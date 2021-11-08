@@ -26,13 +26,23 @@ export default {
     docsApi
       .getDocumentData(this.doc_id, this.isPublic)
       .then((resp) => {
-        console.log('Download URL:', resp.details.file.dl_link);
-        location.href = resp.details.file.dl_link;
+        this.download(resp.details.file.url, 'a');
         this.$emit('close');
       })
       .catch((err) => {
         this.$emit('err', err);
       });
+  },
+  methods: {
+    download(url, name) {
+      const link = document.createElement('a');
+      link.download = name;
+      link.href = url;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
   },
 };
 </script>
