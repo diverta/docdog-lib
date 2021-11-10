@@ -51,7 +51,7 @@ export default {
       },
       set(unselect) {
         // Setting = closing the modal
-        this.current_node_idx = null;
+        this.closeModal();
       },
     },
     current_node() {
@@ -78,7 +78,7 @@ export default {
             this.current_node_idx = idx;
           } else if (this.current_node_idx === idx) {
             // Current node is opened => close
-            this.current_node_idx = null;
+            this.closeModal();
           } else {
             // Another node is opened => replace
             this.current_node_idx = idx;
@@ -88,6 +88,7 @@ export default {
     },
     closeModal() {
       this.current_node_idx = null;
+      this.current_page = 'Loading'; // Reinit the page state
     },
   },
 };
