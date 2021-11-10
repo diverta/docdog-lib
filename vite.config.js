@@ -10,6 +10,7 @@ export default defineConfig({
       name: 'docdog-lib',
       fileName: (format) => `docdog-lib.${format}.js`,
     },
+    minify: false,
   },
   resolve: {
     alias: {

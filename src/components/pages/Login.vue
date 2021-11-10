@@ -1,23 +1,25 @@
-<script setup>
-import AbstractPage from './AbstractPage.vue';
-import loginApi from '@/api/login';
-</script>
-
 <template>
-  <h1>Login or Sign up to Download</h1>
-  Login ID : <input type="text" v-model="login_id" />
+  <h2>This is a private file. Please login to download</h2>
+  <p class="err" v-if="err.length > 0" v-html="err" />
+  Login ID : <n-input type="text" v-model:value="login_id" />
   <br />
-  Password : <input type="password" v-model="password" />
+  Password : <n-input type="password" v-model:value="password" />
   <br />
-  <p class="err" v-if="err.length > 0">{{ err }}</p>
-  <input type="button" value="Login" @click="login" />
-  <br />
-  <a href="#" @click.prevent="$emit('redirect', 'SignUp')">Sign Up</a>
+  <n-button @click="login">Login</n-button>
+  <n-button class="signup-btn" href="#" @click.prevent="$emit('redirect', 'SignUp')">Sign Up</n-button>
 </template>
 
 <script>
+import AbstractPage from './AbstractPage.vue';
+import loginApi from '@/api/login';
+import { NButton, NInput } from 'naive-ui';
+
 export default {
   extends: AbstractPage,
+  components: {
+    NButton,
+    NInput,
+  },
   data() {
     return {
       login_id: '',
@@ -51,5 +53,8 @@ export default {
 <style scoped>
 .err {
   color: red;
+}
+.signup-btn {
+  float: right;
 }
 </style>

@@ -1,12 +1,3 @@
-<script setup>
-import Login from './Login.vue';
-import SignUp from './SignUp.vue';
-import Download from './Download.vue';
-import Error from './Error.vue';
-import Loading from './Loading.vue';
-import loginApi from '@/api/login';
-</script>
-
 <template>
   <component
     :is="current_page_comp"
@@ -18,6 +9,13 @@ import loginApi from '@/api/login';
 </template>
 
 <script>
+import Login from './Login.vue';
+import SignUp from './SignUp.vue';
+import Download from './Download.vue';
+import Error from './Error.vue';
+import Loading from './Loading.vue';
+import loginApi from '@/api/login';
+
 const pages = {
   Login,
   SignUp,
@@ -26,16 +24,20 @@ const pages = {
   Error, // In case a dynamic component is incorrectly indicated - should only be a case during development
 };
 export default {
+  components: pages,
   props: {
     node_params: {
       type: Object,
       default: () => ({}),
     },
+    current_page: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       p_err_msg: '', // Do not manually modify, assign to 'err' computed prop instead
-      current_page: null,
     };
   },
   mounted() {
@@ -49,7 +51,7 @@ export default {
         }
         switch (this.current_page) {
           case 'Download':
-            if (!this.node_params.id) {
+            if (!this.node_params || !this.node_params.id) {
               return 'Document id is undefined';
             }
         }
@@ -68,7 +70,7 @@ export default {
     },
     comp_props() {
       const page_params = {};
-      if (this.current_page == 'Download') {
+      if (this.current_page == 'Download' && this.node_params) {
         if (this.node_params.id) {
           page_params.doc_id = this.node_params.id;
         }
@@ -81,18 +83,21 @@ export default {
   },
   methods: {
     init() {
-      this.current_page = 'Loading';
+      this.setCurrentPage('Loading');
       loginApi
         .isLogin({
           autoLogin: true,
           anonLogin: this.node_params.public || false,
         })
         .then((isLogin) => {
-          this.current_page = isLogin ? 'Download' : 'Login';
+          this.setCurrentPage(isLogin ? 'Download' : 'Login');
         });
     },
+    setCurrentPage(newPage) {
+      this.$emit('update:current_page', newPage);
+    },
     onRedirect(target) {
-      this.current_page = target;
+      this.setCurrentPage(target);
     },
   },
 };

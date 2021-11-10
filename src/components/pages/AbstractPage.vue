@@ -8,5 +8,8 @@ export default {
     },
   },
   emits: ['close', 'err', 'redirect'],
+  unmount() {
+    this.$emit('err', '');
+  },
 };
 </script>

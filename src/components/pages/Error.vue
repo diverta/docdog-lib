@@ -1,13 +1,11 @@
-<script setup>
-import AbstractPage from './AbstractPage.vue';
-</script>
-
 <template>
   <h2>Error</h2>
-  <p>{{ this.err }}</p>
+  <p>{{ err }}</p>
 </template>
 
 <script>
+import AbstractPage from './AbstractPage.vue';
+
 export default {
   extends: AbstractPage,
 };

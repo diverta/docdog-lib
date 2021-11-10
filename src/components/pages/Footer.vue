@@ -1,6 +1,5 @@
 <template>
-  <hr />
-  <h1>Footer</h1>
+  <h5 align="right">DocDog - Powered by Kuroco</h5>
 </template>
 
 <script>

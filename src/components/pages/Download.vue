@@ -1,13 +1,10 @@
-<script setup>
-import AbstractPage from './AbstractPage.vue';
-</script>
-
 <template>
-  <h1>Downloading...</h1>
-  <p v-if="err.length > 0" class="err">{{ err }}</p>
+  <h2>Please wait ...</h2>
+  <p class="err" v-if="err.length > 0" v-html="err"/>
 </template>
 
 <script>
+import AbstractPage from './AbstractPage.vue';
 import docsApi from '@/api/docs';
 
 export default {

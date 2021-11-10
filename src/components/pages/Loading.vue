@@ -1,12 +1,10 @@
-<script setup>
-import AbstractPage from './AbstractPage.vue';
-</script>
-
 <template>
   <h2>Loading ...</h2>
 </template>
 
 <script>
+import AbstractPage from './AbstractPage.vue';
+
 export default {
   extends: AbstractPage,
 };

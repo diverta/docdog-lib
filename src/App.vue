@@ -1,28 +1,34 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import Modal from './components/Modal.vue';
-import Header from './components/pages/Header.vue';
-import Footer from './components/pages/Footer.vue';
-import PageController from './components/pages/PageController.vue';
-</script>
-
 <template>
-  <Modal v-if="is_node_selected" @close="closeModal">
-    <template v-slot:header>
-      <Header @close="closeModal" />
-    </template>
-    <template v-slot:body>
-      <PageController :node_params="current_node_params" @close="closeModal" />
-    </template>
-    <template v-slot:footer>
-      <Footer />
-    </template>
-  </Modal>
+  <n-modal v-model:show="is_node_selected">
+    <n-card style="width: 600px" title="Docdog" :bordered="false" size="huge">
+      <template #header>
+        <Header :title="current_page" @close="closeModal" />
+      </template>
+      <PageController v-model:current_page="current_page" :node_params="current_node_params" @close="closeModal" />
+      <template #footer>
+        <Footer />
+      </template>
+    </n-card>
+  </n-modal>
 </template>
 
 <script>
+import { NModal, NCard } from 'naive-ui';
+import Header from './components/pages/Header.vue';
+import Footer from './components/pages/Footer.vue';
+import PageController from './components/pages/PageController.vue';
+
+// General NaiveUI font
+import 'vfonts/Lato.css';
+
 export default {
+  components: {
+    NModal,
+    NCard,
+    Header,
+    Footer,
+    PageController,
+  },
   props: {
     node_params_list: {
       type: Array,
@@ -32,14 +38,21 @@ export default {
   data() {
     return {
       current_node_idx: null,
+      current_page: 'Loading',
     };
   },
   mounted() {
     this.init();
   },
   computed: {
-    is_node_selected() {
-      return this.current_node_idx !== null;
+    is_node_selected: {
+      get() {
+        return this.current_node_idx !== null;
+      },
+      set(unselect) {
+        // Setting = closing the modal
+        this.current_node_idx = null;
+      },
     },
     current_node() {
       if (this.is_node_selected) {
