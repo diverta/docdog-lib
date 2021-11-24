@@ -1,20 +1,19 @@
 {
-  "name": "docdog-prototype",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/docdog-lib.umd.js",
-  "module": "./dist/docdog-lib.es.js",
+  "name": "docdog-lib",
+  "main": "./dist/iife/docdog-lib.iife.js",
+  "module": "./dist/es/docdog-lib.es.js",
   "exports": {
     ".": {
-      "import": "./dist/docdog-lib.es.js",
-      "require": "./dist/docdog-lib.umd.js"
+      "import": "./dist/es/docdog-lib.es.js",
+      "require": "./dist/iife/docdog-lib.iife.js"
     }
   },
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:iife": "vite build -c vite.iife.config.js",
+    "build:es": "vite build -c vite.es.config.js",
+    "build": "vite build -c vite.iife.config.js && vite build -c vite.es.config.js",
     "serve": "vite preview"
   },
   "dependencies": {
