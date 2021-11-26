@@ -5,6 +5,24 @@ import _ from 'lodash';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
+if (window.Docdog === undefined) {
+  window.Docdog = {
+    app: null,
+  };
+}
+
+function linkNode(node, params) {
+  if (window.Docdog.app) {
+    window.Docdog.app.linkNode(node, params);
+  }
+}
+
+function unlinkNode(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.unlinkNode(node);
+  }
+}
+
 function parseConfig(config) {
   if (typeof config === 'string' || config instanceof String) {
     return config.split(',').reduce((carry, keyval) => {
@@ -22,13 +40,15 @@ function parseConfig(config) {
   }
 }
 
-const initDocdogApp = _.once((node_params_list) => {
-  console.log('Initting DocDog App');
+const initDocdogApp = _.once(() => {
+  if (window.Docdog.app == null) {
+    // Even if the lib is loaded multiple times, ensure app init only once
 
-  const docdogAppDiv = document.createElement('div');
-  docdogAppDiv.classList.add('docdog-container');
-  document.body.appendChild(docdogAppDiv);
-  createApp(App, { node_params_list }).mount(docdogAppDiv);
+    const docdogAppDiv = document.createElement('div');
+    docdogAppDiv.classList.add('docdog-container');
+    document.body.appendChild(docdogAppDiv);
+    window.Docdog.app = createApp(App).mount(docdogAppDiv);
+  }
 });
 
 function parseDOM() {
@@ -39,20 +59,22 @@ function parseDOM() {
   //  XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
   //  null
   //);
+  initDocdogApp();
+
   const node_params_list = [];
   document.querySelectorAll('[data-docdog]').forEach((node) => {
     const params = parseConfig(node.getAttribute('data-docdog'));
-
-    node_params_list.push({ node, params });
+    linkNode(node, params);
   });
-
-  if (node_params_list.length > 0) {
-    initDocdogApp(node_params_list);
-  }
 }
 
-function docdog(node, params) {
-  initDocdogApp([{ node, params: parseConfig(params) }]);
+function docdogLink(node, params) {
+  initDocdogApp();
+  linkNode(node, parseConfig(params));
 }
 
-export { parseDOM, docdog };
+function docdogUnlink(node) {
+  unlinkNode(node);
+}
+
+export { parseDOM, docdogLink, docdogUnlink };

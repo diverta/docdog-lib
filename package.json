@@ -10,21 +10,22 @@
   },
   "version": "0.0.1",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite -c vite.iife.config.js",
     "build:iife": "vite build -c vite.iife.config.js",
     "build:es": "vite build -c vite.es.config.js",
     "build": "vite build -c vite.iife.config.js && vite build -c vite.es.config.js",
-    "serve": "vite preview"
+    "serve": "vite -c vite.iife.config.js preview"
   },
   "dependencies": {
     "axios": "^0.24.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "qs": "^6.10.1",
+    "uuid": "^8.3.2",
     "vue": "^3.2.21"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.9.3",
+    "@vitejs/plugin-vue": "^1.10.0",
     "naive-ui": "^2.20.2",
     "prettier": "2.4.1",
     "vfonts": "^0.1.0",

@@ -17,6 +17,7 @@ import { NModal, NCard } from 'naive-ui';
 import Header from './components/pages/Header.vue';
 import Footer from './components/pages/Footer.vue';
 import PageController from './components/pages/PageController.vue';
+import { v4 as uuidv4 } from 'uuid';
 
 // General NaiveUI font
 import 'vfonts/Lato.css';
@@ -29,25 +30,18 @@ export default {
     Footer,
     PageController,
   },
-  props: {
-    node_params_list: {
-      type: Array,
-      default: [],
-    },
-  },
   data() {
     return {
-      current_node_idx: null,
+      docdog_id_attr_name: 'data-docdog-id',
+      node_params_map: {},
+      current_node_uuid: null,
       current_page: 'Loading',
     };
-  },
-  mounted() {
-    this.init();
   },
   computed: {
     is_node_selected: {
       get() {
-        return this.current_node_idx !== null;
+        return this.current_node_uuid !== null;
       },
       set(unselect) {
         // Setting = closing the modal
@@ -56,43 +50,54 @@ export default {
     },
     current_node() {
       if (this.is_node_selected) {
-        return this.node_params_list[this.current_node_idx].node;
+        return this.node_params_map[this.current_node_uuid].node;
       } else {
         return null;
       }
     },
     current_node_params() {
       if (this.is_node_selected) {
-        return this.node_params_list[this.current_node_idx].params;
+        return this.node_params_map[this.current_node_uuid].params;
       } else {
         return null;
       }
     },
   },
   methods: {
-    init() {
-      this.node_params_list.forEach(({ node }, idx) => {
-        node.onclick = () => {
-          if (this.current_node_idx === null) {
-            // No node is opened => open
-            this.current_node_idx = idx;
-          } else if (this.current_node_idx === idx) {
-            // Current node is opened => close
-            this.closeModal();
-          } else {
-            // Another node is opened => replace
-            this.current_node_idx = idx;
-          }
-        };
-      });
+    linkNode(node, params) {
+      let uuid = node.getAttribute(this.docdog_id_attr_name);
+      if (uuid == null || uuid == '') {
+        uuid = uuidv4();
+        this.node_params_map[uuid] = { node, params };
+        node.setAttribute(this.docdog_id_attr_name, uuid);
+        node.addEventListener('click', this.nodeAction);
+      }
+    },
+    unlinkNode(node) {
+      const uuid = node.getAttribute(this.docdog_id_attr_name);
+      node.removeEventListener('click', this.nodeAction);
+      delete this.node_params_map[uuid];
+      node.removeAttribute(this.docdog_id_attr_name);
+    },
+    nodeAction(event) {
+      const uuid = event.target.getAttribute(this.docdog_id_attr_name);
+      if (this.current_node_uuid === null) {
+        // No node is opened => open
+        this.current_node_uuid = uuid;
+      } else if (this.current_node_uuid === uuid) {
+        // Current node is opened => close
+        this.closeModal();
+      } else {
+        // Another node is opened => replace
+        this.current_node_uuid = uuid;
+      }
     },
     closeModal() {
-      this.current_node_idx = null;
+      this.current_node_uuid = null;
       this.current_page = 'Loading'; // Reinit the page state
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
