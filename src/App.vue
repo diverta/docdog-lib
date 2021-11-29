@@ -71,6 +71,9 @@ export default {
         this.node_params_map[uuid] = { node, params };
         node.setAttribute(this.docdog_id_attr_name, uuid);
         node.addEventListener('click', this.nodeAction);
+      } else {
+        // Node already exists : update with new params
+        this.node_params_map[uuid].params = params;
       }
     },
     unlinkNode(node) {
