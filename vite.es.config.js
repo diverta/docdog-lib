@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 const { resolve } = require('path');
 import vue from '@vitejs/plugin-vue';
-import libInjectCss from './libInjectCss'
+import libInjectCss from './libInjectCss';
 
 // https://vitejs.dev/config/
 export default defineConfig((settings) => ({
@@ -12,7 +12,6 @@ export default defineConfig((settings) => ({
       formats: ['es'],
     },
     outDir: 'dist/es',
-    minify: false,
   },
   resolve: {
     alias: {

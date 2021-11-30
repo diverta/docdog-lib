@@ -12,7 +12,6 @@ export default defineConfig((settings) => ({
       formats: ['iife'],
     },
     outDir: 'dist/iife',
-    minify: false,
   },
   resolve: {
     alias: {
