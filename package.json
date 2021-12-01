@@ -8,7 +8,7 @@
       "require": "./dist/iife/docdog-lib.iife.js"
     }
   },
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite -c vite.iife.config.js",
     "build:iife": "vite build -c vite.iife.config.js",

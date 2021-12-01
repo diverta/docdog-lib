@@ -18,6 +18,7 @@ import Header from './components/pages/Header.vue';
 import Footer from './components/pages/Footer.vue';
 import PageController from './components/pages/PageController.vue';
 import { v4 as uuidv4 } from 'uuid';
+import loginApi from '@/api/login';
 
 // General NaiveUI font
 import 'vfonts/Lato.css';
@@ -98,6 +99,15 @@ export default {
     closeModal() {
       this.current_node_uuid = null;
       this.current_page = 'Loading'; // Reinit the page state
+    },
+    setNodeLogout(node) {
+      node.addEventListener('click', this.logout);
+    },
+    removeNodeLogout(node) {
+      node.removeEventListener('click', this.logout);
+    },
+    logout() {
+      loginApi.doLogout();
     },
   },
 };

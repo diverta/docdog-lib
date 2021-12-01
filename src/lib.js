@@ -23,6 +23,12 @@ function unlinkNode(node) {
   }
 }
 
+function setNodeLogout(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeLogout(node);
+  }
+}
+
 function parseConfig(config) {
   if (typeof config === 'string' || config instanceof String) {
     return config.split(',').reduce((carry, keyval) => {
@@ -64,7 +70,11 @@ function parseDOM() {
   const node_params_list = [];
   document.querySelectorAll('[data-docdog]').forEach((node) => {
     const params = parseConfig(node.getAttribute('data-docdog'));
-    linkNode(node, params);
+    if (params.logout) {
+      setNodeLogout(node);
+    } else {
+      linkNode(node, params);
+    }
   });
 }
 
@@ -77,4 +87,10 @@ function docdogUnlink(node) {
   unlinkNode(node);
 }
 
-export { parseDOM, docdogLink, docdogUnlink };
+function docdogLogout() {
+  if (window.Docdog.app) {
+    window.Docdog.app.logout();
+  }
+}
+
+export { parseDOM, docdogLink, docdogUnlink, docdogLogout };

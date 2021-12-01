@@ -115,6 +115,11 @@ function doLogin({ email, password }) {
     });
 }
 
+function doLogout() {
+  removeData(storage_keys.ACCESS_TOKEN);
+  removeData(storage_keys.REFRESH_TOKEN);
+}
+
 function getAccessToken({ grant_token, refresh_token }) {
   return post('/rcms-api/3/token', { grant_token, refresh_token })
     .then(processError)
@@ -134,4 +139,5 @@ export default {
   isLogin,
   getAuthHeaders,
   doLogin,
+  doLogout,
 };
