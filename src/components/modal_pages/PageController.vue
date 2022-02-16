@@ -34,6 +34,10 @@ export default {
       type: String,
       default: '',
     },
+    process: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -87,17 +91,42 @@ export default {
       loginApi
         .isLogin({
           autoLogin: true,
-          anonLogin: this.node_params.public || false,
+          anonLogin: (this.node_params && this.node_params.public) || false,
         })
         .then((isLogin) => {
-          this.setCurrentPage(isLogin ? 'Download' : 'SignIn');
+          if (this.process) {
+            switch (this.process) {
+              case 'login':
+                if (isLogin) {
+                  this.$emit('close'); // Already logged in
+                } else {
+                  this.setCurrentPage('SignIn');
+                }
+                break;
+              case 'signup':
+                if (isLogin) {
+                  this.$emit('close'); // Already logged in
+                } else {
+                  this.setCurrentPage('SignUp');
+                }
+                break;
+            }
+            // Manual process such as login or signup
+          } else {
+            this.setCurrentPage(isLogin ? 'Download' : 'SignIn');
+          }
         });
     },
     setCurrentPage(newPage) {
       this.$emit('update:current_page', newPage);
     },
     onRedirect(target) {
-      this.setCurrentPage(target);
+      if (this.process != '' && target == 'Download') {
+        // Simple process, after login just close the modal instead of going to Download page
+        this.$emit('close');
+      } else {
+        this.setCurrentPage(target);
+      }
     },
   },
 };

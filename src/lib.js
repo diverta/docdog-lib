@@ -23,9 +23,21 @@ function unlinkNode(node) {
   }
 }
 
+function setNodeLogin(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeLogin(node);
+  }
+}
+
 function setNodeLogout(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeLogout(node);
+  }
+}
+
+function setNodeSignUp(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeSignUp(node);
   }
 }
 
@@ -58,7 +70,7 @@ const initApp = _.once((el) => {
       docdogAppDiv.classList.add('docdog-container');
       document.body.appendChild(docdogAppDiv);
     }
-    window.Docdog.app = createApp(App).mount(docdogAppDiv);
+    window.Docdog.app = createApp(App, { initList: true }).mount(docdogAppDiv);
   }
 });
 
@@ -88,6 +100,10 @@ function parseDOM() {
   nodes.forEach((node) => {
     if (node.params.logout) {
       setNodeLogout(node.el);
+    } else if (node.params.login) {
+      setNodeLogin(node.el);
+    } else if (node.params.signup) {
+      setNodeSignUp(node.el);
     } else {
       linkNode(node.el, node.params);
     }
