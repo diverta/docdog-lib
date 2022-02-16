@@ -2,7 +2,6 @@ import axios from 'axios';
 import _ from 'lodash';
 import qs from 'qs';
 
-export const API_RESPONSE_SUCCESS = 200;
 export const API_HOST = 'https://docdog.g.kuroco.app';
 
 export function get(uri, headers = {}) {
@@ -33,7 +32,7 @@ export function processError(res) {
   if (data.errors && data.errors.length > 0) {
     return Promise.reject({ errors: data.errors });
   }
-  if (res.status !== API_RESPONSE_SUCCESS) {
+  if (res.status > 400) {
     return Promise.reject();
   }
   return res.data;

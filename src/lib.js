@@ -46,13 +46,18 @@ function parseConfig(config) {
   }
 }
 
-const initDocdogApp = _.once(() => {
+const initApp = _.once((el) => {
   if (window.Docdog.app == null) {
     // Even if the lib is loaded multiple times, ensure app init only once
 
-    const docdogAppDiv = document.createElement('div');
-    docdogAppDiv.classList.add('docdog-container');
-    document.body.appendChild(docdogAppDiv);
+    let docdogAppDiv = null;
+    if (el) {
+      docdogAppDiv = el;
+    } else {
+      docdogAppDiv = document.createElement('div');
+      docdogAppDiv.classList.add('docdog-container');
+      document.body.appendChild(docdogAppDiv);
+    }
     window.Docdog.app = createApp(App).mount(docdogAppDiv);
   }
 });
@@ -65,21 +70,32 @@ function parseDOM() {
   //  XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
   //  null
   //);
-  initDocdogApp();
+  const nodes = [];
+  let el = null; // Element to be mounted
 
-  const node_params_list = [];
   document.querySelectorAll('[data-docdog]').forEach((node) => {
     const params = parseConfig(node.getAttribute('data-docdog'));
-    if (params.logout) {
-      setNodeLogout(node);
+    if (params.list) {
+      // "list" is a rendering param. We mount the app on it, if it exists
+      el = node;
     } else {
-      linkNode(node, params);
+      nodes.push({ el: node, params });
+    }
+  });
+
+  initApp(el);
+
+  nodes.forEach((node) => {
+    if (node.params.logout) {
+      setNodeLogout(node.el);
+    } else {
+      linkNode(node.el, node.params);
     }
   });
 }
 
 function docdogLink(node, params) {
-  initDocdogApp();
+  initApp();
   linkNode(node, parseConfig(params));
 }
 

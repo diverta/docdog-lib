@@ -1,0 +1,20 @@
+.l-body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.l-container {
+  flex: 1 1 auto;
+  padding: 2rem 20px;
+  background-color: $color-background;
+  @media screen and (min-width: 768px) {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  &--large{
+    @media screen and (min-width: 768px) {
+      max-width: 1200px;
+      margin: auto;
+    }
+  }
+}

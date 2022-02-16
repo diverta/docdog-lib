@@ -1,22 +1,92 @@
 <template>
-  <n-modal v-model:show="is_node_selected">
-    <n-card style="width: 600px" title="Docdog" :bordered="false" size="huge">
-      <template #header>
-        <Header :title="current_page" @close="closeModal" />
-      </template>
+  <main class="l-container">
+    <section class="l-container--large">
+      <h1 class="c-heading--h1">営業資料</h1>
+      <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
+      <ul class="c-card__list c-card__list--col-3">
+        <li class="c-card">
+          <div class="c-card__thumb" style="background-image: url(/src/assets/image/doc-1.png)">
+            <span class="c-badge c-badge--pdf">PDF</span>
+          </div>
+          <div class="c-card__body">
+            <h2 class="c-card__title">Kuroco説明資料</h2>
+          </div>
+          <div class="c-card__foot">
+            <button type="button" class="c-button c-button--dark" v-on:click="openModal">ダウンロードする</button>
+            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
+          </div>
+        </li>
+        <li class="c-card">
+          <div class="c-card__thumb" style="background-image: url(/src/assets/image/doc-2.png)">
+            <span class="c-badge c-badge--pdf">PDF</span>
+          </div>
+          <div class="c-card__body">
+            <h2 class="c-card__title">インフラに関するドキュメント</h2>
+          </div>
+          <div class="c-card__foot">
+            <button type="button" class="c-button c-button--dark" v-on:click="openModal">ダウンロードする</button>
+            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
+          </div>
+        </li>
+        <li class="c-card">
+          <div class="c-card__thumb" style="background-image: url(/src/assets/image/doc-3.png)">
+            <span class="c-badge c-badge--excel">Excel</span>
+          </div>
+          <div class="c-card__body">
+            <h2 class="c-card__title">案件ヒアリングシート</h2>
+          </div>
+          <div class="c-card__foot">
+            <button type="button" class="c-button c-button--dark" v-on:click="openModal">ダウンロードする</button>
+            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
+          </div>
+        </li>
+        <li class="c-card">
+          <div class="c-card__thumb" style="background-image: url(/src/assets/image/doc-4.png)">
+            <span class="c-badge c-badge--pdf">PDF</span>
+          </div>
+          <div class="c-card__body">
+            <h2 class="c-card__title">Kurocoを利用したプロジェクトの進め方（サンプル）</h2>
+          </div>
+          <div class="c-card__foot">
+            <button type="button" class="c-button c-button--dark" v-on:click="openModal">ダウンロードする</button>
+            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
+          </div>
+        </li>
+        <li class="c-card">
+          <div class="c-card__thumb" style="background-image: url(/src/assets/image/doc-5.png)">
+            <span class="c-badge c-badge--pdf">PDF</span>
+          </div>
+          <div class="c-card__body">
+            <h2 class="c-card__title">WBSやタスクリストのサンプル</h2>
+          </div>
+          <div class="c-card__foot">
+            <button type="button" class="c-button c-button--dark" v-on:click="openModal">ダウンロードする</button>
+            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
+          </div>
+        </li>
+        <li class="c-card">
+          <div class="c-card__thumb" style="background-image: url(/src/assets/image/doc-6.png)">
+            <span class="c-badge c-badge--excel">Excel</span>
+          </div>
+          <div class="c-card__body">
+            <h2 class="c-card__title">プロジェクト役割分担表</h2>
+          </div>
+          <div class="c-card__foot">
+            <button type="button" class="c-button c-button--dark" v-on:click="openModal">ダウンロードする</button>
+            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+    <Modal v-model:show="is_node_selected" :title="current_page_title" @close="closeModal">
       <PageController v-model:current_page="current_page" :node_params="current_node_params" @close="closeModal" />
-      <template #footer>
-        <Footer />
-      </template>
-    </n-card>
-  </n-modal>
+    </Modal>
+  </main>
 </template>
 
 <script>
-import { NModal, NCard } from 'naive-ui';
-import Header from './components/pages/Header.vue';
-import Footer from './components/pages/Footer.vue';
-import PageController from './components/pages/PageController.vue';
+import Modal from '@/components/Modal.vue';
+import PageController from './components/modal_pages/PageController.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
 
@@ -25,10 +95,7 @@ import 'vfonts/Lato.css';
 
 export default {
   components: {
-    NModal,
-    NCard,
-    Header,
-    Footer,
+    Modal,
     PageController,
   },
   data() {
@@ -62,6 +129,29 @@ export default {
       } else {
         return null;
       }
+    },
+    current_page_title() {
+      let title = ''; // Todo : i18n
+      switch (this.current_page) {
+        case 'Loading':
+          title = 'ローディング';
+          break;
+        case 'Error':
+          title = 'エラー';
+          break;
+        case 'SignUp':
+          title = 'アカウントの作成';
+          break;
+        case 'SignIn':
+          title = 'ログインしてダウンロード';
+          break;
+        case 'Download':
+          title = 'ダウンロード';
+          break;
+        default:
+          title = this.current_page;
+      }
+      return title;
     },
   },
   methods: {
@@ -113,4 +203,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+@import './src/assets/scss/app.scss';
+</style>

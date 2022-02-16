@@ -1,0 +1,99 @@
+.l-header {
+  position: relative;
+  padding: 1em 2em;
+  background-color: #fff;
+  @media screen and (min-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4em 2em;
+  }
+  &__main {
+    @media screen and (min-width: 768px) {
+      display: flex;
+      align-items: center;
+      flex: 1 1 auto;
+    }
+  }
+  &__title {
+    color: $color-primary;
+    font-size: 1.6em;
+    font-weight: 900;
+    @media screen and (max-width: 767px) {
+      display: block;
+      text-align: center;
+    }
+    img { 
+      width: 1.4em;
+      margin-right: .4em;
+    }
+  }
+}
+
+.l-header__nav {
+  @media screen and (min-width: 768px) {
+    margin-left: 4em;
+  }
+  @media screen and (max-width: 767px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: .6em;
+  }
+  &__list {
+    display: flex;
+    li:not(:first-child) { margin-left: 2em; }
+    a {
+      transition: $transition;
+      &:hover { color: $color-link; }
+    }
+  }
+  &__button {
+    @extend .c-button--primary;
+    padding: 1em 2em;
+    border: 1px solid;
+    border-radius: $border-radius;
+    font-size: .8em;
+    transition: $transition;
+    &--icon {
+      width: 45px;
+      height: 45px;
+      background-color: transparent;
+    }
+  }
+  // 会員用メニュー
+  &--user{
+    position: absolute;
+    top: 70px;
+    right: 2em;
+    width: 200px;
+    border-radius: $border-radius;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+    @media screen and (max-width: 767px) {
+      top: 110px;
+      right: 1em;
+    }
+    &__name {
+      padding: 1.2em 1em .4em;
+      color: lighten($color-dark, 24%);
+      font-size: .7em;
+      font-weight: bold;
+    }
+    &__button {
+      display: block;
+      width: 100%;
+      padding: 1.2em 1em;
+      background-color: #fff;
+      font-size: .8em;
+      text-align: left;
+      &:last-child { 
+        border-top: 1px solid $color-border;
+        border-radius: 0 0 $border-radius $border-radius;
+      }
+      &:hover {
+        background-color: darken(#fff, 4%);
+      }
+    }
+  }
+}

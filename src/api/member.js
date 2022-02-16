@@ -3,18 +3,19 @@ import qs from 'qs';
 import { post, processError } from './utils';
 import loginApi from './login';
 
-function doSignUp({ email, name1, name2, login_pwd }) {
+function doSignUp(data) {
   return loginApi
     .getAuthHeaders({
       autoLogin: true,
       anonLogin: true,
     })
     .then((headers) =>
-      post('/rcms-api/3/member/new', { email, name1, name2, login_pwd }, headers)
+      post('/rcms-api/3/member/new', data, headers)
         .then(processError)
         .catch((err) => {
+            console.log(err);
           let err_msg = 'Error during signup'; // Default error message
-          if (err.response.data.errors) {
+          if (err.response && err.response.data && err.response.data.errors) {
             err_msg = err.response.data.errors.reduce((carry, obj) => {
               if (carry != '') {
                 carry += '<br/>';

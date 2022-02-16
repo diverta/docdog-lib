@@ -102,10 +102,14 @@ function doLogin({ email, password }) {
       }
     })
     .catch((err) => {
+        console.log("ERROR LOGIN", err);
       let err_msg = 'Error during login'; // Default error message
       switch (err.response.status) {
         case 401:
-          err_msg = 'Invalid Login ID or Password';
+          err_msg =
+            err.response && err.response.data && err.response.data.errors.length > 0 && err.response.data.errors[0].message
+              ? err.response.data.errors[0].message
+              : 'メールアドレスが不正です。';
           break;
         case 404:
           err_msg = 'The login endpoint could not be found';

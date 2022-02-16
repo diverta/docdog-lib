@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Login from './Login.vue';
+import SignIn from './SignIn.vue';
 import SignUp from './SignUp.vue';
 import Download from './Download.vue';
 import Error from './Error.vue';
@@ -17,7 +17,7 @@ import Loading from './Loading.vue';
 import loginApi from '@/api/login';
 
 const pages = {
-  Login,
+  SignIn,
   SignUp,
   Download,
   Loading,
@@ -90,7 +90,7 @@ export default {
           anonLogin: this.node_params.public || false,
         })
         .then((isLogin) => {
-          this.setCurrentPage(isLogin ? 'Download' : 'Login');
+          this.setCurrentPage(isLogin ? 'Download' : 'SignIn');
         });
     },
     setCurrentPage(newPage) {
