@@ -13,7 +13,9 @@
             <h2 class="c-card__title">{{ doc.subject }}</h2>
           </div>
           <div class="c-card__foot">
-            <button type="button" class="c-button c-button--dark" @click="nodeAction(doc.topics_id)">ダウンロードする</button>
+            <button type="button" class="c-button c-button--dark" @click="nodeAction(doc.topics_id)">
+              ダウンロードする
+            </button>
             <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
           </div>
         </li>
@@ -152,7 +154,8 @@ export default {
       delete this.node_params_map[uuid];
       node.removeAttribute(this.docdog_id_attr_name);
     },
-    nodeAction(event) { // Event can either be an HTML element having a docdoc uuid (in case el linking), or plain topics_id integer (in case of dynamic use)
+    nodeAction(event) {
+      // Event can either be an HTML element having a docdoc uuid (in case el linking), or plain topics_id integer (in case of dynamic use)
       const node_id = isNaN(event) ? event.target.getAttribute(this.docdog_id_attr_name) : event;
       if (this.current_node_uuid === null) {
         // No node is opened => open
@@ -201,7 +204,6 @@ export default {
       this.current_process = 'signup'; // Model action for this process
     },
     getThumbnailStyle(doc) {
-        console.log(doc);
       if (doc.type.key == 'image' && doc.file) {
         return 'background-image: url(' + doc.file.url + ')';
       } else {

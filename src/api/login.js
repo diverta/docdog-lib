@@ -102,7 +102,6 @@ function doLogin({ email, password }) {
       }
     })
     .catch((err) => {
-        console.log("ERROR LOGIN", err);
       let err_msg = 'Error during login'; // Default error message
       switch (err.response.status) {
         case 401:

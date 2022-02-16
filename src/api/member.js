@@ -13,7 +13,6 @@ function doSignUp(data) {
       post('/rcms-api/3/member/new', data, headers)
         .then(processError)
         .catch((err) => {
-            console.log(err);
           let err_msg = 'Error during signup'; // Default error message
           if (err.response && err.response.data && err.response.data.errors) {
             err_msg = err.response.data.errors.reduce((carry, obj) => {
