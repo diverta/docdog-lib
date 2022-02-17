@@ -13066,7 +13066,6 @@ function doLogin({ email, password }) {
       throw "Login API did not contain a grant token";
     }
   }).catch((err) => {
-    console.log("ERROR LOGIN", err);
     let err_msg = "Error during login";
     switch (err.response.status) {
       case 401:
@@ -13351,7 +13350,6 @@ function doSignUp(data2) {
     autoLogin: true,
     anonLogin: true
   }).then((headers) => post("/rcms-api/3/member/new", data2, headers).then(processError).catch((err) => {
-    console.log(err);
     let err_msg = "Error during signup";
     if (err.response && err.response.data && err.response.data.errors) {
       err_msg = err.response.data.errors.reduce((carry, obj) => {
@@ -14032,7 +14030,6 @@ const _sfc_main = {
       this.current_process = "signup";
     },
     getThumbnailStyle(doc2) {
-      console.log(doc2);
       if (doc2.type.key == "image" && doc2.file) {
         return "background-image: url(" + doc2.file.url + ")";
       } else {
@@ -14041,11 +14038,11 @@ const _sfc_main = {
     }
   }
 };
-const _hoisted_1 = { class: "l-container" };
-const _hoisted_2 = {
+const _hoisted_1 = {
   key: 0,
-  class: "l-container--large"
+  class: "l-container"
 };
+const _hoisted_2 = { class: "l-container--large" };
 const _hoisted_3 = /* @__PURE__ */ createBaseVNode("h1", { class: "c-heading--h1" }, "\u55B6\u696D\u8CC7\u6599", -1);
 const _hoisted_4 = /* @__PURE__ */ createBaseVNode("p", null, "Kuroco\u55B6\u696D\u6642\u306B\u5229\u7528\u3067\u304D\u308B\u8CC7\u6599\u3092\u307E\u3068\u3081\u3066\u3044\u307E\u3059\u3002\u793E\u5185\u3067\u306E\u78BA\u8A8D\u3084\u304A\u5BA2\u69D8\u3078\u306E\u3054\u63D0\u6848\u306A\u3069\u306B\u3054\u6D3B\u7528\u304F\u3060\u3055\u3044\u3002", -1);
 const _hoisted_5 = { class: "c-card__list c-card__list--col-3" };
@@ -14068,8 +14065,8 @@ const _hoisted_12 = /* @__PURE__ */ createBaseVNode("button", {
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PageController = resolveComponent("PageController");
   const _component_Modal = resolveComponent("Modal");
-  return openBlock(), createElementBlock("main", _hoisted_1, [
-    $props.initList ? (openBlock(), createElementBlock("section", _hoisted_2, [
+  return $props.initList ? (openBlock(), createElementBlock("main", _hoisted_1, [
+    createBaseVNode("section", _hoisted_2, [
       _hoisted_3,
       _hoisted_4,
       createBaseVNode("ul", _hoisted_5, [
@@ -14093,13 +14090,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
                 type: "button",
                 class: "c-button c-button--dark",
                 onClick: ($event) => $options.nodeAction(doc2.topics_id)
-              }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B", 8, _hoisted_11),
+              }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B ", 8, _hoisted_11),
               _hoisted_12
             ])
           ]);
         }), 128))
       ])
-    ])) : createCommentVNode("", true),
+    ]),
     createVNode(_component_Modal, {
       show: $options.showModal,
       "onUpdate:show": _cache[1] || (_cache[1] = ($event) => $options.showModal = $event),
@@ -14117,7 +14114,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       ]),
       _: 1
     }, 8, ["show", "title", "onClose"])
-  ]);
+  ])) : createCommentVNode("", true);
 }
 var App = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -14169,14 +14166,17 @@ function parseConfig(config) {
 const initApp = _.once((el) => {
   if (window.Docdog.app == null) {
     let docdogAppDiv = null;
+    let docdogApp = null;
     if (el) {
       docdogAppDiv = el;
+      docdogApp = createApp(App, { initList: true });
     } else {
       docdogAppDiv = document.createElement("div");
       docdogAppDiv.classList.add("docdog-container");
       document.body.appendChild(docdogAppDiv);
+      docdogApp = createApp(App);
     }
-    window.Docdog.app = createApp(App, { initList: true }).mount(docdogAppDiv);
+    window.Docdog.app = docdogApp.mount(docdogAppDiv);
   }
 });
 function parseDOM() {
@@ -14237,12 +14237,12 @@ function docdogLogout() {
 }
 
 
-.h3[data-v-7bb604a8] {
+.err[data-v-061c2bb2] {
   color: red;
 }
 
 
-.err[data-v-061c2bb2] {
+.h3[data-v-7bb604a8] {
   color: red;
 }
 `));

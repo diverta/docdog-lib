@@ -63,14 +63,17 @@ const initApp = _.once((el) => {
     // Even if the lib is loaded multiple times, ensure app init only once
 
     let docdogAppDiv = null;
+    let docdogApp = null;
     if (el) {
       docdogAppDiv = el;
+      docdogApp = createApp(App, { initList: true });
     } else {
       docdogAppDiv = document.createElement('div');
       docdogAppDiv.classList.add('docdog-container');
       document.body.appendChild(docdogAppDiv);
+      docdogApp = createApp(App);
     }
-    window.Docdog.app = createApp(App, { initList: true }).mount(docdogAppDiv);
+    window.Docdog.app = docdogApp.mount(docdogAppDiv);
   }
 });
 
