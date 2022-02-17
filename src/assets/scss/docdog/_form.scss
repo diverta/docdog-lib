@@ -143,11 +143,11 @@
       input[type='text'],
       input[type='email'],
       input[type='password'] {
-        border-color: #dc0000;
+        border-color: $color-danger;
       }
       &__msg {
         margin: $spacing-sm 0;
-        color: #dc0000;
+        color: $color-danger;
         font-size: 12px;
       }
     }
@@ -170,7 +170,7 @@
     text-align: center;
     a,
     button {
-      display: inline-block;
+      display: block;
       margin: auto;
     }
   }

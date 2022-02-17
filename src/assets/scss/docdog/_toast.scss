@@ -1,0 +1,63 @@
+.docdog-toast {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: auto;
+  max-height: 90%;
+  border-radius: $border-radius-md;
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  background: #fff;
+  box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+  overflow-y: auto;
+  font-size: 13px;
+  z-index: 9900;
+  @media screen and (max-width: 767px) {
+    right: 10px;
+    bottom: 10px;
+  }
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 0 $spacing-md;
+    border-bottom: 1px solid $color-border;
+    &__heading {
+      margin: 0;
+      font-weight: bold;
+    }
+    &__close {
+      width: 50px;
+      height: 50px;
+      background-color: transparent;
+      &:hover { opacity: .6; }
+    }
+  }
+  &__body {
+    flex: 1 1 auto;
+    &__list {
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $spacing-sm $spacing-md;
+        &:not(:first-child) { border-top: 1px solid $color-border; }
+      }
+      &__title {
+        margin: 0 $spacing-sm 0 0;
+        color: $color-gray;
+      }
+      .docdog-button--del { flex: 0 0 auto; }
+    }
+  }
+  &__foot {
+    display: flex;
+    justify-content: center;
+    padding: $spacing-md;
+    .docdog-toast__body + & { border-top: 1px solid $color-border; }
+    @media screen and (min-width: 768px) {
+      .docdog-button { height: 40px; }
+    }
+  }
+}

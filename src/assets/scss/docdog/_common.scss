@@ -2,6 +2,8 @@ $color-link: #1371ff;
 $color-primary: #1371ff;
 $color-border: #ccc;
 $color-gray: #666;
+$color-danger: #dc0000;
+$color-success: #06c792;
 $border-radius-sm: 4px;
 $border-radius-md: 8px;
 $border-radius-lg: 12px;
@@ -15,7 +17,7 @@ $transition: 0.2s;
 .docdog {
   color: #222;
   font-size: 14px;
-  // font-family: serif;
+  font-family: sans-serif;
   line-height: 1.5;
   word-wrap: break-word;
   a {
