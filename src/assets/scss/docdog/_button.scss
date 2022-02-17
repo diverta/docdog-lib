@@ -1,0 +1,23 @@
+.docdog-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  border-radius: $border-radius-sm;
+  &--primary {
+    background-color: $color-primary;
+    color: #fff;
+    &:hover {
+      background-color: darken($color-primary, 8%);
+    }
+  }
+  &--text {
+    padding: $spacing-x-sm;
+    background-color: transparent;
+    color: $color-link;
+    & + & {
+      margin-top: $spacing-x-sm;
+    }
+  }
+}
