@@ -78,14 +78,14 @@ export default {
       },
     },
     current_node() {
-      if (this.is_node_selected) {
+      if (this.is_node_selected && this.node_params_map[this.current_node_uuid]) {
         return this.node_params_map[this.current_node_uuid].node;
       } else {
         return null;
       }
     },
     current_node_params() {
-      if (this.is_node_selected) {
+      if (this.is_node_selected && this.node_params_map[this.current_node_uuid]) {
         return this.node_params_map[this.current_node_uuid].params;
       } else {
         return null;
