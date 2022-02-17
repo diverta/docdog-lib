@@ -1,6 +1,6 @@
 <template>
-  <main class="l-container" v-if="initList">
-    <section class="l-container--large">
+  <main class="l-container">
+    <section class="l-container--large" v-if="initList">
       <h1 class="c-heading--h1">営業資料</h1>
       <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
       <ul class="c-card__list c-card__list--col-3">

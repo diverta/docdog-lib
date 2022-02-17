@@ -6,6 +6,10 @@
     ".": {
       "import": "./dist/es/docdog-lib.es.js",
       "require": "./dist/iife/docdog-lib.iife.js"
+    },
+    "./style": {
+      "import": "./dist/es/style.css",
+      "require": "./dist/iife/style.css"
     }
   },
   "version": "0.1.0",
