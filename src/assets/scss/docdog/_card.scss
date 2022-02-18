@@ -1,0 +1,72 @@
+.docdog-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  &__thumb { 
+    height: 120px;
+    position: relative;
+    border-bottom: 1px solid $color-border;
+    border-radius: $border-radius-md $border-radius-md 0 0;
+    background-size: cover;
+    background-position: center;
+    @media screen and (max-width: 767px) {
+      height: 100px;
+    }
+    &__badge {
+      display: inline-block;
+      min-width: 40px;
+      padding: $spacing-x-sm $spacing-sm;
+      position: absolute;
+      bottom: $spacing-sm;
+      right:  $spacing-sm;
+      background-color: $color-primary;
+      border-radius: 20px;
+      color: #fff;
+      font-size: 10px;
+      text-align: center;
+    }
+  }
+  &__body {
+    flex: 1 1 auto;
+    padding: $spacing-md;
+    @media screen and (max-width: 767px) {
+      padding: $spacing-sm;
+    }
+    &__title {
+      margin: 0;
+      font-weight: bold;
+    }
+  }
+  &__foot {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 $spacing-md $spacing-md;
+    @media screen and (max-width: 767px) {
+      padding: 0 $spacing-sm $spacing-sm;
+    }
+  }
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    li { 
+      @media screen and (min-width: 768px) {
+        width: 30%;
+        &:not(:nth-of-type(3n)) { margin-right: 5%; }
+        &:nth-of-type(n+4) { margin-top: $spacing-lg; }
+      }
+      @media screen and (max-width: 767px) {
+        width: 48%;
+        &:nth-of-type(2n) { margin-left: 4%; }
+        &:nth-of-type(n+3) { margin-top: $spacing-md; }
+      }
+    }
+  }
+  &__single {
+    display: flex;
+    justify-content: center;
+    .docdog-card { width: 210px; }
+  }
+}

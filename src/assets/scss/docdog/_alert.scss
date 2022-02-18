@@ -1,0 +1,23 @@
+.docdog-alert {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-lg;
+  border-radius: $border-radius-md;
+  &__heading { 
+    margin: $spacing-sm 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  &--success {
+    background: $color-success;
+    color: #fff;
+  }
+  &--error {
+    background: $color-danger;
+    color: #fff;
+  }
+  p:not([class]) { 
+    margin: 0;
+  }
+}

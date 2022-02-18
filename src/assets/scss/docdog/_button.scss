@@ -12,6 +12,21 @@
       background-color: darken($color-primary, 8%);
     }
   }
+  &--white {
+    border: 1px solid lighten($color-border, 8%);
+    background-color: transparent;
+    color: $color-primary;
+    &:hover { 
+      background-color: lighten($color-border, 16%);
+    }
+  }
+  &--danger {
+    background-color: $color-danger;
+    color: #fff;
+    &:hover {
+      background-color: darken($color-danger, 8%);
+    }
+  }
   &--text {
     padding: $spacing-x-sm;
     background-color: transparent;
@@ -19,5 +34,28 @@
     & + & {
       margin-top: $spacing-x-sm;
     }
+  }
+  &--del {
+    display: flex;
+    padding: $spacing-sm;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    background-color: #fff;
+    font-size: 13px;
+    transition: $transition;
+    @media screen and (max-width: 767px) {
+      font-size: 12px;
+    }
+    &:hover {
+      background-color: lighten($color-border, 16%);
+    }
+    span { 
+      margin-left: $spacing-x-sm;
+    }
+  }
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 }
