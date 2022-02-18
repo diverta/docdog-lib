@@ -18,11 +18,9 @@
         <div class="docdog-modal__body">
           <slot></slot>
         </div>
-        <!-- <footer class="docdog-modal__foot">
-          <slot name="footer">
-            <button type="button" v-on:click="closeModal">close</button>
-          </slot>
-        </footer> -->
+        <footer class="docdog-modal__foot">
+          <slot name="footer" v-bind="$attrs"></slot>
+        </footer>
       </section>
     </div>
   </div>

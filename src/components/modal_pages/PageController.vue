@@ -5,22 +5,29 @@
     @err="err = $event"
     @close="$emit('close')"
     @redirect="onRedirect"
+    ref="page"
   />
 </template>
 
 <script>
 import SignIn from './SignIn.vue';
+import SignInStep3 from './SignInStep3.vue';
+import Withdrawal from './Withdrawal.vue';
 import SignUp from './SignUp.vue';
 import Download from './Download.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
+import EmptyPage from './EmptyPage.vue';
 import loginApi from '@/api/login';
 
 const pages = {
   SignIn,
+  SignInStep3,
   SignUp,
   Download,
+  EmptyPage,
   Loading,
+  Withdrawal,
   Error, // In case a dynamic component is incorrectly indicated - should only be a case during development
 };
 export default {
@@ -38,9 +45,15 @@ export default {
       type: String,
       default: '',
     },
+    process_params: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
+      msg: '',
+      msg2: '',
       p_err_msg: '', // Do not manually modify, assign to 'err' computed prop instead
     };
   },
@@ -52,12 +65,6 @@ export default {
       get() {
         if (!this.current_page in pages) {
           return 'Page component <' + this.current_page + '> does not exist';
-        }
-        switch (this.current_page) {
-          case 'Download':
-            if (!this.node_params || !this.node_params.id) {
-              return 'Document id is undefined';
-            }
         }
         return this.p_err_msg;
       },
@@ -82,7 +89,14 @@ export default {
           page_params.isPublic = true;
         }
       }
-      return { ...page_params, err: this.err };
+      return {
+        ...page_params,
+        err: this.err,
+        msg: this.msg,
+        msg2: this.msg2,
+        process: this.process,
+        ...this.process_params,
+      };
     },
   },
   methods: {
@@ -98,17 +112,23 @@ export default {
             switch (this.process) {
               case 'login':
                 if (isLogin) {
-                  this.$emit('close'); // Already logged in
+                  // When pressed Login button after being logged in : functionnally incorrect flow, should not happen
+                  this.msg = 'ログインしました';
+                  this.setCurrentPage('EmptyPage');
                 } else {
                   this.setCurrentPage('SignIn');
                 }
                 break;
               case 'signup':
                 if (isLogin) {
-                  this.$emit('close'); // Already logged in
+                  this.msg = 'アカウント作成が完了しました';
+                  this.setCurrentPage('EmptyPage');
                 } else {
                   this.setCurrentPage('SignUp');
                 }
+                break;
+              case 'single_download':
+                this.setCurrentPage('Download');
                 break;
             }
             // Manual process such as login or signup
@@ -117,10 +137,18 @@ export default {
           }
         });
     },
+    pageExec(method) {
+      // Executes the given method of the current component
+      this.$refs['page'][method]();
+    },
     setCurrentPage(newPage) {
       this.$emit('update:current_page', newPage);
     },
-    onRedirect(target) {
+    onRedirect({ target, msg, msg2, err }) {
+      // Reset eventual alerts after redirect
+      this.msg = msg || '';
+      this.msg2 = msg2 || '';
+      this.err = err || '';
       if (this.process != '' && target == 'Download') {
         // Simple process, after login just close the modal instead of going to Download page
         this.$emit('close');

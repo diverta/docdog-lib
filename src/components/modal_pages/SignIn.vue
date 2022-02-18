@@ -134,7 +134,14 @@ export default {
         })
         .then((login_ok) => {
           if (login_ok) {
-            this.$emit('redirect', 'Download');
+            switch (this.process) {
+              case 'login':
+                this.$emit('redirect', { target: 'EmptyPage', msg: 'ログインしました' });
+                break;
+              default:
+                // Outside of a process, triggered by unauthorized download attempt (now logged in, so OK)
+                this.$emit('redirect', { target: 'Download' });
+            }
           } else {
             this.$emit('err', 'Could not login');
           }

@@ -128,7 +128,7 @@ export default {
               password: this.login_pwd,
             })
             .then(() => {
-              this.$emit('redirect', 'Download');
+                this.$emit('redirect', {target: 'Download'});
             })
             .catch((err) => {
               this.$emit('err', err);

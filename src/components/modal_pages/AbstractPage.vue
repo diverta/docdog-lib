@@ -6,6 +6,18 @@ export default {
       type: String,
       default: '',
     },
+    msg: {
+      type: String,
+      default: '',
+    },
+    msg2: {
+      type: String,
+      default: '',
+    },
+    process: {
+      type: String,
+      default: '',
+    }
   },
   emits: ['close', 'err', 'redirect'],
   unmount() {

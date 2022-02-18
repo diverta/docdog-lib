@@ -118,7 +118,14 @@ export default {
               password: this.login_pwd,
             })
             .then(() => {
-              this.$emit('redirect', 'Download');
+              const msg = 'アカウント作成が完了しました';
+              if (this.process == 'signup') {
+                // Only SignUp
+                this.$emit('redirect', { target: 'EmptyPage', msg });
+              } else {
+                // Auto-signup before download
+                this.$emit('redirect', { target: 'Download', msg });
+              }
             })
             .catch((err) => {
               this.$emit('err', err);

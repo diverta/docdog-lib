@@ -1,5 +1,4 @@
 <template>
-  <!-- ToDo: ModalHeading "アカウントの削除" -->
   <div class="docdog-modal__body__section">
       <p class="docdog-modal__body__text">アカウントを削除すると○○ができなくなります。アカウントを削除しますか？</p>
     </div>

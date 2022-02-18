@@ -4,21 +4,7 @@
       <h1 class="c-heading--h1">営業資料</h1>
       <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
       <ul class="c-card__list c-card__list--col-3">
-        <li class="c-card" v-for="doc in list" :key="doc.topics_id">
-          <div class="c-card__thumb" :style="getThumbnailStyle(doc)">
-            <span v-if="doc.type.key == 'pdf'" class="c-badge c-badge--pdf">PDF</span>
-            <span v-if="doc.type.key == 'excel'" class="c-badge c-badge--excel">Excel</span>
-          </div>
-          <div class="c-card__body">
-            <h2 class="c-card__title">{{ doc.subject }}</h2>
-          </div>
-          <div class="c-card__foot">
-            <button type="button" class="c-button c-button--dark" @click="nodeAction(doc.topics_id)">
-              ダウンロードする
-            </button>
-            <button type="button" class="c-button c-button--light">ダウンロードリストに追加する</button>
-          </div>
-        </li>
+        <CardMain v-for="doc in list" :data="doc" :key="doc.topics_id" @download="download" />
       </ul>
     </section>
     <Modal v-model:show="showModal" :title="current_page_title" @close="closeModal">
@@ -26,8 +12,13 @@
         v-model:current_page="current_page"
         :node_params="current_node_params"
         :process="current_process"
+        :process_params="current_process_params"
         @close="closeModal"
+        ref="ctrl"
       />
+      <template v-slot:footer v-if="footer_comp">
+        <component :is="footer_comp" @download="download" />
+      </template>
     </Modal>
   </main>
 </template>
@@ -35,9 +26,17 @@
 <script>
 import Modal from '@/components/Modal.vue';
 import PageController from './components/modal_pages/PageController.vue';
+import Footer1 from './components/modal_pages/Footer1.vue';
+import Footer2 from './components/modal_pages/Footer2.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
+import CardMain from './components/cards/CardMain.vue';
 import docsApi from '@/api/docs';
+
+const footerComps = {
+  Footer1,
+  Footer2,
+};
 
 // General NaiveUI font
 import 'vfonts/Lato.css';
@@ -46,6 +45,8 @@ export default {
   components: {
     Modal,
     PageController,
+    CardMain,
+    ...footerComps,
   },
   props: {
     initList: {
@@ -62,6 +63,7 @@ export default {
       current_node_uuid: null,
       current_page: 'Loading',
       current_process: '', // Setting simple process for the modal to show instead of automatic, such as 'signup' or 'login'
+      current_process_params: {}, // Params for the process
     };
   },
   computed: {
@@ -94,6 +96,9 @@ export default {
     current_page_title() {
       let title = ''; // Todo : i18n
       switch (this.current_page) {
+        case 'EmptyPage':
+          title = '';
+          break;
         case 'Loading':
           title = 'ローディング';
           break;
@@ -106,13 +111,31 @@ export default {
         case 'SignIn':
           title = 'ログインしてダウンロード';
           break;
+        case 'SignInStep3':
+          title = 'ログインしてダウンロード';
+          break;
+        case 'Withdrawal':
+          title = 'アカウントの削除';
+          break;
         case 'Download':
-          title = 'ダウンロード';
+          title = 'ログインしてダウンロード';
           break;
         default:
           title = this.current_page;
       }
       return title;
+    },
+    footer_comp() {
+      let comp = '';
+      switch (this.current_page) {
+        case 'Download':
+          comp = footerComps['Footer1'];
+          break;
+        case 'SignInStep3':
+          comp = footerComps['Footer2'];
+          break;
+      }
+      return comp;
     },
   },
   mounted() {
@@ -172,6 +195,7 @@ export default {
       this.current_node_uuid = null;
       this.current_page = 'Loading'; // Reinit the page state
       this.current_process = ''; // Terminate any process
+      this.current_process_params = {}; // And clean its data
     },
     setNodeLogin(node) {
       node.addEventListener('click', this.login);
@@ -193,6 +217,16 @@ export default {
         autoLogin: true,
         anonLogin: false,
       });
+    },
+    download(data) {
+      if (this.current_process != 'single_download') {
+        this.current_process = 'single_download';
+        this.current_process_params = { doc_data: data };
+      } else {
+        // Coming from the footer, as download modal is open
+        console.log(this.$refs.ctrl);
+        this.$refs['ctrl'].pageExec('onDownload');
+      }
     },
     login() {
       this.current_process = 'login'; // Model action for this process
