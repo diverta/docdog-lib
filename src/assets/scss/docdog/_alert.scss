@@ -13,6 +13,10 @@
     background: $color-success;
     color: #fff;
   }
+  &--error {
+    background: $color-danger;
+    color: #fff;
+  }
   p:not([class]) { 
     margin: 0;
   }
