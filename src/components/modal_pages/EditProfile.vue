@@ -61,6 +61,9 @@
           </button>
         </div>
       </form>
+      <div class="docdog-form__link">
+        <button type="button" class="docdog-button--text">アカウントを削除する</button>
+      </div>
     </div>
   </div>
   <div class="docdog-modal__body__section">
