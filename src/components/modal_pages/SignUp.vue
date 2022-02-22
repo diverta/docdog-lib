@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     signup(event) {
-      this.$emit('err', '');
+      this.error('');
       memberApi
         .doSignUp({
           email: this.email,
@@ -121,18 +121,18 @@ export default {
               const msg = 'アカウント作成が完了しました';
               if (this.process == 'signup') {
                 // Only SignUp
-                this.$emit('redirect', { target: 'EmptyPage', msg });
+                this.redirect({ target: 'EmptyPage', msg });
               } else {
                 // Auto-signup before download
-                this.$emit('redirect', { target: 'Download', msg });
+                this.redirect({ target: 'Download', msg });
               }
             })
             .catch((err) => {
-              this.$emit('err', err);
+              this.error(err);
             });
         })
         .catch((err) => {
-          this.$emit('err', err);
+          this.error(err);
         });
     },
   },

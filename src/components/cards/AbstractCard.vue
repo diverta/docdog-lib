@@ -5,8 +5,16 @@ export default {
       type: Object,
       default: () => {},
     },
+    deleteFooter: {
+      type: Boolean,
+      default: false,
+    },
+    toastIds: {
+      type: Object,
+      default: () => {},
+    },
   },
-  emits: ['download', 'add'],
+  emits: ['download', 'addToast', 'removeToast'],
   computed: {
     thumbnailStyle() {
       if (this.data && this.data.type && this.data.type.key == 'image' && this.data.file) {
@@ -16,13 +24,19 @@ export default {
         return '';
       }
     },
+    isInToast() {
+      return this.toastIds ? this.toastIds[this.data.topics_id] || false : false;
+    },
   },
   methods: {
     onDownload() {
       this.$emit('download', this.data);
     },
     onAdd() {
-      this.$emit('add', this.data);
+      this.$emit('addToast', this.data);
+    },
+    removeToast() {
+      this.$emit('removeToast');
     },
   },
 };

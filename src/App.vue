@@ -4,22 +4,40 @@
       <h1 class="c-heading--h1">営業資料</h1>
       <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
       <ul class="c-card__list c-card__list--col-3">
-        <CardMain v-for="doc in list" :data="doc" :key="doc.topics_id" @download="download" />
+        <CardMain
+          v-for="doc in list"
+          :data="doc"
+          :key="doc.topics_id"
+          :toastIds="toastIds"
+          @download="download"
+          @addToast="addToast"
+        />
       </ul>
     </section>
-    <Modal v-model:show="showModal" :title="current_page_title" @close="closeModal">
+    <Modal v-model:show="showModal" :title="current_page_title" @close="closeModalOuter">
       <PageController
         v-model:current_page="current_page"
         :node_params="current_node_params"
         :process="current_process"
         :process_params="current_process_params"
+        :toastIds="toastIds"
+        v-model:footer_data="footer_data"
         @close="closeModal"
+        @addToast="addToast"
+        @removeToast="removeToast"
         ref="ctrl"
       />
       <template v-slot:footer v-if="footer_comp">
-        <component :is="footer_comp" @download="download" />
+        <component :is="footer_comp" :footer_data="footer_data" @download="download" @addToast="addToast" />
       </template>
     </Modal>
+    <Toast
+      v-model:list="toastList"
+      v-show="toastList.length > 0"
+      @downloadToast="downloadToast"
+      @removeToast="removeToast"
+      ref="toast"
+    />
   </main>
 </template>
 
@@ -31,6 +49,7 @@ import Footer2 from './components/modal_pages/Footer2.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
 import CardMain from './components/cards/CardMain.vue';
+import Toast from './components/Toast.vue';
 import docsApi from '@/api/docs';
 
 const footerComps = {
@@ -46,6 +65,7 @@ export default {
     Modal,
     PageController,
     CardMain,
+    Toast,
     ...footerComps,
   },
   props: {
@@ -57,6 +77,7 @@ export default {
   data() {
     return {
       list: [],
+      toastList: [],
       pageInfo: {},
       docdog_id_attr_name: 'data-docdog-id',
       node_params_map: {},
@@ -64,6 +85,7 @@ export default {
       current_page: 'Loading',
       current_process: '', // Setting simple process for the modal to show instead of automatic, such as 'signup' or 'login'
       current_process_params: {}, // Params for the process
+      footer_data: {}, // Data to be shared between the modal page and the footer
     };
   },
   computed: {
@@ -76,7 +98,7 @@ export default {
       },
       set(unselect) {
         // Setting = closing the modal
-        this.closeModal();
+        this.closeModalOuter();
       },
     },
     current_node() {
@@ -111,8 +133,11 @@ export default {
         case 'SignIn':
           title = 'ログインしてダウンロード';
           break;
-        case 'SignInStep3':
+        case 'DownloadList':
           title = 'ログインしてダウンロード';
+          break;
+        case 'EditProfile':
+          title = 'アカウント情報の編集';
           break;
         case 'Withdrawal':
           title = 'アカウントの削除';
@@ -131,11 +156,16 @@ export default {
         case 'Download':
           comp = footerComps['Footer1'];
           break;
-        case 'SignInStep3':
+        case 'DownloadList':
           comp = footerComps['Footer2'];
           break;
       }
       return comp;
+    },
+    toastIds() {
+      return this.toastList.reduce((carry, item) => {
+        return { ...carry, [item.topics_id]: true };
+      }, {});
     },
   },
   mounted() {
@@ -185,13 +215,19 @@ export default {
         this.current_node_uuid = node_id;
       } else if (this.current_node_uuid === node_id) {
         // Current node is opened => close
-        this.closeModal();
+        this.closeModalOuter();
       } else {
         // Another node is opened => replace
         this.current_node_uuid = node_id;
       }
     },
+    closeModalOuter() {
+      // Triggered by general modal close user click
+      this.footer_data = {};
+      this.closeModal();
+    },
     closeModal() {
+      // Can be triggered through 'close' event by any modal page
       this.current_node_uuid = null;
       this.current_page = 'Loading'; // Reinit the page state
       this.current_process = ''; // Terminate any process
@@ -205,6 +241,9 @@ export default {
     },
     setNodeSignUp(node) {
       node.addEventListener('click', this.signup);
+    },
+    setNodeProfile(node) {
+      node.addEventListener('click', this.profile);
     },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
@@ -224,7 +263,6 @@ export default {
         this.current_process_params = { doc_data: data };
       } else {
         // Coming from the footer, as download modal is open
-        console.log(this.$refs.ctrl);
         this.$refs['ctrl'].pageExec('onDownload');
       }
     },
@@ -235,7 +273,14 @@ export default {
       loginApi.doLogout();
     },
     signup() {
-      this.current_process = 'signup'; // Model action for this process
+      this.current_process = 'signup';
+    },
+    profile() {
+      this.current_process = 'profile';
+    },
+    downloadToast() {
+      this.current_process = 'downloadList';
+      this.current_process_params = { list: this.toastList };
     },
     getThumbnailStyle(doc) {
       if (doc.type.key == 'image' && doc.file) {
@@ -244,6 +289,26 @@ export default {
         // TODO preview image ?
         return '';
       }
+    },
+    addToast(item) {
+      if (item) {
+        this.toastList.push(item);
+      } else if (this.current_process == 'single_download') {
+        // Coming from the footer of single download process
+        this.$refs['ctrl'].pageExec('addToastCurrent');
+      }
+    },
+    removeToast(idx) {
+      if (idx != null) {
+        this.toastList.splice(idx, 1);
+      } else {
+        // Delete all indexes
+        this.toastList.splice(0, this.toastList.length);
+      }
+    },
+    downloadToast() {
+      this.current_process = 'downloadList';
+      this.current_process_params = { list: this.toastList };
     },
   },
 };

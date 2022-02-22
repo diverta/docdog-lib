@@ -6,7 +6,7 @@
   </div>
   <div class="docdog-modal__body__section">
     <div class="docdog-card__single">
-      <CardModal :data="doc_data" />
+      <CardModal :data="doc_data" :toastIds="toastIds" />
     </div>
   </div>
 </template>
@@ -41,8 +41,10 @@ export default {
   },
   mounted() {
     if (!this.doc_id && !this.doc_data) {
-      this.$emit('err', 'Document id is undefined and data not provided');
+      this.error('Document id is undefined and data not provided');
     }
+    this.footer_data.doc_data = this.doc_data;
+    this.footer_data.isInToast = this.toastIds[this.doc_data.topics_id] || false;
   },
   methods: {
     onDownload() {
@@ -55,10 +57,10 @@ export default {
           .getDocumentData(this.doc_id, this.isPublic)
           .then((resp) => {
             this.download(resp.details.file.url);
-            this.$emit('close');
+            this.close();
           })
           .catch((err) => {
-            this.$emit('err', err);
+            this.error(err);
           });
       }
     },
@@ -70,6 +72,11 @@ export default {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    },
+    addToastCurrent() {
+      this.addToast(this.doc_data);
+      this.footer_data.isInToast = true;
+      this.close();
     },
   },
 };

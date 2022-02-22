@@ -2,6 +2,7 @@
   <component
     :is="current_page_comp"
     v-bind="comp_props"
+    v-model:footer_data="footer_data"
     @err="err = $event"
     @close="$emit('close')"
     @redirect="onRedirect"
@@ -11,10 +12,11 @@
 
 <script>
 import SignIn from './SignIn.vue';
-import SignInStep3 from './SignInStep3.vue';
+import EditProfile from './EditProfile.vue';
 import Withdrawal from './Withdrawal.vue';
 import SignUp from './SignUp.vue';
 import Download from './Download.vue';
+import DownloadList from './DownloadList.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
 import EmptyPage from './EmptyPage.vue';
@@ -22,11 +24,12 @@ import loginApi from '@/api/login';
 
 const pages = {
   SignIn,
-  SignInStep3,
   SignUp,
   Download,
+  DownloadList,
   EmptyPage,
   Loading,
+  EditProfile,
   Withdrawal,
   Error, // In case a dynamic component is incorrectly indicated - should only be a case during development
 };
@@ -46,6 +49,14 @@ export default {
       default: '',
     },
     process_params: {
+      type: Object,
+      default: () => {},
+    },
+    toastIds: {
+      type: Object,
+      default: () => {},
+    },
+    footer_data: {
       type: Object,
       default: () => {},
     },
@@ -95,6 +106,7 @@ export default {
         msg: this.msg,
         msg2: this.msg2,
         process: this.process,
+        toastIds: this.toastIds,
         ...this.process_params,
       };
     },
@@ -129,6 +141,12 @@ export default {
                 break;
               case 'single_download':
                 this.setCurrentPage('Download');
+                break;
+              case 'downloadList':
+                this.setCurrentPage('DownloadList');
+                break;
+              case 'profile':
+                this.setCurrentPage('EditProfile');
                 break;
             }
             // Manual process such as login or signup

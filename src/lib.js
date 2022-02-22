@@ -41,6 +41,12 @@ function setNodeSignUp(node) {
   }
 }
 
+function setNodeProfile(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeProfile(node);
+  }
+}
+
 function parseConfig(config) {
   if (typeof config === 'string' || config instanceof String) {
     return config.split(',').reduce((carry, keyval) => {
@@ -107,6 +113,8 @@ function parseDOM() {
       setNodeLogin(node.el);
     } else if (node.params.signup) {
       setNodeSignUp(node.el);
+    } else if (node.params.profile) {
+      setNodeProfile(node.el);
     } else {
       linkNode(node.el, node.params);
     }

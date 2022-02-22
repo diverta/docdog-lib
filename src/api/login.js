@@ -1,14 +1,15 @@
 import axios from 'axios';
 import qs from 'qs';
-import { post, processError } from './utils';
+import { get, post, processError } from './utils';
 
 const header_keys = {
   ACCESS_TOKEN: 'X-RCMS-API-ACCESS-TOKEN',
 };
 
 const storage_keys = {
-  REFRESH_TOKEN: 'docdog.refresh_token',
-  ACCESS_TOKEN: 'docdog.access_token',
+  REFRESH_TOKEN: { name: 'docdog.refresh_token', location: 'local' },
+  ACCESS_TOKEN: { name: 'docdog.access_token', location: 'local' },
+  PROFILE: { name: 'docdog.profile', location: 'session' },
 };
 
 // Checks whether user is logged in
@@ -61,7 +62,7 @@ function getAuthHeaders(
 
 // Parses a token object, notably validates expiry date
 function parseToken(key, token_data) {
-  token_data.isPublic = token_data.isPublic && token_data.isPublic !== 'false'; // Because storing and reading stringifies the boolean into string "false" which is true otherwise
+  token_data.isPublic = (token_data.isPublic && token_data.isPublic !== 'false') || false; // Because storing and reading stringifies the boolean into string "false" which is true otherwise
   if (token_data.expiresAt) {
     const expirationTimestamp = parseInt(token_data.expiresAt);
     if (expirationTimestamp <= Math.floor(Date.now() / 1000)) {
@@ -74,15 +75,29 @@ function parseToken(key, token_data) {
 }
 
 function storeData(key, value) {
-  localStorage.setItem(key, qs.stringify(value));
+  if (key.location == 'session') {
+    sessionStorage.setItem(key.name, qs.stringify(value));
+  } else {
+    localStorage.setItem(key.name, qs.stringify(value));
+  }
 }
 
 function fetchData(key) {
-  return qs.parse(localStorage.getItem(key));
+  let rawData = '';
+  if (key.location == 'session') {
+    rawData = sessionStorage.getItem(key.name);
+  } else {
+    rawData = localStorage.getItem(key.name);
+  }
+  return qs.parse(rawData);
 }
 
 function removeData(key) {
-  localStorage.removeItem(key);
+  if (key.location == 'session') {
+    sessionStorage.removeItem(key.name);
+  } else {
+    localStorage.removeItem(key.name);
+  }
 }
 
 function doLogin({ email, password }) {
@@ -106,7 +121,10 @@ function doLogin({ email, password }) {
       switch (err.response.status) {
         case 401:
           err_msg =
-            err.response && err.response.data && err.response.data.errors.length > 0 && err.response.data.errors[0].message
+            err.response &&
+            err.response.data &&
+            err.response.data.errors.length > 0 &&
+            err.response.data.errors[0].message
               ? err.response.data.errors[0].message
               : 'メールアドレスが不正です。';
           break;
@@ -121,6 +139,7 @@ function doLogin({ email, password }) {
 function doLogout() {
   removeData(storage_keys.ACCESS_TOKEN);
   removeData(storage_keys.REFRESH_TOKEN);
+  removeData(storage_keys.PROFILE);
 }
 
 function getAccessToken({ grant_token, refresh_token }) {
@@ -137,10 +156,41 @@ function getAccessToken({ grant_token, refresh_token }) {
     });
 }
 
+function updateProfile(data) {
+  const profile = getProfile();
+  storeData(storage_keys.PROFILE, { ...profile, ...data });
+}
+
+function getProfile(
+  options = {
+    autoLogin: true, // Performs autoLogin if there is a Refresh token but not Access token
+    anonLogin: false, // Fetches anonymous token if there is no Access or Refresh token
+  }
+) {
+  const profile = fetchData(storage_keys.PROFILE);
+  if (profile.member_id) {
+    return Promise.resolve(profile);
+  } else {
+    return getAuthHeaders(options).then((headers) => {
+      if (header_keys.ACCESS_TOKEN in headers && headers[header_keys.ACCESS_TOKEN].length > 0) {
+        return get('/rcms-api/3/profile', headers).then((res) => {
+          updateProfile(res.data.details);
+          return res.data.details;
+        });
+      } else {
+        // Not logged in
+        return {};
+      }
+    });
+  }
+}
+
 // Public methods
 export default {
   isLogin,
   getAuthHeaders,
   doLogin,
   doLogout,
+  updateProfile,
+  getProfile,
 };

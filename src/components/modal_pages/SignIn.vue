@@ -97,7 +97,7 @@
         </div>
       </form>
       <div class="docdog-form__link">
-        <button type="button" class="docdog-button--text" @click.prevent="$emit('redirect', 'SignUp')">
+        <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignUp' })">
           アカウントを作成する
         </button>
         <button type="button" class="docdog-button--text">パスワードを忘れた場合</button>
@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     login(event) {
-      this.$emit('err', '');
+      this.error('');
       loginApi
         .doLogin({
           email: this.login_id,
@@ -136,19 +136,19 @@ export default {
           if (login_ok) {
             switch (this.process) {
               case 'login':
-                this.$emit('redirect', { target: 'EmptyPage', msg: 'ログインしました' });
+                this.redirect({ target: 'EmptyPage', msg: 'ログインしました' });
                 break;
               default:
                 // Outside of a process, triggered by unauthorized download attempt (now logged in, so OK)
-                this.$emit('redirect', { target: 'Download' });
+                this.redirect({ target: 'Download' });
             }
           } else {
-            this.$emit('err', 'Could not login');
+            this.error('Could not login');
           }
           event.target.blur();
         })
         .catch((err) => {
-          this.$emit('err', err);
+          this.error(err);
         });
     },
   },

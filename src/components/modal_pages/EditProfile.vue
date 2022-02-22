@@ -1,9 +1,7 @@
 <template>
-  <!-- ToDo: ModalHeading "アカウント情報の編集" -->
   <div class="docdog-modal__body__section">
-    <!-- ToDo: After submit, display error or success message -->
-    <AlertError />
-    <AlertSuccess />
+    <AlertError v-if="err" :err="err_msg" />
+    <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
   </div>
   <div class="docdog-form docdog-modal__body__section">
     <div class="docdog-form__signup">
@@ -22,7 +20,7 @@
         <div :class="err_field == 'email' ? 'docdog-form__item docdog-form__item--error' : ''">
           <label for="email" class="docdog-form__item__title">メールアドレス</label>
           <input name="email" type="text" id="email" placeholder="" v-model="email" required />
-          <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
+          <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">{{ err_msg }}</p>
         </div>
         <div class="docdog-form__item">
           <label for="password" class="docdog-form__item__title">パスワード</label>
@@ -56,13 +54,15 @@
           <input name="position" type="text" id="position" placeholder="" v-model="position" required />
         </div>
         <div class="docdog-form__button">
-          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="signup">
+          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="editProfile">
             変更する
           </button>
         </div>
       </form>
       <div class="docdog-form__link">
-        <button type="button" class="docdog-button--text">アカウントを削除する</button>
+        <button type="button" class="docdog-button--text" @click="redirect({ target: 'Withdrawal' })">
+          アカウントを削除する
+        </button>
       </div>
     </div>
   </div>
@@ -80,11 +80,12 @@ import memberApi from '@/api/member';
 import loginApi from '@/api/login';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
+
 export default {
   extends: AbstractPage,
   components: {
     AlertSuccess,
-    AlertError
+    AlertError,
   },
   data() {
     return {
@@ -107,35 +108,71 @@ export default {
       }
       return '';
     },
+    err_msg() {
+      if (this.err.length > 0) {
+        const [err_field, err_type] = this.err.split(':');
+        let translatedField = 'データ';
+        let tranlatedProblem = '不正';
+        switch (err_field) {
+          case 'email':
+            translatedField = 'メールアドレス';
+            break;
+        }
+        switch (err_type) {
+          case 'invalid':
+            tranlatedProblem = '不正';
+            break;
+          case 'required':
+            tranlatedProblem = '必須';
+            break;
+        }
+        if (translatedField && tranlatedProblem) {
+          return translatedField + 'が' + tranlatedProblem + 'です';
+        } else {
+          return 'エラーが発生しました。';
+        }
+      } else {
+        return '';
+      }
+    },
+  },
+  mounted() {
+    loginApi.getProfile().then((profile) => {
+      if (profile.member_id) {
+        this.email = profile.email;
+        this.name1 = profile.name1;
+        this.name2 = profile.name2;
+        this.company_nm = profile.company_nm;
+        this.industry = profile.industry.key;
+        this.position = profile.position;
+      } else {
+        this.close();
+      }
+    });
   },
   methods: {
-    signup(event) {
-      this.$emit('err', '');
+    editProfile(event) {
+      this.error(''); // clean the error
+      const newData = {
+        email: this.email,
+        name1: this.name1,
+        name2: this.name2,
+        company_nm: this.company_nm,
+        industry: this.industry,
+        position: this.position,
+      };
+      if (this.login_pwd) {
+        // Only update password if inputted
+        newData.login_pwd = this.login_pwd;
+      }
       memberApi
-        .doSignUp({
-          email: this.email,
-          name1: this.name1,
-          name2: this.name2,
-          company_nm: this.company_nm,
-          industry: this.industry,
-          position: this.position,
-          login_pwd: this.login_pwd,
-        })
+        .doEditProfile(newData)
         .then((resp) => {
-          loginApi
-            .doLogin({
-              email: this.email,
-              password: this.login_pwd,
-            })
-            .then(() => {
-                this.$emit('redirect', {target: 'Download'});
-            })
-            .catch((err) => {
-              this.$emit('err', err);
-            });
+          loginApi.updateProfile(newData);
+          this.redirect({ target: 'EditProfile', msg: ' ' }); // For the msg
         })
         .catch((err) => {
-          this.$emit('err', err);
+          this.error(err);
         });
     },
   },
