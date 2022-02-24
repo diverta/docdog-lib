@@ -4,14 +4,12 @@
 
 .docdog-modal {
   width: 90%;
-  max-height: 90%;
   border-radius: $border-radius-lg;
   background-color: #fff;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
   z-index: 11100;
   @media screen and (min-width: 768px) {
     width: 800px;
-    min-height: 600px;
   }
   &__bg {
     position: fixed;
