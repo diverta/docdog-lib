@@ -1,6 +1,6 @@
 <template>
   <div class="docdog" v-if="show">
-    <div class="docdog-modal__bg">
+    <div class="docdog-modal__bg" @click.self="closeModal">
       <section class="docdog-modal">
         <header class="docdog-modal__head">
           <slot name="header">
@@ -18,7 +18,7 @@
         <div class="docdog-modal__body">
           <slot></slot>
         </div>
-        <footer class="docdog-modal__foot">
+        <footer v-if="this.$slots.footer" class="docdog-modal__foot">
           <slot name="footer" v-bind="$attrs"></slot>
         </footer>
       </section>
