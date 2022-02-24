@@ -3,14 +3,12 @@
   flex-direction: column;
   width: 300px;
   height: auto;
-  max-height: 90%;
   border-radius: $border-radius-md;
   position: fixed;
   right: 40px;
   bottom: 40px;
   background: #fff;
   box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
-  overflow-y: auto;
   font-size: 13px;
   z-index: 9900;
   @media screen and (max-width: 767px) {
@@ -36,6 +34,17 @@
   }
   &__body {
     flex: 1 1 auto;
+    max-height: 90vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      background-color: #f0f0f0;
+      width: $border-radius-md;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-border;
+      border-radius: $border-radius-sm;
+      border:2px solid $color-border;
+    }
     &__list {
       li {
         display: flex;

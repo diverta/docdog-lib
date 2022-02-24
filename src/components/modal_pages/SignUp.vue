@@ -13,7 +13,7 @@
             <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
           </div>
         </div>
-        <div :class="err_field == 'email' ? 'docdog-form__item docdog-form__item--error' : ''">
+        <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
           <label for="email" class="docdog-form__item__title">メールアドレス</label>
           <input name="email" type="text" id="email" placeholder="" v-model="email" required />
           <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
@@ -56,8 +56,7 @@
         </div>
       </form>
       <div class="docdog-form__link">
-        <button type="button" class="docdog-button--text">ログイン</button>
-        <button type="button" class="docdog-button--text">パスワードを忘れた場合</button>
+        <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignIn' })">ログイン</button>
       </div>
     </div>
   </div>

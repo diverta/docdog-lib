@@ -17,7 +17,7 @@
             <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
           </div>
         </div>
-        <div :class="err_field == 'email' ? 'docdog-form__item docdog-form__item--error' : ''">
+        <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
           <label for="email" class="docdog-form__item__title">メールアドレス</label>
           <input name="email" type="text" id="email" placeholder="" v-model="email" required />
           <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">{{ err_msg }}</p>

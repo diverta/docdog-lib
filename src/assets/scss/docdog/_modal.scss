@@ -4,15 +4,12 @@
 
 .docdog-modal {
   width: 90%;
-  max-height: 90%;
   border-radius: $border-radius-lg;
   background-color: #fff;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
-  overflow-y: auto;
   z-index: 11100;
   @media screen and (min-width: 768px) {
     width: 800px;
-    min-height: 600px;
   }
   &__bg {
     position: fixed;
@@ -49,6 +46,17 @@
   }
   &__body {
     padding: $spacing-x-lg;
+    max-height: 70vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      background-color: #f0f0f0;
+      width: $border-radius-md;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-border;
+      border-radius: $border-radius-sm;
+      border:2px solid $color-border;
+    }
     &__heading {
       margin: 0 0 $spacing-lg;
       font-size: 16px;
