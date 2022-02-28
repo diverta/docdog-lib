@@ -1,76 +1,78 @@
 <template>
-  <div class="docdog-modal__body__section">
-    <AlertError v-if="err" :err="err_msg" />
-    <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-  </div>
-  <div class="docdog-form docdog-modal__body__section">
-    <div class="docdog-form__signup">
-      <p class="err" v-html="err" />
-      <form>
-        <div class="docdog-form__item--col-2">
-          <div class="docdog-form__item">
-            <label for="name1" class="docdog-form__item__title">姓</label>
-            <input name="name1" type="text" id="name1" placeholder="" v-model="name1" required />
+  <div class="docdog-form">
+    <div class="docdog-modal__body__section">
+      <AlertError v-if="err" :err="err_msg" />
+      <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
+    </div>
+    <div class="docdog-modal__body__section">
+      <div class="docdog-form__signup">
+        <p class="err" v-html="err" />
+        <form>
+          <div class="docdog-form__item--col-2">
+            <div class="docdog-form__item">
+              <label for="name1" class="docdog-form__item__title">姓</label>
+              <input name="name1" type="text" id="name1" placeholder="" v-model="name1" required />
+            </div>
+            <div class="docdog-form__item">
+              <label for="name2" class="docdog-form__item__title">名</label>
+              <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
+            </div>
+          </div>
+          <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
+            <label for="email" class="docdog-form__item__title">メールアドレス</label>
+            <input name="email" type="text" id="email" placeholder="" v-model="email" required />
+            <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">{{ err_msg }}</p>
           </div>
           <div class="docdog-form__item">
-            <label for="name2" class="docdog-form__item__title">名</label>
-            <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
+            <label for="password" class="docdog-form__item__title">パスワード</label>
+            <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
           </div>
-        </div>
-        <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
-          <label for="email" class="docdog-form__item__title">メールアドレス</label>
-          <input name="email" type="text" id="email" placeholder="" v-model="email" required />
-          <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">{{ err_msg }}</p>
-        </div>
-        <div class="docdog-form__item">
-          <label for="password" class="docdog-form__item__title">パスワード</label>
-          <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
-        </div>
-        <div class="docdog-form__item">
-          <label for="company" class="docdog-form__item__title">会社名</label>
-          <input name="company" type="text" id="company" placeholder="" v-model="company_nm" required />
-        </div>
-        <div class="docdog-form__item">
-          <label for="industry" class="docdog-form__item__title">業種</label>
-          <select name="industry" id="industry" v-model="industry" required>
-            <option value="">選択してください</option>
-            <option value="1">金融</option>
-            <option value="2">官公庁・自治体</option>
-            <option value="3">学校</option>
-            <option value="4">IT・ソフトウェア</option>
-            <option value="5">メディア</option>
-            <option value="6">建設・不動産</option>
-            <option value="7">製造業</option>
-            <option value="8">食品</option>
-            <option value="9">人材・HR</option>
-            <option value="10">エネルギー・資源</option>
-            <option value="11">流通・小売</option>
-            <option value="12">スポーツ関連</option>
-            <option value="99">その他</option>
-          </select>
-        </div>
-        <div class="docdog-form__item">
-          <label for="position" class="docdog-form__item__title">役職</label>
-          <input name="position" type="text" id="position" placeholder="" v-model="position" required />
-        </div>
-        <div class="docdog-form__button">
-          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="editProfile">
-            変更する
+          <div class="docdog-form__item">
+            <label for="company" class="docdog-form__item__title">会社名</label>
+            <input name="company" type="text" id="company" placeholder="" v-model="company_nm" required />
+          </div>
+          <div class="docdog-form__item">
+            <label for="industry" class="docdog-form__item__title">業種</label>
+            <select name="industry" id="industry" v-model="industry" required>
+              <option value="">選択してください</option>
+              <option value="1">金融</option>
+              <option value="2">官公庁・自治体</option>
+              <option value="3">学校</option>
+              <option value="4">IT・ソフトウェア</option>
+              <option value="5">メディア</option>
+              <option value="6">建設・不動産</option>
+              <option value="7">製造業</option>
+              <option value="8">食品</option>
+              <option value="9">人材・HR</option>
+              <option value="10">エネルギー・資源</option>
+              <option value="11">流通・小売</option>
+              <option value="12">スポーツ関連</option>
+              <option value="99">その他</option>
+            </select>
+          </div>
+          <div class="docdog-form__item">
+            <label for="position" class="docdog-form__item__title">役職</label>
+            <input name="position" type="text" id="position" placeholder="" v-model="position" required />
+          </div>
+          <div class="docdog-form__button">
+            <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="editProfile">
+              変更する
+            </button>
+          </div>
+        </form>
+        <div class="docdog-form__link">
+          <button type="button" class="docdog-button--text" @click="redirect({ target: 'Withdrawal' })">
+            アカウントを削除する
           </button>
         </div>
-      </form>
-      <div class="docdog-form__link">
-        <button type="button" class="docdog-button--text" @click="redirect({ target: 'Withdrawal' })">
-          アカウントを削除する
-        </button>
       </div>
     </div>
-  </div>
-  <div class="docdog-modal__body__section">
-    <p class="docdog-modal__body__text">
-      続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
-      >を読み、これに同意するものとします。
-    </p>
+    <div class="docdog-modal__body__section">
+      <p class="docdog-modal__body__text">
+        続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
+        >を読み、これに同意するものとします。
+      </p>
+    </div>
   </div>
 </template>
 
