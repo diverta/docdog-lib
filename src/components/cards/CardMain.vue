@@ -9,9 +9,9 @@
     </div>
     <div class="c-card__foot">
       <button type="button" class="c-button c-button--dark" @click="onDownload()">ダウンロードする</button>
-      <button type="button" class="c-button c-button--light" v-if="isInToast">ダウンロードリストに入ってある</button>
+      <button type="button" class="c-button c-button--light" v-if="isInToast">追加済み</button>
       <button type="button" class="c-button c-button--light" v-else @click="onAdd()">
-        追加済み
+        ダウンロードリストに入ってある
       </button>
     </div>
   </li>
