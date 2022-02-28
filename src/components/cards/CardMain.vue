@@ -11,7 +11,7 @@
       <button type="button" class="c-button c-button--dark" @click="onDownload()">ダウンロードする</button>
       <button type="button" class="c-button c-button--light" v-if="isInToast">追加済み</button>
       <button type="button" class="c-button c-button--light" v-else @click="onAdd()">
-        ダウンロードリストに入ってある
+        ダウンロードリストに追加する
       </button>
     </div>
   </li>
