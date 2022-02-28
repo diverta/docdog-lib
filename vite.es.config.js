@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 const { resolve } = require('path');
 import vue from '@vitejs/plugin-vue';
-import libInjectCss from './libInjectCss';
+//import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 // https://vitejs.dev/config/
 export default defineConfig((settings) => ({
@@ -18,5 +18,5 @@ export default defineConfig((settings) => ({
       '@': resolve(__dirname, './src'),
     },
   },
-  plugins: [vue(), libInjectCss()],
+  plugins: [vue()],
 }));
