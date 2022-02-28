@@ -131,10 +131,10 @@ export default {
           title = 'アカウントの作成';
           break;
         case 'SignIn':
-          title = 'ログインしてダウンロード';
+          title = 'ログイン';
           break;
         case 'DownloadList':
-          title = 'ログインしてダウンロード';
+          title = 'ダウンロードリスト';
           break;
         case 'EditProfile':
           title = 'アカウント情報の編集';
@@ -143,7 +143,10 @@ export default {
           title = 'アカウントの削除';
           break;
         case 'Download':
-          title = 'ログインしてダウンロード';
+          title = 'ダウンロード';
+          break;
+        case 'List':
+          title = '資料一覧';
           break;
         default:
           title = this.current_page;

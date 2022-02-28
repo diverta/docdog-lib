@@ -1,15 +1,17 @@
 <template>
-  <div class="docdog-modal__body__section">
-    <p class="docdog-modal__body__text">アカウントを削除すると○○ができなくなります。アカウントを削除しますか？</p>
-  </div>
-  <div class="docdog-modal__body__section">
-    <form>
-      <div class="docdog-form__button">
-        <button type="submit" class="docdog-button docdog-button--danger" @click.prevent="withdrawal">
-          アカウントを削除する
-        </button>
-      </div>
-    </form>
+  <div class="docdog-form">
+    <div class="docdog-modal__body__section">
+      <p class="docdog-modal__body__text">アカウントを削除すると今後は資料ダウンロードができなくなります。アカウントを削除しますか？</p>
+    </div>
+    <div class="docdog-modal__body__section">
+      <form>
+        <div class="docdog-form__button">
+          <button type="submit" class="docdog-button docdog-button--danger" @click.prevent="withdrawal">
+            アカウントを削除する
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
