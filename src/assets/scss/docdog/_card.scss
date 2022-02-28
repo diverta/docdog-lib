@@ -5,12 +5,15 @@
   border: 1px solid $color-border;
   border-radius: $border-radius-md;
   &__thumb { 
-    height: 120px;
+    height: 200px;
     position: relative;
     border-bottom: 1px solid $color-border;
     border-radius: $border-radius-md $border-radius-md 0 0;
     background-size: cover;
     background-position: center;
+    @media screen and (max-width: 1280px) {
+      height: 150px;
+    }
     @media screen and (max-width: 767px) {
       height: 100px;
     }
@@ -37,6 +40,10 @@
     &__title {
       margin: 0;
       font-weight: bold;
+      & + .docdog-button { margin-top: $spacing-sm; }
+    }
+    .docdog-button + .docdog-button {
+      margin-top: $spacing-md;
     }
   }
   &__foot {
@@ -52,9 +59,19 @@
     flex-wrap: wrap;
     width: 100%;
     li { 
-      @media screen and (min-width: 768px) {
-        width: 30%;
-        &:not(:nth-of-type(3n)) { margin-right: 5%; }
+      @media screen and (min-width: 1441px) {
+        width: 18.4%;
+        &:not(:nth-of-type(5n)) { margin-right: 2%; }
+        &:nth-of-type(n+6) { margin-top: $spacing-lg; }
+      }
+      @media screen and (min-width: 1281px) and (max-width: 1440px) {
+        width: 23.1%;
+        &:not(:nth-of-type(4n)) { margin-right: 2.5%; }
+        &:nth-of-type(n+5) { margin-top: $spacing-lg; }
+      }
+      @media screen and (min-width: 768px) and (max-width: 1280px) {
+        width: 31.3%;
+        &:not(:nth-of-type(3n)) { margin-right: 3%; }
         &:nth-of-type(n+4) { margin-top: $spacing-lg; }
       }
       @media screen and (max-width: 767px) {
@@ -67,6 +84,9 @@
   &__single {
     display: flex;
     justify-content: center;
-    .docdog-card { width: 210px; }
+    .docdog-card { 
+      width: 100%;
+      max-width: 500px;
+    }
   }
 }
