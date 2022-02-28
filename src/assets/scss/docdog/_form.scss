@@ -1,5 +1,7 @@
 .docdog-form {
   @media screen and (min-width: 768px) {
+    max-width: 768px;
+    margin: auto;
     padding: $spacing-md;
     &--col-2 {
       display: flex;
