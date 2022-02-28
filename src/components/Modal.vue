@@ -43,5 +43,14 @@ export default {
       this.$emit('close');
     },
   },
+  watch: {
+    show: function (shown) {
+      if (shown) {
+        document.querySelector('body').classList.add('docdog-modal-open');
+      } else {
+        document.querySelector('body').classList.remove('docdog-modal-open');
+      }
+    },
+  },
 };
 </script>
