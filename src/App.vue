@@ -1,8 +1,17 @@
 <template>
   <main class="l-container">
-    <section class="l-container--large" v-if="initList">
-      <h1 class="c-heading--h1">営業資料</h1>
-      <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
+    <section class="l-container--large p-top__hero">
+      <header>
+        <img src="/src/assets/image/logo.svg">
+        <h1>DocDog デモサイト</h1>
+      </header>
+      <div class="p-top__hero__body">
+        <!-- TOD: Click to display list modal -->
+        <a href="/docs" class="c-button c-button--primary p-top__hero__body__button">ダウンロードページを見る</a>
+      </div>
+    </section>
+    <!-- TODO: Change to modal -->
+    <!-- <section class="l-container--large" v-if="initList">
       <ul class="c-card__list c-card__list--col-3">
         <CardMain
           v-for="doc in list"
@@ -13,7 +22,7 @@
           @addToast="addToast"
         />
       </ul>
-    </section>
+    </section> -->
     <Modal v-model:show="showModal" :title="current_page_title" @close="closeModalOuter">
       <PageController
         v-model:current_page="current_page"
@@ -21,6 +30,7 @@
         :process="current_process"
         :process_params="current_process_params"
         :toastIds="toastIds"
+        :initList="initList"
         v-model:footer_data="footer_data"
         @close="closeModal"
         @addToast="addToast"
@@ -48,9 +58,9 @@ import Footer1 from './components/modal_pages/Footer1.vue';
 import Footer2 from './components/modal_pages/Footer2.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
-import CardMain from './components/cards/CardMain.vue';
+// import CardMain from './components/cards/CardMain.vue';
 import Toast from './components/Toast.vue';
-import docsApi from '@/api/docs';
+// import docsApi from '@/api/docs';
 
 const footerComps = {
   Footer1,
@@ -64,7 +74,7 @@ export default {
   components: {
     Modal,
     PageController,
-    CardMain,
+    // CardMain,
     Toast,
     ...footerComps,
   },
@@ -171,26 +181,26 @@ export default {
       }, {});
     },
   },
-  mounted() {
-    if (this.initList) {
-      this.list = [];
-      docsApi.getDocumentList(true).then((data) => {
-        if (data) {
-          data.list.forEach((topics) => {
-            this.node_params_map[topics.topics_id] = {
-              node: null,
-              params: {
-                id: topics.topics_id,
-                public: true,
-              },
-            };
-            this.list.push(topics);
-          });
-          this.pageInfo = data.pageInfo;
-        }
-      });
-    }
-  },
+  // mounted() {
+  //   if (this.initList) {
+  //     this.list = [];
+  //     docsApi.getDocumentList(true).then((data) => {
+  //       if (data) {
+  //         data.list.forEach((topics) => {
+  //           this.node_params_map[topics.topics_id] = {
+  //             node: null,
+  //             params: {
+  //               id: topics.topics_id,
+  //               public: true,
+  //             },
+  //           };
+  //           this.list.push(topics);
+  //         });
+  //         this.pageInfo = data.pageInfo;
+  //       }
+  //     });
+  //   }
+  // },
   methods: {
     linkNode(node, params) {
       let uuid = node.getAttribute(this.docdog_id_attr_name);

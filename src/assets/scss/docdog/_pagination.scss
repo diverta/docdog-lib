@@ -1,0 +1,38 @@
+.docdog-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: $spacing-x-lg;
+  border-radius: $border-radius-md;
+  li {
+    width: 45px;
+    height: 45px;
+    margin: 0 $spacing-x-sm;
+    button, span {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      border-radius: $border-radius-md;
+      align-items: center;
+      justify-content: center;
+    }
+    button {
+      background-color: transparent;
+      color: $color-link;
+      transition: $transition;
+      svg { fill: $color-link; }
+      &:hover {
+        background-color: lighten($color-border, 16%);
+      }
+      &:disabled {
+        svg {
+          fill: $color-border;
+        }
+      }
+    }
+    span {
+      background-color: $color-link;
+      color: #fff;
+    }
+  }
+}

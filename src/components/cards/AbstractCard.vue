@@ -13,6 +13,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    showDownloadBtn: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['download', 'addToast', 'removeToast'],
   computed: {
