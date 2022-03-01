@@ -5,11 +5,15 @@
     </div>
     <div class="docdog-card__body">
       <p class="docdog-card__body__title">{{ data.subject }}</p>
-      <!-- TODO: Show only in list modal -->
-      <DownloadButton />
+      <template v-if="showDownloadBtn">
+        <button type="button" class="docdog-button docdog-button--secondary" @click="onDownload()">ダウンロードする</button>
+        <button type="button" class="docdog-button docdog-button--white" v-if="isInToast">追加済み</button>
+        <button type="button" class="docdog-button docdog-button--white" v-else @click="onAdd()">
+          ダウンロードリストに追加する
+        </button>
+      </template>
     </div>
     <div class="docdog-card__foot" v-if="deleteFooter">
-      <!-- TODO: Show only in dlownload list modal -->
       <DeleteButton @click="removeToast" />
     </div>
   </div>
@@ -17,13 +21,11 @@
 
 <script>
 import AbstractCard from './AbstractCard.vue';
-import DownloadButton from '@/components/DownloadButton.vue';
 import DeleteButton from '@/components/DeleteButton.vue';
 
 export default {
   extends: AbstractCard,
   components: {
-    DownloadButton,
     DeleteButton,
   },
 };
