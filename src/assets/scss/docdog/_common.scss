@@ -24,4 +24,8 @@ $transition: 0.2s;
   a {
     color: $color-link;
   }
+  button:disabled {
+    pointer-events: none;
+    color: $color-gray;
+  }
 }
