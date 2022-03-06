@@ -27,7 +27,8 @@
     "qs": "^6.10.1",
     "uuid": "^8.3.2",
     "vite-plugin-css-injected-by-js": "^1.2.1",
-    "vue": "^3.2.21"
+    "vue": "^3.2.21",
+    "vue3-keypress": "^4.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.10.0",

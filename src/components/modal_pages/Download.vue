@@ -6,7 +6,7 @@
   </div>
   <div class="docdog-modal__body__section">
     <div class="docdog-card__single">
-      <CardModal :data="doc_data" :toastIds="toastIds" />
+      <CardModal :data="data" :toastIds="toastIds" />
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@ import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
 import CardModal from '@/components/cards/CardModal.vue';
 import docsApi from '@/api/docs';
+import loginApi from '@/api/login';
 
 export default {
   extends: AbstractPage,
@@ -27,8 +28,8 @@ export default {
   },
   props: {
     doc_id: {
-      type: String,
-      default: '',
+      type: Number,
+      default: 0,
     },
     doc_data: {
       type: Object,
@@ -39,29 +40,53 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      data: {},
+    };
+  },
   mounted() {
     if (!this.doc_id && !this.doc_data) {
       this.error('Document id is undefined and data not provided');
     }
-    this.footer_data.doc_data = this.doc_data;
-    this.footer_data.isInToast = this.toastIds[this.doc_data.topics_id] || false;
+    if (this.doc_data) {
+      this.data = { ...this.doc_data };
+      this.footer_data.doc_data = this.data;
+      this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+    } else {
+      // Fetch data using doc id
+      loginApi
+        .isLogin({
+          autoLogin: true,
+          anonLogin: false,
+        })
+        .then((isLogin) => {
+          if (isLogin || this.isPublic) {
+            docsApi
+              .getDocumentData(this.doc_id, !isLogin) // If not logged in, do anonLogin
+              .then((resp) => {
+                this.data = resp.details;
+                this.footer_data.doc_data = this.data;
+                this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+              })
+              .catch((err) => {
+                this.error(err);
+              });
+          } else {
+            this.redirect({
+              target: 'SignIn',
+              params: { return: { target: 'Download', params: { doc_id: this.doc_id, doc_data: this.doc_data } } },
+            });
+          }
+        });
+    }
   },
   methods: {
     onDownload() {
-      if (this.doc_data) {
-        // Data has already been fetched (arriving from list, for example)
-        this.download(this.doc_data.file.url);
-      } else if (this.doc_id) {
-        // Fetch using doc_id
-        docsApi
-          .getDocumentData(this.doc_id, this.isPublic)
-          .then((resp) => {
-            this.download(resp.details.file.url);
-            this.close();
-          })
-          .catch((err) => {
-            this.error(err);
-          });
+      if (this.data) {
+        // Data has been fetched
+        this.download(this.data.file.url);
+        this.close();
       }
     },
     download(url, name = '') {
@@ -74,7 +99,7 @@ export default {
       document.body.removeChild(link);
     },
     addToastCurrent() {
-      this.addToast(this.doc_data);
+      this.addToast(this.data);
       this.footer_data.isInToast = true;
       this.close();
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="docdog" v-if="show">
+  <div class="docdog" v-show="show">
     <div class="docdog-modal__bg" @click.self="closeModal">
       <section class="docdog-modal">
         <header class="docdog-modal__head">

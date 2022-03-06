@@ -3,10 +3,10 @@
     <button type="button" class="docdog-button docdog-button--white" v-if="footer_data.isInToast">
       追加済み
     </button>
-    <button type="button" class="docdog-button docdog-button--white" v-else @click="$emit('addToast')">
+    <button type="button" class="docdog-button docdog-button--white" v-else @click="addToast">
       ダウンロードリストに追加する
     </button>
-    <button type="button" class="docdog-button docdog-button--primary" @click="$emit('download')">
+    <button type="button" class="docdog-button docdog-button--primary" @click="download">
       ダウンロードする
     </button>
   </div>

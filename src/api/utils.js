@@ -4,9 +4,10 @@ import qs from 'qs';
 
 export const API_HOST = 'https://docdog.g.kuroco.app';
 
-export function get(uri, headers = {}) {
+export function get(uri, headers = {}, params = {}) {
   return axios.get(API_HOST + uri, {
     headers,
+    params,
   });
 }
 

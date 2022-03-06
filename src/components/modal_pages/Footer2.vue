@@ -3,7 +3,7 @@
     <button type="button" class="docdog-button docdog-button--white"  @click.prevent="redirect({ target: 'List' })">
       資料一覧に戻る
     </button>
-    <button type="button" class="docdog-button docdog-button--primary" @click="$emit('downloadAll')">
+    <button type="button" class="docdog-button docdog-button--primary" @click="downloadToast">
       まとめてダウンロードする
     </button>
   </div>

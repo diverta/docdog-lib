@@ -11,6 +11,12 @@ if (window.Docdog === undefined) {
   };
 }
 
+function processNodeParams(node, params) {
+  if (window.Docdog.app) {
+    window.Docdog.app.processNodeParams(node, params);
+  }
+}
+
 function linkNode(node, params) {
   if (window.Docdog.app) {
     window.Docdog.app.linkNode(node, params);
@@ -47,6 +53,12 @@ function setNodeProfile(node) {
   }
 }
 
+function setNodeList(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeList(node);
+  }
+}
+
 function parseConfig(config) {
   if (typeof config === 'string' || config instanceof String) {
     return config.split(',').reduce((carry, keyval) => {
@@ -69,17 +81,14 @@ const initApp = _.once((el) => {
     // Even if the lib is loaded multiple times, ensure app init only once
 
     let docdogAppDiv = null;
-    let docdogApp = null;
     if (el) {
       docdogAppDiv = el;
-      docdogApp = createApp(App, { initList: true });
     } else {
       docdogAppDiv = document.createElement('div');
       docdogAppDiv.classList.add('docdog-container');
       document.body.appendChild(docdogAppDiv);
-      docdogApp = createApp(App);
     }
-    window.Docdog.app = docdogApp.mount(docdogAppDiv);
+    window.Docdog.app = createApp(App).mount(docdogAppDiv);
   }
 });
 
@@ -91,32 +100,66 @@ function parseDOM() {
   //  XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
   //  null
   //);
+  const docdogEls = [];
   const nodes = [];
   let el = null; // Element to be mounted
 
+  // Scan <a> tags
+  document.querySelectorAll('a[href^="https://docdog.g.kuroco-front.app/"]').forEach((node) => {
+    const url = new URL(node.href);
+    const action = url.pathname.substr(1);
+    node.removeAttribute('href'); // Disable click
+    docdogEls.push({ node, action, searchParams: url.searchParams });
+  });
+
+  // Scan any tag having custom data-docdog attribute
   document.querySelectorAll('[data-docdog]').forEach((node) => {
-    const params = parseConfig(node.getAttribute('data-docdog'));
-    if (params.list) {
-      // "list" is a rendering param. We mount the app on it, if it exists
-      el = node;
-    } else {
-      nodes.push({ el: node, params });
+    const [action, paramsQueryString] = node.getAttribute('data-docdog').split('?');
+    docdogEls.push({ node, action, searchParams: new URLSearchParams(paramsQueryString) });
+  });
+
+  docdogEls.forEach((elData) => {
+    const params = {};
+    const paramsIter = elData.searchParams.entries();
+    let res = paramsIter.next();
+    while (!res.done) {
+      const [key, value] = res.value;
+      if (key == 'id') {
+        params[key] = parseInt(value);
+      } else {
+        params[key] = value;
+      }
+      res = paramsIter.next();
     }
+    nodes.push({ el: elData.node, action: elData.action, params });
   });
 
   initApp(el);
 
   nodes.forEach((node) => {
-    if (node.params.logout) {
-      setNodeLogout(node.el);
-    } else if (node.params.login) {
-      setNodeLogin(node.el);
-    } else if (node.params.signup) {
-      setNodeSignUp(node.el);
-    } else if (node.params.profile) {
-      setNodeProfile(node.el);
-    } else {
-      linkNode(node.el, node.params);
+    processNodeParams(node.el, node.params);
+    switch (node.action) {
+      case 'logout':
+        setNodeLogout(node.el);
+        break;
+      case 'login':
+        setNodeLogin(node.el);
+        break;
+      case 'signup':
+        setNodeSignUp(node.el);
+        break;
+      case 'profile':
+        setNodeProfile(node.el);
+        break;
+      case 'list':
+        setNodeList(node.el);
+        break;
+      case 'download':
+        linkNode(node.el, node.params);
+        break;
+      default:
+        // Actionless tags are possible, for example to make use of docdog event binding (such as isLogin)
+        //console.err('[DocDog] Unrecognized or non specified action for the element', node.el);
     }
   });
 }

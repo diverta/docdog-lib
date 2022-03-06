@@ -57,7 +57,9 @@
           </div>
         </form>
         <div class="docdog-form__link">
-          <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignIn' })">ログイン</button>
+          <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignIn' })">
+            ログイン
+          </button>
         </div>
       </div>
     </div>
@@ -119,13 +121,11 @@ export default {
               password: this.login_pwd,
             })
             .then(() => {
-              const msg = 'アカウント作成が完了しました';
-              if (this.process == 'signup') {
-                // Only SignUp
-                this.redirect({ target: 'EmptyPage', msg });
+              this.$emit('onLogin');
+              if (this.return && this.return.target) {
+                this.redirect(this.return);
               } else {
-                // Auto-signup before download
-                this.redirect({ target: 'Download', msg });
+                this.redirect({ target: 'EmptyPage', msg: 'アカウントの作成は完了しました。' });
               }
             })
             .catch((err) => {

@@ -1,6 +1,7 @@
 <script>
 // This is an abstract parent component of other page components. It is used define shared properties, such as props or data
 export default {
+  inheritAttrs: false, // disable automatic event propagation
   props: {
     err: {
       type: String,
@@ -14,12 +15,12 @@ export default {
       type: String,
       default: '',
     },
-    process: {
-      type: String,
-      default: '',
-    },
     toastIds: {
       type: Object,
+      default: () => {},
+    },
+    return: {
+      type: Object, // Used after SignUp or SignIn process to redirect to other page
       default: () => {},
     },
     footer_data: {
@@ -27,7 +28,7 @@ export default {
       default: () => {},
     },
   },
-  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast'],
+  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin'],
   unmount() {
     this.clearFooterData();
     this.$emit('err', '');
@@ -39,6 +40,9 @@ export default {
     },
     error(err) {
       this.$emit('err', err);
+    },
+    download(data) {
+      this.redirect({ target: 'Download', params: { doc_data: data } });
     },
     addToast(item) {
       this.$emit('addToast', item);

@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     onDownload() {
-      this.$emit('download', this.data);
+      this.$emit('download');
     },
     onAdd() {
       this.$emit('addToast', this.data);

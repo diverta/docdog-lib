@@ -2,15 +2,14 @@ import axios from 'axios';
 import { get, processError } from './utils';
 import loginApi from './login';
 
-
-export function getDocumentList(isPublic = false) {
+export function getDocumentList(isPublic = false, params = {}) {
   return loginApi
     .getAuthHeaders({
       autoLogin: true,
       anonLogin: isPublic,
     })
     .then((headers) =>
-      get('/rcms-api/3/files', headers)
+      get('/rcms-api/3/files', headers, params)
         .then(processError)
         .catch((err) => {
           let err_msg = 'Problem fetching document list'; // Default error message
@@ -27,14 +26,14 @@ export function getDocumentList(isPublic = false) {
     );
 }
 
-export function getDocumentData(id, isPublic = false) {
+export function getDocumentData(id, isPublic = false, params = {}) {
   return loginApi
     .getAuthHeaders({
       autoLogin: true,
       anonLogin: isPublic,
     })
     .then((headers) =>
-      get('/rcms-api/3/files/' + id, headers)
+      get('/rcms-api/3/files/' + id, headers, params)
         .then(processError)
         .catch((err) => {
           let err_msg = 'Problem fetching document data'; // Default error message

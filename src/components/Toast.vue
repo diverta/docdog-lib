@@ -48,6 +48,9 @@ export default {
     return {};
   },
   methods: {
+    downloadAll() {
+      console.log('downloading toast list');
+    },
     removeByIdx(idx) {
       this.$emit('removeToast', idx);
     },

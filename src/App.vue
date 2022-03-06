@@ -1,54 +1,35 @@
 <template>
-  <main class="l-container">
-    <section class="l-container--large p-top__hero">
-      <header>
-        <img src="/src/assets/image/logo.svg">
-        <h1>DocDog デモサイト</h1>
-      </header>
-      <div class="p-top__hero__body">
-        <!-- TOD: Click to display list modal -->
-        <a href="/docs" class="c-button c-button--primary p-top__hero__body__button">ダウンロードページを見る</a>
-      </div>
-    </section>
-    <!-- TODO: Change to modal -->
-    <!-- <section class="l-container--large" v-if="initList">
-      <ul class="c-card__list c-card__list--col-3">
-        <CardMain
-          v-for="doc in list"
-          :data="doc"
-          :key="doc.topics_id"
-          :toastIds="toastIds"
-          @download="download"
-          @addToast="addToast"
-        />
-      </ul>
-    </section> -->
-    <Modal v-model:show="showModal" :title="current_page_title" @close="closeModalOuter">
-      <PageController
-        v-model:current_page="current_page"
-        :node_params="current_node_params"
-        :process="current_process"
-        :process_params="current_process_params"
-        :toastIds="toastIds"
-        :initList="initList"
-        v-model:footer_data="footer_data"
-        @close="closeModal"
-        @addToast="addToast"
-        @removeToast="removeToast"
-        ref="ctrl"
-      />
-      <template v-slot:footer v-if="footer_comp">
-        <component :is="footer_comp" :footer_data="footer_data" @download="download" @addToast="addToast" />
-      </template>
-    </Modal>
-    <Toast
-      v-model:list="toastList"
-      v-show="toastList.length > 0"
-      @downloadToast="downloadToast"
+  <Modal v-model:show="showModal" :title="current_page_title" @close="closeModalOuter">
+    <PageController
+      v-model:current_page="current_page"
+      :node_params="current_node_params"
+      :toastIds="toastIds"
+      v-model:footer_data="footer_data"
+      @close="closeModal"
+      @addToast="addToast"
       @removeToast="removeToast"
-      ref="toast"
+      @download="download"
+      @onLogin="onLogin"
+      ref="ctrl"
     />
-  </main>
+    <template v-slot:footer v-if="footer_comp">
+      <component
+        :is="footer_comp"
+        :footer_data="footer_data"
+        @download="download"
+        @addToast="addToast"
+        @downloadToast="downloadToast"
+        @redirect="redirect"
+      />
+    </template>
+  </Modal>
+  <Toast
+    v-model:list="toastList"
+    v-show="toastList.length > 0 && current_page != 'DownloadList'"
+    @downloadToast="downloadToast"
+    @removeToast="removeToast"
+    ref="toast"
+  />
 </template>
 
 <script>
@@ -58,7 +39,6 @@ import Footer1 from './components/modal_pages/Footer1.vue';
 import Footer2 from './components/modal_pages/Footer2.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
-// import CardMain from './components/cards/CardMain.vue';
 import Toast from './components/Toast.vue';
 // import docsApi from '@/api/docs';
 
@@ -67,41 +47,30 @@ const footerComps = {
   Footer2,
 };
 
-// General NaiveUI font
-import 'vfonts/Lato.css';
-
 export default {
   components: {
     Modal,
     PageController,
-    // CardMain,
     Toast,
     ...footerComps,
   },
-  props: {
-    initList: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
-      list: [],
+      showModal: false,
       toastList: [],
       pageInfo: {},
       docdog_id_attr_name: 'data-docdog-id',
       node_params_map: {},
       current_node_uuid: null,
       current_page: 'Loading',
-      current_process: '', // Setting simple process for the modal to show instead of automatic, such as 'signup' or 'login'
-      current_process_params: {}, // Params for the process
       footer_data: {}, // Data to be shared between the modal page and the footer
+      app_global_events: {
+        // List of events that are handled by Docdog
+        isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
+      },
     };
   },
   computed: {
-    showModal() {
-      return this.is_node_selected || this.current_process != '';
-    },
     is_node_selected: {
       get() {
         return this.current_node_uuid !== null;
@@ -181,26 +150,40 @@ export default {
       }, {});
     },
   },
-  // mounted() {
-  //   if (this.initList) {
-  //     this.list = [];
-  //     docsApi.getDocumentList(true).then((data) => {
-  //       if (data) {
-  //         data.list.forEach((topics) => {
-  //           this.node_params_map[topics.topics_id] = {
-  //             node: null,
-  //             params: {
-  //               id: topics.topics_id,
-  //               public: true,
-  //             },
-  //           };
-  //           this.list.push(topics);
-  //         });
-  //         this.pageInfo = data.pageInfo;
-  //       }
-  //     });
-  //   }
-  // },
+  mounted() {
+    document.addEventListener('keydown', (event) => {
+      if (event.key == 'Escape' && this.showModal) {
+        this.closeModalOuter();
+      }
+    });
+    this.isLogin().then((loggedIn) => {
+      // Initial firing of logged in/logged out events
+      if (loggedIn) {
+        this.onLogin();
+      } else {
+        this.onLogout();
+      }
+    });
+
+    //   if (this.initList) {
+    //     this.list = [];
+    //     docsApi.getDocumentList(true).then((data) => {
+    //       if (data) {
+    //         data.list.forEach((topics) => {
+    //           this.node_params_map[topics.topics_id] = {
+    //             node: null,
+    //             params: {
+    //               id: topics.topics_id,
+    //               public: true,
+    //             },
+    //           };
+    //           this.list.push(topics);
+    //         });
+    //         this.pageInfo = data.pageInfo;
+    //       }
+    //     });
+    //   }
+  },
   methods: {
     linkNode(node, params) {
       let uuid = node.getAttribute(this.docdog_id_attr_name);
@@ -226,6 +209,7 @@ export default {
       if (this.current_node_uuid === null) {
         // No node is opened => open
         this.current_node_uuid = node_id;
+        this.redirect({ target: 'Download', params: { doc_id: this.current_node_params.id } });
       } else if (this.current_node_uuid === node_id) {
         // Current node is opened => close
         this.closeModalOuter();
@@ -241,10 +225,28 @@ export default {
     },
     closeModal() {
       // Can be triggered through 'close' event by any modal page
+      this.removeToast();
+      this.showModal = false;
       this.current_node_uuid = null;
       this.current_page = 'Loading'; // Reinit the page state
-      this.current_process = ''; // Terminate any process
-      this.current_process_params = {}; // And clean its data
+    },
+    processNodeParams(node, params) {
+      // Processing only relevant params
+      if (params.show) {
+        // Expecting a global docdog event
+        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params.show).groups;
+        if (!eventName in this.app_global_events) {
+          console.error('[Docdog] "show" handler expects an existing event among :', this.app_global_events.join(','));
+        } else {
+          this.app_global_events.isLogin.push((isLoggedIn) => {
+            if ((isLoggedIn && eventMod != '!') || (!isLoggedIn && eventMod == '!')) {
+              node.style.display = 'block';
+            } else {
+              node.style.display = 'none';
+            }
+          });
+        }
+      }
     },
     setNodeLogin(node) {
       node.addEventListener('click', this.login);
@@ -257,6 +259,9 @@ export default {
     },
     setNodeProfile(node) {
       node.addEventListener('click', this.profile);
+    },
+    setNodeList(node) {
+      node.addEventListener('click', this.list);
     },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
@@ -271,29 +276,46 @@ export default {
       });
     },
     download(data) {
-      if (this.current_process != 'single_download') {
-        this.current_process = 'single_download';
-        this.current_process_params = { doc_data: data };
+      if (this.current_page != 'Download') {
+        this.redirect({ target: 'Download', params: { doc_data: data } });
       } else {
         // Coming from the footer, as download modal is open
         this.$refs['ctrl'].pageExec('onDownload');
       }
     },
+    onLogin() {
+      this.app_global_events.isLogin.forEach((func) => {
+        func(true);
+      });
+    },
+    onLogout() {
+      this.app_global_events.isLogin.forEach((func) => {
+        func(false);
+      });
+    },
     login() {
-      this.current_process = 'login'; // Model action for this process
+      this.redirect({ target: 'SignIn' });
     },
     logout() {
       loginApi.doLogout();
+      this.onLogout();
     },
     signup() {
-      this.current_process = 'signup';
+      this.redirect({ target: 'SignUp' });
     },
     profile() {
-      this.current_process = 'profile';
+      this.redirect({ target: 'EditProfile' });
+    },
+    list() {
+      this.redirect({ target: 'List' });
     },
     downloadToast() {
-      this.current_process = 'downloadList';
-      this.current_process_params = { list: this.toastList };
+      if (this.current_page != 'DownloadList') {
+        this.redirect({ target: 'DownloadList', params: { list: this.toastList } });
+      } else {
+        // Coming from footer => execute page action
+        this.$refs['toast'].downloadAll();
+      }
     },
     getThumbnailStyle(doc) {
       if (doc.type.key == 'image' && doc.file) {
@@ -304,24 +326,28 @@ export default {
       }
     },
     addToast(item) {
-      if (item) {
-        this.toastList.push(item);
-      } else if (this.current_process == 'single_download') {
-        // Coming from the footer of single download process
-        this.$refs['ctrl'].pageExec('addToastCurrent');
+      this.toastList.push(item);
+      if (this.footer_data && this.footer_data.doc_data && this.footer_data.doc_data.topics_id == item.topics_id) {
+        this.footer_data.isInToast = true;
       }
     },
     removeToast(idx) {
       if (idx != null) {
-        this.toastList.splice(idx, 1);
+        const item = this.toastList.splice(idx, 1)[0];
+        if (this.footer_data && this.footer_data.doc_data && this.footer_data.doc_data.topics_id == item.topics_id) {
+          this.footer_data.isInToast = false;
+        }
       } else {
         // Delete all indexes
         this.toastList.splice(0, this.toastList.length);
+        if (this.footer_data) {
+          this.footer_data.isInToast = false;
+        }
       }
     },
-    downloadToast() {
-      this.current_process = 'downloadList';
-      this.current_process_params = { list: this.toastList };
+    redirect(pageData) {
+      this.showModal = true;
+      this.$refs['ctrl'].onRedirect(pageData);
     },
   },
 };

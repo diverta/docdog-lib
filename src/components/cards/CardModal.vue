@@ -1,12 +1,14 @@
 <template>
   <div class="docdog-card">
     <div class="docdog-card__thumb" :style="thumbnailStyle">
-      <span class="docdog-card__thumb__badge">{{ data.type.label }}</span>
+      <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
     <div class="docdog-card__body">
       <p class="docdog-card__body__title">{{ data.subject }}</p>
       <template v-if="showDownloadBtn">
-        <button type="button" class="docdog-button docdog-button--secondary" @click="onDownload()">ダウンロードする</button>
+        <button type="button" class="docdog-button docdog-button--secondary" @click="onDownload()">
+          ダウンロードする
+        </button>
         <button type="button" class="docdog-button docdog-button--white" v-if="isInToast">追加済み</button>
         <button type="button" class="docdog-button docdog-button--white" v-else @click="onAdd()">
           ダウンロードリストに追加する

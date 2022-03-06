@@ -4,7 +4,6 @@
     v-bind="comp_props"
     v-model:footer_data="footer_data"
     @err="err = $event"
-    @close="$emit('close')"
     @redirect="onRedirect"
     ref="page"
   />
@@ -17,6 +16,7 @@ import Withdrawal from './Withdrawal.vue';
 import SignUp from './SignUp.vue';
 import Download from './Download.vue';
 import DownloadList from './DownloadList.vue';
+import List from './List.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
 import EmptyPage from './EmptyPage.vue';
@@ -27,6 +27,7 @@ const pages = {
   SignUp,
   Download,
   DownloadList,
+  List,
   EmptyPage,
   Loading,
   EditProfile,
@@ -44,14 +45,6 @@ export default {
       type: String,
       default: '',
     },
-    process: {
-      type: String,
-      default: '',
-    },
-    process_params: {
-      type: Object,
-      default: () => {},
-    },
     toastIds: {
       type: Object,
       default: () => {},
@@ -66,6 +59,7 @@ export default {
       msg: '',
       msg2: '',
       p_err_msg: '', // Do not manually modify, assign to 'err' computed prop instead
+      redirect_params: {},
     };
   },
   mounted() {
@@ -105,21 +99,22 @@ export default {
         err: this.err,
         msg: this.msg,
         msg2: this.msg2,
-        process: this.process,
         toastIds: this.toastIds,
-        ...this.process_params,
+        ...this.redirect_params,
       };
     },
   },
   methods: {
     init() {
       this.setCurrentPage('Loading');
+      this.redirect_params = {};
       loginApi
         .isLogin({
           autoLogin: true,
           anonLogin: (this.node_params && this.node_params.public) || false,
         })
         .then((isLogin) => {
+          /*
           if (this.process) {
             switch (this.process) {
               case 'login':
@@ -148,11 +143,15 @@ export default {
               case 'profile':
                 this.setCurrentPage('EditProfile');
                 break;
+              case 'list':
+                this.setCurrentPage('List');
+                break;
             }
             // Manual process such as login or signup
           } else {
             this.setCurrentPage(isLogin ? 'Download' : 'SignIn');
           }
+          */
         });
     },
     pageExec(method) {
@@ -162,17 +161,13 @@ export default {
     setCurrentPage(newPage) {
       this.$emit('update:current_page', newPage);
     },
-    onRedirect({ target, msg, msg2, err }) {
+    onRedirect({ target, msg, msg2, err, params }) {
       // Reset eventual alerts after redirect
       this.msg = msg || '';
       this.msg2 = msg2 || '';
       this.err = err || '';
-      if (this.process != '' && target == 'Download') {
-        // Simple process, after login just close the modal instead of going to Download page
-        this.$emit('close');
-      } else {
-        this.setCurrentPage(target);
-      }
+      this.redirect_params = params;
+      this.setCurrentPage(target);
     },
   },
 };
