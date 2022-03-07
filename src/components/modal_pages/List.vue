@@ -61,20 +61,31 @@ export default {
   components: {
     CardModal,
   },
+  props: {
+    cnt: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
       list: [],
       pageInfo: {},
       pagedButtons: [],
       pageID: 1,
-      cnt: 1,
       node_params_map: {},
       showDownloadBtn: true,
     };
   },
   computed: {
     defaultParams() {
-      return { pageID: this.pageID, cnt: this.cnt };
+      const defaultParams = {
+        pageID: this.pageID,
+      };
+      if (this.cnt) {
+        defaultParams.cnt = this.cnt;
+      }
+      return defaultParams;
     },
   },
   mounted() {
