@@ -64,7 +64,7 @@ export default {
   props: {
     cnt: {
       type: Number,
-      default: 10,
+      default: null,
     },
   },
   data() {
@@ -79,7 +79,13 @@ export default {
   },
   computed: {
     defaultParams() {
-      return { pageID: this.pageID, cnt: this.cnt };
+      const defaultParams = {
+        pageID: this.pageID,
+      };
+      if (this.cnt) {
+        defaultParams.cnt = this.cnt;
+      }
+      return defaultParams;
     },
   },
   mounted() {
