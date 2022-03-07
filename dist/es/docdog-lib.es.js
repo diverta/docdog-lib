@@ -14543,13 +14543,18 @@ const _sfc_main$9 = {
   components: {
     CardModal
   },
+  props: {
+    cnt: {
+      type: Number,
+      default: 10
+    }
+  },
   data() {
     return {
       list: [],
       pageInfo: {},
       pagedButtons: [],
       pageID: 1,
-      cnt: 10,
       node_params_map: {},
       showDownloadBtn: true
     };
@@ -14676,7 +14681,8 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("button", {
               type: "button",
               "aria-label": "Previous",
-              disabled: $data.pageID == 1
+              disabled: $data.pageID == 1,
+              onClick: _cache[0] || (_cache[0] = ($event) => $options.changePage($data.pageID - 1))
             }, _hoisted_7$1, 8, _hoisted_5$1)
           ]),
           (openBlock(true), createElementBlock(Fragment, null, renderList($data.pagedButtons, (num) => {
@@ -14694,7 +14700,8 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("button", {
               type: "button",
               "aria-label": "Next",
-              disabled: $data.pageInfo && $data.pageID == $data.pageInfo.totalPageCnt
+              disabled: $data.pageInfo && $data.pageID == $data.pageInfo.totalPageCnt,
+              onClick: _cache[1] || (_cache[1] = ($event) => $options.changePage($data.pageID + 1))
             }, _hoisted_12, 8, _hoisted_10$1)
           ])
         ])
@@ -15244,8 +15251,8 @@ const _sfc_main = {
     setNodeProfile(node) {
       node.addEventListener("click", this.profile);
     },
-    setNodeList(node) {
-      node.addEventListener("click", this.list);
+    setNodeList(node, params) {
+      node.addEventListener("click", () => this.list(params));
     },
     removeNodeLogin(node) {
       node.removeEventListener("click", this.login);
@@ -15289,8 +15296,8 @@ const _sfc_main = {
     profile() {
       this.redirect({ target: "EditProfile" });
     },
-    list() {
-      this.redirect({ target: "List" });
+    list(params) {
+      this.redirect({ target: "List", params });
     },
     downloadToast() {
       if (this.current_page != "DownloadList") {
@@ -15406,9 +15413,9 @@ function unlinkNode(node) {
     window.Docdog.app.unlinkNode(node);
   }
 }
-function setNodeLogin(node) {
+function setNodeLogin(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeLogin(node);
+    window.Docdog.app.setNodeLogin(node, params);
   }
 }
 function setNodeLogout(node) {
@@ -15426,9 +15433,9 @@ function setNodeProfile(node) {
     window.Docdog.app.setNodeProfile(node);
   }
 }
-function setNodeList(node) {
+function setNodeList(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
 function parseConfig(config) {
@@ -15479,10 +15486,12 @@ function parseDOM() {
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
-      if (key == "id") {
-        params[key] = parseInt(value);
-      } else {
-        params[key] = value;
+      if (value != "") {
+        if (key == "id" || !isNaN(value) && !isNaN(parseInt(value))) {
+          params[key] = parseInt(value);
+        } else {
+          params[key] = value;
+        }
       }
       res = paramsIter.next();
     }
@@ -15496,7 +15505,7 @@ function parseDOM() {
         setNodeLogout(node.el);
         break;
       case "login":
-        setNodeLogin(node.el);
+        setNodeLogin(node.el, node.params);
         break;
       case "signup":
         setNodeSignUp(node.el);
@@ -15505,7 +15514,7 @@ function parseDOM() {
         setNodeProfile(node.el);
         break;
       case "list":
-        setNodeList(node.el);
+        setNodeList(node.el, node.params);
         break;
       case "download":
         linkNode(node.el, node.params);

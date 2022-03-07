@@ -260,8 +260,8 @@ export default {
     setNodeProfile(node) {
       node.addEventListener('click', this.profile);
     },
-    setNodeList(node) {
-      node.addEventListener('click', this.list);
+    setNodeList(node, params) {
+      node.addEventListener('click', () => this.list(params));
     },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
@@ -306,8 +306,8 @@ export default {
     profile() {
       this.redirect({ target: 'EditProfile' });
     },
-    list() {
-      this.redirect({ target: 'List' });
+    list(params) {
+      this.redirect({ target: 'List', params });
     },
     downloadToast() {
       if (this.current_page != 'DownloadList') {

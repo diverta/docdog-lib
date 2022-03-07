@@ -61,13 +61,18 @@ export default {
   components: {
     CardModal,
   },
+  props: {
+    cnt: {
+      type: Number,
+      default: 10,
+    },
+  },
   data() {
     return {
       list: [],
       pageInfo: {},
       pagedButtons: [],
       pageID: 1,
-      cnt: 1,
       node_params_map: {},
       showDownloadBtn: true,
     };
