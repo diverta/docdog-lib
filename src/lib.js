@@ -53,9 +53,9 @@ function setNodeProfile(node) {
   }
 }
 
-function setNodeList(node) {
+function setNodeList(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
 
@@ -124,10 +124,12 @@ function parseDOM() {
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
-      if (key == 'id') {
-        params[key] = parseInt(value);
-      } else {
-        params[key] = value;
+      if (value != '') {
+        if (key == 'id' || (!isNaN(value) && !isNaN(parseInt(value)))) {
+          params[key] = parseInt(value);
+        } else {
+          params[key] = value;
+        }
       }
       res = paramsIter.next();
     }
@@ -152,14 +154,14 @@ function parseDOM() {
         setNodeProfile(node.el);
         break;
       case 'list':
-        setNodeList(node.el);
+        setNodeList(node.el, node.params);
         break;
       case 'download':
         linkNode(node.el, node.params);
         break;
       default:
-        // Actionless tags are possible, for example to make use of docdog event binding (such as isLogin)
-        //console.err('[DocDog] Unrecognized or non specified action for the element', node.el);
+      // Actionless tags are possible, for example to make use of docdog event binding (such as isLogin)
+      //console.err('[DocDog] Unrecognized or non specified action for the element', node.el);
     }
   });
 }
