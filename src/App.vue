@@ -260,8 +260,8 @@ export default {
     setNodeProfile(node) {
       node.addEventListener('click', this.profile);
     },
-    setNodeList(node, params) {
-      node.addEventListener('click', () => this.list(params));
+    setNodeList(node) {
+      node.addEventListener('click', this.list);
     },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
@@ -306,8 +306,8 @@ export default {
     profile() {
       this.redirect({ target: 'EditProfile' });
     },
-    list(params) {
-      this.redirect({ target: 'List', params });
+    list() {
+      this.redirect({ target: 'List' });
     },
     downloadToast() {
       if (this.current_page != 'DownloadList') {
@@ -354,6 +354,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import './src/assets/scss/app.scss';
 @import './src/assets/scss/docdog.scss';
 </style>

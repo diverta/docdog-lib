@@ -29,9 +29,9 @@ function unlinkNode(node) {
   }
 }
 
-function setNodeLogin(node, params) {
+function setNodeLogin(node) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeLogin(node, params);
+    window.Docdog.app.setNodeLogin(node);
   }
 }
 
@@ -53,9 +53,9 @@ function setNodeProfile(node) {
   }
 }
 
-function setNodeList(node, params) {
+function setNodeList(node) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params);
+    window.Docdog.app.setNodeList(node);
   }
 }
 
@@ -124,12 +124,10 @@ function parseDOM() {
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
-      if (value != '') {
-        if (key == 'id' || (!isNaN(value) && !isNaN(parseInt(value)))) {
-          params[key] = parseInt(value);
-        } else {
-          params[key] = value;
-        }
+      if (key == 'id') {
+        params[key] = parseInt(value);
+      } else {
+        params[key] = value;
       }
       res = paramsIter.next();
     }
@@ -145,7 +143,7 @@ function parseDOM() {
         setNodeLogout(node.el);
         break;
       case 'login':
-        setNodeLogin(node.el, node.params);
+        setNodeLogin(node.el);
         break;
       case 'signup':
         setNodeSignUp(node.el);
@@ -154,14 +152,14 @@ function parseDOM() {
         setNodeProfile(node.el);
         break;
       case 'list':
-        setNodeList(node.el, node.params);
+        setNodeList(node.el);
         break;
       case 'download':
         linkNode(node.el, node.params);
         break;
       default:
-      // Actionless tags are possible, for example to make use of docdog event binding (such as isLogin)
-      //console.err('[DocDog] Unrecognized or non specified action for the element', node.el);
+        // Actionless tags are possible, for example to make use of docdog event binding (such as isLogin)
+        //console.err('[DocDog] Unrecognized or non specified action for the element', node.el);
     }
   });
 }
