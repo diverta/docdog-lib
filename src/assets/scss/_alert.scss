@@ -10,12 +10,14 @@
     font-weight: bold;
   }
   &--success {
-    background: $color-success;
-    color: #fff;
+    margin-bottom: $spacing-x-lg;
+    background-color: rgba($color-success, .2);
+    color: $color-success;
   }
   &--error {
-    background: $color-danger;
-    color: #fff;
+    margin-bottom: $spacing-x-lg;
+    background-color: rgba($color-danger, .2);
+    color: $color-danger;
   }
   p:not([class]) { 
     margin: 0;
