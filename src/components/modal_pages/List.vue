@@ -1,7 +1,7 @@
 <template>
   <!-- Modal Content -->
   <div class="docdog-modal__body__section">
-    <p class="docdog-modal__body__heading">営業資料</p>
+    <h1 class="docdog-modal__body__pagetitle">資料一覧</h1>
     <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
   </div>
   <div class="docdog-modal__body__section">
@@ -17,8 +17,8 @@
         />
       </li>
     </ul>
-    <nav>
-      <ul class="docdog-pagination">
+    <nav class="docdog-pagination">
+      <ul class="docdog-pagination__list">
         <li>
           <button type="button" aria-label="Previous" :disabled="pageID == 1" @click="changePage(pageID - 1)">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">

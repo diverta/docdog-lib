@@ -1,9 +1,10 @@
 .docdog-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding-top: $spacing-x-lg;
-  border-radius: $border-radius-md;
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   li {
     width: 45px;
     height: 45px;
