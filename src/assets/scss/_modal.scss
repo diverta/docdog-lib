@@ -153,7 +153,7 @@
     display: flex;
     justify-content: center;
     padding: $spacing-lg $spacing-x-lg;
-    background-color: darken($color-border, 16%);
+    background-color: darken($color-secondary, 16%);
     .docdog-modal__body + & {
       box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
      }
