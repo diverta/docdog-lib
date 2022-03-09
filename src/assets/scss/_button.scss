@@ -29,6 +29,9 @@
     &:hover { 
       background-color: lighten($color-border, 16%);
     }
+    &:disabled {
+      background-color: lighten($color-border, 8%);
+    }
   }
   &--white-outline {
     border: 1px solid #fff !important;
@@ -79,6 +82,10 @@
   &--sm {
     flex: 0 0 auto !important;
     width: auto !important;
+  }
+  &--wide {
+    flex: 1 1 100% !important;
+    width: 100% !important;
   }
 
   // list
