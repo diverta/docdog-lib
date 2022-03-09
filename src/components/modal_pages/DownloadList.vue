@@ -1,13 +1,25 @@
 <template>
-  <!-- Modal Content -->
+
+  <!-- TODO: Implement success message -->
+  <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
+
   <div class="docdog-modal__body__section">
-    <p class="docdog-modal__body__heading">選択中のファイル</p>
+    <h1 class="docdog-modal__body__pagetitle">ダウンロードリスト</h1>
+  </div>
+
+  <div class="docdog-modal__body__section" v-if="list.length">
+    <p>選択中のファイル</p>
     <ul class="docdog-card__list">
       <li v-for="(item, idx) in list">
         <CardModal :data="item" :toastIds="toastIds" :deleteFooter="true" @removeToast="onRemoveToast(idx)" />
       </li>
     </ul>
   </div>
+
+  <div class="docdog-modal__body__section" v-if="!list.length">
+    <p>選択中のファイルはありません。</p>
+  </div>
+
 </template>
 
 <script>

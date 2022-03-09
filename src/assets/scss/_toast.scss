@@ -70,4 +70,24 @@
       .docdog-button { height: 40px; }
     }
   }
+
+  // contract
+  &--contract {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    width: 50px;
+    height: 50px;
+    border-radius: $border-radius-md;
+    background: $color-primary;
+    box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+    transition: $transition;
+    z-index: 11200;
+    &:hover {
+      background-color: darken($color-primary, 8%);
+    }
+  }
 }

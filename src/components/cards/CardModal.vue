@@ -9,7 +9,7 @@
         <button type="button" class="docdog-button docdog-button--secondary" @click="onDownload()">
           ダウンロードする
         </button>
-        <button type="button" class="docdog-button docdog-button--white" v-if="isInToast">追加済み</button>
+        <button type="button" class="docdog-button docdog-button--white" v-if="isInToast" disabled>追加済み</button>
         <button type="button" class="docdog-button docdog-button--white" v-else @click="onAdd()">
           ダウンロードリストに追加する
         </button>
