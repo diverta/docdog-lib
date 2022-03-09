@@ -1,7 +1,9 @@
 <template>
-  <!-- Modal Content -->
-    <AlertSuccess v-if="msg" :msg="msg" />
-    <AlertError v-if="err" :err="err" />
+
+  <!-- TODO: Implement success message -->
+  <AlertSuccess v-if="msg" :msg="msg" />
+  <AlertError v-if="err" :err="err" />
+
   <div class="docdog-modal__body__section">
     <h1 class="docdog-modal__body__pagetitle">ダウンロード</h1>
   </div>
@@ -10,6 +12,7 @@
       <CardModal :data="data" :toastIds="toastIds" />
     </div>
   </div>
+
 </template>
 
 <script>
