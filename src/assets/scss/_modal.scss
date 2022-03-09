@@ -23,23 +23,85 @@
     transition: 2s;
     z-index: 10000;
   }
+  // header
   &__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: $spacing-sm $spacing-md $spacing-sm $spacing-x-lg;
-    border-bottom: 1px solid $color-border;
-    &__heading {
-      margin: 0;
-      font-size: 18px;
-      font-weight: bold;
+    padding: $spacing-md $spacing-x-lg;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+    &__nav {
+      display: flex;
+      align-items: center;
+      &__logo {
+        height: 45px;
+        padding: 0;
+        background-color: transparent;
+        img {
+          max-height: 45px;
+        }
+      }
+      &__list {
+        margin-left: $spacing-lg;
+        ul {
+          display: flex;
+          li {
+            margin-left: $spacing-md;
+          }
+        }
+        &__item {
+          padding: $spacing-md;
+          background-color: transparent;
+          font-weight: bold;
+        }
+      }
     }
-    &__close {
-      width: 50px;
-      height: 50px;
-      background-color: transparent;
-      &:hover {
-        opacity: 0.6;
+    &__account {
+      &__button {
+        height: 45px;
+        padding: 0 $spacing-lg;
+        border: 1px solid $color-link !important;
+        border-radius: $border-radius-sm;
+        background-color: transparent;
+        color:$color-link;
+        transition: $transition;
+        &:hover {
+          background-color: $color-primary;
+          color: #fff;
+        }
+      }
+      &__toggle {
+        width: 45px;
+        height: 45px;
+        padding: 0;
+        background-color: transparent;
+      }
+      &__nav {
+        position: absolute;
+        top: 70px;
+        right: 2em;
+        width: 200px;
+        border-radius: $border-radius-sm;
+        background-color: #fff;
+        box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+        li:not(:first-child) {
+          border-top: 1px solid lighten($color-border, 8%);
+        }
+        &__item {
+          width: 100%;
+          padding: $spacing-md;
+          background-color: transparent;
+          text-align: left;
+          &:hover {
+            background-color: lighten($color-border, 16%);
+          }
+          &:first-child {
+            border-radius: $border-radius-sm $border-radius-sm 0 0;
+          }
+          &:last-child {
+            border-radius: 0 0 $border-radius-sm $border-radius-sm;
+          }
+        }
       }
     }
   }
@@ -55,6 +117,11 @@
       background-color: $color-border;
       border-radius: $border-radius-sm;
       border:2px solid $color-border;
+    }
+    &__pagetitle {
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
     }
     &__heading {
       margin: 0 0 $spacing-lg;
@@ -86,7 +153,10 @@
     display: flex;
     justify-content: center;
     padding: $spacing-lg $spacing-x-lg;
-    .docdog-modal__body + & { border-top: 1px solid $color-border; }
+    background-color: darken($color-border, 16%);
+    .docdog-modal__body + & {
+      box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+     }
     @media screen and (min-width: 768px) {
       .docdog-button { width: 48%; }
     }

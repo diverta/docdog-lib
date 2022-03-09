@@ -1,7 +1,7 @@
 <template>
   <div class="docdog-alert docdog-alert--error">
     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="30" cy="30" r="28" stroke="#ffffff" stroke-width="4" />
+      <circle cx="30" cy="30" r="28" fill="#dc0000" stroke="#ffffff" stroke-width="4" />
       <path
         d="M21.6144 40.1878C20.7581 39.3315 20.7581 37.9432 21.6144 37.087L37.1186 21.5827C37.9749 20.7264 39.3632 20.7264 40.2195 21.5827V21.5827C41.0758 22.439 41.0758 23.8273 40.2195 24.6836L24.7152 40.1878C23.859 41.0441 22.4707 41.0441 21.6144 40.1878V40.1878Z"
         fill="#ffffff"

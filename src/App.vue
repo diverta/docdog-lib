@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:show="showModal" :title="current_page_title" @close="closeModalOuter">
+  <Modal v-model:show="showModal" @close="closeModalOuter">
     <PageController
       v-model:current_page="current_page"
       :node_params="current_node_params"
@@ -93,44 +93,6 @@ export default {
       } else {
         return null;
       }
-    },
-    current_page_title() {
-      let title = ''; // Todo : i18n
-      switch (this.current_page) {
-        case 'EmptyPage':
-          title = '';
-          break;
-        case 'Loading':
-          title = 'ローディング';
-          break;
-        case 'Error':
-          title = 'エラー';
-          break;
-        case 'SignUp':
-          title = 'アカウントの作成';
-          break;
-        case 'SignIn':
-          title = 'ログイン';
-          break;
-        case 'DownloadList':
-          title = 'ダウンロードリスト';
-          break;
-        case 'EditProfile':
-          title = 'アカウント情報の編集';
-          break;
-        case 'Withdrawal':
-          title = 'アカウントの削除';
-          break;
-        case 'Download':
-          title = 'ダウンロード';
-          break;
-        case 'List':
-          title = '資料一覧';
-          break;
-        default:
-          title = this.current_page;
-      }
-      return title;
     },
     footer_comp() {
       let comp = '';

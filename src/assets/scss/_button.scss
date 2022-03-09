@@ -6,6 +6,8 @@
   height: 50px;
   border-radius: $border-radius-sm;
   transition: $transition;
+
+  // color
   &--primary {
     background-color: $color-primary;
     color: #fff;
@@ -22,10 +24,19 @@
   }
   &--white {
     border: 1px solid lighten($color-border, 8%) !important;
-    background-color: transparent;
+    background-color: #fff;
     color: $color-primary;
     &:hover { 
       background-color: lighten($color-border, 16%);
+    }
+  }
+  &--white-outline {
+    border: 1px solid #fff !important;
+    background-color: transparent;
+    color: #fff;
+    &:hover { 
+      background-color: #fff;
+      svg { fill: $color-link; }
     }
   }
   &--danger {
@@ -35,6 +46,8 @@
       background-color: darken($color-danger, 8%);
     }
   }
+
+  // type
   &--text {
     padding: $spacing-x-sm;
     background-color: transparent;
@@ -61,14 +74,26 @@
       margin-left: $spacing-x-sm;
     }
   }
+
+  // size
+  &--sm {
+    flex: 0 0 auto !important;
+    width: auto !important;
+  }
+
+  // list
   &__list {
     width: 100%;
     @media screen and (min-width: 768px) {
       display: flex;
       justify-content: space-between;
+      .docdog-button { margin: 0 $spacing-sm;}
     }
     @media screen and (max-width: 767px) {
-      .docdog-button + .docdog-button { margin-top: $spacing-sm; }
+      .docdog-button + .docdog-button { 
+        margin-top: $spacing-sm;
+      }
     }
   }
+
 }

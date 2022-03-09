@@ -1,15 +1,24 @@
 <template>
   <div class="docdog-form">
+
+    <AlertError v-if="err" :err="err_msg" />
+    <!-- TODO: Implement success message -->
+    <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
+
     <div class="docdog-modal__body__section">
-      <div class="docdog-form__signup">
-        <p class="err" v-html="err" />
+      <h1 class="docdog-modal__body__pagetitle">アカウントの作成</h1>
+    </div>
+
+    <!-- TODO: Show only before create account -->
+    <div class=" docdog-modal__body__section">
+      <div class="docdog-modal__body__section">
         <form>
           <div class="docdog-form__item--col-2">
-            <div class="docdog-form__item">
+            <div class="docdog-form__item" :class="err_field == 'name1' ? 'docdog-form__item--error' : ''">
               <label for="name1" class="docdog-form__item__title">姓</label>
               <input name="name1" type="text" id="name1" placeholder="" v-model="name1" required />
             </div>
-            <div class="docdog-form__item">
+            <div class="docdog-form__item" :class="err_field == 'name2' ? 'docdog-form__item--error' : ''">
               <label for="name2" class="docdog-form__item__title">名</label>
               <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
             </div>
@@ -17,9 +26,8 @@
           <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
             <label for="email" class="docdog-form__item__title">メールアドレス</label>
             <input name="email" type="text" id="email" placeholder="" v-model="email" required />
-            <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
           </div>
-          <div class="docdog-form__item">
+          <div class="docdog-form__item" :class="err_field == 'password' ? 'docdog-form__item--error' : ''">
             <label for="password" class="docdog-form__item__title">パスワード</label>
             <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
           </div>
@@ -62,13 +70,21 @@
           </button>
         </div>
       </div>
+      <div class="docdog-modal__body__section">
+        <p class="docdog-modal__body__text">
+          続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
+          >を読み、これに同意するものとします。
+        </p>
+      </div>
     </div>
+
+    <!-- TODO: Show only after create account -->
     <div class="docdog-modal__body__section">
-      <p class="docdog-modal__body__text">
-        続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
-        >を読み、これに同意するものとします。
-      </p>
+      <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
+        資料一覧へ戻る
+      </button>
     </div>
+
   </div>
 </template>
 
@@ -76,9 +92,14 @@
 import AbstractPage from './AbstractPage.vue';
 import memberApi from '@/api/member';
 import loginApi from '@/api/login';
-
+import AlertSuccess from '@/components/AlertSuccess.vue';
+import AlertError from '@/components/AlertError.vue';
 export default {
   extends: AbstractPage,
+  components: {
+    AlertSuccess,
+    AlertError,
+  },
   data() {
     return {
       email: '',
@@ -99,6 +120,33 @@ export default {
         }
       }
       return '';
+    },
+    err_msg() {
+      if (this.err.length > 0) {
+        const [err_field, err_type] = this.err.split(':');
+        let translatedField = 'データ';
+        let tranlatedProblem = '不正';
+        switch (err_field) {
+          case 'email':
+            translatedField = 'メールアドレス';
+            break;
+        }
+        switch (err_type) {
+          case 'invalid':
+            tranlatedProblem = '不正';
+            break;
+          case 'required':
+            tranlatedProblem = '必須';
+            break;
+        }
+        if (translatedField && tranlatedProblem) {
+          return translatedField + 'が' + tranlatedProblem + 'です';
+        } else {
+          return 'エラーが発生しました。';
+        }
+      } else {
+        return '';
+      }
     },
   },
   methods: {

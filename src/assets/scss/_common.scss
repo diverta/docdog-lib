@@ -4,7 +4,7 @@ $color-secondary: #5d6775;
 $color-border: #ccc;
 $color-gray: #666;
 $color-danger: #dc0000;
-$color-success: #06c792;
+$color-success: #05a87c;
 $border-radius-sm: 4px;
 $border-radius-md: 8px;
 $border-radius-lg: 12px;
@@ -24,7 +24,7 @@ $transition: 0.2s;
   *, *:after, *:before {
     box-sizing: border-box;
   }
-  dd, dl, dt, label, ul, ol {
+  dd, dl, dt, ul, ol {
     padding: 0;
     margin: 0;
   }

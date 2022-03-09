@@ -1,12 +1,12 @@
 <template>
   <div class="docdog-form">
+    <AlertError v-if="err" :err="err_msg" />
+    <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
     <div class="docdog-modal__body__section">
-      <AlertError v-if="err" :err="err_msg" />
-      <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
+      <h1 class="docdog-modal__body__pagetitle">アカウント情報の編集</h1>
     </div>
     <div class="docdog-modal__body__section">
       <div class="docdog-form__signup">
-        <p class="err" v-html="err" />
         <form>
           <div class="docdog-form__item--col-2">
             <div class="docdog-form__item">
@@ -21,7 +21,6 @@
           <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
             <label for="email" class="docdog-form__item__title">メールアドレス</label>
             <input name="email" type="text" id="email" placeholder="" v-model="email" required />
-            <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">{{ err_msg }}</p>
           </div>
           <div class="docdog-form__item">
             <label for="password" class="docdog-form__item__title">パスワード</label>
@@ -180,9 +179,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.err {
-  color: red;
-}
-</style>
