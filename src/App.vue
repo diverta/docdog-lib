@@ -25,7 +25,7 @@
   </Modal>
   <Toast
     v-model:list="toastList"
-    v-show="toastList.length > 0 && current_page != 'DownloadList'"
+    v-show="toastList.length > 0 && current_page != 'DownloadList' && current_page != 'Download'"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
     ref="toast"
@@ -126,25 +126,6 @@ export default {
         this.onLogout();
       }
     });
-
-    //   if (this.initList) {
-    //     this.list = [];
-    //     docsApi.getDocumentList(true).then((data) => {
-    //       if (data) {
-    //         data.list.forEach((topics) => {
-    //           this.node_params_map[topics.topics_id] = {
-    //             node: null,
-    //             params: {
-    //               id: topics.topics_id,
-    //               public: true,
-    //             },
-    //           };
-    //           this.list.push(topics);
-    //         });
-    //         this.pageInfo = data.pageInfo;
-    //       }
-    //     });
-    //   }
   },
   methods: {
     linkNode(node, params) {
