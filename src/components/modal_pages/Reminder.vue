@@ -1,31 +1,25 @@
 <template>
   <div class="docdog-form">
-
-    <AlertError v-if="err" :err="err_msg" />
-    <!-- TODO: Implement success message -->
+    <AlertError v-if="err" :err="err" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
     <div class="docdog-modal__body__section">
       <h1 class="docdog-modal__body__pagetitle">パスワード再設定</h1>
 
-      <!-- TODO: Show only Step1 -->
-      <p class="docdog-modal__body__text">
+      <p class="docdog-modal__body__text" v-if="step == 'input_email'">
         パスワード再設定用のURLを送信します。ご登録されているメールアドレスを入力してください。
       </p>
-
     </div>
 
     <div class="docdog-modal__body__section">
-
-      <!-- TODO: Implement step1 -->
-      <form>
+      <form v-if="step == 'input_email'">
         <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
           <label for="email" class="docdog-form__item__title">メールアドレス</label>
           <input name="email" type="text" id="email" placeholder="" v-model="email" required />
           <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
         </div>
         <div class="docdog-form__button">
-          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="signup">
+          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="sendEmail">
             送信する
           </button>
         </div>
@@ -36,8 +30,7 @@
         </div>
       </form>
 
-      <!-- TODO: Implement step2 -->
-      <form>
+      <form v-if="step == 'input_new_pwd'">
         <div class="docdog-form__item" :class="err_field == 'temp_pwd' ? 'docdog-form__item--error' : ''">
           <label for="temp_pwd" class="docdog-form__item__title">仮パスワード</label>
           <input name="temp_pwd" type="text" id="temp_pwd" placeholder="" v-model="temp_pwd" required />
@@ -49,19 +42,29 @@
         </div>
         <div class="docdog-form__item" :class="err_field == 'password_confirm' ? 'docdog-form__item--error' : ''">
           <label for="password_confirm" class="docdog-form__item__title">新しいパスワード（確認）</label>
-          <input name="password_confirm" type="password" id="password_confirm" placeholder="" v-model="login_pwd" required />
+          <input
+            name="password_confirm"
+            type="password"
+            id="password_confirm"
+            placeholder=""
+            v-model="password_confirm"
+            required
+          />
         </div>
         <div class="docdog-form__button">
-          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="signup">
+          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="updatePassword">
             再設定する
           </button>
         </div>
       </form>
 
-      <!-- TODO: Implement step2 success -->
-      <div>
+      <div v-if="step == 'done'">
         <div class="docdog-form__button">
-          <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="signup">
+          <button
+            type="submit"
+            class="docdog-button docdog-button--primary"
+            @click.prevent="redirect({ target: 'SignIn' })"
+          >
             ログイン
           </button>
         </div>
@@ -71,23 +74,44 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import AbstractPage from './AbstractPage.vue';
+import AlertSuccess from '@/components/AlertSuccess.vue';
+import AlertError from '@/components/AlertError.vue';
+import loginApi from '@/api/login';
 
 export default {
   extends: AbstractPage,
+  components: {
+    AlertSuccess,
+    AlertError,
+  },
+  props: {
+    token: {
+      type: String,
+      default: () => '',
+    },
+  },
   data() {
     return {
+      steps: ['input_email', 'input_new_pwd', 'done'],
+      step: '',
       email: '',
       temp_pwd: '',
-      password: '',
+      login_pwd: '',
       password_confirm: '',
     };
+  },
+  mounted() {
+    if (this.token) {
+      this.step = 'input_new_pwd';
+    } else {
+      this.step = 'input_email';
+    }
   },
   computed: {
     err_field() {
@@ -99,35 +123,32 @@ export default {
       }
       return '';
     },
-    err_msg() {
-      if (this.err.length > 0) {
-        const [err_field, err_type] = this.err.split(':');
-        let translatedField = 'データ';
-        let tranlatedProblem = '不正';
-        switch (err_field) {
-          case 'email':
-            translatedField = 'メールアドレス';
-            break;
-        }
-        switch (err_type) {
-          case 'invalid':
-            tranlatedProblem = '不正';
-            break;
-          case 'required':
-            tranlatedProblem = '必須';
-            break;
-        }
-        if (translatedField && tranlatedProblem) {
-          return translatedField + 'が' + tranlatedProblem + 'です';
-        } else {
-          return 'エラーが発生しました。';
-        }
-      } else {
-        return '';
-      }
-    },
   },
   methods: {
+    sendEmail() {
+      loginApi.reminderSendEmail({
+        email: this.email,
+      });
+    },
+    updatePassword() {
+      this.error('');
+      if (this.login_pwd == this.password_confirm) {
+        loginApi
+          .reminderUpdatePassword({
+            token: this.token,
+            temp_pwd: this.temp_pwd,
+            login_pwd: this.login_pwd,
+          })
+          .then(() => {
+            this.step = 'done';
+          })
+          .catch((err) => {
+            this.error(err);
+          });
+      } else {
+        this.error('新しいパスワード（確認）が一致しません。');
+      }
+    },
   },
 };
 </script>

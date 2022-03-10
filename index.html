@@ -9,6 +9,7 @@
     <title>Docdog Testing Page</title>
   </head>
   <body>
+      <!-- <a href="https://docdog.g.kuroco-front.app/header">My header A</a> -->
     <a href="https://docdog.g.kuroco-front.app/download?id=3">Docdog id=3 download (PRIVATE)</a><br/>
     <a href="https://docdog.g.kuroco-front.app/download?id=4&public=true">Docdog id=4 download (PUBLIC)</a><br/>
     <a href="https://docdog.g.kuroco-front.app/logout">Docdog Logout</a><br/>
@@ -23,6 +24,7 @@
     <br/>
     Demo of isLogin toggle :<br/>
     <button type="button" data-docdog="login?show=!isLogin">ログイン</button>
+    <button type="button" data-docdog="reminder?show=!isLogin">PWリマインダー</button>
     <button type="button" data-docdog="?show=isLogin" onclick="toggleDocdogMemberMenu()">Member</button>
     <nav style="display:none" name="docdogMemberMenu">
       <button type="button" class="l-header__nav--user__button" data-docdog="profile" onclick="toggleDocdogMemberMenu()">アカウント情報の編集</button>

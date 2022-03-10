@@ -1,6 +1,4 @@
 <template>
-
-  <!-- TODO: Implement success message -->
   <AlertSuccess v-if="msg" :msg="msg" />
   <AlertError v-if="err" :err="err" />
 
@@ -12,7 +10,6 @@
       <CardModal :data="data" :toastIds="toastIds" />
     </div>
   </div>
-
 </template>
 
 <script>
@@ -57,6 +54,7 @@ export default {
       this.data = { ...this.doc_data };
       this.footer_data.doc_data = this.data;
       this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+      this.footer_data.downloaded = false;
     } else {
       // Fetch data using doc id
       loginApi
@@ -72,6 +70,7 @@ export default {
                 this.data = resp.details;
                 this.footer_data.doc_data = this.data;
                 this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+                this.footer_data.downloaded = false;
               })
               .catch((err) => {
                 this.error(err);
@@ -90,7 +89,7 @@ export default {
       if (this.data) {
         // Data has been fetched
         this.download(this.data.file.url);
-        this.close();
+        this.footer_data.downloaded = true;
       }
     },
     download(url, name = '') {

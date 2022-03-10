@@ -1,14 +1,15 @@
 <template>
   <div class="docdog-form">
+    <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
-    <!-- TODO: Show only before withdrawal -->
-    <div class="docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="isLogin">
       <h1 class="docdog-modal__body__pagetitle">アカウントの削除</h1>
-      <p class="docdog-modal__body__text">アカウントを削除すると今後は資料ダウンロードができなくなります。アカウントを削除しますか？</p>
+      <p class="docdog-modal__body__text">
+        アカウントを削除すると今後は資料ダウンロードができなくなります。アカウントを削除しますか？
+      </p>
     </div>
 
-    <!-- TODO: Show only before withdrawal -->
-    <div class="docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="isLogin">
       <form>
         <div class="docdog-form__button">
           <button type="submit" class="docdog-button docdog-button--danger" @click.prevent="withdrawal">
@@ -23,29 +24,29 @@
       </form>
     </div>
 
-    <!-- TODO: Show only after withdrawal -->
-    <div class="docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="!isLogin">
       <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
         資料一覧へ戻る
       </button>
     </div>
-
   </div>
 </template>
 
 <script>
 import AbstractPage from './AbstractPage.vue';
 import memberApi from '@/api/member';
+import AlertSuccess from '@/components/AlertSuccess.vue';
 import loginApi from '@/api/login';
 
 export default {
   extends: AbstractPage,
-  data() {
-    return {};
-  },
+  components: { AlertSuccess },
   methods: {
     withdrawal() {
-      memberApi.doWithdrawal().then(() => this.close());
+      memberApi.doWithdrawal().then(() => {
+        this.logout();
+        this.setMsg('削除しました。');
+      });
     },
   },
 };

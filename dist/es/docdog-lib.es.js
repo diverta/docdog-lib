@@ -176,8 +176,8 @@ const remove = (arr, el) => {
     arr.splice(i, 1);
   }
 };
-const hasOwnProperty = Object.prototype.hasOwnProperty;
-const hasOwn$2 = (val, key) => hasOwnProperty.call(val, key);
+const hasOwnProperty$1 = Object.prototype.hasOwnProperty;
+const hasOwn$2 = (val, key) => hasOwnProperty$1.call(val, key);
 const isArray$5 = Array.isArray;
 const isMap$1 = (val) => toTypeString(val) === "[object Map]";
 const isSet$1 = (val) => toTypeString(val) === "[object Set]";
@@ -4859,6 +4859,813 @@ function normalizeContainer(container) {
   }
   return container;
 }
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getAugmentedNamespace(n) {
+  if (n.__esModule)
+    return n;
+  var a = Object.defineProperty({}, "__esModule", { value: true });
+  Object.keys(n).forEach(function(k) {
+    var d = Object.getOwnPropertyDescriptor(n, k);
+    Object.defineProperty(a, k, d.get ? d : {
+      enumerable: true,
+      get: function() {
+        return n[k];
+      }
+    });
+  });
+  return a;
+}
+var url = {};
+var punycode$1 = { exports: {} };
+/*! https://mths.be/punycode v1.3.2 by @mathias */
+(function(module, exports) {
+  (function(root) {
+    var freeExports = exports && !exports.nodeType && exports;
+    var freeModule = module && !module.nodeType && module;
+    var freeGlobal = typeof commonjsGlobal == "object" && commonjsGlobal;
+    if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal || freeGlobal.self === freeGlobal) {
+      root = freeGlobal;
+    }
+    var punycode2, maxInt = 2147483647, base = 36, tMin = 1, tMax = 26, skew = 38, damp = 700, initialBias = 72, initialN = 128, delimiter = "-", regexPunycode = /^xn--/, regexNonASCII = /[^\x20-\x7E]/, regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g, errors = {
+      "overflow": "Overflow: input needs wider integers to process",
+      "not-basic": "Illegal input >= 0x80 (not a basic code point)",
+      "invalid-input": "Invalid input"
+    }, baseMinusTMin = base - tMin, floor = Math.floor, stringFromCharCode = String.fromCharCode, key;
+    function error(type) {
+      throw RangeError(errors[type]);
+    }
+    function map(array, fn) {
+      var length = array.length;
+      var result = [];
+      while (length--) {
+        result[length] = fn(array[length]);
+      }
+      return result;
+    }
+    function mapDomain(string, fn) {
+      var parts = string.split("@");
+      var result = "";
+      if (parts.length > 1) {
+        result = parts[0] + "@";
+        string = parts[1];
+      }
+      string = string.replace(regexSeparators, ".");
+      var labels = string.split(".");
+      var encoded = map(labels, fn).join(".");
+      return result + encoded;
+    }
+    function ucs2decode(string) {
+      var output = [], counter = 0, length = string.length, value, extra;
+      while (counter < length) {
+        value = string.charCodeAt(counter++);
+        if (value >= 55296 && value <= 56319 && counter < length) {
+          extra = string.charCodeAt(counter++);
+          if ((extra & 64512) == 56320) {
+            output.push(((value & 1023) << 10) + (extra & 1023) + 65536);
+          } else {
+            output.push(value);
+            counter--;
+          }
+        } else {
+          output.push(value);
+        }
+      }
+      return output;
+    }
+    function ucs2encode(array) {
+      return map(array, function(value) {
+        var output = "";
+        if (value > 65535) {
+          value -= 65536;
+          output += stringFromCharCode(value >>> 10 & 1023 | 55296);
+          value = 56320 | value & 1023;
+        }
+        output += stringFromCharCode(value);
+        return output;
+      }).join("");
+    }
+    function basicToDigit(codePoint) {
+      if (codePoint - 48 < 10) {
+        return codePoint - 22;
+      }
+      if (codePoint - 65 < 26) {
+        return codePoint - 65;
+      }
+      if (codePoint - 97 < 26) {
+        return codePoint - 97;
+      }
+      return base;
+    }
+    function digitToBasic(digit, flag) {
+      return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
+    }
+    function adapt(delta, numPoints, firstTime) {
+      var k = 0;
+      delta = firstTime ? floor(delta / damp) : delta >> 1;
+      delta += floor(delta / numPoints);
+      for (; delta > baseMinusTMin * tMax >> 1; k += base) {
+        delta = floor(delta / baseMinusTMin);
+      }
+      return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
+    }
+    function decode2(input) {
+      var output = [], inputLength = input.length, out, i = 0, n = initialN, bias = initialBias, basic, j, index, oldi, w, k, digit, t, baseMinusT;
+      basic = input.lastIndexOf(delimiter);
+      if (basic < 0) {
+        basic = 0;
+      }
+      for (j = 0; j < basic; ++j) {
+        if (input.charCodeAt(j) >= 128) {
+          error("not-basic");
+        }
+        output.push(input.charCodeAt(j));
+      }
+      for (index = basic > 0 ? basic + 1 : 0; index < inputLength; ) {
+        for (oldi = i, w = 1, k = base; ; k += base) {
+          if (index >= inputLength) {
+            error("invalid-input");
+          }
+          digit = basicToDigit(input.charCodeAt(index++));
+          if (digit >= base || digit > floor((maxInt - i) / w)) {
+            error("overflow");
+          }
+          i += digit * w;
+          t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
+          if (digit < t) {
+            break;
+          }
+          baseMinusT = base - t;
+          if (w > floor(maxInt / baseMinusT)) {
+            error("overflow");
+          }
+          w *= baseMinusT;
+        }
+        out = output.length + 1;
+        bias = adapt(i - oldi, out, oldi == 0);
+        if (floor(i / out) > maxInt - n) {
+          error("overflow");
+        }
+        n += floor(i / out);
+        i %= out;
+        output.splice(i++, 0, n);
+      }
+      return ucs2encode(output);
+    }
+    function encode3(input) {
+      var n, delta, handledCPCount, basicLength, bias, j, m, q, k, t, currentValue, output = [], inputLength, handledCPCountPlusOne, baseMinusT, qMinusT;
+      input = ucs2decode(input);
+      inputLength = input.length;
+      n = initialN;
+      delta = 0;
+      bias = initialBias;
+      for (j = 0; j < inputLength; ++j) {
+        currentValue = input[j];
+        if (currentValue < 128) {
+          output.push(stringFromCharCode(currentValue));
+        }
+      }
+      handledCPCount = basicLength = output.length;
+      if (basicLength) {
+        output.push(delimiter);
+      }
+      while (handledCPCount < inputLength) {
+        for (m = maxInt, j = 0; j < inputLength; ++j) {
+          currentValue = input[j];
+          if (currentValue >= n && currentValue < m) {
+            m = currentValue;
+          }
+        }
+        handledCPCountPlusOne = handledCPCount + 1;
+        if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
+          error("overflow");
+        }
+        delta += (m - n) * handledCPCountPlusOne;
+        n = m;
+        for (j = 0; j < inputLength; ++j) {
+          currentValue = input[j];
+          if (currentValue < n && ++delta > maxInt) {
+            error("overflow");
+          }
+          if (currentValue == n) {
+            for (q = delta, k = base; ; k += base) {
+              t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
+              if (q < t) {
+                break;
+              }
+              qMinusT = q - t;
+              baseMinusT = base - t;
+              output.push(stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0)));
+              q = floor(qMinusT / baseMinusT);
+            }
+            output.push(stringFromCharCode(digitToBasic(q, 0)));
+            bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
+            delta = 0;
+            ++handledCPCount;
+          }
+        }
+        ++delta;
+        ++n;
+      }
+      return output.join("");
+    }
+    function toUnicode(input) {
+      return mapDomain(input, function(string) {
+        return regexPunycode.test(string) ? decode2(string.slice(4).toLowerCase()) : string;
+      });
+    }
+    function toASCII(input) {
+      return mapDomain(input, function(string) {
+        return regexNonASCII.test(string) ? "xn--" + encode3(string) : string;
+      });
+    }
+    punycode2 = {
+      "version": "1.3.2",
+      "ucs2": {
+        "decode": ucs2decode,
+        "encode": ucs2encode
+      },
+      "decode": decode2,
+      "encode": encode3,
+      "toASCII": toASCII,
+      "toUnicode": toUnicode
+    };
+    if (freeExports && freeModule) {
+      if (module.exports == freeExports) {
+        freeModule.exports = punycode2;
+      } else {
+        for (key in punycode2) {
+          punycode2.hasOwnProperty(key) && (freeExports[key] = punycode2[key]);
+        }
+      }
+    } else {
+      root.punycode = punycode2;
+    }
+  })(commonjsGlobal);
+})(punycode$1, punycode$1.exports);
+var util$1 = {
+  isString: function(arg) {
+    return typeof arg === "string";
+  },
+  isObject: function(arg) {
+    return typeof arg === "object" && arg !== null;
+  },
+  isNull: function(arg) {
+    return arg === null;
+  },
+  isNullOrUndefined: function(arg) {
+    return arg == null;
+  }
+};
+var querystring$1 = {};
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+var decode$1 = function(qs, sep, eq, options) {
+  sep = sep || "&";
+  eq = eq || "=";
+  var obj = {};
+  if (typeof qs !== "string" || qs.length === 0) {
+    return obj;
+  }
+  var regexp = /\+/g;
+  qs = qs.split(sep);
+  var maxKeys = 1e3;
+  if (options && typeof options.maxKeys === "number") {
+    maxKeys = options.maxKeys;
+  }
+  var len = qs.length;
+  if (maxKeys > 0 && len > maxKeys) {
+    len = maxKeys;
+  }
+  for (var i = 0; i < len; ++i) {
+    var x = qs[i].replace(regexp, "%20"), idx = x.indexOf(eq), kstr, vstr, k, v;
+    if (idx >= 0) {
+      kstr = x.substr(0, idx);
+      vstr = x.substr(idx + 1);
+    } else {
+      kstr = x;
+      vstr = "";
+    }
+    k = decodeURIComponent(kstr);
+    v = decodeURIComponent(vstr);
+    if (!hasOwnProperty(obj, k)) {
+      obj[k] = v;
+    } else if (Array.isArray(obj[k])) {
+      obj[k].push(v);
+    } else {
+      obj[k] = [obj[k], v];
+    }
+  }
+  return obj;
+};
+var stringifyPrimitive = function(v) {
+  switch (typeof v) {
+    case "string":
+      return v;
+    case "boolean":
+      return v ? "true" : "false";
+    case "number":
+      return isFinite(v) ? v : "";
+    default:
+      return "";
+  }
+};
+var encode$2 = function(obj, sep, eq, name) {
+  sep = sep || "&";
+  eq = eq || "=";
+  if (obj === null) {
+    obj = void 0;
+  }
+  if (typeof obj === "object") {
+    return Object.keys(obj).map(function(k) {
+      var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      if (Array.isArray(obj[k])) {
+        return obj[k].map(function(v) {
+          return ks + encodeURIComponent(stringifyPrimitive(v));
+        }).join(sep);
+      } else {
+        return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+      }
+    }).join(sep);
+  }
+  if (!name)
+    return "";
+  return encodeURIComponent(stringifyPrimitive(name)) + eq + encodeURIComponent(stringifyPrimitive(obj));
+};
+querystring$1.decode = querystring$1.parse = decode$1;
+querystring$1.encode = querystring$1.stringify = encode$2;
+var punycode = punycode$1.exports;
+var util = util$1;
+url.parse = urlParse;
+url.resolve = urlResolve;
+url.resolveObject = urlResolveObject;
+url.format = urlFormat;
+url.Url = Url;
+function Url() {
+  this.protocol = null;
+  this.slashes = null;
+  this.auth = null;
+  this.host = null;
+  this.port = null;
+  this.hostname = null;
+  this.hash = null;
+  this.search = null;
+  this.query = null;
+  this.pathname = null;
+  this.path = null;
+  this.href = null;
+}
+var protocolPattern = /^([a-z0-9.+-]+:)/i, portPattern = /:[0-9]*$/, simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/, delims = ["<", ">", '"', "`", " ", "\r", "\n", "	"], unwise = ["{", "}", "|", "\\", "^", "`"].concat(delims), autoEscape = ["'"].concat(unwise), nonHostChars = ["%", "/", "?", ";", "#"].concat(autoEscape), hostEndingChars = ["/", "?", "#"], hostnameMaxLen = 255, hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/, hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/, unsafeProtocol = {
+  "javascript": true,
+  "javascript:": true
+}, hostlessProtocol = {
+  "javascript": true,
+  "javascript:": true
+}, slashedProtocol = {
+  "http": true,
+  "https": true,
+  "ftp": true,
+  "gopher": true,
+  "file": true,
+  "http:": true,
+  "https:": true,
+  "ftp:": true,
+  "gopher:": true,
+  "file:": true
+}, querystring = querystring$1;
+function urlParse(url2, parseQueryString, slashesDenoteHost) {
+  if (url2 && util.isObject(url2) && url2 instanceof Url)
+    return url2;
+  var u = new Url();
+  u.parse(url2, parseQueryString, slashesDenoteHost);
+  return u;
+}
+Url.prototype.parse = function(url2, parseQueryString, slashesDenoteHost) {
+  if (!util.isString(url2)) {
+    throw new TypeError("Parameter 'url' must be a string, not " + typeof url2);
+  }
+  var queryIndex = url2.indexOf("?"), splitter = queryIndex !== -1 && queryIndex < url2.indexOf("#") ? "?" : "#", uSplit = url2.split(splitter), slashRegex = /\\/g;
+  uSplit[0] = uSplit[0].replace(slashRegex, "/");
+  url2 = uSplit.join(splitter);
+  var rest = url2;
+  rest = rest.trim();
+  if (!slashesDenoteHost && url2.split("#").length === 1) {
+    var simplePath = simplePathPattern.exec(rest);
+    if (simplePath) {
+      this.path = rest;
+      this.href = rest;
+      this.pathname = simplePath[1];
+      if (simplePath[2]) {
+        this.search = simplePath[2];
+        if (parseQueryString) {
+          this.query = querystring.parse(this.search.substr(1));
+        } else {
+          this.query = this.search.substr(1);
+        }
+      } else if (parseQueryString) {
+        this.search = "";
+        this.query = {};
+      }
+      return this;
+    }
+  }
+  var proto = protocolPattern.exec(rest);
+  if (proto) {
+    proto = proto[0];
+    var lowerProto = proto.toLowerCase();
+    this.protocol = lowerProto;
+    rest = rest.substr(proto.length);
+  }
+  if (slashesDenoteHost || proto || rest.match(/^\/\/[^@\/]+@[^@\/]+/)) {
+    var slashes = rest.substr(0, 2) === "//";
+    if (slashes && !(proto && hostlessProtocol[proto])) {
+      rest = rest.substr(2);
+      this.slashes = true;
+    }
+  }
+  if (!hostlessProtocol[proto] && (slashes || proto && !slashedProtocol[proto])) {
+    var hostEnd = -1;
+    for (var i = 0; i < hostEndingChars.length; i++) {
+      var hec = rest.indexOf(hostEndingChars[i]);
+      if (hec !== -1 && (hostEnd === -1 || hec < hostEnd))
+        hostEnd = hec;
+    }
+    var auth, atSign;
+    if (hostEnd === -1) {
+      atSign = rest.lastIndexOf("@");
+    } else {
+      atSign = rest.lastIndexOf("@", hostEnd);
+    }
+    if (atSign !== -1) {
+      auth = rest.slice(0, atSign);
+      rest = rest.slice(atSign + 1);
+      this.auth = decodeURIComponent(auth);
+    }
+    hostEnd = -1;
+    for (var i = 0; i < nonHostChars.length; i++) {
+      var hec = rest.indexOf(nonHostChars[i]);
+      if (hec !== -1 && (hostEnd === -1 || hec < hostEnd))
+        hostEnd = hec;
+    }
+    if (hostEnd === -1)
+      hostEnd = rest.length;
+    this.host = rest.slice(0, hostEnd);
+    rest = rest.slice(hostEnd);
+    this.parseHost();
+    this.hostname = this.hostname || "";
+    var ipv6Hostname = this.hostname[0] === "[" && this.hostname[this.hostname.length - 1] === "]";
+    if (!ipv6Hostname) {
+      var hostparts = this.hostname.split(/\./);
+      for (var i = 0, l = hostparts.length; i < l; i++) {
+        var part = hostparts[i];
+        if (!part)
+          continue;
+        if (!part.match(hostnamePartPattern)) {
+          var newpart = "";
+          for (var j = 0, k = part.length; j < k; j++) {
+            if (part.charCodeAt(j) > 127) {
+              newpart += "x";
+            } else {
+              newpart += part[j];
+            }
+          }
+          if (!newpart.match(hostnamePartPattern)) {
+            var validParts = hostparts.slice(0, i);
+            var notHost = hostparts.slice(i + 1);
+            var bit = part.match(hostnamePartStart);
+            if (bit) {
+              validParts.push(bit[1]);
+              notHost.unshift(bit[2]);
+            }
+            if (notHost.length) {
+              rest = "/" + notHost.join(".") + rest;
+            }
+            this.hostname = validParts.join(".");
+            break;
+          }
+        }
+      }
+    }
+    if (this.hostname.length > hostnameMaxLen) {
+      this.hostname = "";
+    } else {
+      this.hostname = this.hostname.toLowerCase();
+    }
+    if (!ipv6Hostname) {
+      this.hostname = punycode.toASCII(this.hostname);
+    }
+    var p2 = this.port ? ":" + this.port : "";
+    var h = this.hostname || "";
+    this.host = h + p2;
+    this.href += this.host;
+    if (ipv6Hostname) {
+      this.hostname = this.hostname.substr(1, this.hostname.length - 2);
+      if (rest[0] !== "/") {
+        rest = "/" + rest;
+      }
+    }
+  }
+  if (!unsafeProtocol[lowerProto]) {
+    for (var i = 0, l = autoEscape.length; i < l; i++) {
+      var ae = autoEscape[i];
+      if (rest.indexOf(ae) === -1)
+        continue;
+      var esc = encodeURIComponent(ae);
+      if (esc === ae) {
+        esc = escape(ae);
+      }
+      rest = rest.split(ae).join(esc);
+    }
+  }
+  var hash = rest.indexOf("#");
+  if (hash !== -1) {
+    this.hash = rest.substr(hash);
+    rest = rest.slice(0, hash);
+  }
+  var qm = rest.indexOf("?");
+  if (qm !== -1) {
+    this.search = rest.substr(qm);
+    this.query = rest.substr(qm + 1);
+    if (parseQueryString) {
+      this.query = querystring.parse(this.query);
+    }
+    rest = rest.slice(0, qm);
+  } else if (parseQueryString) {
+    this.search = "";
+    this.query = {};
+  }
+  if (rest)
+    this.pathname = rest;
+  if (slashedProtocol[lowerProto] && this.hostname && !this.pathname) {
+    this.pathname = "/";
+  }
+  if (this.pathname || this.search) {
+    var p2 = this.pathname || "";
+    var s = this.search || "";
+    this.path = p2 + s;
+  }
+  this.href = this.format();
+  return this;
+};
+function urlFormat(obj) {
+  if (util.isString(obj))
+    obj = urlParse(obj);
+  if (!(obj instanceof Url))
+    return Url.prototype.format.call(obj);
+  return obj.format();
+}
+Url.prototype.format = function() {
+  var auth = this.auth || "";
+  if (auth) {
+    auth = encodeURIComponent(auth);
+    auth = auth.replace(/%3A/i, ":");
+    auth += "@";
+  }
+  var protocol = this.protocol || "", pathname = this.pathname || "", hash = this.hash || "", host = false, query = "";
+  if (this.host) {
+    host = auth + this.host;
+  } else if (this.hostname) {
+    host = auth + (this.hostname.indexOf(":") === -1 ? this.hostname : "[" + this.hostname + "]");
+    if (this.port) {
+      host += ":" + this.port;
+    }
+  }
+  if (this.query && util.isObject(this.query) && Object.keys(this.query).length) {
+    query = querystring.stringify(this.query);
+  }
+  var search = this.search || query && "?" + query || "";
+  if (protocol && protocol.substr(-1) !== ":")
+    protocol += ":";
+  if (this.slashes || (!protocol || slashedProtocol[protocol]) && host !== false) {
+    host = "//" + (host || "");
+    if (pathname && pathname.charAt(0) !== "/")
+      pathname = "/" + pathname;
+  } else if (!host) {
+    host = "";
+  }
+  if (hash && hash.charAt(0) !== "#")
+    hash = "#" + hash;
+  if (search && search.charAt(0) !== "?")
+    search = "?" + search;
+  pathname = pathname.replace(/[?#]/g, function(match2) {
+    return encodeURIComponent(match2);
+  });
+  search = search.replace("#", "%23");
+  return protocol + host + pathname + search + hash;
+};
+function urlResolve(source2, relative) {
+  return urlParse(source2, false, true).resolve(relative);
+}
+Url.prototype.resolve = function(relative) {
+  return this.resolveObject(urlParse(relative, false, true)).format();
+};
+function urlResolveObject(source2, relative) {
+  if (!source2)
+    return relative;
+  return urlParse(source2, false, true).resolveObject(relative);
+}
+Url.prototype.resolveObject = function(relative) {
+  if (util.isString(relative)) {
+    var rel = new Url();
+    rel.parse(relative, false, true);
+    relative = rel;
+  }
+  var result = new Url();
+  var tkeys = Object.keys(this);
+  for (var tk = 0; tk < tkeys.length; tk++) {
+    var tkey = tkeys[tk];
+    result[tkey] = this[tkey];
+  }
+  result.hash = relative.hash;
+  if (relative.href === "") {
+    result.href = result.format();
+    return result;
+  }
+  if (relative.slashes && !relative.protocol) {
+    var rkeys = Object.keys(relative);
+    for (var rk = 0; rk < rkeys.length; rk++) {
+      var rkey = rkeys[rk];
+      if (rkey !== "protocol")
+        result[rkey] = relative[rkey];
+    }
+    if (slashedProtocol[result.protocol] && result.hostname && !result.pathname) {
+      result.path = result.pathname = "/";
+    }
+    result.href = result.format();
+    return result;
+  }
+  if (relative.protocol && relative.protocol !== result.protocol) {
+    if (!slashedProtocol[relative.protocol]) {
+      var keys = Object.keys(relative);
+      for (var v = 0; v < keys.length; v++) {
+        var k = keys[v];
+        result[k] = relative[k];
+      }
+      result.href = result.format();
+      return result;
+    }
+    result.protocol = relative.protocol;
+    if (!relative.host && !hostlessProtocol[relative.protocol]) {
+      var relPath = (relative.pathname || "").split("/");
+      while (relPath.length && !(relative.host = relPath.shift()))
+        ;
+      if (!relative.host)
+        relative.host = "";
+      if (!relative.hostname)
+        relative.hostname = "";
+      if (relPath[0] !== "")
+        relPath.unshift("");
+      if (relPath.length < 2)
+        relPath.unshift("");
+      result.pathname = relPath.join("/");
+    } else {
+      result.pathname = relative.pathname;
+    }
+    result.search = relative.search;
+    result.query = relative.query;
+    result.host = relative.host || "";
+    result.auth = relative.auth;
+    result.hostname = relative.hostname || relative.host;
+    result.port = relative.port;
+    if (result.pathname || result.search) {
+      var p2 = result.pathname || "";
+      var s = result.search || "";
+      result.path = p2 + s;
+    }
+    result.slashes = result.slashes || relative.slashes;
+    result.href = result.format();
+    return result;
+  }
+  var isSourceAbs = result.pathname && result.pathname.charAt(0) === "/", isRelAbs = relative.host || relative.pathname && relative.pathname.charAt(0) === "/", mustEndAbs = isRelAbs || isSourceAbs || result.host && relative.pathname, removeAllDots = mustEndAbs, srcPath = result.pathname && result.pathname.split("/") || [], relPath = relative.pathname && relative.pathname.split("/") || [], psychotic = result.protocol && !slashedProtocol[result.protocol];
+  if (psychotic) {
+    result.hostname = "";
+    result.port = null;
+    if (result.host) {
+      if (srcPath[0] === "")
+        srcPath[0] = result.host;
+      else
+        srcPath.unshift(result.host);
+    }
+    result.host = "";
+    if (relative.protocol) {
+      relative.hostname = null;
+      relative.port = null;
+      if (relative.host) {
+        if (relPath[0] === "")
+          relPath[0] = relative.host;
+        else
+          relPath.unshift(relative.host);
+      }
+      relative.host = null;
+    }
+    mustEndAbs = mustEndAbs && (relPath[0] === "" || srcPath[0] === "");
+  }
+  if (isRelAbs) {
+    result.host = relative.host || relative.host === "" ? relative.host : result.host;
+    result.hostname = relative.hostname || relative.hostname === "" ? relative.hostname : result.hostname;
+    result.search = relative.search;
+    result.query = relative.query;
+    srcPath = relPath;
+  } else if (relPath.length) {
+    if (!srcPath)
+      srcPath = [];
+    srcPath.pop();
+    srcPath = srcPath.concat(relPath);
+    result.search = relative.search;
+    result.query = relative.query;
+  } else if (!util.isNullOrUndefined(relative.search)) {
+    if (psychotic) {
+      result.hostname = result.host = srcPath.shift();
+      var authInHost = result.host && result.host.indexOf("@") > 0 ? result.host.split("@") : false;
+      if (authInHost) {
+        result.auth = authInHost.shift();
+        result.host = result.hostname = authInHost.shift();
+      }
+    }
+    result.search = relative.search;
+    result.query = relative.query;
+    if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
+      result.path = (result.pathname ? result.pathname : "") + (result.search ? result.search : "");
+    }
+    result.href = result.format();
+    return result;
+  }
+  if (!srcPath.length) {
+    result.pathname = null;
+    if (result.search) {
+      result.path = "/" + result.search;
+    } else {
+      result.path = null;
+    }
+    result.href = result.format();
+    return result;
+  }
+  var last = srcPath.slice(-1)[0];
+  var hasTrailingSlash = (result.host || relative.host || srcPath.length > 1) && (last === "." || last === "..") || last === "";
+  var up = 0;
+  for (var i = srcPath.length; i >= 0; i--) {
+    last = srcPath[i];
+    if (last === ".") {
+      srcPath.splice(i, 1);
+    } else if (last === "..") {
+      srcPath.splice(i, 1);
+      up++;
+    } else if (up) {
+      srcPath.splice(i, 1);
+      up--;
+    }
+  }
+  if (!mustEndAbs && !removeAllDots) {
+    for (; up--; up) {
+      srcPath.unshift("..");
+    }
+  }
+  if (mustEndAbs && srcPath[0] !== "" && (!srcPath[0] || srcPath[0].charAt(0) !== "/")) {
+    srcPath.unshift("");
+  }
+  if (hasTrailingSlash && srcPath.join("/").substr(-1) !== "/") {
+    srcPath.push("");
+  }
+  var isAbsolute = srcPath[0] === "" || srcPath[0] && srcPath[0].charAt(0) === "/";
+  if (psychotic) {
+    result.hostname = result.host = isAbsolute ? "" : srcPath.length ? srcPath.shift() : "";
+    var authInHost = result.host && result.host.indexOf("@") > 0 ? result.host.split("@") : false;
+    if (authInHost) {
+      result.auth = authInHost.shift();
+      result.host = result.hostname = authInHost.shift();
+    }
+  }
+  mustEndAbs = mustEndAbs || result.host && srcPath.length;
+  if (mustEndAbs && !isAbsolute) {
+    srcPath.unshift("");
+  }
+  if (!srcPath.length) {
+    result.pathname = null;
+    result.path = null;
+  } else {
+    result.pathname = srcPath.join("/");
+  }
+  if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
+    result.path = (result.pathname ? result.pathname : "") + (result.search ? result.search : "");
+  }
+  result.auth = relative.auth || result.auth;
+  result.slashes = result.slashes || relative.slashes;
+  result.href = result.format();
+  return result;
+};
+Url.prototype.parseHost = function() {
+  var host = this.host;
+  var port = portPattern.exec(host);
+  if (port) {
+    port = port[0];
+    if (port !== ":") {
+      this.port = port.substr(1);
+    }
+    host = host.substr(0, host.length - port.length);
+  }
+  if (host)
+    this.hostname = host;
+};
 var _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -4866,7 +5673,7 @@ var _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$m = {
+const _sfc_main$n = {
   props: {
     show: {
       type: Boolean,
@@ -4876,6 +5683,11 @@ const _sfc_main$m = {
       type: String,
       default: ""
     }
+  },
+  data() {
+    return {
+      docdog_menu_display: false
+    };
   },
   methods: {
     closeModal() {
@@ -4892,52 +5704,102 @@ const _sfc_main$m = {
     }
   }
 };
-const _hoisted_1$g = { class: "docdog" };
-const _hoisted_2$d = { class: "docdog-modal" };
-const _hoisted_3$b = { class: "docdog-modal__head" };
-const _hoisted_4$9 = { class: "docdog-modal__head__heading" };
-const _hoisted_5$6 = /* @__PURE__ */ createBaseVNode("svg", {
-  width: "12",
-  height: "13",
-  viewBox: "0 0 12 13",
+const _hoisted_1$h = { class: "docdog" };
+const _hoisted_2$f = { class: "docdog-modal" };
+const _hoisted_3$d = { class: "docdog-modal__head" };
+const _hoisted_4$c = { class: "docdog-modal__head__nav" };
+const _hoisted_5$a = /* @__PURE__ */ createStaticVNode('<svg width="228" height="45" viewBox="0 0 228 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32.985 1.53C32.283 0.828 30.9015 0.2565 29.9115 0.2565H15.0885C14.0985 0.2565 12.717 0.828 12.015 1.53L1.52997 12.015C0.82797 12.717 0.25647 14.0985 0.25647 15.0885V29.9115C0.25647 30.9015 0.82797 32.283 1.52997 32.985L12.015 43.47C12.717 44.172 14.0985 44.7435 15.0885 44.7435H29.9115C30.9015 44.7435 32.283 44.172 32.985 43.47L43.47 32.985C44.172 32.283 44.7435 30.9015 44.7435 29.9115V15.0885C44.7435 14.0985 44.172 12.717 43.47 12.015L32.985 1.53Z" fill="#FF4613"></path><path d="M20.322 5.80951C20.5064 5.71095 20.6748 5.58502 20.8215 5.43601L20.034 4.95451C19.5885 4.68901 19.0125 4.68901 18.567 4.99951C18.5265 5.04001 18.297 5.21551 17.9955 5.50801C18.3077 5.78685 18.6969 5.96483 19.1121 6.01863C19.5273 6.07244 19.949 5.99954 20.322 5.80951V5.80951Z" fill="white"></path><path d="M39.5236 17.1855C38.7226 12.3345 34.4521 8.7345 29.4705 8.7345H26.2215L21.528 5.86349C21.312 6.07049 21.0645 6.25049 20.7945 6.38999C20.2683 6.65867 19.6764 6.77174 19.0882 6.71595C18.5 6.66015 17.9399 6.43781 17.4735 6.075C17.2305 6.3585 16.9785 6.696 16.749 7.092C14.8815 10.4265 14.436 16.344 19.287 19.1925C28.017 24.363 26.838 33.669 23.778 44.7435H29.9881C30.9421 44.7435 32.2741 44.19 32.9446 43.5195L38.8036 37.6605C37.7416 36.072 36.9721 34.5195 36.7561 33.147C36.1846 30.2805 37.7281 28.4985 37.5256 27.2115C36.8908 27.1552 36.2808 26.9386 35.7527 26.582C35.2245 26.2255 34.7956 25.7407 34.5061 25.173L31.7701 19.809C31.6081 19.494 31.7296 19.1295 32.0446 18.9675C32.3596 18.8055 32.7241 18.927 32.8861 19.242L35.6176 24.6015C35.7676 24.8964 35.9743 25.1588 36.2259 25.3738C36.4774 25.5888 36.7688 25.7522 37.0835 25.8546C37.3981 25.957 37.7298 25.9963 38.0597 25.9705C38.3896 25.9447 38.7112 25.8541 39.0061 25.704C39.3391 25.533 39.6091 25.281 39.8386 24.9975L39.8476 25.002C40.6531 23.184 40.1176 20.646 39.5236 17.1855ZM29.0251 13.4055C28.3185 13.4055 27.7426 12.8295 27.7426 12.123C27.7426 11.4165 28.3185 10.8405 29.0251 10.8405C29.7316 10.8405 30.3076 11.4165 30.3076 12.123C30.3076 12.834 29.7361 13.4055 29.0251 13.4055Z" fill="white"></path><path d="M21.1681 22.4055L18.3016 21.3345L19.0666 13.554C19.0981 13.239 18.8686 12.9645 18.5536 12.933C18.2386 12.9015 17.9641 13.131 17.9326 13.446L17.9236 13.5315C17.8921 13.5585 17.8606 13.581 17.8336 13.6125L13.5991 19.5795L10.6741 18.486C10.3366 18.36 9.95856 18.531 9.83256 18.8685L5.84106 29.547C5.04456 31.68 6.12906 34.056 8.26206 34.8525L12.2536 36.342C14.3866 37.1385 16.7626 36.054 17.5591 33.921L21.5506 23.2425C21.6811 22.9095 21.5101 22.536 21.1681 22.4055V22.4055ZM14.2066 20.8755C14.1121 21.1275 13.8286 21.258 13.5766 21.1635C13.3246 21.069 13.1941 20.7855 13.2886 20.5335C13.3367 20.4156 13.4288 20.321 13.5454 20.2699C13.6621 20.2187 13.794 20.2149 13.9134 20.2594C14.0327 20.3039 14.1301 20.393 14.1848 20.5081C14.2395 20.6231 14.2473 20.7548 14.2066 20.8755V20.8755ZM14.7061 19.9935L17.7076 15.7635L17.1991 20.925L14.7061 19.9935ZM17.9911 22.2885C17.8966 22.5405 17.6131 22.671 17.3611 22.5765C17.1091 22.482 16.9786 22.1985 17.0731 21.9465C17.1676 21.6945 17.4511 21.564 17.7031 21.6585C17.9551 21.753 18.0856 22.0365 17.9911 22.2885Z" fill="white"></path><path opacity="0.2" d="M12.258 36.3465L8.26648 34.857C16.794 36.261 21.1725 22.41 21.1725 22.41C21.51 22.536 21.681 22.914 21.555 23.2515L17.5635 33.93C16.767 36.063 14.391 37.1475 12.258 36.3465V36.3465Z" fill="#BE2C11"></path><path d="M26.9414 34.299C27.3018 34.299 27.5939 34.0069 27.5939 33.6465C27.5939 33.2861 27.3018 32.994 26.9414 32.994C26.5811 32.994 26.2889 33.2861 26.2889 33.6465C26.2889 34.0069 26.5811 34.299 26.9414 34.299Z" fill="#FF4613"></path><path d="M28.683 34.5735C29.0434 34.5735 29.3355 34.2814 29.3355 33.921C29.3355 33.5606 29.0434 33.2685 28.683 33.2685C28.3227 33.2685 28.0305 33.5606 28.0305 33.921C28.0305 34.2814 28.3227 34.5735 28.683 34.5735Z" fill="#FF4613"></path><path d="M30.42 34.659C30.7803 34.659 31.0725 34.3669 31.0725 34.0065C31.0725 33.6461 30.7803 33.354 30.42 33.354C30.0596 33.354 29.7675 33.6461 29.7675 34.0065C29.7675 34.3669 30.0596 34.659 30.42 34.659Z" fill="#FF4613"></path><path d="M32.1615 34.5825C32.5219 34.5825 32.814 34.2904 32.814 33.93C32.814 33.5696 32.5219 33.2775 32.1615 33.2775C31.8012 33.2775 31.509 33.5696 31.509 33.93C31.509 34.2904 31.8012 34.5825 32.1615 34.5825Z" fill="#FF4613"></path><path d="M33.903 34.2585C34.2634 34.2585 34.5555 33.9664 34.5555 33.606C34.5555 33.2456 34.2634 32.9535 33.903 32.9535C33.5426 32.9535 33.2505 33.2456 33.2505 33.606C33.2505 33.9664 33.5426 34.2585 33.903 34.2585Z" fill="#FF4613"></path><path d="M35.64 33.6915C36.0004 33.6915 36.2925 33.3994 36.2925 33.039C36.2925 32.6786 36.0004 32.3865 35.64 32.3865C35.2797 32.3865 34.9875 32.6786 34.9875 33.039C34.9875 33.3994 35.2797 33.6915 35.64 33.6915Z" fill="#FF4613"></path><path d="M61 12.578H67.996C69.668 12.578 71.142 12.9007 72.418 13.546C73.7087 14.1767 74.706 15.0713 75.41 16.23C76.1287 17.3887 76.488 18.738 76.488 20.278C76.488 21.818 76.1287 23.1673 75.41 24.326C74.706 25.4847 73.7087 26.3867 72.418 27.032C71.142 27.6627 69.668 27.978 67.996 27.978H61V12.578ZM67.82 25.052C69.36 25.052 70.5847 24.6267 71.494 23.776C72.418 22.9107 72.88 21.7447 72.88 20.278C72.88 18.8113 72.418 17.6527 71.494 16.802C70.5847 15.9367 69.36 15.504 67.82 15.504H64.564V25.052H67.82Z" fill="#FF4613"></path><path d="M84.5658 28.154C83.3191 28.154 82.1971 27.8973 81.1998 27.384C80.2171 26.856 79.4471 26.13 78.8898 25.206C78.3324 24.282 78.0538 23.2333 78.0538 22.06C78.0538 20.8867 78.3324 19.838 78.8898 18.914C79.4471 17.99 80.2171 17.2713 81.1998 16.758C82.1971 16.23 83.3191 15.966 84.5658 15.966C85.8124 15.966 86.9271 16.23 87.9098 16.758C88.8924 17.2713 89.6624 17.99 90.2198 18.914C90.7771 19.838 91.0558 20.8867 91.0558 22.06C91.0558 23.2333 90.7771 24.282 90.2198 25.206C89.6624 26.13 88.8924 26.856 87.9098 27.384C86.9271 27.8973 85.8124 28.154 84.5658 28.154ZM84.5658 25.338C85.4458 25.338 86.1644 25.0447 86.7218 24.458C87.2938 23.8567 87.5798 23.0573 87.5798 22.06C87.5798 21.0627 87.2938 20.2707 86.7218 19.684C86.1644 19.0827 85.4458 18.782 84.5658 18.782C83.6858 18.782 82.9598 19.0827 82.3878 19.684C81.8158 20.2707 81.5298 21.0627 81.5298 22.06C81.5298 23.0573 81.8158 23.8567 82.3878 24.458C82.9598 25.0447 83.6858 25.338 84.5658 25.338Z" fill="#FF4613"></path><path d="M99.0698 28.154C97.8085 28.154 96.6718 27.8973 95.6598 27.384C94.6625 26.856 93.8778 26.13 93.3058 25.206C92.7485 24.282 92.4698 23.2333 92.4698 22.06C92.4698 20.8867 92.7485 19.838 93.3058 18.914C93.8778 17.99 94.6625 17.2713 95.6598 16.758C96.6718 16.23 97.8085 15.966 99.0698 15.966C100.316 15.966 101.402 16.23 102.326 16.758C103.264 17.2713 103.946 18.012 104.372 18.98L101.71 20.41C101.094 19.3247 100.206 18.782 99.0478 18.782C98.1531 18.782 97.4125 19.0753 96.8258 19.662C96.2391 20.2487 95.9458 21.048 95.9458 22.06C95.9458 23.072 96.2391 23.8713 96.8258 24.458C97.4125 25.0447 98.1531 25.338 99.0478 25.338C100.221 25.338 101.108 24.7953 101.71 23.71L104.372 25.162C103.946 26.1007 103.264 26.834 102.326 27.362C101.402 27.89 100.316 28.154 99.0698 28.154Z" fill="#FF4613"></path><path d="M106.59 12.578H113.586C115.258 12.578 116.732 12.9007 118.008 13.546C119.299 14.1767 120.296 15.0713 121 16.23C121.719 17.3887 122.078 18.738 122.078 20.278C122.078 21.818 121.719 23.1673 121 24.326C120.296 25.4847 119.299 26.3867 118.008 27.032C116.732 27.6627 115.258 27.978 113.586 27.978H106.59V12.578ZM113.41 25.052C114.95 25.052 116.175 24.6267 117.084 23.776C118.008 22.9107 118.47 21.7447 118.47 20.278C118.47 18.8113 118.008 17.6527 117.084 16.802C116.175 15.9367 114.95 15.504 113.41 15.504H110.154V25.052H113.41Z" fill="#FF4613"></path><path d="M130.156 28.154C128.909 28.154 127.787 27.8973 126.79 27.384C125.807 26.856 125.037 26.13 124.48 25.206C123.922 24.282 123.644 23.2333 123.644 22.06C123.644 20.8867 123.922 19.838 124.48 18.914C125.037 17.99 125.807 17.2713 126.79 16.758C127.787 16.23 128.909 15.966 130.156 15.966C131.402 15.966 132.517 16.23 133.5 16.758C134.482 17.2713 135.252 17.99 135.81 18.914C136.367 19.838 136.646 20.8867 136.646 22.06C136.646 23.2333 136.367 24.282 135.81 25.206C135.252 26.13 134.482 26.856 133.5 27.384C132.517 27.8973 131.402 28.154 130.156 28.154ZM130.156 25.338C131.036 25.338 131.754 25.0447 132.312 24.458C132.884 23.8567 133.17 23.0573 133.17 22.06C133.17 21.0627 132.884 20.2707 132.312 19.684C131.754 19.0827 131.036 18.782 130.156 18.782C129.276 18.782 128.55 19.0827 127.978 19.684C127.406 20.2707 127.12 21.0627 127.12 22.06C127.12 23.0573 127.406 23.8567 127.978 24.458C128.55 25.0447 129.276 25.338 130.156 25.338Z" fill="#FF4613"></path><path d="M151.15 16.142V25.998C151.15 28.1687 150.585 29.782 149.456 30.838C148.326 31.894 146.676 32.422 144.506 32.422C143.362 32.422 142.276 32.2827 141.25 32.004C140.223 31.7253 139.372 31.322 138.698 30.794L140.062 28.33C140.56 28.7407 141.191 29.0633 141.954 29.298C142.716 29.5473 143.479 29.672 144.242 29.672C145.43 29.672 146.302 29.4007 146.86 28.858C147.432 28.33 147.718 27.5233 147.718 26.438V25.932C146.823 26.9147 145.576 27.406 143.978 27.406C142.892 27.406 141.895 27.1713 140.986 26.702C140.091 26.218 139.38 25.5433 138.852 24.678C138.324 23.8127 138.06 22.8153 138.06 21.686C138.06 20.5567 138.324 19.5593 138.852 18.694C139.38 17.8287 140.091 17.1613 140.986 16.692C141.895 16.208 142.892 15.966 143.978 15.966C145.694 15.966 146.999 16.5307 147.894 17.66V16.142H151.15ZM144.66 24.59C145.569 24.59 146.31 24.326 146.882 23.798C147.468 23.2553 147.762 22.5513 147.762 21.686C147.762 20.8207 147.468 20.124 146.882 19.596C146.31 19.0533 145.569 18.782 144.66 18.782C143.75 18.782 143.002 19.0533 142.416 19.596C141.829 20.124 141.536 20.8207 141.536 21.686C141.536 22.5513 141.829 23.2553 142.416 23.798C143.002 24.326 143.75 24.59 144.66 24.59Z" fill="#FF4613"></path><path d="M160.816 12.578H167.812C169.484 12.578 170.958 12.9007 172.234 13.546C173.525 14.1767 174.522 15.0713 175.226 16.23C175.945 17.3887 176.304 18.738 176.304 20.278C176.304 21.818 175.945 23.1673 175.226 24.326C174.522 25.4847 173.525 26.3867 172.234 27.032C170.958 27.6627 169.484 27.978 167.812 27.978H160.816V12.578ZM167.636 25.052C169.176 25.052 170.401 24.6267 171.31 23.776C172.234 22.9107 172.696 21.7447 172.696 20.278C172.696 18.8113 172.234 17.6527 171.31 16.802C170.401 15.9367 169.176 15.504 167.636 15.504H164.38V25.052H167.636Z" fill="#FF4613"></path><path d="M190.344 22.104C190.344 22.148 190.322 22.456 190.278 23.028H181.324C181.486 23.7613 181.867 24.3407 182.468 24.766C183.07 25.1913 183.818 25.404 184.712 25.404C185.328 25.404 185.871 25.316 186.34 25.14C186.824 24.9493 187.272 24.656 187.682 24.26L189.508 26.24C188.394 27.516 186.766 28.154 184.624 28.154C183.29 28.154 182.109 27.8973 181.082 27.384C180.056 26.856 179.264 26.13 178.706 25.206C178.149 24.282 177.87 23.2333 177.87 22.06C177.87 20.9013 178.142 19.86 178.684 18.936C179.242 17.9973 179.997 17.2713 180.95 16.758C181.918 16.23 182.996 15.966 184.184 15.966C185.343 15.966 186.392 16.2153 187.33 16.714C188.269 17.2127 189.002 17.9313 189.53 18.87C190.073 19.794 190.344 20.872 190.344 22.104ZM184.206 18.562C183.429 18.562 182.776 18.782 182.248 19.222C181.72 19.662 181.398 20.2633 181.28 21.026H187.11C186.993 20.278 186.67 19.684 186.142 19.244C185.614 18.7893 184.969 18.562 184.206 18.562Z" fill="#FF4613"></path><path d="M207.787 15.966C209.268 15.966 210.442 16.406 211.307 17.286C212.187 18.1513 212.627 19.4567 212.627 21.202V27.978H209.195V21.73C209.195 20.7913 208.997 20.0947 208.601 19.64C208.22 19.1707 207.67 18.936 206.951 18.936C206.144 18.936 205.506 19.2 205.037 19.728C204.568 20.2413 204.333 21.0113 204.333 22.038V27.978H200.901V21.73C200.901 19.8673 200.153 18.936 198.657 18.936C197.865 18.936 197.234 19.2 196.765 19.728C196.296 20.2413 196.061 21.0113 196.061 22.038V27.978H192.629V16.142H195.907V17.506C196.347 17.0073 196.882 16.626 197.513 16.362C198.158 16.098 198.862 15.966 199.625 15.966C200.461 15.966 201.216 16.1347 201.891 16.472C202.566 16.7947 203.108 17.2713 203.519 17.902C204.003 17.286 204.612 16.8093 205.345 16.472C206.093 16.1347 206.907 15.966 207.787 15.966Z" fill="#FF4613"></path><path d="M221.464 28.154C220.218 28.154 219.096 27.8973 218.098 27.384C217.116 26.856 216.346 26.13 215.788 25.206C215.231 24.282 214.952 23.2333 214.952 22.06C214.952 20.8867 215.231 19.838 215.788 18.914C216.346 17.99 217.116 17.2713 218.098 16.758C219.096 16.23 220.218 15.966 221.464 15.966C222.711 15.966 223.826 16.23 224.808 16.758C225.791 17.2713 226.561 17.99 227.118 18.914C227.676 19.838 227.954 20.8867 227.954 22.06C227.954 23.2333 227.676 24.282 227.118 25.206C226.561 26.13 225.791 26.856 224.808 27.384C223.826 27.8973 222.711 28.154 221.464 28.154ZM221.464 25.338C222.344 25.338 223.063 25.0447 223.62 24.458C224.192 23.8567 224.478 23.0573 224.478 22.06C224.478 21.0627 224.192 20.2707 223.62 19.684C223.063 19.0827 222.344 18.782 221.464 18.782C220.584 18.782 219.858 19.0827 219.286 19.684C218.714 20.2707 218.428 21.0627 218.428 22.06C218.428 23.0573 218.714 23.8567 219.286 24.458C219.858 25.0447 220.584 25.338 221.464 25.338Z" fill="#FF4613"></path></svg>', 1);
+const _hoisted_6$a = [
+  _hoisted_5$a
+];
+const _hoisted_7$9 = /* @__PURE__ */ createBaseVNode("nav", { class: "docdog-modal__head__nav__list" }, [
+  /* @__PURE__ */ createBaseVNode("ul", null, [
+    /* @__PURE__ */ createBaseVNode("li", null, [
+      /* @__PURE__ */ createBaseVNode("button", {
+        type: "button",
+        "data-docdog": "list",
+        class: "docdog-modal__head__nav__list__item"
+      }, "\u8CC7\u6599\u4E00\u89A7")
+    ])
+  ])
+], -1);
+const _hoisted_8$8 = /* @__PURE__ */ createBaseVNode("button", {
+  type: "button",
+  class: "docdog-modal__head__account__button",
+  "data-docdog": "login?show=!isLogin"
+}, " \u30ED\u30B0\u30A4\u30F3 ", -1);
+const _hoisted_9$7 = /* @__PURE__ */ createBaseVNode("svg", {
+  width: "30",
+  height: "30",
+  viewBox: "0 0 30 30",
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg"
 }, [
   /* @__PURE__ */ createBaseVNode("path", {
-    d: "M11.8334 1.84163L10.6584 0.666626L6.00008 5.32496L1.34175 0.666626L0.166748 1.84163L4.82508 6.49996L0.166748 11.1583L1.34175 12.3333L6.00008 7.67496L10.6584 12.3333L11.8334 11.1583L7.17508 6.49996L11.8334 1.84163Z",
-    fill: "#AAAAAA"
+    d: "M15 2.5C8.1 2.5 2.5 8.1 2.5 15C2.5 21.9 8.1 27.5 15 27.5C21.9 27.5 27.5 21.9 27.5 15C27.5 8.1 21.9 2.5 15 2.5ZM15 6.25C17.075 6.25 18.75 7.925 18.75 10C18.75 12.075 17.075 13.75 15 13.75C12.925 13.75 11.25 12.075 11.25 10C11.25 7.925 12.925 6.25 15 6.25ZM15 24C11.875 24 9.1125 22.4 7.5 19.975C7.5375 17.4875 12.5 16.125 15 16.125C17.4875 16.125 22.4625 17.4875 22.5 19.975C20.8875 22.4 18.125 24 15 24Z",
+    fill: "#138AFF"
   })
 ], -1);
-const _hoisted_6$6 = [
-  _hoisted_5$6
+const _hoisted_10$6 = [
+  _hoisted_9$7
 ];
-const _hoisted_7$5 = { class: "docdog-modal__body" };
-const _hoisted_8$5 = {
+const _hoisted_11$6 = { class: "docdog-modal__head__account__nav" };
+const _hoisted_12$6 = { class: "docdog-modal__body" };
+const _hoisted_13$5 = {
   key: 0,
   class: "docdog-modal__foot"
 };
-function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
-  return withDirectives((openBlock(), createElementBlock("div", _hoisted_1$g, [
+function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
+  return withDirectives((openBlock(), createElementBlock("div", _hoisted_1$h, [
     createBaseVNode("div", {
       class: "docdog-modal__bg",
-      onClick: _cache[1] || (_cache[1] = withModifiers((...args) => $options.closeModal && $options.closeModal(...args), ["self"]))
+      onClick: _cache[4] || (_cache[4] = withModifiers((...args) => $options.closeModal && $options.closeModal(...args), ["self"]))
     }, [
-      createBaseVNode("section", _hoisted_2$d, [
-        createBaseVNode("header", _hoisted_3$b, [
-          renderSlot(_ctx.$slots, "header", {}, () => [
-            createBaseVNode("p", _hoisted_4$9, toDisplayString($props.title), 1),
+      createBaseVNode("section", _hoisted_2$f, [
+        createBaseVNode("header", _hoisted_3$d, [
+          createBaseVNode("div", _hoisted_4$c, [
             createBaseVNode("button", {
               type: "button",
-              "aria-label": "Close",
-              class: "docdog-modal__head__close",
+              "aria-label": "Back to top",
+              class: "docdog-modal__head__nav__logo",
               onClick: _cache[0] || (_cache[0] = withModifiers((...args) => $options.closeModal && $options.closeModal(...args), ["prevent"]))
-            }, _hoisted_6$6)
+            }, _hoisted_6$a),
+            _hoisted_7$9
+          ]),
+          createBaseVNode("nav", null, [
+            _hoisted_8$8,
+            createBaseVNode("button", {
+              type: "button",
+              class: "docdog-modal__head__account__toggle",
+              "data-docdog": "?show=isLogin",
+              onClick: _cache[1] || (_cache[1] = ($event) => $data.docdog_menu_display = !$data.docdog_menu_display)
+            }, _hoisted_10$6),
+            withDirectives(createBaseVNode("ul", _hoisted_11$6, [
+              createBaseVNode("li", null, [
+                createBaseVNode("button", {
+                  type: "button",
+                  class: "docdog-modal__head__account__nav__item",
+                  "data-docdog": "profile",
+                  onClick: _cache[2] || (_cache[2] = ($event) => $data.docdog_menu_display = false)
+                }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831\u306E\u7DE8\u96C6 ")
+              ]),
+              createBaseVNode("li", null, [
+                createBaseVNode("button", {
+                  type: "button",
+                  class: "docdog-modal__head__account__nav__item",
+                  "data-docdog": "logout",
+                  onClick: _cache[3] || (_cache[3] = ($event) => $data.docdog_menu_display = false)
+                }, " \u30ED\u30B0\u30A2\u30A6\u30C8 ")
+              ])
+            ], 512), [
+              [vShow, $data.docdog_menu_display]
+            ])
           ])
         ]),
-        createBaseVNode("div", _hoisted_7$5, [
+        createBaseVNode("div", _hoisted_12$6, [
           renderSlot(_ctx.$slots, "default")
         ]),
-        this.$slots.footer ? (openBlock(), createElementBlock("footer", _hoisted_8$5, [
+        this.$slots.footer ? (openBlock(), createElementBlock("footer", _hoisted_13$5, [
           renderSlot(_ctx.$slots, "footer", normalizeProps(guardReactiveProps(_ctx.$attrs)))
         ])) : createCommentVNode("", true)
       ])
@@ -4946,8 +5808,8 @@ function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, $props.show]
   ]);
 }
-var Modal = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$j]]);
-const _sfc_main$l = {
+var Modal = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$k]]);
+const _sfc_main$m = {
   inheritAttrs: false,
   props: {
     err: {
@@ -4976,9 +5838,13 @@ const _sfc_main$l = {
       type: Object,
       default: () => {
       }
+    },
+    isLogin: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ["close", "err", "redirect", "addToast", "removeToast", "onLogin"],
+  emits: ["close", "err", "redirect", "addToast", "removeToast", "onLogin", "logout", "update:msg"],
   unmount() {
     this.clearFooterData();
     this.$emit("err", "");
@@ -5006,25 +5872,18 @@ const _sfc_main$l = {
     },
     clearFooterData() {
       Object.keys(this.footer_data).forEach((key) => delete this.footer_data[key]);
+    },
+    logout() {
+      this.$emit("logout");
+    },
+    onLogin() {
+      this.$emit("onLogin");
+    },
+    setMsg(msg) {
+      this.$emit("update:msg", msg);
     }
   }
 };
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getAugmentedNamespace(n) {
-  if (n.__esModule)
-    return n;
-  var a = Object.defineProperty({}, "__esModule", { value: true });
-  Object.keys(n).forEach(function(k) {
-    var d = Object.getOwnPropertyDescriptor(n, k);
-    Object.defineProperty(a, k, d.get ? d : {
-      enumerable: true,
-      get: function() {
-        return n[k];
-      }
-    });
-  });
-  return a;
-}
 var axios$2 = { exports: {} };
 var bind$4 = function bind(fn, thisArg) {
   return function wrap() {
@@ -5185,9 +6044,9 @@ var utils$f = utils$g;
 function encode$1(val) {
   return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
 }
-var buildURL$2 = function buildURL(url, params, paramsSerializer) {
+var buildURL$2 = function buildURL(url2, params, paramsSerializer) {
   if (!params) {
-    return url;
+    return url2;
   }
   var serializedParams;
   if (paramsSerializer) {
@@ -5217,13 +6076,13 @@ var buildURL$2 = function buildURL(url, params, paramsSerializer) {
     serializedParams = parts.join("&");
   }
   if (serializedParams) {
-    var hashmarkIndex = url.indexOf("#");
+    var hashmarkIndex = url2.indexOf("#");
     if (hashmarkIndex !== -1) {
-      url = url.slice(0, hashmarkIndex);
+      url2 = url2.slice(0, hashmarkIndex);
     }
-    url += (url.indexOf("?") === -1 ? "?" : "&") + serializedParams;
+    url2 += (url2.indexOf("?") === -1 ? "?" : "&") + serializedParams;
   }
-  return url;
+  return url2;
 };
 var utils$e = utils$g;
 function InterceptorManager$1() {
@@ -5338,8 +6197,8 @@ var cookies$1 = utils$c.isStandardBrowserEnv() ? function standardBrowserEnv() {
     }
   };
 }();
-var isAbsoluteURL$1 = function isAbsoluteURL(url) {
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+var isAbsoluteURL$1 = function isAbsoluteURL(url2) {
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url2);
 };
 var combineURLs$1 = function combineURLs(baseURL, relativeURL) {
   return relativeURL ? baseURL.replace(/\/+$/, "") + "/" + relativeURL.replace(/^\/+/, "") : baseURL;
@@ -5402,8 +6261,8 @@ var isURLSameOrigin$1 = utils$a.isStandardBrowserEnv() ? function standardBrowse
   var msie = /(msie|trident)/i.test(navigator.userAgent);
   var urlParsingNode = document.createElement("a");
   var originURL;
-  function resolveURL(url) {
-    var href = url;
+  function resolveURL(url2) {
+    var href = url2;
     if (msie) {
       urlParsingNode.setAttribute("href", href);
       href = urlParsingNode.href;
@@ -5938,19 +6797,19 @@ Axios$1.prototype.getUri = function getUri(config) {
   return buildURL2(config.url, config.params, config.paramsSerializer).replace(/^\?/, "");
 };
 utils$4.forEach(["delete", "get", "head", "options"], function forEachMethodNoData2(method) {
-  Axios$1.prototype[method] = function(url, config) {
+  Axios$1.prototype[method] = function(url2, config) {
     return this.request(mergeConfig$1(config || {}, {
       method,
-      url,
+      url: url2,
       data: (config || {}).data
     }));
   };
 });
 utils$4.forEach(["post", "put", "patch"], function forEachMethodWithData2(method) {
-  Axios$1.prototype[method] = function(url, data2, config) {
+  Axios$1.prototype[method] = function(url2, data2, config) {
     return this.request(mergeConfig$1(config || {}, {
       method,
-      url,
+      url: url2,
       data: data2
     }));
   };
@@ -13262,22 +14121,179 @@ function getProfile(options = {
     });
   }
 }
+function reminderSendEmail({ email }) {
+  return getAuthHeaders({
+    autoLogin: true,
+    anonLogin: true
+  }).then((headers) => post("/rcms-api/3/reminder", { email }, headers).then(processError).then((resp) => {
+    if (resp.errors && resp.errors.length > 0) {
+      return Promise.reject(resp.errors[1]);
+    }
+  }).catch((err) => {
+    let err_msg = "\u4E0D\u660E\u30A8\u30E9\u30FC";
+    switch (err.response.status) {
+      case 401:
+        err_msg = err.response && err.response.data && err.response.data.errors.length > 0 && err.response.data.errors[0].message ? err.response.data.errors[0].message : "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u304C\u4E0D\u6B63\u3067\u3059\u3002";
+        break;
+      case 404:
+        err_msg = "The reminder endpoint could not be found";
+        break;
+    }
+    return Promise.reject(err_msg);
+  }));
+}
+function reminderUpdatePassword({ token, temp_pwd, login_pwd }) {
+  return getAuthHeaders({
+    autoLogin: true,
+    anonLogin: true
+  }).then((headers) => post("/rcms-api/3/reminder", { token, temp_pwd, login_pwd }, headers).then(processError).then((resp) => {
+    if (resp.errors && resp.errors.length > 0) {
+      return Promise.reject(resp.errors[1]);
+    }
+  }).catch((err) => {
+    let err_msg = "\u4E0D\u660E\u30A8\u30E9\u30FC";
+    switch (err.response.status) {
+      case 404:
+        err_msg = "The reminder endpoint could not be found";
+        break;
+      default:
+        err_msg = err.response && err.response.data && err.response.data.errors.length > 0 && err.response.data.errors[0].message ? reminderProcessMessage(err.response.data.errors[0].message) : "\u4E0D\u660E\u30A8\u30E9\u30FC";
+    }
+    return Promise.reject(err_msg);
+  }));
+}
+function reminderProcessMessage(msg) {
+  switch (msg) {
+    case "Invalid Temporary Password":
+      return "\u4EEE\u30D1\u30B9\u30EF\u30FC\u30C9\u304C\u4E0D\u6B63\u3067\u3059\u3002";
+    default:
+      return "\u4E0D\u660E\u30A8\u30E9\u30FC";
+  }
+}
 var loginApi = {
   isLogin,
   getAuthHeaders,
   doLogin,
   doLogout,
   updateProfile,
-  getProfile
+  getProfile,
+  reminderSendEmail,
+  reminderUpdatePassword
 };
-var _imports_0 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGrSURBVHgB7dS9S8NAGMfxi1ZBrS+TFJWKgyi4VOrgJIibdHCwq4jiH6GLgiKIgi4OTp18m1w6ufiyuYh1qYuoiOBgVSwF39r4PXqBGNI0tFQQ8oNPD5Ln6fXumgjhxYuX/x5Nfui63sJw4KL+BVFN07KizPjUmEEM3QhjBLXq3ivmcIOUMSk/NsAQKPL9V4ggKdGbK1jJF2qYwbeeTw6r8rqlbhIPSKsaI194xgl68aiu32EZjU6TV2MJGdX0gYhNXSuG8abqTjGBEGplj2kBMjHUCadQ4MeuqekaXZaaAHaQxQaaLPe3TP1yxf3CTShsxoWp+dD4xYwdOFOrnYLPpjdpOq5FuZPCbSjuU2emq5WtYVSt4F5udYG+sDpvmYR1N9xOHtXzfyLjvN9xi6BDz4ppteOi1NC8p//OUJH6c1V3jCpRamhesEzc6VAbVDUphOxqfKIy+cQ80rgUZU7c4KaIFQ4wtGOdN1ValBI9/+aZxiaeLFu9r67Pwq/qfYirP9+R09kWW/EgxpBC3Oa+3IU2GM+nfMYT6MG247u5EmGl9agRXrx4+Yv8ABvMC0SCFJm4AAAAAElFTkSuQmCC";
+const _sfc_main$l = {
+  props: {
+    msg: {
+      type: String,
+      default: ""
+    },
+    msg2: {
+      type: String,
+      default: ""
+    }
+  },
+  methods: {}
+};
+const _hoisted_1$g = { class: "docdog-alert docdog-alert--success" };
+const _hoisted_2$e = /* @__PURE__ */ createBaseVNode("svg", {
+  width: "60",
+  height: "60",
+  viewBox: "0 0 60 60",
+  fill: "none",
+  xmlns: "http://www.w3.org/2000/svg"
+}, [
+  /* @__PURE__ */ createBaseVNode("circle", {
+    cx: "30",
+    cy: "30",
+    r: "28",
+    fill: "#05a87c",
+    stroke: "#ffffff",
+    "stroke-width": "4"
+  }),
+  /* @__PURE__ */ createBaseVNode("path", {
+    "fill-rule": "evenodd",
+    "clip-rule": "evenodd",
+    d: "M26.8158 39.8072C26.7282 39.9632 26.618 40.11 26.4853 40.2427C25.7042 41.0238 24.4379 41.0238 23.6569 40.2427L16.5858 33.1716C15.8047 32.3906 15.8047 31.1243 16.5858 30.3432C17.3668 29.5622 18.6332 29.5622 19.4142 30.3432L25.046 35.975L38.4351 22.5858C39.2162 21.8047 40.4825 21.8047 41.2636 22.5858C42.0446 23.3668 42.0446 24.6332 41.2636 25.4142L27.1214 39.5563C27.0262 39.6516 26.9237 39.7352 26.8158 39.8072Z",
+    fill: "#ffffff"
+  })
+], -1);
+const _hoisted_3$c = { class: "docdog-alert__heading" };
+const _hoisted_4$b = { key: 0 };
+function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$g, [
+    _hoisted_2$e,
+    createBaseVNode("p", _hoisted_3$c, toDisplayString($props.msg), 1),
+    $props.msg2 ? (openBlock(), createElementBlock("p", _hoisted_4$b, toDisplayString($props.msg2), 1)) : createCommentVNode("", true)
+  ]);
+}
+var AlertSuccess = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$j]]);
 const _sfc_main$k = {
-  extends: _sfc_main$l,
+  props: {
+    err: {
+      type: String,
+      default: ""
+    }
+  },
+  methods: {}
+};
+const _hoisted_1$f = { class: "docdog-alert docdog-alert--error" };
+const _hoisted_2$d = /* @__PURE__ */ createStaticVNode('<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="#dc0000" stroke="#ffffff" stroke-width="4"></circle><path d="M21.6144 40.1878C20.7581 39.3315 20.7581 37.9432 21.6144 37.087L37.1186 21.5827C37.9749 20.7264 39.3632 20.7264 40.2195 21.5827V21.5827C41.0758 22.439 41.0758 23.8273 40.2195 24.6836L24.7152 40.1878C23.859 41.0441 22.4707 41.0441 21.6144 40.1878V40.1878Z" fill="#ffffff"></path><path d="M39.1554 40.1555C38.2991 41.0118 36.9108 41.0118 36.0546 40.1555L20.5503 24.6513C19.694 23.795 19.694 22.4067 20.5503 21.5504V21.5504C21.4066 20.6942 22.7949 20.6942 23.6512 21.5504L39.1554 37.0547C40.0117 37.911 40.0117 39.2993 39.1554 40.1555V40.1555Z" fill="#ffffff"></path></svg><p class="docdog-alert__heading">\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F</p>', 2);
+function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$f, [
+    _hoisted_2$d,
+    createBaseVNode("p", null, toDisplayString($props.err), 1)
+  ]);
+}
+var AlertError = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$i]]);
+var _imports_0 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGrSURBVHgB7dS9S8NAGMfxi1ZBrS+TFJWKgyi4VOrgJIibdHCwq4jiH6GLgiKIgi4OTp18m1w6ufiyuYh1qYuoiOBgVSwF39r4PXqBGNI0tFQQ8oNPD5Ln6fXumgjhxYuX/x5Nfui63sJw4KL+BVFN07KizPjUmEEM3QhjBLXq3ivmcIOUMSk/NsAQKPL9V4ggKdGbK1jJF2qYwbeeTw6r8rqlbhIPSKsaI194xgl68aiu32EZjU6TV2MJGdX0gYhNXSuG8abqTjGBEGplj2kBMjHUCadQ4MeuqekaXZaaAHaQxQaaLPe3TP1yxf3CTShsxoWp+dD4xYwdOFOrnYLPpjdpOq5FuZPCbSjuU2emq5WtYVSt4F5udYG+sDpvmYR1N9xOHtXzfyLjvN9xi6BDz4ppteOi1NC8p//OUJH6c1V3jCpRamhesEzc6VAbVDUphOxqfKIy+cQ80rgUZU7c4KaIFQ4wtGOdN1ValBI9/+aZxiaeLFu9r67Pwq/qfYirP9+R09kWW/EgxpBC3Oa+3IU2GM+nfMYT6MG247u5EmGl9agRXrx4+Yv8ABvMC0SCFJm4AAAAAElFTkSuQmCC";
+const _sfc_main$j = {
+  extends: _sfc_main$m,
+  components: {
+    AlertSuccess,
+    AlertError
+  },
   data() {
     return {
       login_id: "",
       password: ""
     };
+  },
+  computed: {
+    err_field() {
+      if (this.err) {
+        const colpos = this.err.indexOf(":");
+        if (colpos !== -1) {
+          return this.err.substring(0, colpos);
+        }
+      }
+      return "";
+    },
+    err_msg() {
+      if (this.err.length > 0) {
+        const [err_field, err_type] = this.err.split(":");
+        let translatedField = "\u30C7\u30FC\u30BF";
+        let tranlatedProblem = "\u4E0D\u6B63";
+        switch (err_field) {
+          case "email":
+            translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
+            break;
+        }
+        switch (err_type) {
+          case "invalid":
+            tranlatedProblem = "\u4E0D\u6B63";
+            break;
+          case "required":
+            tranlatedProblem = "\u5FC5\u9808";
+            break;
+        }
+        if (translatedField && tranlatedProblem) {
+          return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
+        } else {
+          return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
+        }
+      } else {
+        return "";
+      }
+    }
   },
   methods: {
     login(event) {
@@ -13287,11 +14303,11 @@ const _sfc_main$k = {
         password: this.password
       }).then((login_ok) => {
         if (login_ok) {
-          this.$emit("onLogin");
+          this.onLogin();
           if (this.return && this.return.target) {
             this.redirect(this.return);
           } else {
-            this.redirect({ target: "EmptyPage", msg: "\u30ED\u30B0\u30A4\u30F3\u3057\u307E\u3057\u305F" });
+            this.setMsg("\u30ED\u30B0\u30A4\u30F3\u3057\u307E\u3057\u305F\u3002");
           }
         } else {
           this.error("Could not login");
@@ -13303,12 +14319,16 @@ const _sfc_main$k = {
     }
   }
 };
-const _hoisted_1$f = { class: "docdog-form" };
+const _hoisted_1$e = { class: "docdog-form" };
 const _hoisted_2$c = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
-  /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B\u306B\u306F\u30ED\u30B0\u30A4\u30F3\u307E\u305F\u306F\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u4F5C\u6210\u304C\u5FC5\u8981\u3067\u3059\u3002")
+  /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30ED\u30B0\u30A4\u30F3")
 ], -1);
-const _hoisted_3$a = { class: "docdog-form--col-2 docdog-modal__body__section" };
-const _hoisted_4$8 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__sso" }, [
+const _hoisted_3$b = {
+  key: 2,
+  class: "docdog-modal__body__section"
+};
+const _hoisted_4$a = { class: "docdog-form--col-2 docdog-modal__body__section" };
+const _hoisted_5$9 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__sso" }, [
   /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__heading" }, "\u4ED6\u30B5\u30A4\u30C8\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u3067\u30ED\u30B0\u30A4\u30F3"),
   /* @__PURE__ */ createBaseVNode("button", {
     type: "button",
@@ -13424,17 +14444,12 @@ const _hoisted_4$8 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-for
     /* @__PURE__ */ createBaseVNode("span", null, "Yahoo! JAPAN ID\u3067\u30ED\u30B0\u30A4\u30F3")
   ])
 ], -1);
-const _hoisted_5$5 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__hr" }, [
+const _hoisted_6$9 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__hr" }, [
   /* @__PURE__ */ createBaseVNode("span", null, "\u307E\u305F\u306F")
 ], -1);
-const _hoisted_6$5 = { class: "docdog-form__signin" };
-const _hoisted_7$4 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__heading" }, "\u30ED\u30B0\u30A4\u30F3", -1);
-const _hoisted_8$4 = {
-  key: 0,
-  class: "docdog-form__item--error__msg"
-};
-const _hoisted_9$4 = { class: "docdog-form__item" };
-const _hoisted_10$4 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__item" }, [
+const _hoisted_7$8 = { class: "docdog-form__signin" };
+const _hoisted_8$7 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__heading" }, "\u30ED\u30B0\u30A4\u30F3", -1);
+const _hoisted_9$6 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__item" }, [
   /* @__PURE__ */ createBaseVNode("div", { class: "docdog-form__toggle" }, [
     /* @__PURE__ */ createBaseVNode("input", {
       name: "login_save",
@@ -13446,13 +14461,9 @@ const _hoisted_10$4 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-fo
     /* @__PURE__ */ createBaseVNode("label", { for: "login_save" }, "\u6B21\u56DE\u304B\u3089\u81EA\u52D5\u7684\u306B\u30ED\u30B0\u30A4\u30F3\u3059\u308B")
   ])
 ], -1);
-const _hoisted_11$3 = { class: "docdog-form__item" };
-const _hoisted_12$3 = { class: "docdog-form__link" };
-const _hoisted_13$2 = /* @__PURE__ */ createBaseVNode("button", {
-  type: "button",
-  class: "docdog-button--text"
-}, "\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u5FD8\u308C\u305F\u5834\u5408", -1);
-const _hoisted_14$2 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+const _hoisted_10$5 = { class: "docdog-form__item" };
+const _hoisted_11$5 = { class: "docdog-form__link" };
+const _hoisted_12$5 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, [
     /* @__PURE__ */ createTextVNode(" \u7D9A\u884C\u3059\u308B\u3053\u3068\u3067"),
     /* @__PURE__ */ createBaseVNode("a", { href: "/dummy/" }, "\u5229\u7528\u898F\u7D04"),
@@ -13461,65 +14472,94 @@ const _hoisted_14$2 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-mo
     /* @__PURE__ */ createTextVNode("\u3092\u8AAD\u307F\u3001\u3053\u308C\u306B\u540C\u610F\u3059\u308B\u3082\u306E\u3068\u3057\u307E\u3059\u3002 ")
   ])
 ], -1);
-function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$f, [
+const _hoisted_13$4 = {
+  key: 3,
+  class: "docdog-modal__body__section"
+};
+function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AlertError = resolveComponent("AlertError");
+  const _component_AlertSuccess = resolveComponent("AlertSuccess");
+  return openBlock(), createElementBlock("div", _hoisted_1$e, [
+    _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
+      key: 0,
+      err: $options.err_msg
+    }, null, 8, ["err"])) : createCommentVNode("", true),
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 1,
+      msg: _ctx.msg,
+      msg2: _ctx.msg2
+    }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
     _hoisted_2$c,
-    createBaseVNode("div", _hoisted_3$a, [
-      _hoisted_4$8,
-      _hoisted_5$5,
-      createBaseVNode("div", _hoisted_6$5, [
-        _hoisted_7$4,
-        createBaseVNode("form", null, [
-          createBaseVNode("div", {
-            class: normalizeClass(_ctx.err.length > 0 ? "docdog-form__item docdog-form__item--error" : "")
-          }, [
-            withDirectives(createBaseVNode("input", {
-              name: "email",
-              type: "text",
-              id: "email",
-              placeholder: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9",
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $data.login_id = $event),
-              required: ""
-            }, null, 512), [
-              [vModelText, $data.login_id]
-            ]),
-            _ctx.err.length > 0 ? (openBlock(), createElementBlock("p", _hoisted_8$4, toDisplayString(_ctx.err), 1)) : createCommentVNode("", true)
-          ], 2),
-          createBaseVNode("div", _hoisted_9$4, [
-            withDirectives(createBaseVNode("input", {
-              name: "password",
-              type: "password",
-              id: "password",
-              placeholder: "\u30D1\u30B9\u30EF\u30FC\u30C9",
-              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $data.password = $event),
-              required: ""
-            }, null, 512), [
-              [vModelText, $data.password]
+    !_ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_3$b, [
+      createBaseVNode("div", _hoisted_4$a, [
+        _hoisted_5$9,
+        _hoisted_6$9,
+        createBaseVNode("div", _hoisted_7$8, [
+          _hoisted_8$7,
+          createBaseVNode("form", null, [
+            createBaseVNode("div", {
+              class: normalizeClass(["docdog-form__item", _ctx.err.length > 0 ? "docdog-form__item--error" : ""])
+            }, [
+              withDirectives(createBaseVNode("input", {
+                name: "email",
+                type: "text",
+                id: "email",
+                placeholder: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9",
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $data.login_id = $event),
+                required: ""
+              }, null, 512), [
+                [vModelText, $data.login_id]
+              ])
+            ], 2),
+            createBaseVNode("div", {
+              class: normalizeClass(["docdog-form__item", _ctx.err.length > 0 ? "docdog-form__item docdog-form__item--error" : ""])
+            }, [
+              withDirectives(createBaseVNode("input", {
+                name: "password",
+                type: "password",
+                id: "password",
+                placeholder: "\u30D1\u30B9\u30EF\u30FC\u30C9",
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $data.password = $event),
+                required: ""
+              }, null, 512), [
+                [vModelText, $data.password]
+              ])
+            ], 2),
+            _hoisted_9$6,
+            createBaseVNode("div", _hoisted_10$5, [
+              createBaseVNode("button", {
+                type: "button",
+                class: "docdog-button docdog-button--primary",
+                onClick: _cache[2] || (_cache[2] = (...args) => $options.login && $options.login(...args))
+              }, "\u30ED\u30B0\u30A4\u30F3")
             ])
           ]),
-          _hoisted_10$4,
-          createBaseVNode("div", _hoisted_11$3, [
+          createBaseVNode("div", _hoisted_11$5, [
             createBaseVNode("button", {
               type: "button",
-              class: "docdog-button docdog-button--primary",
-              onClick: _cache[2] || (_cache[2] = (...args) => $options.login && $options.login(...args))
-            }, "\u30ED\u30B0\u30A4\u30F3")
+              class: "docdog-button--text",
+              onClick: _cache[3] || (_cache[3] = withModifiers(($event) => _ctx.redirect({ target: "SignUp" }), ["prevent"]))
+            }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u4F5C\u6210\u3059\u308B "),
+            createBaseVNode("button", {
+              type: "button",
+              class: "docdog-button--text",
+              onClick: _cache[4] || (_cache[4] = withModifiers(($event) => _ctx.redirect({ target: "Reminder" }), ["prevent"]))
+            }, " \u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u5FD8\u308C\u305F\u5834\u5408 ")
           ])
-        ]),
-        createBaseVNode("div", _hoisted_12$3, [
-          createBaseVNode("button", {
-            type: "button",
-            class: "docdog-button--text",
-            onClick: _cache[3] || (_cache[3] = withModifiers(($event) => _ctx.redirect({ target: "SignUp" }), ["prevent"]))
-          }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u4F5C\u6210\u3059\u308B "),
-          _hoisted_13$2
         ])
-      ])
-    ]),
-    _hoisted_14$2
+      ]),
+      _hoisted_12$5
+    ])) : createCommentVNode("", true),
+    _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_13$4, [
+      createBaseVNode("button", {
+        type: "button",
+        class: "docdog-button docdog-button--white",
+        onClick: _cache[5] || (_cache[5] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+      }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+    ])) : createCommentVNode("", true)
   ]);
 }
-var SignIn = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$i]]);
+var SignIn = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$h]]);
 function parseErr(errors) {
   return errors.reduce((carry, obj) => {
     if (carry != "") {
@@ -13581,72 +14621,8 @@ var memberApi = {
   doEditProfile,
   doWithdrawal
 };
-const _sfc_main$j = {
-  props: {
-    msg: {
-      type: String,
-      default: ""
-    },
-    msg2: {
-      type: String,
-      default: ""
-    }
-  },
-  methods: {}
-};
-const _hoisted_1$e = { class: "docdog-alert docdog-alert--success" };
-const _hoisted_2$b = /* @__PURE__ */ createBaseVNode("svg", {
-  width: "50",
-  height: "50",
-  viewBox: "0 0 50 50",
-  fill: "none",
-  xmlns: "http://www.w3.org/2000/svg"
-}, [
-  /* @__PURE__ */ createBaseVNode("circle", {
-    cx: "25",
-    cy: "25",
-    r: "23",
-    stroke: "#fff",
-    "stroke-width": "4"
-  }),
-  /* @__PURE__ */ createBaseVNode("path", {
-    "fill-rule": "evenodd",
-    "clip-rule": "evenodd",
-    d: "M21.3038 34.8892C21.0685 34.7916 20.8481 34.6471 20.6569 34.4558L13.5858 27.3848C12.8047 26.6037 12.8047 25.3374 13.5858 24.5563C14.3668 23.7753 15.6332 23.7753 16.4142 24.5563L22.225 30.3671L35.0064 17.5858C35.7874 16.8047 37.0537 16.8047 37.8348 17.5858C38.6158 18.3668 38.6158 19.6332 37.8348 20.4142L23.6927 34.5563C23.0455 35.2035 22.0652 35.3144 21.3038 34.8892Z",
-    fill: "#fff"
-  })
-], -1);
-const _hoisted_3$9 = { class: "docdog-alert__heading" };
-const _hoisted_4$7 = { key: 0 };
-function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$e, [
-    _hoisted_2$b,
-    createBaseVNode("p", _hoisted_3$9, toDisplayString($props.msg), 1),
-    $props.msg2 ? (openBlock(), createElementBlock("p", _hoisted_4$7, toDisplayString($props.msg2), 1)) : createCommentVNode("", true)
-  ]);
-}
-var AlertSuccess = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$h]]);
 const _sfc_main$i = {
-  props: {
-    err: {
-      type: String,
-      default: ""
-    }
-  },
-  methods: {}
-};
-const _hoisted_1$d = { class: "docdog-alert docdog-alert--error" };
-const _hoisted_2$a = /* @__PURE__ */ createStaticVNode('<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" stroke="#ffffff" stroke-width="4"></circle><path d="M21.6144 40.1878C20.7581 39.3315 20.7581 37.9432 21.6144 37.087L37.1186 21.5827C37.9749 20.7264 39.3632 20.7264 40.2195 21.5827V21.5827C41.0758 22.439 41.0758 23.8273 40.2195 24.6836L24.7152 40.1878C23.859 41.0441 22.4707 41.0441 21.6144 40.1878V40.1878Z" fill="#ffffff"></path><path d="M39.1554 40.1555C38.2991 41.0118 36.9108 41.0118 36.0546 40.1555L20.5503 24.6513C19.694 23.795 19.694 22.4067 20.5503 21.5504V21.5504C21.4066 20.6942 22.7949 20.6942 23.6512 21.5504L39.1554 37.0547C40.0117 37.911 40.0117 39.2993 39.1554 40.1555V40.1555Z" fill="#ffffff"></path></svg><p class="docdog-alert__heading">\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F</p>', 2);
-function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$d, [
-    _hoisted_2$a,
-    createBaseVNode("p", null, toDisplayString($props.err), 1)
-  ]);
-}
-var AlertError = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$g]]);
-var EditProfile_vue_vue_type_style_index_0_scoped_true_lang = "";
-const _sfc_main$h = {
-  extends: _sfc_main$l,
+  extends: _sfc_main$m,
   components: {
     AlertSuccess,
     AlertError
@@ -13707,7 +14683,7 @@ const _sfc_main$h = {
         this.name1 = profile.name1;
         this.name2 = profile.name2;
         this.company_nm = profile.company_nm;
-        this.industry = profile.industry.key;
+        this.industry = profile.industry ? profile.industry.key : "";
         this.position = profile.position;
       } else {
         this.close();
@@ -13737,58 +14713,54 @@ const _sfc_main$h = {
     }
   }
 };
-const _withScopeId$2 = (n) => (pushScopeId("data-v-2f49673e"), n = n(), popScopeId(), n);
-const _hoisted_1$c = { class: "docdog-form" };
-const _hoisted_2$9 = { class: "docdog-modal__body__section" };
-const _hoisted_3$8 = { class: "docdog-modal__body__section" };
-const _hoisted_4$6 = { class: "docdog-form__signup" };
-const _hoisted_5$4 = ["innerHTML"];
-const _hoisted_6$4 = { class: "docdog-form__item--col-2" };
-const _hoisted_7$3 = { class: "docdog-form__item" };
-const _hoisted_8$3 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_1$d = { class: "docdog-form" };
+const _hoisted_2$b = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+  /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831\u306E\u7DE8\u96C6")
+], -1);
+const _hoisted_3$a = { class: "docdog-modal__body__section" };
+const _hoisted_4$9 = { class: "docdog-form__signup" };
+const _hoisted_5$8 = { class: "docdog-form__item--col-2" };
+const _hoisted_6$8 = { class: "docdog-form__item" };
+const _hoisted_7$7 = /* @__PURE__ */ createBaseVNode("label", {
   for: "name1",
   class: "docdog-form__item__title"
-}, "\u59D3", -1));
-const _hoisted_9$3 = { class: "docdog-form__item" };
-const _hoisted_10$3 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+}, "\u59D3", -1);
+const _hoisted_8$6 = { class: "docdog-form__item" };
+const _hoisted_9$5 = /* @__PURE__ */ createBaseVNode("label", {
   for: "name2",
   class: "docdog-form__item__title"
-}, "\u540D", -1));
-const _hoisted_11$2 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+}, "\u540D", -1);
+const _hoisted_10$4 = /* @__PURE__ */ createBaseVNode("label", {
   for: "email",
   class: "docdog-form__item__title"
-}, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", -1));
-const _hoisted_12$2 = {
-  key: 0,
-  class: "docdog-form__item--error__msg"
-};
-const _hoisted_13$1 = { class: "docdog-form__item" };
-const _hoisted_14$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+}, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", -1);
+const _hoisted_11$4 = { class: "docdog-form__item" };
+const _hoisted_12$4 = /* @__PURE__ */ createBaseVNode("label", {
   for: "password",
   class: "docdog-form__item__title"
-}, "\u30D1\u30B9\u30EF\u30FC\u30C9", -1));
-const _hoisted_15$1 = { class: "docdog-form__item" };
-const _hoisted_16$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+}, "\u30D1\u30B9\u30EF\u30FC\u30C9", -1);
+const _hoisted_13$3 = { class: "docdog-form__item" };
+const _hoisted_14$2 = /* @__PURE__ */ createBaseVNode("label", {
   for: "company",
   class: "docdog-form__item__title"
-}, "\u4F1A\u793E\u540D", -1));
-const _hoisted_17$1 = { class: "docdog-form__item" };
-const _hoisted_18$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+}, "\u4F1A\u793E\u540D", -1);
+const _hoisted_15$1 = { class: "docdog-form__item" };
+const _hoisted_16$1 = /* @__PURE__ */ createBaseVNode("label", {
   for: "industry",
   class: "docdog-form__item__title"
-}, "\u696D\u7A2E", -1));
-const _hoisted_19 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-2f49673e>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-2f49673e>\u91D1\u878D</option><option value="2" data-v-2f49673e>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-2f49673e>\u5B66\u6821</option><option value="4" data-v-2f49673e>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-2f49673e>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-2f49673e>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-2f49673e>\u88FD\u9020\u696D</option><option value="8" data-v-2f49673e>\u98DF\u54C1</option><option value="9" data-v-2f49673e>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-2f49673e>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-2f49673e>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-2f49673e>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-2f49673e>\u305D\u306E\u4ED6</option>', 14);
-const _hoisted_33$1 = [
-  _hoisted_19
+}, "\u696D\u7A2E", -1);
+const _hoisted_17$1 = /* @__PURE__ */ createStaticVNode('<option value="">\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1">\u91D1\u878D</option><option value="2">\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3">\u5B66\u6821</option><option value="4">IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5">\u30E1\u30C7\u30A3\u30A2</option><option value="6">\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7">\u88FD\u9020\u696D</option><option value="8">\u98DF\u54C1</option><option value="9">\u4EBA\u6750\u30FBHR</option><option value="10">\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11">\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12">\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99">\u305D\u306E\u4ED6</option>', 14);
+const _hoisted_31$1 = [
+  _hoisted_17$1
 ];
-const _hoisted_34$1 = { class: "docdog-form__item" };
-const _hoisted_35$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_32$1 = { class: "docdog-form__item" };
+const _hoisted_33$1 = /* @__PURE__ */ createBaseVNode("label", {
   for: "position",
   class: "docdog-form__item__title"
-}, "\u5F79\u8077", -1));
-const _hoisted_36$1 = { class: "docdog-form__button" };
-const _hoisted_37$1 = { class: "docdog-form__link" };
-const _hoisted_38 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+}, "\u5F79\u8077", -1);
+const _hoisted_34$1 = { class: "docdog-form__button" };
+const _hoisted_35 = { class: "docdog-form__link" };
+const _hoisted_36 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, [
     /* @__PURE__ */ createTextVNode(" \u7D9A\u884C\u3059\u308B\u3053\u3068\u3067"),
     /* @__PURE__ */ createBaseVNode("a", { href: "/dummy/" }, "\u5229\u7528\u898F\u7D04"),
@@ -13796,32 +14768,27 @@ const _hoisted_38 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createB
     /* @__PURE__ */ createBaseVNode("a", { href: "/dummy/" }, "\u30D7\u30E9\u30A4\u30D0\u30B7\u30FC\u30DD\u30EA\u30B7\u30FC"),
     /* @__PURE__ */ createTextVNode("\u3092\u8AAD\u307F\u3001\u3053\u308C\u306B\u540C\u610F\u3059\u308B\u3082\u306E\u3068\u3057\u307E\u3059\u3002 ")
   ])
-], -1));
-function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+], -1);
+function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_AlertError = resolveComponent("AlertError");
   const _component_AlertSuccess = resolveComponent("AlertSuccess");
-  return openBlock(), createElementBlock("div", _hoisted_1$c, [
-    createBaseVNode("div", _hoisted_2$9, [
-      _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
-        key: 0,
-        err: $options.err_msg
-      }, null, 8, ["err"])) : createCommentVNode("", true),
-      _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
-        key: 1,
-        msg: _ctx.msg,
-        msg2: _ctx.msg2
-      }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true)
-    ]),
-    createBaseVNode("div", _hoisted_3$8, [
-      createBaseVNode("div", _hoisted_4$6, [
-        createBaseVNode("p", {
-          class: "err",
-          innerHTML: _ctx.err
-        }, null, 8, _hoisted_5$4),
+  return openBlock(), createElementBlock("div", _hoisted_1$d, [
+    _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
+      key: 0,
+      err: $options.err_msg
+    }, null, 8, ["err"])) : createCommentVNode("", true),
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 1,
+      msg: _ctx.msg,
+      msg2: _ctx.msg2
+    }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
+    _hoisted_2$b,
+    createBaseVNode("div", _hoisted_3$a, [
+      createBaseVNode("div", _hoisted_4$9, [
         createBaseVNode("form", null, [
-          createBaseVNode("div", _hoisted_6$4, [
-            createBaseVNode("div", _hoisted_7$3, [
-              _hoisted_8$3,
+          createBaseVNode("div", _hoisted_5$8, [
+            createBaseVNode("div", _hoisted_6$8, [
+              _hoisted_7$7,
               withDirectives(createBaseVNode("input", {
                 name: "name1",
                 type: "text",
@@ -13833,8 +14800,8 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
                 [vModelText, $data.name1]
               ])
             ]),
-            createBaseVNode("div", _hoisted_9$3, [
-              _hoisted_10$3,
+            createBaseVNode("div", _hoisted_8$6, [
+              _hoisted_9$5,
               withDirectives(createBaseVNode("input", {
                 name: "name2",
                 type: "text",
@@ -13850,7 +14817,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
           createBaseVNode("div", {
             class: normalizeClass(["docdog-form__item", $options.err_field == "email" ? "docdog-form__item--error" : ""])
           }, [
-            _hoisted_11$2,
+            _hoisted_10$4,
             withDirectives(createBaseVNode("input", {
               name: "email",
               type: "text",
@@ -13860,11 +14827,10 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
               required: ""
             }, null, 512), [
               [vModelText, $data.email]
-            ]),
-            $options.err_field == "email" ? (openBlock(), createElementBlock("p", _hoisted_12$2, toDisplayString($options.err_msg), 1)) : createCommentVNode("", true)
+            ])
           ], 2),
-          createBaseVNode("div", _hoisted_13$1, [
-            _hoisted_14$1,
+          createBaseVNode("div", _hoisted_11$4, [
+            _hoisted_12$4,
             withDirectives(createBaseVNode("input", {
               name: "password",
               type: "password",
@@ -13876,8 +14842,8 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
               [vModelText, $data.login_pwd]
             ])
           ]),
-          createBaseVNode("div", _hoisted_15$1, [
-            _hoisted_16$1,
+          createBaseVNode("div", _hoisted_13$3, [
+            _hoisted_14$2,
             withDirectives(createBaseVNode("input", {
               name: "company",
               type: "text",
@@ -13889,19 +14855,19 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
               [vModelText, $data.company_nm]
             ])
           ]),
-          createBaseVNode("div", _hoisted_17$1, [
-            _hoisted_18$1,
+          createBaseVNode("div", _hoisted_15$1, [
+            _hoisted_16$1,
             withDirectives(createBaseVNode("select", {
               name: "industry",
               id: "industry",
               "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.industry = $event),
               required: ""
-            }, _hoisted_33$1, 512), [
+            }, _hoisted_31$1, 512), [
               [vModelSelect, $data.industry]
             ])
           ]),
-          createBaseVNode("div", _hoisted_34$1, [
-            _hoisted_35$1,
+          createBaseVNode("div", _hoisted_32$1, [
+            _hoisted_33$1,
             withDirectives(createBaseVNode("input", {
               name: "position",
               type: "text",
@@ -13913,7 +14879,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
               [vModelText, $data.position]
             ])
           ]),
-          createBaseVNode("div", _hoisted_36$1, [
+          createBaseVNode("div", _hoisted_34$1, [
             createBaseVNode("button", {
               type: "submit",
               class: "docdog-button docdog-button--primary",
@@ -13921,7 +14887,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
             }, " \u5909\u66F4\u3059\u308B ")
           ])
         ]),
-        createBaseVNode("div", _hoisted_37$1, [
+        createBaseVNode("div", _hoisted_35, [
           createBaseVNode("button", {
             type: "button",
             class: "docdog-button--text",
@@ -13930,47 +14896,87 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
         ])
       ])
     ]),
-    _hoisted_38
+    _hoisted_36
   ]);
 }
-var EditProfile = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$f], ["__scopeId", "data-v-2f49673e"]]);
-const _sfc_main$g = {
-  extends: _sfc_main$l,
-  data() {
-    return {};
-  },
+var EditProfile = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["render", _sfc_render$g]]);
+const _sfc_main$h = {
+  extends: _sfc_main$m,
+  components: { AlertSuccess },
   methods: {
     withdrawal() {
-      memberApi.doWithdrawal().then(() => this.close());
+      memberApi.doWithdrawal().then(() => {
+        this.logout();
+        this.setMsg("\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
+      });
     }
   }
 };
-const _hoisted_1$b = { class: "docdog-form" };
-const _hoisted_2$8 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
-  /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B\u3068\u4ECA\u5F8C\u306F\u8CC7\u6599\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u304C\u3067\u304D\u306A\u304F\u306A\u308A\u307E\u3059\u3002\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F")
-], -1);
-const _hoisted_3$7 = { class: "docdog-modal__body__section" };
-const _hoisted_4$5 = { class: "docdog-form__button" };
-function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$b, [
-    _hoisted_2$8,
-    createBaseVNode("div", _hoisted_3$7, [
+const _hoisted_1$c = { class: "docdog-form" };
+const _hoisted_2$a = {
+  key: 1,
+  class: "docdog-modal__body__section"
+};
+const _hoisted_3$9 = /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u524A\u9664", -1);
+const _hoisted_4$8 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B\u3068\u4ECA\u5F8C\u306F\u8CC7\u6599\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u304C\u3067\u304D\u306A\u304F\u306A\u308A\u307E\u3059\u3002\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F ", -1);
+const _hoisted_5$7 = [
+  _hoisted_3$9,
+  _hoisted_4$8
+];
+const _hoisted_6$7 = {
+  key: 2,
+  class: "docdog-modal__body__section"
+};
+const _hoisted_7$6 = { class: "docdog-form__button" };
+const _hoisted_8$5 = { class: "docdog-form__link" };
+const _hoisted_9$4 = {
+  key: 3,
+  class: "docdog-modal__body__section"
+};
+function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AlertSuccess = resolveComponent("AlertSuccess");
+  return openBlock(), createElementBlock("div", _hoisted_1$c, [
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 0,
+      msg: _ctx.msg,
+      msg2: _ctx.msg2
+    }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
+    _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_2$a, _hoisted_5$7)) : createCommentVNode("", true),
+    _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_6$7, [
       createBaseVNode("form", null, [
-        createBaseVNode("div", _hoisted_4$5, [
+        createBaseVNode("div", _hoisted_7$6, [
           createBaseVNode("button", {
             type: "submit",
             class: "docdog-button docdog-button--danger",
             onClick: _cache[0] || (_cache[0] = withModifiers((...args) => $options.withdrawal && $options.withdrawal(...args), ["prevent"]))
           }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B ")
+        ]),
+        createBaseVNode("div", _hoisted_8$5, [
+          createBaseVNode("button", {
+            type: "button",
+            class: "docdog-button--text",
+            onClick: _cache[1] || (_cache[1] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+          }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
         ])
       ])
-    ])
+    ])) : createCommentVNode("", true),
+    !_ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_9$4, [
+      createBaseVNode("button", {
+        type: "button",
+        class: "docdog-button docdog-button--white",
+        onClick: _cache[2] || (_cache[2] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+      }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+    ])) : createCommentVNode("", true)
   ]);
 }
-var Withdrawal = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$e]]);
+var Withdrawal = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$f]]);
 var SignUp_vue_vue_type_style_index_0_scoped_true_lang = "";
-const _sfc_main$f = {
-  extends: _sfc_main$l,
+const _sfc_main$g = {
+  extends: _sfc_main$m,
+  components: {
+    AlertSuccess,
+    AlertError
+  },
   data() {
     return {
       email: "",
@@ -13991,6 +14997,33 @@ const _sfc_main$f = {
         }
       }
       return "";
+    },
+    err_msg() {
+      if (this.err.length > 0) {
+        const [err_field, err_type] = this.err.split(":");
+        let translatedField = "\u30C7\u30FC\u30BF";
+        let tranlatedProblem = "\u4E0D\u6B63";
+        switch (err_field) {
+          case "email":
+            translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
+            break;
+        }
+        switch (err_type) {
+          case "invalid":
+            tranlatedProblem = "\u4E0D\u6B63";
+            break;
+          case "required":
+            tranlatedProblem = "\u5FC5\u9808";
+            break;
+        }
+        if (translatedField && tranlatedProblem) {
+          return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
+        } else {
+          return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
+        }
+      } else {
+        return "";
+      }
     }
   },
   methods: {
@@ -14009,11 +15042,11 @@ const _sfc_main$f = {
           email: this.email,
           password: this.login_pwd
         }).then(() => {
-          this.$emit("onLogin");
+          this.onLogin();
           if (this.return && this.return.target) {
             this.redirect(this.return);
           } else {
-            this.redirect({ target: "EmptyPage", msg: "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u4F5C\u6210\u306F\u5B8C\u4E86\u3057\u307E\u3057\u305F\u3002" });
+            this.setMsg("\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u4F5C\u6210\u306F\u5B8C\u4E86\u3057\u307E\u3057\u305F\u3002");
           }
         }).catch((err) => {
           this.error(err);
@@ -14024,57 +15057,55 @@ const _sfc_main$f = {
     }
   }
 };
-const _withScopeId$1 = (n) => (pushScopeId("data-v-0c32fef5"), n = n(), popScopeId(), n);
-const _hoisted_1$a = { class: "docdog-form" };
-const _hoisted_2$7 = { class: "docdog-modal__body__section" };
-const _hoisted_3$6 = { class: "docdog-form__signup" };
-const _hoisted_4$4 = ["innerHTML"];
-const _hoisted_5$3 = { class: "docdog-form__item--col-2" };
-const _hoisted_6$3 = { class: "docdog-form__item" };
-const _hoisted_7$2 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _withScopeId$2 = (n) => (pushScopeId("data-v-52cc582f"), n = n(), popScopeId(), n);
+const _hoisted_1$b = { class: "docdog-form" };
+const _hoisted_2$9 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+  /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u4F5C\u6210")
+], -1));
+const _hoisted_3$8 = {
+  key: 2,
+  class: "docdog-modal__body__section"
+};
+const _hoisted_4$7 = { class: "docdog-modal__body__section" };
+const _hoisted_5$6 = { class: "docdog-form__item--col-2" };
+const _hoisted_6$6 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "name1",
   class: "docdog-form__item__title"
 }, "\u59D3", -1));
-const _hoisted_8$2 = { class: "docdog-form__item" };
-const _hoisted_9$2 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_7$5 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "name2",
   class: "docdog-form__item__title"
 }, "\u540D", -1));
-const _hoisted_10$2 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_8$4 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "email",
   class: "docdog-form__item__title"
 }, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", -1));
-const _hoisted_11$1 = {
-  key: 0,
-  class: "docdog-form__item--error__msg"
-};
-const _hoisted_12$1 = { class: "docdog-form__item" };
-const _hoisted_13 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_9$3 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "password",
   class: "docdog-form__item__title"
 }, "\u30D1\u30B9\u30EF\u30FC\u30C9", -1));
-const _hoisted_14 = { class: "docdog-form__item" };
-const _hoisted_15 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_10$3 = { class: "docdog-form__item" };
+const _hoisted_11$3 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "company",
   class: "docdog-form__item__title"
 }, "\u4F1A\u793E\u540D", -1));
-const _hoisted_16 = { class: "docdog-form__item" };
-const _hoisted_17 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_12$3 = { class: "docdog-form__item" };
+const _hoisted_13$2 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "industry",
   class: "docdog-form__item__title"
 }, "\u696D\u7A2E", -1));
-const _hoisted_18 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-0c32fef5>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-0c32fef5>\u91D1\u878D</option><option value="2" data-v-0c32fef5>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-0c32fef5>\u5B66\u6821</option><option value="4" data-v-0c32fef5>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-0c32fef5>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-0c32fef5>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-0c32fef5>\u88FD\u9020\u696D</option><option value="8" data-v-0c32fef5>\u98DF\u54C1</option><option value="9" data-v-0c32fef5>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-0c32fef5>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-0c32fef5>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-0c32fef5>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-0c32fef5>\u305D\u306E\u4ED6</option>', 14);
-const _hoisted_32 = [
-  _hoisted_18
+const _hoisted_14$1 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-52cc582f>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-52cc582f>\u91D1\u878D</option><option value="2" data-v-52cc582f>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-52cc582f>\u5B66\u6821</option><option value="4" data-v-52cc582f>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-52cc582f>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-52cc582f>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-52cc582f>\u88FD\u9020\u696D</option><option value="8" data-v-52cc582f>\u98DF\u54C1</option><option value="9" data-v-52cc582f>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-52cc582f>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-52cc582f>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-52cc582f>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-52cc582f>\u305D\u306E\u4ED6</option>', 14);
+const _hoisted_28 = [
+  _hoisted_14$1
 ];
-const _hoisted_33 = { class: "docdog-form__item" };
-const _hoisted_34 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("label", {
+const _hoisted_29 = { class: "docdog-form__item" };
+const _hoisted_30 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "position",
   class: "docdog-form__item__title"
 }, "\u5F79\u8077", -1));
-const _hoisted_35 = { class: "docdog-form__button" };
-const _hoisted_36 = { class: "docdog-form__link" };
-const _hoisted_37 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+const _hoisted_31 = { class: "docdog-form__button" };
+const _hoisted_32 = { class: "docdog-form__link" };
+const _hoisted_33 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, [
     /* @__PURE__ */ createTextVNode(" \u7D9A\u884C\u3059\u308B\u3053\u3068\u3067"),
     /* @__PURE__ */ createBaseVNode("a", { href: "/dummy/" }, "\u5229\u7528\u898F\u7D04"),
@@ -14083,18 +15114,32 @@ const _hoisted_37 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createB
     /* @__PURE__ */ createTextVNode("\u3092\u8AAD\u307F\u3001\u3053\u308C\u306B\u540C\u610F\u3059\u308B\u3082\u306E\u3068\u3057\u307E\u3059\u3002 ")
   ])
 ], -1));
-function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$a, [
-    createBaseVNode("div", _hoisted_2$7, [
-      createBaseVNode("div", _hoisted_3$6, [
-        createBaseVNode("p", {
-          class: "err",
-          innerHTML: _ctx.err
-        }, null, 8, _hoisted_4$4),
+const _hoisted_34 = {
+  key: 3,
+  class: "docdog-modal__body__section"
+};
+function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AlertError = resolveComponent("AlertError");
+  const _component_AlertSuccess = resolveComponent("AlertSuccess");
+  return openBlock(), createElementBlock("div", _hoisted_1$b, [
+    _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
+      key: 0,
+      err: $options.err_msg
+    }, null, 8, ["err"])) : createCommentVNode("", true),
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 1,
+      msg: _ctx.msg,
+      msg2: _ctx.msg2
+    }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
+    _hoisted_2$9,
+    !_ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_3$8, [
+      createBaseVNode("div", _hoisted_4$7, [
         createBaseVNode("form", null, [
-          createBaseVNode("div", _hoisted_5$3, [
-            createBaseVNode("div", _hoisted_6$3, [
-              _hoisted_7$2,
+          createBaseVNode("div", _hoisted_5$6, [
+            createBaseVNode("div", {
+              class: normalizeClass(["docdog-form__item", $options.err_field == "name1" ? "docdog-form__item--error" : ""])
+            }, [
+              _hoisted_6$6,
               withDirectives(createBaseVNode("input", {
                 name: "name1",
                 type: "text",
@@ -14105,9 +15150,11 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               }, null, 512), [
                 [vModelText, $data.name1]
               ])
-            ]),
-            createBaseVNode("div", _hoisted_8$2, [
-              _hoisted_9$2,
+            ], 2),
+            createBaseVNode("div", {
+              class: normalizeClass(["docdog-form__item", $options.err_field == "name2" ? "docdog-form__item--error" : ""])
+            }, [
+              _hoisted_7$5,
               withDirectives(createBaseVNode("input", {
                 name: "name2",
                 type: "text",
@@ -14118,12 +15165,12 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               }, null, 512), [
                 [vModelText, $data.name2]
               ])
-            ])
+            ], 2)
           ]),
           createBaseVNode("div", {
             class: normalizeClass(["docdog-form__item", $options.err_field == "email" ? "docdog-form__item--error" : ""])
           }, [
-            _hoisted_10$2,
+            _hoisted_8$4,
             withDirectives(createBaseVNode("input", {
               name: "email",
               type: "text",
@@ -14133,11 +15180,12 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               required: ""
             }, null, 512), [
               [vModelText, $data.email]
-            ]),
-            $options.err_field == "email" ? (openBlock(), createElementBlock("p", _hoisted_11$1, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u304C\u4E0D\u6B63\u3067\u3059\u3002")) : createCommentVNode("", true)
+            ])
           ], 2),
-          createBaseVNode("div", _hoisted_12$1, [
-            _hoisted_13,
+          createBaseVNode("div", {
+            class: normalizeClass(["docdog-form__item", $options.err_field == "password" ? "docdog-form__item--error" : ""])
+          }, [
+            _hoisted_9$3,
             withDirectives(createBaseVNode("input", {
               name: "password",
               type: "password",
@@ -14148,9 +15196,9 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
             }, null, 512), [
               [vModelText, $data.login_pwd]
             ])
-          ]),
-          createBaseVNode("div", _hoisted_14, [
-            _hoisted_15,
+          ], 2),
+          createBaseVNode("div", _hoisted_10$3, [
+            _hoisted_11$3,
             withDirectives(createBaseVNode("input", {
               name: "company",
               type: "text",
@@ -14162,19 +15210,19 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               [vModelText, $data.company_nm]
             ])
           ]),
-          createBaseVNode("div", _hoisted_16, [
-            _hoisted_17,
+          createBaseVNode("div", _hoisted_12$3, [
+            _hoisted_13$2,
             withDirectives(createBaseVNode("select", {
               name: "industry",
               id: "industry",
               "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.industry = $event),
               required: ""
-            }, _hoisted_32, 512), [
+            }, _hoisted_28, 512), [
               [vModelSelect, $data.industry]
             ])
           ]),
-          createBaseVNode("div", _hoisted_33, [
-            _hoisted_34,
+          createBaseVNode("div", _hoisted_29, [
+            _hoisted_30,
             withDirectives(createBaseVNode("input", {
               name: "position",
               type: "text",
@@ -14186,7 +15234,7 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
               [vModelText, $data.position]
             ])
           ]),
-          createBaseVNode("div", _hoisted_35, [
+          createBaseVNode("div", _hoisted_31, [
             createBaseVNode("button", {
               type: "submit",
               class: "docdog-button docdog-button--primary",
@@ -14194,20 +15242,27 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
             }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u4F5C\u6210 ")
           ])
         ]),
-        createBaseVNode("div", _hoisted_36, [
+        createBaseVNode("div", _hoisted_32, [
           createBaseVNode("button", {
             type: "button",
             class: "docdog-button--text",
             onClick: _cache[8] || (_cache[8] = withModifiers(($event) => _ctx.redirect({ target: "SignIn" }), ["prevent"]))
           }, " \u30ED\u30B0\u30A4\u30F3 ")
         ])
-      ])
-    ]),
-    _hoisted_37
+      ]),
+      _hoisted_33
+    ])) : createCommentVNode("", true),
+    _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_34, [
+      createBaseVNode("button", {
+        type: "button",
+        class: "docdog-button docdog-button--white",
+        onClick: _cache[9] || (_cache[9] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+      }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+    ])) : createCommentVNode("", true)
   ]);
 }
-var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$d], ["__scopeId", "data-v-0c32fef5"]]);
-const _sfc_main$e = {
+var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$e], ["__scopeId", "data-v-52cc582f"]]);
+const _sfc_main$f = {
   props: {
     data: {
       type: Object,
@@ -14253,15 +15308,15 @@ const _sfc_main$e = {
     }
   }
 };
-const _sfc_main$d = {
+const _sfc_main$e = {
   props: {},
   methods: {}
 };
-const _hoisted_1$9 = {
+const _hoisted_1$a = {
   type: "button",
   class: "docdog-button--del"
 };
-const _hoisted_2$6 = /* @__PURE__ */ createBaseVNode("svg", {
+const _hoisted_2$8 = /* @__PURE__ */ createBaseVNode("svg", {
   width: "14",
   height: "15",
   viewBox: "0 0 14 15",
@@ -14284,52 +15339,53 @@ const _hoisted_2$6 = /* @__PURE__ */ createBaseVNode("svg", {
     stroke: "#aaaaaa"
   })
 ], -1);
-const _hoisted_3$5 = /* @__PURE__ */ createBaseVNode("span", null, "\u524A\u9664", -1);
-const _hoisted_4$3 = [
-  _hoisted_2$6,
-  _hoisted_3$5
+const _hoisted_3$7 = /* @__PURE__ */ createBaseVNode("span", null, "\u524A\u9664", -1);
+const _hoisted_4$6 = [
+  _hoisted_2$8,
+  _hoisted_3$7
 ];
-function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("button", _hoisted_1$9, _hoisted_4$3);
+function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("button", _hoisted_1$a, _hoisted_4$6);
 }
-var DeleteButton = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c]]);
-const _sfc_main$c = {
-  extends: _sfc_main$e,
+var DeleteButton = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d]]);
+const _sfc_main$d = {
+  extends: _sfc_main$f,
   components: {
     DeleteButton
   }
 };
-const _hoisted_1$8 = { class: "docdog-card" };
-const _hoisted_2$5 = { class: "docdog-card__thumb__badge" };
-const _hoisted_3$4 = { class: "docdog-card__body" };
-const _hoisted_4$2 = { class: "docdog-card__body__title" };
-const _hoisted_5$2 = {
+const _hoisted_1$9 = { class: "docdog-card" };
+const _hoisted_2$7 = { class: "docdog-card__thumb__badge" };
+const _hoisted_3$6 = { class: "docdog-card__body" };
+const _hoisted_4$5 = { class: "docdog-card__body__title" };
+const _hoisted_5$5 = {
   key: 0,
   type: "button",
-  class: "docdog-button docdog-button--white"
+  class: "docdog-button docdog-button--white",
+  disabled: ""
 };
-const _hoisted_6$2 = {
+const _hoisted_6$5 = {
   key: 0,
   class: "docdog-card__foot"
 };
-function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DeleteButton = resolveComponent("DeleteButton");
-  return openBlock(), createElementBlock("div", _hoisted_1$8, [
+  return openBlock(), createElementBlock("div", _hoisted_1$9, [
     createBaseVNode("div", {
       class: "docdog-card__thumb",
       style: normalizeStyle(_ctx.thumbnailStyle)
     }, [
-      createBaseVNode("span", _hoisted_2$5, toDisplayString(_ctx.data.type ? _ctx.data.type.label : ""), 1)
+      createBaseVNode("span", _hoisted_2$7, toDisplayString(_ctx.data.type ? _ctx.data.type.label : ""), 1)
     ], 4),
-    createBaseVNode("div", _hoisted_3$4, [
-      createBaseVNode("p", _hoisted_4$2, toDisplayString(_ctx.data.subject), 1),
+    createBaseVNode("div", _hoisted_3$6, [
+      createBaseVNode("p", _hoisted_4$5, toDisplayString(_ctx.data.subject), 1),
       _ctx.showDownloadBtn ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
         createBaseVNode("button", {
           type: "button",
           class: "docdog-button docdog-button--secondary",
           onClick: _cache[0] || (_cache[0] = ($event) => _ctx.onDownload())
         }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B "),
-        _ctx.isInToast ? (openBlock(), createElementBlock("button", _hoisted_5$2, "\u8FFD\u52A0\u6E08\u307F")) : (openBlock(), createElementBlock("button", {
+        _ctx.isInToast ? (openBlock(), createElementBlock("button", _hoisted_5$5, "\u8FFD\u52A0\u6E08\u307F")) : (openBlock(), createElementBlock("button", {
           key: 1,
           type: "button",
           class: "docdog-button docdog-button--white",
@@ -14337,12 +15393,12 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
         }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0\u3059\u308B "))
       ], 64)) : createCommentVNode("", true)
     ]),
-    _ctx.deleteFooter ? (openBlock(), createElementBlock("div", _hoisted_6$2, [
+    _ctx.deleteFooter ? (openBlock(), createElementBlock("div", _hoisted_6$5, [
       createVNode(_component_DeleteButton, { onClick: _ctx.removeToast }, null, 8, ["onClick"])
     ])) : createCommentVNode("", true)
   ]);
 }
-var CardModal = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b]]);
+var CardModal = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c]]);
 function getDocumentList(isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
@@ -14382,8 +15438,8 @@ var docsApi = {
   getDocumentData
 };
 var Download_vue_vue_type_style_index_0_scoped_true_lang = "";
-const _sfc_main$b = {
-  extends: _sfc_main$l,
+const _sfc_main$c = {
+  extends: _sfc_main$m,
   components: {
     AlertSuccess,
     AlertError,
@@ -14416,6 +15472,7 @@ const _sfc_main$b = {
       this.data = __spreadValues({}, this.doc_data);
       this.footer_data.doc_data = this.data;
       this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+      this.footer_data.downloaded = false;
     } else {
       loginApi.isLogin({
         autoLogin: true,
@@ -14426,6 +15483,7 @@ const _sfc_main$b = {
             this.data = resp.details;
             this.footer_data.doc_data = this.data;
             this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+            this.footer_data.downloaded = false;
           }).catch((err) => {
             this.error(err);
           });
@@ -14442,13 +15500,13 @@ const _sfc_main$b = {
     onDownload() {
       if (this.data) {
         this.download(this.data.file.url);
-        this.close();
+        this.footer_data.downloaded = true;
       }
     },
-    download(url, name = "") {
+    download(url2, name = "") {
       const link = document.createElement("a");
       link.download = name;
-      link.href = url;
+      link.href = url2;
       link.target = "_blank";
       document.body.appendChild(link);
       link.click();
@@ -14461,29 +15519,28 @@ const _sfc_main$b = {
     }
   }
 };
-const _hoisted_1$7 = {
-  key: 0,
-  class: "docdog-modal__body__section"
-};
-const _hoisted_2$4 = { class: "docdog-modal__body__section" };
-const _hoisted_3$3 = { class: "docdog-card__single" };
-function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+const _withScopeId$1 = (n) => (pushScopeId("data-v-1911071c"), n = n(), popScopeId(), n);
+const _hoisted_1$8 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+  /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9")
+], -1));
+const _hoisted_2$6 = { class: "docdog-modal__body__section" };
+const _hoisted_3$5 = { class: "docdog-card__single" };
+function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_AlertSuccess = resolveComponent("AlertSuccess");
   const _component_AlertError = resolveComponent("AlertError");
   const _component_CardModal = resolveComponent("CardModal");
   return openBlock(), createElementBlock(Fragment, null, [
-    _ctx.msg || _ctx.err ? (openBlock(), createElementBlock("div", _hoisted_1$7, [
-      _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
-        key: 0,
-        msg: _ctx.msg
-      }, null, 8, ["msg"])) : createCommentVNode("", true),
-      _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
-        key: 1,
-        err: _ctx.err
-      }, null, 8, ["err"])) : createCommentVNode("", true)
-    ])) : createCommentVNode("", true),
-    createBaseVNode("div", _hoisted_2$4, [
-      createBaseVNode("div", _hoisted_3$3, [
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 0,
+      msg: _ctx.msg
+    }, null, 8, ["msg"])) : createCommentVNode("", true),
+    _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
+      key: 1,
+      err: _ctx.err
+    }, null, 8, ["err"])) : createCommentVNode("", true),
+    _hoisted_1$8,
+    createBaseVNode("div", _hoisted_2$6, [
+      createBaseVNode("div", _hoisted_3$5, [
         createVNode(_component_CardModal, {
           data: $data.data,
           toastIds: _ctx.toastIds
@@ -14492,10 +15549,11 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-var Download = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-6a06d44b"]]);
-const _sfc_main$a = {
-  extends: _sfc_main$l,
+var Download = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-1911071c"]]);
+const _sfc_main$b = {
+  extends: _sfc_main$m,
   components: {
+    AlertSuccess,
     CardModal
   },
   props: {
@@ -14507,6 +15565,9 @@ const _sfc_main$a = {
   data() {
     return {};
   },
+  mounted() {
+    this.footer_data.toastList = this.list;
+  },
   methods: {
     onRemoveToast(idx) {
       this.removeToast(idx);
@@ -14516,32 +15577,62 @@ const _sfc_main$a = {
     }
   }
 };
-const _hoisted_1$6 = { class: "docdog-modal__body__section" };
-const _hoisted_2$3 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__heading" }, "\u9078\u629E\u4E2D\u306E\u30D5\u30A1\u30A4\u30EB", -1);
-const _hoisted_3$2 = { class: "docdog-card__list" };
-function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_1$7 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+  /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8")
+], -1);
+const _hoisted_2$5 = {
+  key: 1,
+  class: "docdog-modal__body__section"
+};
+const _hoisted_3$4 = /* @__PURE__ */ createBaseVNode("p", null, "\u9078\u629E\u4E2D\u306E\u30D5\u30A1\u30A4\u30EB", -1);
+const _hoisted_4$4 = { class: "docdog-card__list" };
+const _hoisted_5$4 = {
+  key: 2,
+  class: "docdog-modal__body__section"
+};
+const _hoisted_6$4 = /* @__PURE__ */ createBaseVNode("p", null, "\u9078\u629E\u4E2D\u306E\u30D5\u30A1\u30A4\u30EB\u306F\u3042\u308A\u307E\u305B\u3093\u3002", -1);
+const _hoisted_7$4 = [
+  _hoisted_6$4
+];
+function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AlertSuccess = resolveComponent("AlertSuccess");
   const _component_CardModal = resolveComponent("CardModal");
-  return openBlock(), createElementBlock("div", _hoisted_1$6, [
-    _hoisted_2$3,
-    createBaseVNode("ul", _hoisted_3$2, [
-      (openBlock(true), createElementBlock(Fragment, null, renderList($props.list, (item, idx) => {
-        return openBlock(), createElementBlock("li", null, [
-          createVNode(_component_CardModal, {
-            data: item,
-            toastIds: _ctx.toastIds,
-            deleteFooter: true,
-            onRemoveToast: ($event) => $options.onRemoveToast(idx)
-          }, null, 8, ["data", "toastIds", "onRemoveToast"])
-        ]);
-      }), 256))
-    ])
-  ]);
+  return openBlock(), createElementBlock(Fragment, null, [
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 0,
+      msg: _ctx.msg,
+      msg2: _ctx.msg2
+    }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
+    _hoisted_1$7,
+    $props.list.length ? (openBlock(), createElementBlock("div", _hoisted_2$5, [
+      _hoisted_3$4,
+      createBaseVNode("ul", _hoisted_4$4, [
+        (openBlock(true), createElementBlock(Fragment, null, renderList($props.list, (item, idx) => {
+          return openBlock(), createElementBlock("li", null, [
+            createVNode(_component_CardModal, {
+              data: item,
+              toastIds: _ctx.toastIds,
+              deleteFooter: true,
+              onRemoveToast: ($event) => $options.onRemoveToast(idx)
+            }, null, 8, ["data", "toastIds", "onRemoveToast"])
+          ]);
+        }), 256))
+      ])
+    ])) : createCommentVNode("", true),
+    !$props.list.length ? (openBlock(), createElementBlock("div", _hoisted_5$4, _hoisted_7$4)) : createCommentVNode("", true)
+  ], 64);
 }
-var DownloadList = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
-const _sfc_main$9 = {
-  extends: _sfc_main$l,
+var DownloadList = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a]]);
+const _sfc_main$a = {
+  extends: _sfc_main$m,
   components: {
     CardModal
+  },
+  props: {
+    cnt: {
+      type: Number,
+      default: null
+    }
   },
   data() {
     return {
@@ -14549,14 +15640,19 @@ const _sfc_main$9 = {
       pageInfo: {},
       pagedButtons: [],
       pageID: 1,
-      cnt: 10,
       node_params_map: {},
       showDownloadBtn: true
     };
   },
   computed: {
     defaultParams() {
-      return { pageID: this.pageID, cnt: this.cnt };
+      const defaultParams = {
+        pageID: this.pageID
+      };
+      if (this.cnt) {
+        defaultParams.cnt = this.cnt;
+      }
+      return defaultParams;
     }
   },
   mounted() {
@@ -14605,18 +15701,19 @@ const _sfc_main$9 = {
     }
   }
 };
-const _hoisted_1$5 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
-  /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__heading" }, "\u55B6\u696D\u8CC7\u6599"),
+const _hoisted_1$6 = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+  /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u8CC7\u6599\u4E00\u89A7"),
   /* @__PURE__ */ createBaseVNode("p", null, "Kuroco\u55B6\u696D\u6642\u306B\u5229\u7528\u3067\u304D\u308B\u8CC7\u6599\u3092\u307E\u3068\u3081\u3066\u3044\u307E\u3059\u3002\u793E\u5185\u3067\u306E\u78BA\u8A8D\u3084\u304A\u5BA2\u69D8\u3078\u306E\u3054\u63D0\u6848\u306A\u3069\u306B\u3054\u6D3B\u7528\u304F\u3060\u3055\u3044\u3002")
 ], -1);
-const _hoisted_2$2 = { class: "docdog-modal__body__section" };
-const _hoisted_3$1 = {
+const _hoisted_2$4 = { class: "docdog-modal__body__section" };
+const _hoisted_3$3 = {
   key: 0,
   class: "docdog-card__list"
 };
-const _hoisted_4$1 = { class: "docdog-pagination" };
-const _hoisted_5$1 = ["disabled"];
-const _hoisted_6$1 = /* @__PURE__ */ createBaseVNode("svg", {
+const _hoisted_4$3 = { class: "docdog-pagination" };
+const _hoisted_5$3 = { class: "docdog-pagination__list" };
+const _hoisted_6$3 = ["disabled"];
+const _hoisted_7$3 = /* @__PURE__ */ createBaseVNode("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   height: "24px",
   viewBox: "0 0 24 24",
@@ -14629,13 +15726,13 @@ const _hoisted_6$1 = /* @__PURE__ */ createBaseVNode("svg", {
   }),
   /* @__PURE__ */ createBaseVNode("path", { d: "M15.61 7.41L14.2 6l-6 6 6 6 1.41-1.41L11.03 12l4.58-4.59z" })
 ], -1);
-const _hoisted_7$1 = [
-  _hoisted_6$1
+const _hoisted_8$3 = [
+  _hoisted_7$3
 ];
-const _hoisted_8$1 = { key: 0 };
-const _hoisted_9$1 = ["onClick"];
-const _hoisted_10$1 = ["disabled"];
-const _hoisted_11 = /* @__PURE__ */ createBaseVNode("svg", {
+const _hoisted_9$2 = { key: 0 };
+const _hoisted_10$2 = ["onClick"];
+const _hoisted_11$2 = ["disabled"];
+const _hoisted_12$2 = /* @__PURE__ */ createBaseVNode("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   height: "24px",
   viewBox: "0 0 24 24",
@@ -14648,15 +15745,15 @@ const _hoisted_11 = /* @__PURE__ */ createBaseVNode("svg", {
   }),
   /* @__PURE__ */ createBaseVNode("path", { d: "M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z" })
 ], -1);
-const _hoisted_12 = [
-  _hoisted_11
+const _hoisted_13$1 = [
+  _hoisted_12$2
 ];
-function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CardModal = resolveComponent("CardModal");
   return openBlock(), createElementBlock(Fragment, null, [
-    _hoisted_1$5,
-    createBaseVNode("div", _hoisted_2$2, [
-      $data.list.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_3$1, [
+    _hoisted_1$6,
+    createBaseVNode("div", _hoisted_2$4, [
+      $data.list.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_3$3, [
         (openBlock(true), createElementBlock(Fragment, null, renderList($data.list, (doc2) => {
           return openBlock(), createElementBlock("li", null, [
             createVNode(_component_CardModal, {
@@ -14670,22 +15767,23 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
           ]);
         }), 256))
       ])) : createCommentVNode("", true),
-      createBaseVNode("nav", null, [
-        createBaseVNode("ul", _hoisted_4$1, [
+      createBaseVNode("nav", _hoisted_4$3, [
+        createBaseVNode("ul", _hoisted_5$3, [
           createBaseVNode("li", null, [
             createBaseVNode("button", {
               type: "button",
               "aria-label": "Previous",
-              disabled: $data.pageID == 1
-            }, _hoisted_7$1, 8, _hoisted_5$1)
+              disabled: $data.pageID == 1,
+              onClick: _cache[0] || (_cache[0] = ($event) => $options.changePage($data.pageID - 1))
+            }, _hoisted_8$3, 8, _hoisted_6$3)
           ]),
           (openBlock(true), createElementBlock(Fragment, null, renderList($data.pagedButtons, (num) => {
             return openBlock(), createElementBlock("li", null, [
-              Number.isInteger(num) && num == $data.pageInfo.pageNo ? (openBlock(), createElementBlock("span", _hoisted_8$1, toDisplayString(num), 1)) : Number.isInteger(num) ? (openBlock(), createElementBlock("button", {
+              Number.isInteger(num) && num == $data.pageInfo.pageNo ? (openBlock(), createElementBlock("span", _hoisted_9$2, toDisplayString(num), 1)) : Number.isInteger(num) ? (openBlock(), createElementBlock("button", {
                 key: 1,
                 type: "button",
                 onClick: ($event) => $options.changePage(num)
-              }, toDisplayString(num), 9, _hoisted_9$1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
+              }, toDisplayString(num), 9, _hoisted_10$2)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
                 createTextVNode(toDisplayString(num), 1)
               ], 64))
             ]);
@@ -14694,18 +15792,245 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("button", {
               type: "button",
               "aria-label": "Next",
-              disabled: $data.pageInfo && $data.pageID == $data.pageInfo.totalPageCnt
-            }, _hoisted_12, 8, _hoisted_10$1)
+              disabled: $data.pageInfo && $data.pageID == $data.pageInfo.totalPageCnt,
+              onClick: _cache[1] || (_cache[1] = ($event) => $options.changePage($data.pageID + 1))
+            }, _hoisted_13$1, 8, _hoisted_11$2)
           ])
         ])
       ])
     ])
   ], 64);
 }
-var List = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
+var List = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9]]);
+const _sfc_main$9 = {
+  extends: _sfc_main$m,
+  components: {
+    AlertSuccess,
+    AlertError
+  },
+  props: {
+    token: {
+      type: String,
+      default: () => ""
+    }
+  },
+  data() {
+    return {
+      steps: ["input_email", "input_new_pwd", "done"],
+      step: "",
+      email: "",
+      temp_pwd: "",
+      login_pwd: "",
+      password_confirm: ""
+    };
+  },
+  mounted() {
+    if (this.token) {
+      this.step = "input_new_pwd";
+    } else {
+      this.step = "input_email";
+    }
+  },
+  computed: {
+    err_field() {
+      if (this.err) {
+        const colpos = this.err.indexOf(":");
+        if (colpos !== -1) {
+          return this.err.substring(0, colpos);
+        }
+      }
+      return "";
+    }
+  },
+  methods: {
+    sendEmail() {
+      loginApi.reminderSendEmail({
+        email: this.email
+      });
+    },
+    updatePassword() {
+      this.error("");
+      if (this.login_pwd == this.password_confirm) {
+        loginApi.reminderUpdatePassword({
+          token: this.token,
+          temp_pwd: this.temp_pwd,
+          login_pwd: this.login_pwd
+        }).then(() => {
+          this.step = "done";
+        }).catch((err) => {
+          this.error(err);
+        });
+      } else {
+        this.error("\u65B0\u3057\u3044\u30D1\u30B9\u30EF\u30FC\u30C9\uFF08\u78BA\u8A8D\uFF09\u304C\u4E00\u81F4\u3057\u307E\u305B\u3093\u3002");
+      }
+    }
+  }
+};
+const _hoisted_1$5 = { class: "docdog-form" };
+const _hoisted_2$3 = { class: "docdog-modal__body__section" };
+const _hoisted_3$2 = /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30D1\u30B9\u30EF\u30FC\u30C9\u518D\u8A2D\u5B9A", -1);
+const _hoisted_4$2 = {
+  key: 0,
+  class: "docdog-modal__body__text"
+};
+const _hoisted_5$2 = { class: "docdog-modal__body__section" };
+const _hoisted_6$2 = { key: 0 };
+const _hoisted_7$2 = /* @__PURE__ */ createBaseVNode("label", {
+  for: "email",
+  class: "docdog-form__item__title"
+}, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9", -1);
+const _hoisted_8$2 = {
+  key: 0,
+  class: "docdog-form__item--error__msg"
+};
+const _hoisted_9$1 = { class: "docdog-form__button" };
+const _hoisted_10$1 = { class: "docdog-form__link" };
+const _hoisted_11$1 = { key: 1 };
+const _hoisted_12$1 = /* @__PURE__ */ createBaseVNode("label", {
+  for: "temp_pwd",
+  class: "docdog-form__item__title"
+}, "\u4EEE\u30D1\u30B9\u30EF\u30FC\u30C9", -1);
+const _hoisted_13 = /* @__PURE__ */ createBaseVNode("label", {
+  for: "password",
+  class: "docdog-form__item__title"
+}, "\u65B0\u3057\u3044\u30D1\u30B9\u30EF\u30FC\u30C9", -1);
+const _hoisted_14 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-form__item__note" }, "8\u6587\u5B57\u4EE5\u4E0A\u82F1\u6570\u6DF7\u5728", -1);
+const _hoisted_15 = /* @__PURE__ */ createBaseVNode("label", {
+  for: "password_confirm",
+  class: "docdog-form__item__title"
+}, "\u65B0\u3057\u3044\u30D1\u30B9\u30EF\u30FC\u30C9\uFF08\u78BA\u8A8D\uFF09", -1);
+const _hoisted_16 = { class: "docdog-form__button" };
+const _hoisted_17 = { key: 2 };
+const _hoisted_18 = { class: "docdog-form__button" };
+const _hoisted_19 = { class: "docdog-form__link" };
+function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AlertError = resolveComponent("AlertError");
+  const _component_AlertSuccess = resolveComponent("AlertSuccess");
+  return openBlock(), createElementBlock("div", _hoisted_1$5, [
+    _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
+      key: 0,
+      err: _ctx.err
+    }, null, 8, ["err"])) : createCommentVNode("", true),
+    _ctx.msg ? (openBlock(), createBlock(_component_AlertSuccess, {
+      key: 1,
+      msg: _ctx.msg,
+      msg2: _ctx.msg2
+    }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
+    createBaseVNode("div", _hoisted_2$3, [
+      _hoisted_3$2,
+      $data.step == "input_email" ? (openBlock(), createElementBlock("p", _hoisted_4$2, " \u30D1\u30B9\u30EF\u30FC\u30C9\u518D\u8A2D\u5B9A\u7528\u306EURL\u3092\u9001\u4FE1\u3057\u307E\u3059\u3002\u3054\u767B\u9332\u3055\u308C\u3066\u3044\u308B\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002 ")) : createCommentVNode("", true)
+    ]),
+    createBaseVNode("div", _hoisted_5$2, [
+      $data.step == "input_email" ? (openBlock(), createElementBlock("form", _hoisted_6$2, [
+        createBaseVNode("div", {
+          class: normalizeClass(["docdog-form__item", $options.err_field == "email" ? "docdog-form__item--error" : ""])
+        }, [
+          _hoisted_7$2,
+          withDirectives(createBaseVNode("input", {
+            name: "email",
+            type: "text",
+            id: "email",
+            placeholder: "",
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $data.email = $event),
+            required: ""
+          }, null, 512), [
+            [vModelText, $data.email]
+          ]),
+          $options.err_field == "email" ? (openBlock(), createElementBlock("p", _hoisted_8$2, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u304C\u4E0D\u6B63\u3067\u3059\u3002")) : createCommentVNode("", true)
+        ], 2),
+        createBaseVNode("div", _hoisted_9$1, [
+          createBaseVNode("button", {
+            type: "submit",
+            class: "docdog-button docdog-button--primary",
+            onClick: _cache[1] || (_cache[1] = withModifiers((...args) => $options.sendEmail && $options.sendEmail(...args), ["prevent"]))
+          }, " \u9001\u4FE1\u3059\u308B ")
+        ]),
+        createBaseVNode("div", _hoisted_10$1, [
+          createBaseVNode("button", {
+            type: "submit",
+            class: "docdog-button--text",
+            onClick: _cache[2] || (_cache[2] = withModifiers(($event) => _ctx.redirect({ target: "SignIn" }), ["prevent"]))
+          }, " \u30ED\u30B0\u30A4\u30F3 ")
+        ])
+      ])) : createCommentVNode("", true),
+      $data.step == "input_new_pwd" ? (openBlock(), createElementBlock("form", _hoisted_11$1, [
+        createBaseVNode("div", {
+          class: normalizeClass(["docdog-form__item", $options.err_field == "temp_pwd" ? "docdog-form__item--error" : ""])
+        }, [
+          _hoisted_12$1,
+          withDirectives(createBaseVNode("input", {
+            name: "temp_pwd",
+            type: "text",
+            id: "temp_pwd",
+            placeholder: "",
+            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.temp_pwd = $event),
+            required: ""
+          }, null, 512), [
+            [vModelText, $data.temp_pwd]
+          ])
+        ], 2),
+        createBaseVNode("div", {
+          class: normalizeClass(["docdog-form__item", $options.err_field == "password" ? "docdog-form__item--error" : ""])
+        }, [
+          _hoisted_13,
+          withDirectives(createBaseVNode("input", {
+            name: "password",
+            type: "password",
+            id: "password",
+            placeholder: "",
+            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.login_pwd = $event),
+            required: ""
+          }, null, 512), [
+            [vModelText, $data.login_pwd]
+          ]),
+          _hoisted_14
+        ], 2),
+        createBaseVNode("div", {
+          class: normalizeClass(["docdog-form__item", $options.err_field == "password_confirm" ? "docdog-form__item--error" : ""])
+        }, [
+          _hoisted_15,
+          withDirectives(createBaseVNode("input", {
+            name: "password_confirm",
+            type: "password",
+            id: "password_confirm",
+            placeholder: "",
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.password_confirm = $event),
+            required: ""
+          }, null, 512), [
+            [vModelText, $data.password_confirm]
+          ])
+        ], 2),
+        createBaseVNode("div", _hoisted_16, [
+          createBaseVNode("button", {
+            type: "submit",
+            class: "docdog-button docdog-button--primary",
+            onClick: _cache[6] || (_cache[6] = withModifiers((...args) => $options.updatePassword && $options.updatePassword(...args), ["prevent"]))
+          }, " \u518D\u8A2D\u5B9A\u3059\u308B ")
+        ])
+      ])) : createCommentVNode("", true),
+      $data.step == "done" ? (openBlock(), createElementBlock("div", _hoisted_17, [
+        createBaseVNode("div", _hoisted_18, [
+          createBaseVNode("button", {
+            type: "submit",
+            class: "docdog-button docdog-button--primary",
+            onClick: _cache[7] || (_cache[7] = withModifiers(($event) => _ctx.redirect({ target: "SignIn" }), ["prevent"]))
+          }, " \u30ED\u30B0\u30A4\u30F3 ")
+        ]),
+        createBaseVNode("div", _hoisted_19, [
+          createBaseVNode("button", {
+            type: "button",
+            class: "docdog-button--text",
+            onClick: _cache[8] || (_cache[8] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+          }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+        ])
+      ])) : createCommentVNode("", true)
+    ])
+  ]);
+}
+var Reminder = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
 var Error_vue_vue_type_style_index_0_scoped_true_lang = "";
 const _sfc_main$8 = {
-  extends: _sfc_main$l
+  extends: _sfc_main$m
 };
 const _withScopeId = (n) => (pushScopeId("data-v-7bb604a8"), n = n(), popScopeId(), n);
 const _hoisted_1$4 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("h2", null, "Error", -1));
@@ -14717,14 +16042,14 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-7bb604a8"]]);
 const _sfc_main$7 = {
-  extends: _sfc_main$l
+  extends: _sfc_main$m
 };
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("h2", null, "Loading ...");
 }
 var Loading = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6]]);
 const _sfc_main$6 = {
-  extends: _sfc_main$l,
+  extends: _sfc_main$m,
   components: {
     AlertSuccess,
     AlertError
@@ -14753,6 +16078,7 @@ const pages = {
   Download,
   DownloadList,
   List,
+  Reminder,
   EmptyPage,
   Loading,
   EditProfile,
@@ -14779,6 +16105,10 @@ const _sfc_main$5 = {
       type: Object,
       default: () => {
       }
+    },
+    isLogin: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -14836,7 +16166,6 @@ const _sfc_main$5 = {
       loginApi.isLogin({
         autoLogin: true,
         anonLogin: this.node_params && this.node_params.public || false
-      }).then((isLogin2) => {
       });
     },
     pageExec(method) {
@@ -14858,10 +16187,14 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(resolveDynamicComponent($options.current_page_comp), mergeProps($options.comp_props, {
     footer_data: $props.footer_data,
     "onUpdate:footer_data": _cache[0] || (_cache[0] = ($event) => $props.footer_data = $event),
-    onErr: _cache[1] || (_cache[1] = ($event) => $options.err = $event),
+    msg: $data.msg,
+    "onUpdate:msg": _cache[1] || (_cache[1] = ($event) => $data.msg = $event),
+    isLogin: $props.isLogin,
+    "onUpdate:isLogin": _cache[2] || (_cache[2] = ($event) => $props.isLogin = $event),
+    onErr: _cache[3] || (_cache[3] = ($event) => $options.err = $event),
     onRedirect: $options.onRedirect,
     ref: "page"
-  }), null, 16, ["footer_data", "onRedirect"]);
+  }), null, 16, ["footer_data", "msg", "isLogin", "onRedirect"]);
 }
 var PageController = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4]]);
 const _sfc_main$4 = {
@@ -14891,34 +16224,87 @@ const _sfc_main$4 = {
 const _sfc_main$3 = {
   extends: _sfc_main$4
 };
-const _hoisted_1$2 = { class: "docdog-button__list" };
-const _hoisted_2$1 = {
+const _hoisted_1$2 = {
   key: 0,
-  type: "button",
-  class: "docdog-button docdog-button--white"
+  class: "docdog-button__list"
+};
+const _hoisted_2$2 = /* @__PURE__ */ createBaseVNode("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  height: "24px",
+  viewBox: "0 0 24 24",
+  width: "24px",
+  fill: "#ffffff"
+}, [
+  /* @__PURE__ */ createBaseVNode("path", {
+    d: "M0 0h24v24H0V0z",
+    fill: "none"
+  }),
+  /* @__PURE__ */ createBaseVNode("path", { d: "M15.61 7.41L14.2 6l-6 6 6 6 1.41-1.41L11.03 12l4.58-4.59z" })
+], -1);
+const _hoisted_3$1 = [
+  _hoisted_2$2
+];
+const _hoisted_4$1 = /* @__PURE__ */ createTextVNode(" \u8FFD\u52A0\u6E08\u307F");
+const _hoisted_5$1 = /* @__PURE__ */ createBaseVNode("br", null, null, -1);
+const _hoisted_6$1 = /* @__PURE__ */ createTextVNode(" \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8\u3092\u898B\u308B ");
+const _hoisted_7$1 = [
+  _hoisted_4$1,
+  _hoisted_5$1,
+  _hoisted_6$1
+];
+const _hoisted_8$1 = {
+  key: 1,
+  class: "docdog-button__list"
 };
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$2, [
-    _ctx.footer_data.isInToast ? (openBlock(), createElementBlock("button", _hoisted_2$1, " \u8FFD\u52A0\u6E08\u307F ")) : (openBlock(), createElementBlock("button", {
-      key: 1,
-      type: "button",
-      class: "docdog-button docdog-button--white",
-      onClick: _cache[0] || (_cache[0] = (...args) => _ctx.addToast && _ctx.addToast(...args))
-    }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0\u3059\u308B ")),
-    createBaseVNode("button", {
-      type: "button",
-      class: "docdog-button docdog-button--primary",
-      onClick: _cache[1] || (_cache[1] = (...args) => _ctx.download && _ctx.download(...args))
-    }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B ")
-  ]);
+  return openBlock(), createElementBlock(Fragment, null, [
+    !_ctx.footer_data.downloaded ? (openBlock(), createElementBlock("div", _hoisted_1$2, [
+      createBaseVNode("button", {
+        type: "button",
+        "aria-label": "Back to docs",
+        class: "docdog-button docdog-button--sm docdog-button--white-outline",
+        onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+      }, _hoisted_3$1),
+      _ctx.footer_data.isInToast ? (openBlock(), createElementBlock("button", {
+        key: 0,
+        type: "button",
+        class: "docdog-button docdog-button--white",
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("downloadToast"))
+      }, _hoisted_7$1)) : (openBlock(), createElementBlock("button", {
+        key: 1,
+        type: "button",
+        class: "docdog-button docdog-button--white",
+        onClick: _cache[2] || (_cache[2] = (...args) => _ctx.addToast && _ctx.addToast(...args))
+      }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0\u3059\u308B ")),
+      createBaseVNode("button", {
+        type: "button",
+        class: "docdog-button docdog-button--primary",
+        onClick: _cache[3] || (_cache[3] = (...args) => _ctx.download && _ctx.download(...args))
+      }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B ")
+    ])) : createCommentVNode("", true),
+    _ctx.footer_data.downloaded ? (openBlock(), createElementBlock("div", _hoisted_8$1, [
+      createBaseVNode("button", {
+        type: "button",
+        class: "docdog-button docdog-button--white docdog-button--wide",
+        onClick: _cache[4] || (_cache[4] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+      }, " \u8CC7\u6599\u4E00\u89A7\u306B\u623B\u308B ")
+    ])) : createCommentVNode("", true)
+  ], 64);
 }
 var Footer1 = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3]]);
 const _sfc_main$2 = {
   extends: _sfc_main$4
 };
-const _hoisted_1$1 = { class: "docdog-button__list" };
+const _hoisted_1$1 = {
+  key: 0,
+  class: "docdog-button__list"
+};
+const _hoisted_2$1 = {
+  key: 1,
+  class: "docdog-button__list"
+};
 function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$1, [
+  return _ctx.footer_data.toastList && _ctx.footer_data.toastList.length > 0 ? (openBlock(), createElementBlock("div", _hoisted_1$1, [
     createBaseVNode("button", {
       type: "button",
       class: "docdog-button docdog-button--white",
@@ -14929,7 +16315,13 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
       class: "docdog-button docdog-button--primary",
       onClick: _cache[1] || (_cache[1] = (...args) => _ctx.downloadToast && _ctx.downloadToast(...args))
     }, " \u307E\u3068\u3081\u3066\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B ")
-  ]);
+  ])) : (openBlock(), createElementBlock("div", _hoisted_2$1, [
+    createBaseVNode("button", {
+      type: "button",
+      class: "docdog-button docdog-button--white docdog-button--wide",
+      onClick: _cache[2] || (_cache[2] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
+    }, " \u8CC7\u6599\u4E00\u89A7\u306B\u623B\u308B ")
+  ]));
 }
 var Footer2 = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2]]);
 var getRandomValues;
@@ -14985,7 +16377,9 @@ const _sfc_main$1 = {
     }
   },
   data() {
-    return {};
+    return {
+      toast_expand: true
+    };
   },
   methods: {
     downloadAll() {
@@ -14993,53 +16387,74 @@ const _sfc_main$1 = {
     },
     removeByIdx(idx) {
       this.$emit("removeToast", idx);
-    },
-    removeAll() {
-      this.$emit("removeToast", null);
     }
   }
 };
 const _hoisted_1 = { class: "docdog" };
-const _hoisted_2 = { class: "docdog-toast" };
-const _hoisted_3 = { class: "docdog-toast__head" };
-const _hoisted_4 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-toast__head__heading" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8", -1);
-const _hoisted_5 = /* @__PURE__ */ createBaseVNode("svg", {
-  width: "14",
-  height: "15",
-  viewBox: "0 0 14 15",
+const _hoisted_2 = /* @__PURE__ */ createBaseVNode("svg", {
+  width: "24",
+  height: "24",
+  viewBox: "0 0 24 24",
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg"
 }, [
   /* @__PURE__ */ createBaseVNode("path", {
-    d: "M11.0827 4.239L10.2602 3.4165L6.99935 6.67734L3.73852 3.4165L2.91602 4.239L6.17685 7.49984L2.91602 10.7607L3.73852 11.5832L6.99935 8.32234L10.2602 11.5832L11.0827 10.7607L7.82185 7.49984L11.0827 4.239Z",
-    fill: "#AAAAAA"
+    d: "M7.41 16L12 11.42L16.59 16L18 14.59L12 8.59L6 14.59L7.41 16Z",
+    fill: "#ffffff"
   })
 ], -1);
-const _hoisted_6 = [
-  _hoisted_5
+const _hoisted_3 = [
+  _hoisted_2
 ];
-const _hoisted_7 = { class: "docdog-toast__body" };
-const _hoisted_8 = { class: "docdog-toast__body__list" };
-const _hoisted_9 = { class: "docdog-toast__body__list__title" };
-const _hoisted_10 = { class: "docdog-toast__foot" };
+const _hoisted_4 = {
+  key: 1,
+  class: "docdog-toast"
+};
+const _hoisted_5 = { class: "docdog-toast__head" };
+const _hoisted_6 = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-toast__head__heading" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8", -1);
+const _hoisted_7 = /* @__PURE__ */ createBaseVNode("svg", {
+  width: "24",
+  height: "24",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  xmlns: "http://www.w3.org/2000/svg"
+}, [
+  /* @__PURE__ */ createBaseVNode("path", {
+    d: "M16.59 8.58997L12 13.17L7.41 8.58997L6 9.99997L12 16L18 9.99997L16.59 8.58997Z",
+    fill: "#666666"
+  })
+], -1);
+const _hoisted_8 = [
+  _hoisted_7
+];
+const _hoisted_9 = { class: "docdog-toast__body" };
+const _hoisted_10 = { class: "docdog-toast__body__list" };
+const _hoisted_11 = { class: "docdog-toast__body__list__title" };
+const _hoisted_12 = { class: "docdog-toast__foot" };
 function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DeleteButton = resolveComponent("DeleteButton");
   return openBlock(), createElementBlock("div", _hoisted_1, [
-    createBaseVNode("section", _hoisted_2, [
-      createBaseVNode("header", _hoisted_3, [
-        _hoisted_4,
+    !$data.toast_expand ? (openBlock(), createElementBlock("button", {
+      key: 0,
+      type: "button",
+      class: "docdog-toast--contract",
+      onClick: _cache[0] || (_cache[0] = ($event) => $data.toast_expand = !$data.toast_expand)
+    }, _hoisted_3)) : createCommentVNode("", true),
+    $data.toast_expand ? (openBlock(), createElementBlock("section", _hoisted_4, [
+      createBaseVNode("header", _hoisted_5, [
+        _hoisted_6,
         createBaseVNode("button", {
           type: "button",
           "aria-label": "Close",
           class: "docdog-toast__head__close",
-          onClick: _cache[0] || (_cache[0] = (...args) => $options.removeAll && $options.removeAll(...args))
-        }, _hoisted_6)
+          onClick: _cache[1] || (_cache[1] = ($event) => $data.toast_expand = !$data.toast_expand)
+        }, _hoisted_8)
       ]),
-      createBaseVNode("div", _hoisted_7, [
-        createBaseVNode("ul", _hoisted_8, [
+      createBaseVNode("div", _hoisted_9, [
+        createBaseVNode("ul", _hoisted_10, [
           (openBlock(true), createElementBlock(Fragment, null, renderList($props.list, (item, idx) => {
             return openBlock(), createElementBlock("li", null, [
-              createBaseVNode("p", _hoisted_9, toDisplayString(item.subject), 1),
+              createBaseVNode("p", _hoisted_11, toDisplayString(item.subject), 1),
               createVNode(_component_DeleteButton, {
                 onClick: ($event) => $options.removeByIdx(idx)
               }, null, 8, ["onClick"])
@@ -15047,14 +16462,14 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
           }), 256))
         ])
       ]),
-      createBaseVNode("footer", _hoisted_10, [
+      createBaseVNode("footer", _hoisted_12, [
         createBaseVNode("button", {
           type: "button",
           class: "docdog-button docdog-button--primary",
-          onClick: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("downloadToast"))
+          onClick: _cache[2] || (_cache[2] = ($event) => _ctx.$emit("downloadToast"))
         }, " \u307E\u3068\u3081\u3066\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B ")
       ])
-    ])
+    ])) : createCommentVNode("", true)
   ]);
 }
 var Toast = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
@@ -15071,6 +16486,7 @@ const _sfc_main = {
   }, footerComps),
   data() {
     return {
+      urlParams: {},
       showModal: false,
       toastList: [],
       pageInfo: {},
@@ -15079,10 +16495,14 @@ const _sfc_main = {
       current_node_uuid: null,
       current_page: "Loading",
       footer_data: {},
+      isLogin: false,
       app_global_events: {
         isLogin: []
       }
     };
+  },
+  created() {
+    this.urlParams = url.parse(window.location.href, true).query;
   },
   computed: {
     is_node_selected: {
@@ -15106,44 +16526,6 @@ const _sfc_main = {
       } else {
         return null;
       }
-    },
-    current_page_title() {
-      let title = "";
-      switch (this.current_page) {
-        case "EmptyPage":
-          title = "";
-          break;
-        case "Loading":
-          title = "\u30ED\u30FC\u30C7\u30A3\u30F3\u30B0";
-          break;
-        case "Error":
-          title = "\u30A8\u30E9\u30FC";
-          break;
-        case "SignUp":
-          title = "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u4F5C\u6210";
-          break;
-        case "SignIn":
-          title = "\u30ED\u30B0\u30A4\u30F3";
-          break;
-        case "DownloadList":
-          title = "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8";
-          break;
-        case "EditProfile":
-          title = "\u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831\u306E\u7DE8\u96C6";
-          break;
-        case "Withdrawal":
-          title = "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u524A\u9664";
-          break;
-        case "Download":
-          title = "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9";
-          break;
-        case "List":
-          title = "\u8CC7\u6599\u4E00\u89A7";
-          break;
-        default:
-          title = this.current_page;
-      }
-      return title;
     },
     footer_comp() {
       let comp = "";
@@ -15169,13 +16551,41 @@ const _sfc_main = {
         this.closeModalOuter();
       }
     });
-    this.isLogin().then((loggedIn) => {
+    this.checkLogin().then((loggedIn) => {
+      this.isLogin = loggedIn;
       if (loggedIn) {
         this.onLogin();
       } else {
         this.onLogout();
       }
     });
+    if (this.urlParams.docdog_page) {
+      let target = "";
+      const params = {};
+      switch (this.urlParams.docdog_page) {
+        case "reminder":
+          target = "Reminder";
+          if (this.urlParams.token) {
+            params.token = this.urlParams.token;
+          }
+          break;
+        case "login":
+          target = "SignIn";
+          break;
+        case "profile":
+          target = "EditProfile";
+          break;
+        case "list":
+          target = "List";
+          break;
+        case "signup":
+          target = "SignUp";
+          break;
+      }
+      if (target) {
+        this.redirect({ target, params });
+      }
+    }
   },
   methods: {
     linkNode(node, params) {
@@ -15235,6 +16645,9 @@ const _sfc_main = {
     setNodeLogin(node) {
       node.addEventListener("click", this.login);
     },
+    setNodeReminder(node) {
+      node.addEventListener("click", this.reminder);
+    },
     setNodeLogout(node) {
       node.addEventListener("click", this.logout);
     },
@@ -15244,8 +16657,8 @@ const _sfc_main = {
     setNodeProfile(node) {
       node.addEventListener("click", this.profile);
     },
-    setNodeList(node) {
-      node.addEventListener("click", this.list);
+    setNodeList(node, params) {
+      node.addEventListener("click", () => this.list(params));
     },
     removeNodeLogin(node) {
       node.removeEventListener("click", this.login);
@@ -15253,7 +16666,7 @@ const _sfc_main = {
     removeNodeLogout(node) {
       node.removeEventListener("click", this.logout);
     },
-    isLogin() {
+    checkLogin() {
       return loginApi.isLogin({
         autoLogin: true,
         anonLogin: false
@@ -15267,11 +16680,13 @@ const _sfc_main = {
       }
     },
     onLogin() {
+      this.isLogin = true;
       this.app_global_events.isLogin.forEach((func) => {
         func(true);
       });
     },
     onLogout() {
+      this.isLogin = false;
       this.app_global_events.isLogin.forEach((func) => {
         func(false);
       });
@@ -15286,11 +16701,14 @@ const _sfc_main = {
     signup() {
       this.redirect({ target: "SignUp" });
     },
+    reminder() {
+      this.redirect({ target: "Reminder" });
+    },
     profile() {
       this.redirect({ target: "EditProfile" });
     },
-    list() {
-      this.redirect({ target: "List" });
+    list(params) {
+      this.redirect({ target: "List", params });
     },
     downloadToast() {
       if (this.current_page != "DownloadList") {
@@ -15338,8 +16756,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
     createVNode(_component_Modal, {
       show: $data.showModal,
-      "onUpdate:show": _cache[2] || (_cache[2] = ($event) => $data.showModal = $event),
-      title: $options.current_page_title,
+      "onUpdate:show": _cache[3] || (_cache[3] = ($event) => $data.showModal = $event),
       onClose: $options.closeModalOuter
     }, createSlots({
       default: withCtx(() => [
@@ -15350,13 +16767,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
           toastIds: $options.toastIds,
           footer_data: $data.footer_data,
           "onUpdate:footer_data": _cache[1] || (_cache[1] = ($event) => $data.footer_data = $event),
+          isLogin: $data.isLogin,
+          "onUpdate:isLogin": _cache[2] || (_cache[2] = ($event) => $data.isLogin = $event),
           onClose: $options.closeModal,
           onAddToast: $options.addToast,
           onRemoveToast: $options.removeToast,
           onDownload: $options.download,
           onOnLogin: $options.onLogin,
+          onLogout: $options.logout,
           ref: "ctrl"
-        }, null, 8, ["current_page", "node_params", "toastIds", "footer_data", "onClose", "onAddToast", "onRemoveToast", "onDownload", "onOnLogin"])
+        }, null, 8, ["current_page", "node_params", "toastIds", "footer_data", "isLogin", "onClose", "onAddToast", "onRemoveToast", "onDownload", "onOnLogin", "onLogout"])
       ]),
       _: 2
     }, [
@@ -15372,15 +16792,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 8, ["footer_data", "onDownload", "onAddToast", "onDownloadToast", "onRedirect"]))
         ])
       } : void 0
-    ]), 1032, ["show", "title", "onClose"]),
+    ]), 1032, ["show", "onClose"]),
     withDirectives(createVNode(_component_Toast, {
       list: $data.toastList,
-      "onUpdate:list": _cache[3] || (_cache[3] = ($event) => $data.toastList = $event),
+      "onUpdate:list": _cache[4] || (_cache[4] = ($event) => $data.toastList = $event),
       onDownloadToast: $options.downloadToast,
       onRemoveToast: $options.removeToast,
       ref: "toast"
     }, null, 8, ["list", "onDownloadToast", "onRemoveToast"]), [
-      [vShow, $data.toastList.length > 0 && $data.current_page != "DownloadList"]
+      [vShow, $data.toastList.length > 0 && $data.current_page != "DownloadList" && $data.current_page != "Download"]
     ])
   ], 64);
 }
@@ -15421,14 +16841,19 @@ function setNodeSignUp(node) {
     window.Docdog.app.setNodeSignUp(node);
   }
 }
+function setNodeReminder(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeReminder(node);
+  }
+}
 function setNodeProfile(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeProfile(node);
   }
 }
-function setNodeList(node) {
+function setNodeList(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
 function parseConfig(config) {
@@ -15464,10 +16889,10 @@ function parseDOM() {
   const nodes = [];
   let el = null;
   document.querySelectorAll('a[href^="https://docdog.g.kuroco-front.app/"]').forEach((node) => {
-    const url = new URL(node.href);
-    const action = url.pathname.substr(1);
+    const url2 = new URL(node.href);
+    const action = url2.pathname.substr(1);
     node.removeAttribute("href");
-    docdogEls.push({ node, action, searchParams: url.searchParams });
+    docdogEls.push({ node, action, searchParams: url2.searchParams });
   });
   document.querySelectorAll("[data-docdog]").forEach((node) => {
     const [action, paramsQueryString] = node.getAttribute("data-docdog").split("?");
@@ -15479,10 +16904,12 @@ function parseDOM() {
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
-      if (key == "id") {
-        params[key] = parseInt(value);
-      } else {
-        params[key] = value;
+      if (value != "") {
+        if (key == "id" || !isNaN(value) && !isNaN(parseInt(value))) {
+          params[key] = parseInt(value);
+        } else {
+          params[key] = value;
+        }
       }
       res = paramsIter.next();
     }
@@ -15498,6 +16925,9 @@ function parseDOM() {
       case "login":
         setNodeLogin(node.el);
         break;
+      case "reminder":
+        setNodeReminder(node.el);
+        break;
       case "signup":
         setNodeSignUp(node.el);
         break;
@@ -15505,7 +16935,7 @@ function parseDOM() {
         setNodeProfile(node.el);
         break;
       case "list":
-        setNodeList(node.el);
+        setNodeList(node.el, node.params);
         break;
       case "download":
         linkNode(node.el, node.params);

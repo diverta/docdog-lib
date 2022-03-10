@@ -1,16 +1,13 @@
 <template>
   <div class="docdog-form">
-
     <AlertError v-if="err" :err="err_msg" />
-    <!-- TODO: Implement success message -->
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
     <div class="docdog-modal__body__section">
       <h1 class="docdog-modal__body__pagetitle">アカウントの作成</h1>
     </div>
 
-    <!-- TODO: Show only before create account -->
-    <div class=" docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="!isLogin">
       <div class="docdog-modal__body__section">
         <form>
           <div class="docdog-form__item--col-2">
@@ -78,13 +75,11 @@
       </div>
     </div>
 
-    <!-- TODO: Show only after create account -->
-    <div class="docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="isLogin">
       <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
         資料一覧へ戻る
       </button>
     </div>
-
   </div>
 </template>
 
@@ -169,11 +164,11 @@ export default {
               password: this.login_pwd,
             })
             .then(() => {
-              this.$emit('onLogin');
+              this.onLogin();
               if (this.return && this.return.target) {
                 this.redirect(this.return);
               } else {
-                this.redirect({ target: 'EmptyPage', msg: 'アカウントの作成は完了しました。' });
+                this.setMsg('アカウントの作成は完了しました。');
               }
             })
             .catch((err) => {

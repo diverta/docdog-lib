@@ -1,15 +1,27 @@
 <template>
   <Modal v-model:show="showModal" @close="closeModalOuter">
+    <template v-slot:header>
+      <ModalHeader
+        v-if="!customHeaderHtml"
+        v-model:isLogin="isLogin"
+        @redirect="redirect"
+        @close="closeModal"
+        @logout="logout"
+      />
+      <header v-else v-html="customHeaderHtml" class="docdog-modal__head"></header>
+    </template>
     <PageController
       v-model:current_page="current_page"
       :node_params="current_node_params"
       :toastIds="toastIds"
       v-model:footer_data="footer_data"
+      v-model:isLogin="isLogin"
       @close="closeModal"
       @addToast="addToast"
       @removeToast="removeToast"
       @download="download"
       @onLogin="onLogin"
+      @logout="logout"
       ref="ctrl"
     />
     <template v-slot:footer v-if="footer_comp">
@@ -33,7 +45,9 @@
 </template>
 
 <script>
+import url from 'url';
 import Modal from '@/components/Modal.vue';
+import ModalHeader from '@/components/ModalHeader.vue';
 import PageController from './components/modal_pages/PageController.vue';
 import Footer1 from './components/modal_pages/Footer1.vue';
 import Footer2 from './components/modal_pages/Footer2.vue';
@@ -50,12 +64,15 @@ const footerComps = {
 export default {
   components: {
     Modal,
+    ModalHeader,
     PageController,
     Toast,
     ...footerComps,
   },
   data() {
     return {
+      customHeaderHtml: null,
+      urlParams: {},
       showModal: false,
       toastList: [],
       pageInfo: {},
@@ -64,11 +81,15 @@ export default {
       current_node_uuid: null,
       current_page: 'Loading',
       footer_data: {}, // Data to be shared between the modal page and the footer
+      isLogin: false, // Flag tracking down login state
       app_global_events: {
         // List of events that are handled by Docdog
         isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
       },
     };
+  },
+  created() {
+    this.urlParams = url.parse(window.location.href, true).query;
   },
   computed: {
     is_node_selected: {
@@ -118,7 +139,8 @@ export default {
         this.closeModalOuter();
       }
     });
-    this.isLogin().then((loggedIn) => {
+    this.checkLogin().then((loggedIn) => {
+      this.isLogin = loggedIn;
       // Initial firing of logged in/logged out events
       if (loggedIn) {
         this.onLogin();
@@ -126,6 +148,33 @@ export default {
         this.onLogout();
       }
     });
+    if (this.urlParams.docdog_page) {
+      let target = '';
+      const params = {};
+      switch (this.urlParams.docdog_page) {
+        case 'reminder':
+          target = 'Reminder';
+          if (this.urlParams.token) {
+            params.token = this.urlParams.token;
+          }
+          break;
+        case 'login':
+          target = 'SignIn';
+          break;
+        case 'profile':
+          target = 'EditProfile';
+          break;
+        case 'list':
+          target = 'List';
+          break;
+        case 'signup':
+          target = 'SignUp';
+          break;
+      }
+      if (target) {
+        this.redirect({ target, params });
+      }
+    }
   },
   methods: {
     linkNode(node, params) {
@@ -194,6 +243,9 @@ export default {
     setNodeLogin(node) {
       node.addEventListener('click', this.login);
     },
+    setNodeReminder(node) {
+      node.addEventListener('click', this.reminder);
+    },
     setNodeLogout(node) {
       node.addEventListener('click', this.logout);
     },
@@ -206,13 +258,17 @@ export default {
     setNodeList(node, params) {
       node.addEventListener('click', () => this.list(params));
     },
+    setNodeHeader(node, params) {
+      this.customHeaderHtml = node.innerHTML;
+      node.remove();
+    },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
     },
     removeNodeLogout(node) {
       node.removeEventListener('click', this.logout);
     },
-    isLogin() {
+    checkLogin() {
       return loginApi.isLogin({
         autoLogin: true,
         anonLogin: false,
@@ -227,11 +283,13 @@ export default {
       }
     },
     onLogin() {
+      this.isLogin = true;
       this.app_global_events.isLogin.forEach((func) => {
         func(true);
       });
     },
     onLogout() {
+      this.isLogin = false;
       this.app_global_events.isLogin.forEach((func) => {
         func(false);
       });
@@ -245,6 +303,9 @@ export default {
     },
     signup() {
       this.redirect({ target: 'SignUp' });
+    },
+    reminder() {
+      this.redirect({ target: 'Reminder' });
     },
     profile() {
       this.redirect({ target: 'EditProfile' });

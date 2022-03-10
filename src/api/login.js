@@ -185,6 +185,80 @@ function getProfile(
   }
 }
 
+function reminderSendEmail({ email }) {
+  return getAuthHeaders({
+    autoLogin: true,
+    anonLogin: true,
+  }).then((headers) =>
+    post('/rcms-api/3/reminder', { email }, headers)
+      .then(processError)
+      .then((resp) => {
+        if (resp.errors && resp.errors.length > 0) {
+          return Promise.reject(resp.errors[1]);
+        }
+      })
+      .catch((err) => {
+        let err_msg = '不明エラー'; // Default error message
+        switch (err.response.status) {
+          case 401:
+            err_msg =
+              err.response &&
+              err.response.data &&
+              err.response.data.errors.length > 0 &&
+              err.response.data.errors[0].message
+                ? err.response.data.errors[0].message
+                : 'メールアドレスが不正です。';
+            break;
+          case 404:
+            err_msg = 'The reminder endpoint could not be found';
+            break;
+        }
+        return Promise.reject(err_msg);
+      })
+  );
+}
+
+function reminderUpdatePassword({ token, temp_pwd, login_pwd }) {
+  return getAuthHeaders({
+    autoLogin: true,
+    anonLogin: true,
+  }).then((headers) =>
+    post('/rcms-api/3/reminder', { token, temp_pwd, login_pwd }, headers)
+      .then(processError)
+      .then((resp) => {
+        if (resp.errors && resp.errors.length > 0) {
+          return Promise.reject(resp.errors[1]);
+        }
+      })
+      .catch((err) => {
+        let err_msg = '不明エラー'; // Default error message
+        switch (err.response.status) {
+          case 404:
+            err_msg = 'The reminder endpoint could not be found';
+            break;
+          default:
+            err_msg =
+              err.response &&
+              err.response.data &&
+              err.response.data.errors.length > 0 &&
+              err.response.data.errors[0].message
+                ? reminderProcessMessage(err.response.data.errors[0].message)
+                : '不明エラー';
+        }
+        return Promise.reject(err_msg);
+      })
+  );
+}
+
+function reminderProcessMessage(msg) {
+  switch (msg) {
+    case 'Invalid Temporary Password':
+      return '仮パスワードが不正です。';
+    default:
+      return '不明エラー';
+  }
+}
+
 // Public methods
 export default {
   isLogin,
@@ -193,4 +267,6 @@ export default {
   doLogout,
   updateProfile,
   getProfile,
+  reminderSendEmail,
+  reminderUpdatePassword,
 };

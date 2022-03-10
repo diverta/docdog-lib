@@ -27,8 +27,12 @@ export default {
       type: Object,
       default: () => {},
     },
+    isLogin: {
+      type: Boolean,
+      default: false,
+    },
   },
-  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin'],
+  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin', 'logout', 'update:msg'],
   unmount() {
     this.clearFooterData();
     this.$emit('err', '');
@@ -57,6 +61,15 @@ export default {
     },
     clearFooterData() {
       Object.keys(this.footer_data).forEach((key) => delete this.footer_data[key]); // Cleanup custom data set by the page for the footer
+    },
+    logout() {
+      this.$emit('logout'); // Logout must be done by App itself, as it needs to do onLogout actions
+    },
+    onLogin() {
+      this.$emit('onLogin');
+    },
+    setMsg(msg) {
+      this.$emit('update:msg', msg);
     },
   },
 };

@@ -47,6 +47,12 @@ function setNodeSignUp(node) {
   }
 }
 
+function setNodeReminder(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeReminder(node);
+  }
+}
+
 function setNodeProfile(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeProfile(node);
@@ -56,6 +62,12 @@ function setNodeProfile(node) {
 function setNodeList(node, params) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeList(node, params);
+  }
+}
+
+function setNodeHeader(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeHeader(node);
   }
 }
 
@@ -147,6 +159,9 @@ function parseDOM() {
       case 'login':
         setNodeLogin(node.el);
         break;
+      case 'reminder':
+        setNodeReminder(node.el);
+        break;
       case 'signup':
         setNodeSignUp(node.el);
         break;
@@ -155,6 +170,9 @@ function parseDOM() {
         break;
       case 'list':
         setNodeList(node.el, node.params);
+        break;
+      case 'header':
+        setNodeHeader(node.el, node.params);
         break;
       case 'download':
         linkNode(node.el, node.params);

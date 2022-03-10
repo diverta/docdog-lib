@@ -1,16 +1,13 @@
 <template>
   <div class="docdog-form">
-
     <AlertError v-if="err" :err="err_msg" />
-    <!-- TODO: Implement success message -->
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
     <div class="docdog-modal__body__section">
       <h1 class="docdog-modal__body__pagetitle">ログイン</h1>
     </div>
 
-    <!-- TODO: Show only before login -->
-    <div class="docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="!isLogin">
       <div class="docdog-form--col-2 docdog-modal__body__section">
         <div class="docdog-form__sso">
           <p class="docdog-modal__body__heading">他サイトのアカウントでログイン</p>
@@ -92,7 +89,14 @@
               <input name="email" type="text" id="email" placeholder="メールアドレス" v-model="login_id" required />
             </div>
             <div class="docdog-form__item" :class="err.length > 0 ? 'docdog-form__item docdog-form__item--error' : ''">
-              <input name="password" type="password" id="password" placeholder="パスワード" v-model="password" required />
+              <input
+                name="password"
+                type="password"
+                id="password"
+                placeholder="パスワード"
+                v-model="password"
+                required
+              />
             </div>
             <div class="docdog-form__item">
               <div class="docdog-form__toggle">
@@ -108,7 +112,9 @@
             <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignUp' })">
               アカウントを作成する
             </button>
-            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'Reminder' })">パスワードを忘れた場合</button>
+            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'Reminder' })">
+              パスワードを忘れた場合
+            </button>
           </div>
         </div>
       </div>
@@ -120,13 +126,11 @@
       </div>
     </div>
 
-    <!-- TODO: Show only after login -->
-    <div class="docdog-modal__body__section">
+    <div class="docdog-modal__body__section" v-if="isLogin">
       <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
         資料一覧へ戻る
       </button>
     </div>
-
   </div>
 </template>
 
@@ -196,11 +200,11 @@ export default {
         })
         .then((login_ok) => {
           if (login_ok) {
-            this.$emit('onLogin');
+            this.onLogin();
             if (this.return && this.return.target) {
               this.redirect(this.return);
             } else {
-              this.redirect({ target: 'EmptyPage', msg: 'ログインしました' });
+              this.setMsg('ログインしました。');
             }
           } else {
             this.error('Could not login');

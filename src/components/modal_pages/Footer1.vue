@@ -1,7 +1,5 @@
 <template>
-
-  <!-- TODO: Show only before download -->
-  <div class="docdog-button__list">
+  <div class="docdog-button__list" v-if="!footer_data.downloaded">
     <button type="button" aria-label="Back to docs" class="docdog-button docdog-button--sm docdog-button--white-outline" @click.prevent="redirect({ target: 'List' })">
       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
         <path d="M0 0h24v24H0V0z" fill="none" />
@@ -20,8 +18,7 @@
     </button>
   </div>
 
-  <!-- TODO: Show only after download -->
-  <div class="docdog-button__list">
+  <div class="docdog-button__list" v-if="footer_data.downloaded">
     <button type="button" class="docdog-button docdog-button--white docdog-button--wide" @click.prevent="redirect({ target: 'List' })">
       資料一覧に戻る
     </button>

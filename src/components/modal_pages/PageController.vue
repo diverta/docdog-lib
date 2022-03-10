@@ -3,6 +3,8 @@
     :is="current_page_comp"
     v-bind="comp_props"
     v-model:footer_data="footer_data"
+    v-model:msg="msg"
+    v-model:isLogin="isLogin"
     @err="err = $event"
     @redirect="onRedirect"
     ref="page"
@@ -17,6 +19,7 @@ import SignUp from './SignUp.vue';
 import Download from './Download.vue';
 import DownloadList from './DownloadList.vue';
 import List from './List.vue';
+import Reminder from './Reminder.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
 import EmptyPage from './EmptyPage.vue';
@@ -28,6 +31,7 @@ const pages = {
   Download,
   DownloadList,
   List,
+  Reminder,
   EmptyPage,
   Loading,
   EditProfile,
@@ -52,6 +56,10 @@ export default {
     footer_data: {
       type: Object,
       default: () => {},
+    },
+    isLogin: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -108,51 +116,11 @@ export default {
     init() {
       this.setCurrentPage('Loading');
       this.redirect_params = {};
-      loginApi
-        .isLogin({
-          autoLogin: true,
-          anonLogin: (this.node_params && this.node_params.public) || false,
-        })
-        .then((isLogin) => {
-          /*
-          if (this.process) {
-            switch (this.process) {
-              case 'login':
-                if (isLogin) {
-                  // When pressed Login button after being logged in : functionnally incorrect flow, should not happen
-                  this.msg = 'ログインしました';
-                  this.setCurrentPage('EmptyPage');
-                } else {
-                  this.setCurrentPage('SignIn');
-                }
-                break;
-              case 'signup':
-                if (isLogin) {
-                  this.msg = 'アカウント作成が完了しました';
-                  this.setCurrentPage('EmptyPage');
-                } else {
-                  this.setCurrentPage('SignUp');
-                }
-                break;
-              case 'single_download':
-                this.setCurrentPage('Download');
-                break;
-              case 'downloadList':
-                this.setCurrentPage('DownloadList');
-                break;
-              case 'profile':
-                this.setCurrentPage('EditProfile');
-                break;
-              case 'list':
-                this.setCurrentPage('List');
-                break;
-            }
-            // Manual process such as login or signup
-          } else {
-            this.setCurrentPage(isLogin ? 'Download' : 'SignIn');
-          }
-          */
-        });
+      loginApi.isLogin({
+        // Make sure we login anonymously if specified so. Should this be moved to App ?
+        autoLogin: true,
+        anonLogin: (this.node_params && this.node_params.public) || false,
+      });
     },
     pageExec(method) {
       // Executes the given method of the current component

@@ -144,7 +144,7 @@ export default {
         this.name1 = profile.name1;
         this.name2 = profile.name2;
         this.company_nm = profile.company_nm;
-        this.industry = profile.industry.key;
+        this.industry = profile.industry ? profile.industry.key : '';
         this.position = profile.position;
       } else {
         this.close();

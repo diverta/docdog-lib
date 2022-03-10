@@ -1,6 +1,4 @@
 <template>
-
-  <!-- TODO: Implement success message -->
   <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
   <div class="docdog-modal__body__section">
@@ -19,16 +17,17 @@
   <div class="docdog-modal__body__section" v-if="!list.length">
     <p>選択中のファイルはありません。</p>
   </div>
-
 </template>
 
 <script>
 import AbstractPage from './AbstractPage.vue';
+import AlertSuccess from '@/components/AlertSuccess.vue';
 import CardModal from '@/components/cards/CardModal.vue';
 
 export default {
   extends: AbstractPage,
   components: {
+    AlertSuccess,
     CardModal,
   },
   props: {
@@ -39,6 +38,9 @@ export default {
   },
   data() {
     return {};
+  },
+  mounted() {
+    this.footer_data.toastList = this.list;
   },
   methods: {
     onRemoveToast(idx) {
