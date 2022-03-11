@@ -31,8 +31,13 @@
         }
       }
     }
-    span {
+  }
+  &__item {
+    &--active{
       background-color: $color-border;
+    }
+    &--ellipses {
+      color: $color-gray;
     }
   }
 }

@@ -28,9 +28,9 @@
           </button>
         </li>
         <li v-for="num in pagedButtons">
-          <span v-if="Number.isInteger(num) && num == pageInfo.pageNo">{{ num }}</span>
+          <span v-if="Number.isInteger(num) && num == pageInfo.pageNo" class="docdog-pagination__item--active">{{ num }}</span>
           <button v-else-if="Number.isInteger(num)" type="button" @click="changePage(num)">{{ num }}</button>
-          <template v-else>{{ num }}</template>
+          <span v-else class="docdog-pagination__item--ellipses">{{ num }}</span>
         </li>
         <li>
           <button
