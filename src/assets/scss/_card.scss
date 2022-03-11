@@ -32,12 +32,15 @@
     }
   }
   &__body {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
     padding: $spacing-md;
     @media screen and (max-width: 767px) {
       padding: $spacing-sm;
     }
     &__title {
+      flex: 1 1 auto;
       margin: 0;
       font-weight: bold;
       & + .docdog-button { margin-top: $spacing-sm; }
