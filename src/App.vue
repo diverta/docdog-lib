@@ -269,10 +269,22 @@ export default {
       node.removeEventListener('click', this.logout);
     },
     checkLogin() {
-      return loginApi.isLogin({
-        autoLogin: true,
-        anonLogin: false,
-      });
+      if (this.urlParams.grant_token) {
+        // Return from successful SSO login
+        return loginApi.doLogin({ grant_token: this.urlParams.grant_token }).then(() => {
+          // Clean Kuroco URL params
+          const newParams = this.urlParams;
+          delete newParams.grant_token;
+          delete newParams.member_id;
+          //window.history.pushState(newParams, document.title, window.location.pathname);
+          return true;
+        });
+      } else {
+        return loginApi.isLogin({
+          autoLogin: true,
+          anonLogin: false,
+        });
+      }
     },
     download(data) {
       if (this.current_page != 'Download') {

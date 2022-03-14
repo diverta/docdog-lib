@@ -100,40 +100,48 @@ function removeData(key) {
   }
 }
 
-function doLogin({ email, password }) {
-  return post('/rcms-api/3/login', { email, password })
-    .then(processError)
-    .then((resp) => {
-      if (resp.grant_token) {
-        return getAccessToken({ grant_token: resp.grant_token }).then((ret) => {
-          storeData(storage_keys.ACCESS_TOKEN, { ...ret.access_token, isPublic: false });
-          if (ret.refresh_token) {
-            storeData(storage_keys.REFRESH_TOKEN, { ...ret.refresh_token });
-          }
-          return true;
-        });
-      } else {
-        throw 'Login API did not contain a grant token';
-      }
-    })
-    .catch((err) => {
-      let err_msg = 'Error during login'; // Default error message
-      switch (err.response.status) {
-        case 401:
-          err_msg =
-            err.response &&
-            err.response.data &&
-            err.response.data.errors.length > 0 &&
-            err.response.data.errors[0].message
-              ? err.response.data.errors[0].message
-              : 'メールアドレスが不正です。';
-          break;
-        case 404:
-          err_msg = 'The login endpoint could not be found';
-          break;
-      }
-      return Promise.reject(err_msg);
-    });
+function handleGrant(grant_token) {
+  return getAccessToken({ grant_token }).then((ret) => {
+    storeData(storage_keys.ACCESS_TOKEN, { ...ret.access_token, isPublic: false });
+    if (ret.refresh_token) {
+      storeData(storage_keys.REFRESH_TOKEN, { ...ret.refresh_token });
+    }
+    return true;
+  });
+}
+
+function doLogin({ email, password, grant_token }) {
+  if (grant_token) {
+    return handleGrant(grant_token);
+  } else {
+    return post('/rcms-api/3/login', { email, password })
+      .then(processError)
+      .then((resp) => {
+        if (resp.grant_token) {
+          return handleGrant(resp.grant_token);
+        } else {
+          throw 'Login API did not contain a grant token';
+        }
+      })
+      .catch((err) => {
+        let err_msg = 'Error during login'; // Default error message
+        switch (err.response.status) {
+          case 401:
+            err_msg =
+              err.response &&
+              err.response.data &&
+              err.response.data.errors.length > 0 &&
+              err.response.data.errors[0].message
+                ? err.response.data.errors[0].message
+                : 'メールアドレスが不正です。';
+            break;
+          case 404:
+            err_msg = 'The login endpoint could not be found';
+            break;
+        }
+        return Promise.reject(err_msg);
+      });
+  }
 }
 
 function doLogout() {
