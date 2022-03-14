@@ -11,7 +11,11 @@
       <div class="docdog-form--col-2 docdog-modal__body__section">
         <div class="docdog-form__sso">
           <p class="docdog-modal__body__heading">他サイトのアカウントでログイン</p>
-          <button type="button" class="docdog-form__sso__button docdog-form__sso__button--google">
+          <button
+            type="button"
+            class="docdog-form__sso__button docdog-form__sso__button--google"
+            @click="ssoLogin('google')"
+          >
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 fill-rule="evenodd"
@@ -124,6 +128,9 @@
           >を読み、これに同意するものとします。
         </p>
       </div>
+      <form v-show="false" method="POST" action="" ref="ssoForm">
+        <input type="hidden" name="api_id" value="3" />
+      </form>
     </div>
 
     <div class="docdog-modal__body__section" v-if="isLogin">
@@ -150,6 +157,7 @@ export default {
     return {
       login_id: '',
       password: '',
+      ssoActionUrl: '',
     };
   },
   computed: {
@@ -214,6 +222,30 @@ export default {
         .catch((err) => {
           this.error(err);
         });
+    },
+    ssoLogin(provider) {
+      switch (provider) {
+        case 'google':
+          this.ssoActionUrl = 'https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1';
+          break;
+        case 'facebook':
+          this.ssoActionUrl = '';
+          break;
+        case 'line':
+          this.ssoActionUrl = '';
+          break;
+        case 'yahoo':
+          this.ssoActionUrl = '';
+          break;
+        case 'apple':
+          this.ssoActionUrl = '';
+          break;
+        default:
+          console.error('Unsupported SSO provider : ' + provider);
+          return;
+      }
+      this.$refs['ssoForm'].action = this.ssoActionUrl;
+      this.$refs['ssoForm'].submit();
     },
   },
 };
