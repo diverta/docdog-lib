@@ -126,9 +126,18 @@ export default {
   },
   methods: {
     sendEmail() {
-      loginApi.reminderSendEmail({
-        email: this.email,
-      });
+      this.setMsg('');
+      this.error('');
+      loginApi
+        .reminderSendEmail({
+          email: this.email,
+        })
+        .then(() => {
+          this.setMsg('パスワード変更のURLが記載されたメールを送信しました');
+        })
+        .catch(() => {
+          this.error('メールアドレスが不正です。');
+        });
     },
     updatePassword() {
       this.error('');
