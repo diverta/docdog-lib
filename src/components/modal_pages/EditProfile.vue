@@ -67,12 +67,7 @@
           </div>
         </div>
       </div>
-      <div class="docdog-modal__body__section">
-        <p class="docdog-modal__body__text">
-          続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
-          >を読み、これに同意するものとします。
-        </p>
-      </div>
+      <FormPolicy />
     </div>
   </div>
 </template>
@@ -83,12 +78,14 @@ import memberApi from '@/api/member';
 import loginApi from '@/api/login';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
+import FormPolicy from '@/components/FormPolicy.vue';
 
 export default {
   extends: AbstractPage,
   components: {
     AlertSuccess,
     AlertError,
+    FormPolicy
   },
   data() {
     return {

@@ -121,12 +121,7 @@
             </div>
           </div>
         </div>
-        <div class="docdog-modal__body__section">
-          <p class="docdog-modal__body__text">
-            続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
-            >を読み、これに同意するものとします。
-          </p>
-        </div>
+        <FormPolicy />
         <form v-show="false" method="POST" action="" ref="ssoForm">
           <input type="hidden" name="api_id" value="3" />
         </form>
@@ -145,12 +140,14 @@ import AbstractPage from './AbstractPage.vue';
 import loginApi from '@/api/login';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
+import FormPolicy from '@/components/FormPolicy.vue';
 
 export default {
   extends: AbstractPage,
   components: {
     AlertSuccess,
     AlertError,
+    FormPolicy
   },
   data() {
     return {
