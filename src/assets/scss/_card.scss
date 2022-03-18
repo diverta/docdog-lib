@@ -4,6 +4,7 @@
   height: 100%;
   border: 1px solid $color-border;
   border-radius: $border-radius-md;
+  background-color: #fff;
   &__thumb { 
     height: 200px;
     position: relative;
@@ -18,17 +19,10 @@
       height: 100px;
     }
     &__badge {
-      display: inline-block;
-      min-width: 40px;
-      padding: $spacing-x-sm $spacing-sm;
+      @extend .docdog-badge;
       position: absolute;
       bottom: $spacing-sm;
       right:  $spacing-sm;
-      background-color: $color-primary;
-      border-radius: 20px;
-      color: #fff;
-      font-size: 10px;
-      text-align: center;
     }
   }
   &__body {
@@ -78,9 +72,8 @@
         &:nth-of-type(n+4) { margin-top: $spacing-lg; }
       }
       @media screen and (max-width: 767px) {
-        width: 48%;
-        &:nth-of-type(2n) { margin-left: 4%; }
-        &:nth-of-type(n+3) { margin-top: $spacing-md; }
+        width: 100%;
+        &:not(:first-child) { margin-top: $spacing-md; }
       }
     }
   }
