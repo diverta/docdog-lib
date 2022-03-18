@@ -1,0 +1,18 @@
+.docdog-container {
+  // color
+  &--white {
+    padding: $spacing-x-lg;
+    border-radius: $border-radius-md;
+    background-color: #fff;
+    @media screen and (max-width: 767px) {
+      padding: $spacing-lg;
+    }
+  }
+  // size
+  &--form {
+    @media screen and (min-width: 768px) {
+      width: 800px;
+      margin: auto;
+    }
+  }
+}
