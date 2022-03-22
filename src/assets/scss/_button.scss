@@ -55,12 +55,17 @@
     padding: $spacing-x-sm;
     background-color: transparent;
     color: $color-link;
+    line-height: 1.5;
     & + & {
       margin-top: $spacing-x-sm;
+    }
+    &:hover { 
+      background-color: transparent;
     }
   }
   &--del {
     display: flex;
+    align-items: center;
     padding: $spacing-sm;
     border: 1px solid $color-border !important;
     border-radius: $border-radius-sm;
@@ -75,6 +80,7 @@
     }
     span { 
       margin-left: $spacing-x-sm;
+      line-height: 1;
     }
   }
 

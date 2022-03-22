@@ -23,7 +23,7 @@
       transition: $transition;
       svg { fill: $color-link; }
       &:hover {
-        background-color: lighten($color-border, 16%);
+        background-color: #ffffff;
       }
       &:disabled {
         svg {

@@ -8,12 +8,15 @@
     border: 1px solid $color-border;
     border-radius: $border-radius-sm;
     padding: $spacing-md;
+    -webkit-appearance: auto;
   }
   input[type='checkbox'],
   input[type='radio'] {
+    display: inline-block;
     width: 16px;
     height: 16px;
     margin-right: $spacing-sm;
+    border: 1px solid $color-border;
   }
   textarea {
     width: 100%;

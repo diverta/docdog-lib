@@ -174,7 +174,7 @@
       font-size: 18px;
       font-weight: bold;
       & + p {
-        margin: $spacing-lg 0;
+        margin: $spacing-lg 0 !important;
       }
     }
     &__heading {
@@ -188,9 +188,8 @@
       font-weight: bold;
     }
     &__text {
-      margin: 0;
-      color: $color-gray;
-      font-size: 13px;
+      color: $color-gray !important;
+      font-size: 13px !important;
       &:not(:last-child) {
         margin-bottom: $spacing-md;
       }
