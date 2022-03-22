@@ -181,7 +181,7 @@ function getProfile(
   } else {
     return getAuthHeaders(options).then((headers) => {
       if (header_keys.ACCESS_TOKEN in headers && headers[header_keys.ACCESS_TOKEN].length > 0) {
-        return get('/rcms-api/3/profile', headers).then((res) => {
+        return get('/rcms-api/3/profile', {}, headers).then((res) => {
           updateProfile(res.data.details);
           return res.data.details;
         });

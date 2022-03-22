@@ -9,7 +9,7 @@ export function getDocumentList(isPublic = false, params = {}) {
       anonLogin: isPublic,
     })
     .then((headers) =>
-      get('/rcms-api/3/files', headers, params)
+      get('/rcms-api/3/files', params, headers)
         .then(processError)
         .catch((err) => {
           let err_msg = 'Problem fetching document list'; // Default error message
@@ -33,7 +33,7 @@ export function getDocumentData(id, isPublic = false, params = {}) {
       anonLogin: isPublic,
     })
     .then((headers) =>
-      get('/rcms-api/3/files/' + id, headers, params)
+      get('/rcms-api/3/files/' + id, params, headers)
         .then(processError)
         .catch((err) => {
           let err_msg = 'Problem fetching document data'; // Default error message
