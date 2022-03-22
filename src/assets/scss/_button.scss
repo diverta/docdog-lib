@@ -23,11 +23,11 @@
     }
   }
   &--white {
-    border: 1px solid lighten($color-border, 8%) !important;
+    border: 1px solid $color-border !important;
     background-color: #fff;
     color: $color-primary;
     &:hover { 
-      background-color: lighten($color-border, 16%);
+      background-color: lighten($color-border, 8%);
     }
     &:disabled {
       background-color: lighten($color-border, 8%);
@@ -55,12 +55,17 @@
     padding: $spacing-x-sm;
     background-color: transparent;
     color: $color-link;
+    line-height: 1.5;
     & + & {
       margin-top: $spacing-x-sm;
+    }
+    &:hover { 
+      background-color: transparent;
     }
   }
   &--del {
     display: flex;
+    align-items: center;
     padding: $spacing-sm;
     border: 1px solid $color-border !important;
     border-radius: $border-radius-sm;
@@ -71,10 +76,11 @@
       font-size: 12px;
     }
     &:hover {
-      background-color: lighten($color-border, 16%);
+      background-color: lighten($color-border, 8%);
     }
     span { 
       margin-left: $spacing-x-sm;
+      line-height: 1;
     }
   }
 

@@ -1,15 +1,41 @@
+.docdog {
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  select {
+    width: 100%;
+    height: 50px;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    padding: $spacing-md;
+    -webkit-appearance: auto;
+  }
+  input[type='checkbox'],
+  input[type='radio'] {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: $spacing-sm;
+    border: 1px solid $color-border;
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-sm;
+    padding: $spacing-md;
+  }
+}
+
 .docdog-form {
   @media screen and (min-width: 768px) {
-    max-width: 768px;
-    margin: auto;
-    padding: $spacing-md;
     &--col-2 {
       display: flex;
       justify-content: space-between;
     }
     &__sso,
     &__signin {
-      width: 42%;
+      width: 43%;
     }
   }
   &__sso {
@@ -105,6 +131,8 @@
       top: 50%;
       left: 50%;
       background-color: #fff;
+      font-size: 12px;
+      font-weight: bold;
       text-align: center;
       transform: translate(-50%, -50%);
       @media screen and (max-width: 767px) {
@@ -112,22 +140,6 @@
         padding: 0 $spacing-md;
       }
     }
-  }
-  input[type='text'],
-  input[type='email'],
-  input[type='password'],
-  select {
-    width: 100%;
-    height: 50px;
-    border: 1px solid $color-border;
-    border-radius: $border-radius-sm;
-    padding: $spacing-md;
-  }
-  input[type='checkbox'],
-  input[type='radio'] {
-    width: 16px;
-    height: 16px;
-    margin-right: $spacing-sm;
   }
   &__toggle {
     display: flex;
@@ -139,7 +151,7 @@
   }
   &__item {
     &:not(:first-child) {
-      margin-top: $spacing-md;
+      margin-top: $spacing-lg;
     }
     &--error {
       input[type='text'],
@@ -162,9 +174,17 @@
       }
     }
     &__title {
-      display: block;
+      display: flex;
+      align-items: center;
       margin: 0 0 $spacing-x-sm;
       font-weight: bold;
+      &__badge {
+        @extend .docdog-badge;
+        min-width: auto !important;
+        margin-left: $spacing-sm;
+        background-color: rgba($color-danger, .2) !important;
+        color: $color-danger !important;
+      }
     }
     &__note {
       margin-top: $spacing-x-sm;

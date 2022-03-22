@@ -1,7 +1,7 @@
 $color-link: #1371ff;
 $color-primary: #1371ff;
 $color-secondary: #5d6775;
-$color-border: #ccc;
+$color-border: #e0e0e0;
 $color-gray: #666;
 $color-danger: #dc0000;
 $color-success: #05a87c;
@@ -24,23 +24,72 @@ $transition: 0.2s;
   *, *:after, *:before {
     box-sizing: border-box;
   }
+  h1, h2, h3, h4, h5, h6 {
+    color: inherit;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: inherit;
+  }
+  p {
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    &:not(:first-child) {
+      margin: $spacing-md 0 0;
+    }
+    &:not(:last-child) {
+      margin: 0 0 $spacing-md;
+    }
+    &:not(:first-child):not(:last-child) {
+      margin: $spacing-md 0;
+    }
+    a {
+      display: inline-block;
+      padding: 0 $spacing-x-sm;
+      text-decoration: underline;
+    }
+  }
   dd, dl, dt, ul, ol {
     padding: 0;
     margin: 0;
+    list-style: none;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
   }
-  li { list-style: none; }
+  li { 
+    list-style: none;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+  }
   a {
     color: $color-link;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
   }
   button, input[type=button],
   input[type=submit] { 
     border: none;
   }
   button {
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
     cursor: pointer;
     &:disabled {
       pointer-events: none;
       color: $color-gray;
     }
+  }
+  strong { font-weight: bold; }
+  time {
+    color: $color-gray;
+    font-size: 13px;
+    font-family: inherit;
   }
 }

@@ -8,7 +8,7 @@
   width: 100%;
   height: 100%;
   background-color: #fff;
-  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 $spacing-md 0 rgba(0, 0, 0, 0.2);
   z-index: 11100;
   &__bg {
     position: fixed;
@@ -29,10 +29,16 @@
     align-items: center;
     justify-content: space-between;
     padding: $spacing-md $spacing-x-lg;
-    box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+    box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+    z-index: 10000;
     &__nav {
       display: flex;
       align-items: center;
+      &--sp { 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
       &__logo {
         height: 45px;
         padding: 0;
@@ -46,20 +52,50 @@
         }
       }
       &__list {
-        margin-left: $spacing-lg;
-        @media screen and (max-width: 767px) {
-          margin-left: $spacing-x-sm;
+        @media screen and (min-width: 768px) {
+          margin-left: $spacing-lg;
+          &__menu {
+            display: flex;
+            li {
+              margin-left: $spacing-md;
+            }
+          }
         }
-        ul {
-          display: flex;
-          li {
-            margin-left: $spacing-md;
+        @media screen and (max-width: 767px) {
+          width: 90%;
+          height: 100%;
+          padding: $spacing-lg;
+          position: fixed;
+          right: -1000px;
+          top: 0;
+          background-color: #fff;
+          box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+          z-index: 11000;
+          transition : 0.4s ease-in-out;
+          &--fixed {
+            right: 0;
+          }
+          &__menu {
+            margin: $spacing-md 0 !important;
+            border-top: 1px solid lighten($color-border, 4%);
+            li {
+              border-bottom: 1px solid lighten($color-border, 4%);
+            }
           }
         }
         &__item {
           padding: $spacing-md;
           background-color: transparent;
           font-weight: bold;
+          transition: $transition;
+          &:hover {
+            color: $color-primary;
+          }
+          @media screen and (max-width: 767px) {
+            width: 100%;
+            height: 50px;
+            text-align: left;
+          }
         }
       }
     }
@@ -85,6 +121,9 @@
         height: 45px;
         padding: 0;
         background-color: transparent;
+        &:hover svg path {
+          fill: darken($color-primary, 8%);
+        }
       }
       &__nav {
         position: absolute;
@@ -93,9 +132,10 @@
         width: 200px;
         border-radius: $border-radius-sm;
         background-color: #fff;
-        box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+        box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+        z-index: 10000;
         li:not(:first-child) {
-          border-top: 1px solid lighten($color-border, 8%);
+          border-top: 1px solid lighten($color-border, 4%);
         }
         &__item {
           width: 100%;
@@ -103,12 +143,12 @@
           background-color: transparent;
           text-align: left;
           &:hover {
-            background-color: lighten($color-border, 16%);
+            background-color: lighten($color-border, 8%);
           }
-          &:first-child {
+          li:first-child & {
             border-radius: $border-radius-sm $border-radius-sm 0 0;
           }
-          &:last-child {
+          li:last-child & {
             border-radius: 0 0 $border-radius-sm $border-radius-sm;
           }
         }
@@ -119,6 +159,7 @@
     flex: 1 1 auto;
     padding: $spacing-x-lg;
     overflow-y: auto;
+    background-color: #f6f6f6;
     &::-webkit-scrollbar {
       background-color: #f0f0f0;
       width: $border-radius-md;
@@ -132,16 +173,23 @@
       margin: 0;
       font-size: 18px;
       font-weight: bold;
+      & + p {
+        margin: $spacing-lg 0 !important;
+      }
     }
     &__heading {
       margin: 0 0 $spacing-lg;
       font-size: 16px;
       font-weight: bold;
     }
+    &__sub-heading {
+      margin: 0 0 $spacing-lg;
+      font-size: 15px;
+      font-weight: bold;
+    }
     &__text {
-      margin: 0;
-      color: $color-gray;
-      font-size: 13px;
+      color: $color-gray !important;
+      font-size: 13px !important;
       &:not(:last-child) {
         margin-bottom: $spacing-md;
       }
@@ -165,7 +213,7 @@
     padding: $spacing-lg $spacing-x-lg;
     background-color: darken($color-secondary, 16%);
     .docdog-modal__body + & {
-      box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+      box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
      }
     @media screen and (min-width: 768px) {
       .docdog-button { width: 48%; }
