@@ -55,7 +55,7 @@
     padding: $spacing-x-sm;
     background-color: transparent;
     color: $color-link;
-    line-height: 1.5;
+    line-height: 1.5 !important;
     & + & {
       margin-top: $spacing-x-sm;
     }

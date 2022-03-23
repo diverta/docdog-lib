@@ -178,24 +178,18 @@
       }
     }
     &__heading {
-      margin: 0 0 $spacing-lg;
+      margin: 0 0 $spacing-lg !important;
       font-size: 16px;
       font-weight: bold;
     }
     &__sub-heading {
-      margin: 0 0 $spacing-lg;
+      margin: 0 0 $spacing-lg !important;
       font-size: 15px;
       font-weight: bold;
     }
     &__text {
       color: $color-gray !important;
       font-size: 13px !important;
-      &:not(:last-child) {
-        margin-bottom: $spacing-md;
-      }
-      &:not(:first-child) {
-        margin-top: $spacing-md;
-      }
       a {
         display: inline-block;
         padding: 0 $spacing-x-sm;

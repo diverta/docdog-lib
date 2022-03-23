@@ -31,6 +31,7 @@ $transition: 0.2s;
     line-height: inherit;
   }
   p {
+    margin: 0;
     color: inherit;
     font-size: inherit;
     font-family: inherit;
@@ -41,6 +42,7 @@ $transition: 0.2s;
     &:not(:last-child) {
       margin: 0 0 $spacing-md;
     }
+    &:first-child:last-child,
     &:not(:first-child):not(:last-child) {
       margin: $spacing-md 0;
     }
