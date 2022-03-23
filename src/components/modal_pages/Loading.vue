@@ -1,5 +1,5 @@
 <template>
-  <h2>Loading ...</h2>
+  <div class="docdog-loader">Loading...</div>
 </template>
 
 <script>
@@ -9,5 +9,3 @@ export default {
   extends: AbstractPage,
 };
 </script>
-
-<style scoped></style>
