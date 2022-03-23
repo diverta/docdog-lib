@@ -31,6 +31,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    toastStatus: {
+      type: String,
+      default: '',
+    },
   },
   emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin', 'logout', 'update:msg'],
   unmount() {

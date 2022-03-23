@@ -9,21 +9,20 @@
       <div class="docdog-modal__body__section">
         <div class="docdog-form__signup">
           <form>
-            <template v-if="isLogin">
-              <!-- TODO: Set member info name1 + name2 -->
-              <input name="name" type="hidden" id="name" placeholder="" v-model="name" required />
-              <!-- TODO: Set member info email -->
-              <input name="email" type="hidden" id="email" placeholder="" v-model="email" required />
-            </template>
-            <template v-else>
+            <template v-if="!isLogin">
               <div class="docdog-form__item">
                 <div class="docdog-form__item">
-                  <label for="name" class="docdog-form__item__title">名前<span class="docdog-form__item__title__badge">必須</span></label>
-                  <input name="name" type="text" id="name" placeholder="" required />
+                  <label for="name" class="docdog-form__item__title">
+                    名前
+                    <span class="docdog-form__item__title__badge">必須</span></label
+                  >
+                  <input name="name" type="text" id="name" v-model="nameInput" placeholder="" required />
                 </div>
               </div>
               <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
-                <label for="email" class="docdog-form__item__title">メールアドレス<span class="docdog-form__item__title__badge">必須</span></label>
+                <label for="email" class="docdog-form__item__title"
+                  >メールアドレス<span class="docdog-form__item__title__badge">必須</span></label
+                >
                 <input name="email" type="text" id="email" placeholder="" v-model="email" required />
               </div>
             </template>
@@ -38,13 +37,13 @@
               </select>
             </div>
             <div class="docdog-form__item">
-              <label for="message" class="docdog-form__item__title">お問い合わせ内容<span class="docdog-form__item__title__badge">必須</span></label>
+              <label for="message" class="docdog-form__item__title"
+                >お問い合わせ内容<span class="docdog-form__item__title__badge">必須</span></label
+              >
               <textarea name="message" id="message" placeholder="" v-model="message" required />
             </div>
             <div class="docdog-form__button">
-              <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="editProfile">
-                送信する
-              </button>
+              <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="send">送信する</button>
             </div>
           </form>
         </div>
@@ -56,7 +55,8 @@
 
 <script>
 import AbstractPage from './AbstractPage.vue';
-import memberApi from '@/api/member';
+import loginApi from '@/api/login';
+import inquiryApi from '@/api/inquiry';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
 import FormPolicy from '@/components/FormPolicy.vue';
@@ -66,19 +66,26 @@ export default {
   components: {
     AlertSuccess,
     AlertError,
-    FormPolicy
+    FormPolicy,
   },
   data() {
     return {
       email: '',
       name1: '',
       name2: '',
-      name: '',
+      nameInput: '',
       category: '',
       message: '',
     };
   },
   computed: {
+    name() {
+      if (this.isLogin) {
+        return this.name1 + ' ' + this.name2;
+      } else {
+        return this.nameInput;
+      }
+    },
     err_field() {
       if (this.err) {
         const colpos = this.err.indexOf(':');
@@ -96,7 +103,7 @@ export default {
         switch (err_field) {
           case 'email':
             translatedField = 'メールアドレス';
-            break;
+            breaksend;
         }
         switch (err_type) {
           case 'invalid':
@@ -116,42 +123,32 @@ export default {
       }
     },
   },
-  // mounted() {
-  //   loginApi.getProfile().then((profile) => {
-  //     if (profile.member_id) {
-  //       this.email = profile.email;
-  //       this.name1 = profile.name1;
-  //       this.name2 = profile.name2;
-  //     } else {
-  //       this.close();
-  //     }
-  //   });
-  // },
-  // methods: {
-  //   editProfile(event) {
-  //     this.error(''); // clean the error
-  //     const newData = {
-  //       email: this.email,
-  //       name1: this.name1,
-  //       name2: this.name2,
-  //       company_nm: this.company_nm,
-  //       industry: this.industry,
-  //       position: this.position,
-  //     };
-  //     if (this.login_pwd) {
-  //       // Only update password if inputted
-  //       newData.login_pwd = this.login_pwd;
-  //     }
-  //     memberApi
-  //       .doEditProfile(newData)
-  //       .then((resp) => {
-  //         loginApi.updateProfile(newData);
-  //         this.redirect({ target: 'EditProfile', msg: ' ' }); // For the msg
-  //       })
-  //       .catch((err) => {
-  //         this.error(err);
-  //       });
-  //   },
-  // },
+  mounted() {
+    loginApi.getProfile().then((profile) => {
+      if (profile.member_id) {
+        this.email = profile.email;
+        this.name1 = profile.name1;
+        this.name2 = profile.name2;
+      }
+    });
+  },
+  methods: {
+    send() {
+      if (this.name && this.email && this.message) {
+        inquiryApi
+          .doSend({
+            name: this.name,
+            email: this.email,
+            ext_01: this.category,
+            body: this.message,
+          })
+          .then((resp) => {
+            if (resp.id) {
+              this.setMsg('送信しました。');
+            }
+          });
+      }
+    },
+  },
 };
 </script>

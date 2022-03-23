@@ -6,6 +6,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    toastStatus: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     download() {

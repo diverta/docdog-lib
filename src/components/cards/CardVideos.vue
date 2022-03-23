@@ -1,7 +1,7 @@
 <template>
   <a href="" class="docdog-card">
     <div class="docdog-card__video">
-      <iframe src="https://player.vimeo.com/video/531387863?autopause=0" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
+      <iframe :src="data.video.url" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
     </div>
     <div class="docdog-card__body">
       <p class="docdog-card__body__title">{{ data.subject }}</p>

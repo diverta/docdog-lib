@@ -18,7 +18,7 @@
     <p>選択中のファイルはありません。</p>
   </div>
 
-  <Loading />
+  <Loading v-if="toastStatus == 'downloading'" />
 </template>
 
 <script>

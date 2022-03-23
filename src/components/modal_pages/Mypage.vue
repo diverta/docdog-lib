@@ -6,25 +6,11 @@
   <section class="docdog-modal__body__section docdog-container--white">
     <h2 class="docdog-modal__body__heading">お知らせ</h2>
     <ul class="docdog-list">
-      <li class="docdog-list__item">
+      <li class="docdog-list__item" v-for="news in listNews">
         <button type="button" class="docdog-list__item__link">
-          <time datetime="2022-03-01">2022/03/01</time>
-          <span class="docdog-badge">お知らせ</span>
-          <span class="docdog-list__item__title">新着コンテンツがあります</span>
-        </button>
-      </li>
-      <li class="docdog-list__item">
-        <button type="button" class="docdog-list__item__link">
-          <time datetime="2022-03-01">2022/01/01</time>
-          <span class="docdog-badge">重要</span>
-          <span class="docdog-list__item__title">4/1（月）システムメンテナンスのお知らせ</span>
-        </button>
-      </li>
-      <li class="docdog-list__item">
-        <button type="button" class="docdog-list__item__link">
-          <time datetime="2022-03-01">2021/12/01</time>
-          <span class="docdog-badge">お知らせ</span>
-          <span class="docdog-list__item__title"> サイトをリニューアルしました</span>
+          <time datetime="2022-03-01">{{ news.ymd }}</time>
+          <span class="docdog-badge">{{ getCategoryName(news.contents_type) }}</span>
+          <span class="docdog-list__item__title">{{ news.subject }} </span>
         </button>
       </li>
     </ul>
@@ -34,8 +20,8 @@
     <ul class="docdog-list">
       <li class="docdog-list__item docdog-u-py-lg">
         <h3 class="docdog-modal__body__sub-heading">資料</h3>
-        <ul class="docdog-card__list" v-if="list.length > 0">
-          <li v-for="doc in list">
+        <ul class="docdog-card__list" v-if="docs.length > 0">
+          <li v-for="doc in docs">
             <CardModal
               :data="doc"
               :key="doc.topics_id"
@@ -49,14 +35,14 @@
       </li>
       <li class="docdog-list__item docdog-u-py-lg">
         <h3 class="docdog-modal__body__sub-heading">動画</h3>
-        <ul class="docdog-card__list" v-if="list.length > 0">
-          <li v-for="doc in list">
+        <ul class="docdog-card__list" v-if="videos.length > 0">
+          <li v-for="video in videos">
             <CardModal
-              :data="doc"
-              :key="doc.topics_id"
+              :data="video"
+              :key="video.topics_id"
               :toastIds="toastIds"
               :showDownloadBtn="showDownloadBtn"
-              @download="download(doc)"
+              @download="download(video)"
               @addToast="addToast"
             />
           </li>
@@ -64,14 +50,14 @@
       </li>
       <li class="docdog-list__item docdog-u-py-lg">
         <h3 class="docdog-modal__body__sub-heading">記事</h3>
-        <ul class="docdog-card__list" v-if="list.length > 0">
-          <li v-for="doc in list">
+        <ul class="docdog-card__list" v-if="topics.length > 0">
+          <li v-for="topic in topics">
             <CardModal
-              :data="doc"
-              :key="doc.topics_id"
+              :data="topic"
+              :key="topic.topics_id"
               :toastIds="toastIds"
               :showDownloadBtn="showDownloadBtn"
-              @download="download(doc)"
+              @download="download(topic)"
               @addToast="addToast"
             />
           </li>
@@ -79,11 +65,15 @@
       </li>
     </ul>
   </section>
-  <section class="docdog-modal__body__section docdog-container--white">
+  <section class="docdog-modal__body__section docdog-container--white" v-if="isLogin">
     <h2 class="docdog-modal__body__heading">アカウント情報</h2>
     <ul class="docdog-card__list">
       <li>
-        <button type="button" class="docdog-button docdog-button--secondary" @click="redirect({ target: 'EditProfile' })">
+        <button
+          type="button"
+          class="docdog-button docdog-button--secondary"
+          @click="redirect({ target: 'EditProfile' })"
+        >
           アカウント情報の変更
         </button>
       </li>
@@ -93,9 +83,7 @@
         </button>
       </li>
       <li>
-        <button type="button" class="docdog-button docdog-button--white">
-          ログアウト
-        </button>
+        <button type="button" class="docdog-button docdog-button--white" @click="logout()">ログアウト</button>
       </li>
     </ul>
   </section>
@@ -103,7 +91,7 @@
     <h2 class="docdog-modal__body__heading">ヘルプ</h2>
     <ul class="docdog-card__list">
       <li>
-        <button type="button" class="docdog-button docdog-button--secondary">
+        <button type="button" class="docdog-button docdog-button--secondary" @click="redirect({ target: 'Inquiry' })">
           お問い合わせ
         </button>
       </li>
@@ -114,11 +102,12 @@
 <script>
 import AbstractPage from './AbstractPage.vue';
 import CardModal from '@/components/cards/CardModal.vue';
-import docsApi from '@/api/docs';
-import _ from 'lodash';
+import TopicsList from '@/mixins/TopicsList';
+import newsApi from '@/api/news';
 
 export default {
   extends: AbstractPage,
+  mixins: [TopicsList],
   components: {
     CardModal,
   },
@@ -130,15 +119,45 @@ export default {
   },
   data() {
     return {
-      list: [],
-      pageInfo: {},
-      pagedButtons: [],
-      pageID: 1,
-      node_params_map: {},
+      lists: {
+        15: [], // Docs
+        17: [], // Videos
+        18: [], // Topics
+      },
+      listNews: [],
+      pageInfos: {
+        15: {}, // Docs
+        17: {}, // Videos
+        18: {}, // Topics
+      },
+      pagedButtons: {
+        15: [], // Docs
+        17: [], // Videos
+        18: [], // Topics
+      },
+      pageIDs: {
+        15: 1, // Docs
+        17: 1, // Videos
+        18: 1, // Topics
+      },
+      cnts: {
+        15: 4, // Docs
+        17: 4, // Videos
+        18: 4, // Topics
+      },
       showDownloadBtn: true,
     };
   },
   computed: {
+    docs() {
+      return this.lists['15'];
+    },
+    videos() {
+      return this.lists['17'];
+    },
+    topics() {
+      return this.lists['18'];
+    },
     defaultParams() {
       const defaultParams = {
         pageID: this.pageID,
@@ -150,56 +169,45 @@ export default {
     },
   },
   mounted() {
-    this.list = [];
-    this.fetchList({ pageID: this.pageID, cnt: this.cnt });
+    this.listNews = [];
+    this.fetchNewsList({ pageID: this.pageID, cnt: this.cnt });
+    this.fetchDocList('15'); // Docs
+    this.fetchDocList('17'); // Videos
+    this.fetchDocList('18'); // Topics
   },
   methods: {
-    fetchList(params = {}) {
+    getCategoryName(categoryId) {
+      switch (categoryId) {
+        case 1:
+          return 'お知らせ';
+        case 16:
+          return '重要';
+        default:
+          return '';
+      }
+    },
+    fetchNewsList(params = {}) {
       params = { ...this.defaultParams, ...params };
-      docsApi.getDocumentList(true, params).then((data) => {
-        this.list = [];
+      newsApi.getNewsList(true, params).then((data) => {
+        this.listNews = [];
         if (data) {
           data.list.forEach((topics) => {
-            this.list.push(topics);
+            this.listNews.push(topics);
           });
-          this.pageInfo = data.pageInfo;
-          const firstNumTmp = Math.max(1, this.pageInfo.pageNo - 2);
-          const lastNumTmp = Math.min(this.pageInfo.pageNo + 2, this.pageInfo.totalPageCnt);
-          this.pagedButtons = _.range(firstNumTmp, lastNumTmp + 1);
-          if (firstNumTmp != 1) {
-            this.pagedButtons.unshift(1);
-            if (firstNumTmp != 2) {
-              if (firstNumTmp == 3) {
-                this.pagedButtons.splice(1, 0, 2);
-              } else {
-                this.pagedButtons.splice(1, 0, '...');
-              }
-            }
-          }
-          if (lastNumTmp != this.pageInfo.totalPageCnt) {
-            if (lastNumTmp != this.pageInfo.totalPageCnt - 1) {
-              if (lastNumTmp == this.pageInfo.totalPageCnt - 2) {
-                this.pagedButtons.push(this.pageInfo.totalPageCnt - 1);
-              } else {
-                this.pagedButtons.push('...');
-              }
-            }
-            this.pagedButtons.push(this.pageInfo.totalPageCnt);
-          }
         }
       });
     },
-    changePage(num) {
-      if (this.pageID != num) {
-        this.pageID = num;
-        this.fetchList();
-      }
-    },
-    onRemoveToast(idx) {
-      this.removeToast(idx);
-      if (this.list.length == 0) {
-        this.close();
-      }
+    fetchDocList(category) {
+      const params = {
+        pageID: this.pageIDs[category],
+        cnt: this.cnts[category],
+        contents_type: category,
+      };
+      this.fetchList(params).then(({ list, pageInfo }) => {
+        this.lists[category] = list;
+        this.pageInfos[category] = pageInfo;
+        this.pagedButtons[category] = this.makePagedButtons(pageInfo);
+      });
     },
   },
 };

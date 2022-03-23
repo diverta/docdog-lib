@@ -45,7 +45,7 @@ export default {
   components: {
     DeleteButton,
   },
-  emits: ['downloadToast', 'removeToast'],
+  emits: ['downloadToast', 'removeToast', 'changeStatus'],
   props: {
     list: {
       type: Array,
@@ -54,13 +54,23 @@ export default {
   },
   data() {
     return {
+      status: '',
       toast_expand: true,
       replay_delay: 3, // seconds between zip download retry
       max_replay_times: 10, // max tries
     };
   },
+  mounted() {
+    this.updateStatus('');
+  },
   methods: {
+    updateStatus(status) {
+      this.status = status;
+      this.$emit('changeStatus', status);
+    },
     downloadAll() {
+      if (this.status == 'downloading') return; // Already downloading
+      this.updateStatus('downloading');
       zipApi
         .makeZip(
           this.list
@@ -88,9 +98,13 @@ export default {
               .then(() => {
                 if (downloadUrl != null || ++currentRetry > this.max_replay_times) {
                   clearInterval(timer);
+                  this.updateStatus('');
                 }
               });
           }, this.replay_delay * 1000);
+        })
+        .catch(() => {
+          this.updateStatus('');
         });
     },
     downloadFile(url) {

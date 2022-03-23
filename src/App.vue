@@ -16,6 +16,7 @@
       :toastIds="toastIds"
       v-model:footer_data="footer_data"
       v-model:isLogin="isLogin"
+      v-model:toastStatus="toastStatus"
       @close="closeModal"
       @addToast="addToast"
       @removeToast="removeToast"
@@ -28,6 +29,7 @@
       <component
         :is="footer_comp"
         :footer_data="footer_data"
+        :toastStatus="toastStatus"
         @download="download"
         @addToast="addToast"
         @downloadToast="downloadToast"
@@ -40,6 +42,7 @@
     v-show="toastList.length > 0 && current_page != 'DownloadList' && current_page != 'Download'"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
+    @changeStatus="toastStatus = $event"
     ref="toast"
   />
 </template>
@@ -86,6 +89,7 @@ export default {
         // List of events that are handled by Docdog
         isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
       },
+      toastStatus: '',
     };
   },
   created() {

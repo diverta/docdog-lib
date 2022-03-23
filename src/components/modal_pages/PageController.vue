@@ -5,6 +5,7 @@
     v-model:footer_data="footer_data"
     v-model:msg="msg"
     v-model:isLogin="isLogin"
+    :toastStatus="toastStatus"
     @err="err = $event"
     @redirect="onRedirect"
     ref="page"
@@ -19,10 +20,14 @@ import SignUp from './SignUp.vue';
 import Download from './Download.vue';
 import DownloadList from './DownloadList.vue';
 import List from './List.vue';
+import Topics from './Topics.vue';
+import Videos from './Videos.vue';
 import Reminder from './Reminder.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
 import EmptyPage from './EmptyPage.vue';
+import Mypage from './Mypage.vue';
+import Inquiry from './Inquiry.vue';
 import loginApi from '@/api/login';
 
 const pages = {
@@ -31,10 +36,14 @@ const pages = {
   Download,
   DownloadList,
   List,
+  Topics,
+  Videos,
   Reminder,
   EmptyPage,
   Loading,
   EditProfile,
+  Mypage,
+  Inquiry,
   Withdrawal,
   Error, // In case a dynamic component is incorrectly indicated - should only be a case during development
 };
@@ -60,6 +69,10 @@ export default {
     isLogin: {
       type: Boolean,
       default: false,
+    },
+    toastStatus: {
+      type: String,
+      default: '',
     },
   },
   data() {
