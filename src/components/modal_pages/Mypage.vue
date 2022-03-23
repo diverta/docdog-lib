@@ -37,7 +37,7 @@
         <h3 class="docdog-modal__body__sub-heading">動画</h3>
         <ul class="docdog-card__list" v-if="videos.length > 0">
           <li v-for="video in videos">
-            <CardModal
+            <CardVideos
               :data="video"
               :key="video.topics_id"
               :toastIds="toastIds"
@@ -52,7 +52,7 @@
         <h3 class="docdog-modal__body__sub-heading">記事</h3>
         <ul class="docdog-card__list" v-if="topics.length > 0">
           <li v-for="topic in topics">
-            <CardModal
+            <CardTopics
               :data="topic"
               :key="topic.topics_id"
               :toastIds="toastIds"
@@ -102,6 +102,8 @@
 <script>
 import AbstractPage from './AbstractPage.vue';
 import CardModal from '@/components/cards/CardModal.vue';
+import CardVideos from '@/components/cards/CardVideos.vue';
+import CardTopics from '@/components/cards/CardTopics.vue';
 import TopicsList from '@/mixins/TopicsList';
 import newsApi from '@/api/news';
 
@@ -110,6 +112,8 @@ export default {
   mixins: [TopicsList],
   components: {
     CardModal,
+    CardVideos,
+    CardTopics,
   },
   props: {
     cnt: {
