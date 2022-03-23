@@ -17,18 +17,22 @@
   <div class="docdog-modal__body__section" v-if="!list.length">
     <p>選択中のファイルはありません。</p>
   </div>
+
+  <Loading />
 </template>
 
 <script>
 import AbstractPage from './AbstractPage.vue';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import CardModal from '@/components/cards/CardModal.vue';
+import Loading from '@/components/modal_pages/Loading.vue';
 
 export default {
   extends: AbstractPage,
   components: {
     AlertSuccess,
     CardModal,
+    Loading,
   },
   props: {
     list: {
