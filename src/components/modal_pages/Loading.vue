@@ -1,10 +1,7 @@
 <template>
   <div class="docdog-loader">
     <div class="docdog-loader__message">
-      <!-- TODO: DownloadList message -->
-      圧縮ファイル作成中
-      <!-- TODO: Else -->
-      Loading...
+      {{ loadingMessage }}
     </div>
     <div class="docdog-loader__icon"></div>
   </div>
@@ -15,5 +12,11 @@ import AbstractPage from './AbstractPage.vue';
 
 export default {
   extends: AbstractPage,
+  props: {
+    loadingMessage: {
+      type: String,
+      default: 'Loading...',
+    },
+  },
 };
 </script>

@@ -18,7 +18,7 @@
     <p>選択中のファイルはありません。</p>
   </div>
 
-  <Loading v-if="toastStatus == 'downloading'" />
+  <Loading v-if="toastStatus == 'downloading'" :loadingMessage="'圧縮ファイル作成中'" />
 </template>
 
 <script>
