@@ -102,6 +102,18 @@
                 docdog_spmenu_display = !docdog_spmenu_display;
               "
             >
+              マイページ
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="docdog-modal__head__nav__list__item"
+              @click.prevent="
+                redirect('List');
+                docdog_spmenu_display = !docdog_spmenu_display;
+              "
+            >
               資料一覧
             </button>
           </li>
@@ -167,11 +179,6 @@
         </svg>
       </button>
       <ul class="docdog-modal__head__account__nav" v-show="docdog_menu_display">
-        <li>
-          <button type="button" class="docdog-modal__head__account__nav__item" @click="redirect('Mypage')">
-            マイページ
-          </button>
-        </li>
         <li>
           <button type="button" class="docdog-modal__head__account__nav__item" @click="redirect('EditProfile')">
             アカウント情報の編集

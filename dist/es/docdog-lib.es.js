@@ -5899,6 +5899,7 @@ const _sfc_main$m = {
     },
     logout() {
       this.$emit("logout");
+      this.$emit("close");
     },
     onLogin() {
       this.$emit("onLogin");
