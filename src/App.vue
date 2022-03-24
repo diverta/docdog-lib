@@ -324,6 +324,7 @@ export default {
     logout() {
       loginApi.doLogout();
       this.onLogout();
+      location.href='/';
     },
     signup() {
       this.redirect({ target: 'SignUp' });

@@ -6102,6 +6102,7 @@ const _sfc_main$u = {
     },
     logout() {
       this.$emit("logout");
+      this.$emit("close");
     },
     onLogin() {
       this.$emit("onLogin");

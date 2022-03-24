@@ -69,8 +69,8 @@
             </button>
           </div>
           <div class="docdog-form__link">
-            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'List' })">
-              資料一覧へ戻る
+            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'Mypage' })">
+              マイページへ戻る
             </button>
           </div>
         </div>

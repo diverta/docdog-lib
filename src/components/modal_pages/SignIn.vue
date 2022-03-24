@@ -127,8 +127,8 @@
         </form>
       </div>
       <div class="docdog-modal__body__section" v-if="isLogin">
-        <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
-          資料一覧へ戻る
+        <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'Mypage' })">
+          マイページへ戻る
         </button>
       </div>
     </div>
