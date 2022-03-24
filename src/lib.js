@@ -71,6 +71,12 @@ function setNodeHeader(node) {
   }
 }
 
+function setNodeMypage(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeMypage(node);
+  }
+}
+
 function parseConfig(config) {
   if (typeof config === 'string' || config instanceof String) {
     return config.split(',').reduce((carry, keyval) => {
@@ -173,6 +179,9 @@ function parseDOM() {
         break;
       case 'header':
         setNodeHeader(node.el, node.params);
+        break;
+      case 'mypage':
+        setNodeMypage(node.el, node.params);
         break;
       case 'download':
         linkNode(node.el, node.params);

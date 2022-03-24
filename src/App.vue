@@ -174,6 +174,11 @@ export default {
         case 'signup':
           target = 'SignUp';
           break;
+        case 'mypage':
+          target = 'Mypage';
+          break;
+        default:
+          target = this.urlParams.docdog_page;
       }
       if (target) {
         this.redirect({ target, params });
@@ -266,6 +271,9 @@ export default {
       this.customHeaderHtml = node.innerHTML;
       node.remove();
     },
+    setNodeMypage(node) {
+      node.addEventListener('click', this.mypage);
+    },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
     },
@@ -325,6 +333,9 @@ export default {
     },
     profile() {
       this.redirect({ target: 'EditProfile' });
+    },
+    mypage() {
+      this.redirect({ target: 'Mypage' });
     },
     list(params) {
       this.redirect({ target: 'List', params });
