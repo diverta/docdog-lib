@@ -65,6 +65,18 @@ function setNodeList(node, params) {
   }
 }
 
+function setNodeTopics(node, params) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeList(node, params);
+  }
+}
+
+function setNodeVideos(node, params) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeList(node, params);
+  }
+}
+
 function setNodeHeader(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeHeader(node);
@@ -72,6 +84,12 @@ function setNodeHeader(node) {
 }
 
 function setNodeMypage(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeMypage(node);
+  }
+}
+
+function setNodeInquiry(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeMypage(node);
   }
@@ -177,11 +195,20 @@ function parseDOM() {
       case 'list':
         setNodeList(node.el, node.params);
         break;
+      case 'topics':
+        setNodeTopics(node.el, node.params);
+        break;
+      case 'videos':
+        setNodeVideos(node.el, node.params);
+        break;
       case 'header':
         setNodeHeader(node.el, node.params);
         break;
       case 'mypage':
         setNodeMypage(node.el, node.params);
+        break;
+      case 'inquiry':
+        setNodeInquiry(node.el, node.params);
         break;
       case 'download':
         linkNode(node.el, node.params);

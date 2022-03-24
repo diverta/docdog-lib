@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     init() {
-      this.setCurrentPage('Loading');
+      this.setCurrentPage('');
       this.redirect_params = {};
       loginApi.isLogin({
         // Make sure we login anonymously if specified so. Should this be moved to App ?

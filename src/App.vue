@@ -82,7 +82,7 @@ export default {
       docdog_id_attr_name: 'data-docdog-id',
       node_params_map: {},
       current_node_uuid: null,
-      current_page: 'Loading',
+      current_page: '',
       footer_data: {}, // Data to be shared between the modal page and the footer
       isLogin: false, // Flag tracking down login state
       app_global_events: {
@@ -94,6 +94,20 @@ export default {
   },
   created() {
     this.urlParams = url.parse(window.location.href, true).query;
+    window.addEventListener(
+      'popstate',
+      ($event) => {
+        // When user changes page state (back/forward buttons for ex)
+        const new_page = $event.state ? $event.state.docdog_page || '' : '';
+        this.urlParams.docdog_page = new_page;
+        if (!new_page || new_page == 'Loading') {
+          this.closeModalOuter(false);
+        } else {
+          this.redirect({ target: new_page }, false); // This specific history redirection must not overwrite history
+        }
+      },
+      false
+    );
   },
   computed: {
     is_node_selected: {
@@ -181,7 +195,7 @@ export default {
           target = this.urlParams.docdog_page;
       }
       if (target) {
-        this.redirect({ target, params });
+        this.redirect({ target, params }, false); // Initial page load, no need to add history
       }
     }
   },
@@ -219,17 +233,20 @@ export default {
         this.current_node_uuid = node_id;
       }
     },
-    closeModalOuter() {
+    closeModalOuter(writeHist = true) {
       // Triggered by general modal close user click
       this.footer_data = {};
-      this.closeModal();
+      this.closeModal(writeHist);
     },
-    closeModal() {
+    closeModal(writeHist = true) {
       // Can be triggered through 'close' event by any modal page
       this.removeToast();
       this.showModal = false;
       this.current_node_uuid = null;
-      this.current_page = 'Loading'; // Reinit the page state
+      this.current_page = ''; // Reinit the page state
+      if (writeHist) {
+        this.writePageHistory('');
+      }
     },
     processNodeParams(node, params) {
       // Processing only relevant params
@@ -267,12 +284,21 @@ export default {
     setNodeList(node, params) {
       node.addEventListener('click', () => this.list(params));
     },
+    setNodeTopics(node) {
+      node.addEventListener('click', this.topics);
+    },
+    setNodeVideos(node) {
+      node.addEventListener('click', this.videos);
+    },
     setNodeHeader(node, params) {
       this.customHeaderHtml = node.innerHTML;
       node.remove();
     },
     setNodeMypage(node) {
       node.addEventListener('click', this.mypage);
+    },
+    setNodeInquiry(node) {
+      node.addEventListener('click', this.inquiry);
     },
     removeNodeLogin(node) {
       node.removeEventListener('click', this.login);
@@ -324,7 +350,7 @@ export default {
     logout() {
       loginApi.doLogout();
       this.onLogout();
-      location.href='/';
+      location.href = '/';
     },
     signup() {
       this.redirect({ target: 'SignUp' });
@@ -338,8 +364,17 @@ export default {
     mypage() {
       this.redirect({ target: 'Mypage' });
     },
+    inquiry(params) {
+      this.redirect({ target: 'Inquiry', params });
+    },
     list(params) {
       this.redirect({ target: 'List', params });
+    },
+    topics(params) {
+      this.redirect({ target: 'Topics', params });
+    },
+    videos(params) {
+      this.redirect({ target: 'Videos', params });
     },
     downloadToast() {
       if (this.current_page != 'DownloadList') {
@@ -377,9 +412,22 @@ export default {
         }
       }
     },
-    redirect(pageData) {
+    redirect(pageData, writeHist = true) {
       this.showModal = true;
       this.$refs['ctrl'].onRedirect(pageData);
+      if (writeHist) {
+        this.writePageHistory(pageData.target);
+      }
+    },
+    writePageHistory(page) {
+      const newParams = { ...this.urlParams };
+      if (page) {
+        newParams.docdog_page = page;
+      } else {
+        delete newParams.docdog_page;
+      }
+      const qs = new URLSearchParams(newParams).toString();
+      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || '' }, null, '?' + qs);
     },
   },
 };
