@@ -5844,13 +5844,23 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
                 $options.redirect("List");
                 $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
               }, ["prevent"]))
-            }, " \u8CC7\u6599\u4E00\u89A7 ")
+            }, " \u30DE\u30A4\u30DA\u30FC\u30B8 ")
           ]),
           createBaseVNode("li", null, [
             createBaseVNode("button", {
               type: "button",
               class: "docdog-modal__head__nav__list__item",
               onClick: _cache[2] || (_cache[2] = withModifiers(($event) => {
+                $options.redirect("List");
+                $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
+              }, ["prevent"]))
+            }, " \u8CC7\u6599\u4E00\u89A7 ")
+          ]),
+          createBaseVNode("li", null, [
+            createBaseVNode("button", {
+              type: "button",
+              class: "docdog-modal__head__nav__list__item",
+              onClick: _cache[3] || (_cache[3] = withModifiers(($event) => {
                 $options.redirect("Videos");
                 $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
               }, ["prevent"]))
@@ -5860,7 +5870,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("button", {
               type: "button",
               class: "docdog-modal__head__nav__list__item",
-              onClick: _cache[3] || (_cache[3] = withModifiers(($event) => {
+              onClick: _cache[4] || (_cache[4] = withModifiers(($event) => {
                 $options.redirect("Topics");
                 $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
               }, ["prevent"]))
@@ -5870,7 +5880,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("button", {
               type: "button",
               class: "docdog-modal__head__nav__list__item",
-              onClick: _cache[4] || (_cache[4] = withModifiers(($event) => {
+              onClick: _cache[5] || (_cache[5] = withModifiers(($event) => {
                 $options.redirect("Inquiry");
                 $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
               }, ["prevent"]))
@@ -5884,22 +5894,15 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
         key: 0,
         type: "button",
         class: "docdog-modal__head__account__button docdog-u-hidden-sp",
-        onClick: _cache[5] || (_cache[5] = withModifiers(($event) => $options.redirect("SignIn"), ["prevent"]))
+        onClick: _cache[6] || (_cache[6] = withModifiers(($event) => $options.redirect("SignIn"), ["prevent"]))
       }, " \u30ED\u30B0\u30A4\u30F3 ")) : createCommentVNode("", true),
       $props.isLogin ? (openBlock(), createElementBlock("button", {
         key: 1,
         type: "button",
         class: "docdog-modal__head__account__toggle docdog-u-hidden-sp",
-        onClick: _cache[6] || (_cache[6] = ($event) => $data.docdog_menu_display = !$data.docdog_menu_display)
+        onClick: _cache[7] || (_cache[7] = ($event) => $data.docdog_menu_display = !$data.docdog_menu_display)
       }, _hoisted_9$a)) : createCommentVNode("", true),
       withDirectives(createBaseVNode("ul", _hoisted_10$b, [
-        createBaseVNode("li", null, [
-          createBaseVNode("button", {
-            type: "button",
-            class: "docdog-modal__head__account__nav__item",
-            onClick: _cache[7] || (_cache[7] = ($event) => $options.redirect("Mypage"))
-          }, " \u30DE\u30A4\u30DA\u30FC\u30B8 ")
-        ]),
         createBaseVNode("li", null, [
           createBaseVNode("button", {
             type: "button",
@@ -6102,7 +6105,6 @@ const _sfc_main$u = {
     },
     logout() {
       this.$emit("logout");
-      this.$emit("close");
     },
     onLogin() {
       this.$emit("onLogin");
@@ -14820,8 +14822,8 @@ function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
         createBaseVNode("button", {
           type: "button",
           class: "docdog-button docdog-button--white",
-          onClick: _cache[6] || (_cache[6] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
-        }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+          onClick: _cache[6] || (_cache[6] = withModifiers(($event) => _ctx.redirect({ target: "Mypage" }), ["prevent"]))
+        }, " \u30DE\u30A4\u30DA\u30FC\u30B8\u3078\u623B\u308B ")
       ])) : createCommentVNode("", true)
     ])
   ]);
@@ -15324,7 +15326,7 @@ const _sfc_main$n = {
     }
   }
 };
-const _withScopeId$2 = (n) => (pushScopeId("data-v-c7251e28"), n = n(), popScopeId(), n);
+const _withScopeId$2 = (n) => (pushScopeId("data-v-53db03a0"), n = n(), popScopeId(), n);
 const _hoisted_1$j = { class: "docdog-container--form" };
 const _hoisted_2$g = { class: "docdog-container--white" };
 const _hoisted_3$f = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
@@ -15362,7 +15364,7 @@ const _hoisted_14$5 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ creat
   for: "industry",
   class: "docdog-form__item__title"
 }, "\u696D\u7A2E", -1));
-const _hoisted_15$2 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-c7251e28>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-c7251e28>\u91D1\u878D</option><option value="2" data-v-c7251e28>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-c7251e28>\u5B66\u6821</option><option value="4" data-v-c7251e28>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-c7251e28>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-c7251e28>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-c7251e28>\u88FD\u9020\u696D</option><option value="8" data-v-c7251e28>\u98DF\u54C1</option><option value="9" data-v-c7251e28>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-c7251e28>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-c7251e28>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-c7251e28>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-c7251e28>\u305D\u306E\u4ED6</option>', 14);
+const _hoisted_15$2 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-53db03a0>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-53db03a0>\u91D1\u878D</option><option value="2" data-v-53db03a0>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-53db03a0>\u5B66\u6821</option><option value="4" data-v-53db03a0>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-53db03a0>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-53db03a0>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-53db03a0>\u88FD\u9020\u696D</option><option value="8" data-v-53db03a0>\u98DF\u54C1</option><option value="9" data-v-53db03a0>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-53db03a0>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-53db03a0>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-53db03a0>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-53db03a0>\u305D\u306E\u4ED6</option>', 14);
 const _hoisted_29 = [
   _hoisted_15$2
 ];
@@ -15517,13 +15519,13 @@ function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
         createBaseVNode("button", {
           type: "button",
           class: "docdog-button docdog-button--white",
-          onClick: _cache[9] || (_cache[9] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
-        }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+          onClick: _cache[9] || (_cache[9] = withModifiers(($event) => _ctx.redirect({ target: "Mypage" }), ["prevent"]))
+        }, " \u30DE\u30A4\u30DA\u30FC\u30B8\u3078\u623B\u308B ")
       ])) : createCommentVNode("", true)
     ])
   ]);
 }
-var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$k], ["__scopeId", "data-v-c7251e28"]]);
+var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$k], ["__scopeId", "data-v-53db03a0"]]);
 const _sfc_main$m = {
   props: {
     data: {
@@ -16637,8 +16639,8 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
             createBaseVNode("button", {
               type: "button",
               class: "docdog-button--text",
-              onClick: _cache[8] || (_cache[8] = withModifiers(($event) => _ctx.redirect({ target: "List" }), ["prevent"]))
-            }, " \u8CC7\u6599\u4E00\u89A7\u3078\u623B\u308B ")
+              onClick: _cache[8] || (_cache[8] = withModifiers(($event) => _ctx.redirect({ target: "Mypage" }), ["prevent"]))
+            }, " \u30DE\u30A4\u30DA\u30FC\u30B8\u3078\u623B\u308B ")
           ])
         ])) : createCommentVNode("", true)
       ])
@@ -17308,7 +17310,7 @@ const _sfc_main$5 = {
   },
   methods: {
     init() {
-      this.setCurrentPage("Loading");
+      this.setCurrentPage("");
       this.redirect_params = {};
       loginApi.isLogin({
         autoLogin: true,
@@ -17706,7 +17708,7 @@ const _sfc_main = {
       docdog_id_attr_name: "data-docdog-id",
       node_params_map: {},
       current_node_uuid: null,
-      current_page: "Loading",
+      current_page: "",
       footer_data: {},
       isLogin: false,
       app_global_events: {
@@ -17717,6 +17719,15 @@ const _sfc_main = {
   },
   created() {
     this.urlParams = url.parse(window.location.href, true).query;
+    window.addEventListener("popstate", ($event) => {
+      const new_page = $event.state ? $event.state.docdog_page || "" : "";
+      this.urlParams.docdog_page = new_page;
+      if (!new_page || new_page == "Loading") {
+        this.closeModalOuter(false);
+      } else {
+        this.redirect({ target: new_page }, false);
+      }
+    }, false);
   },
   computed: {
     is_node_selected: {
@@ -17802,7 +17813,7 @@ const _sfc_main = {
           target = this.urlParams.docdog_page;
       }
       if (target) {
-        this.redirect({ target, params });
+        this.redirect({ target, params }, false);
       }
     }
   },
@@ -17835,15 +17846,18 @@ const _sfc_main = {
         this.current_node_uuid = node_id;
       }
     },
-    closeModalOuter() {
+    closeModalOuter(writeHist = true) {
       this.footer_data = {};
-      this.closeModal();
+      this.closeModal(writeHist);
     },
-    closeModal() {
+    closeModal(writeHist = true) {
       this.removeToast();
       this.showModal = false;
       this.current_node_uuid = null;
-      this.current_page = "Loading";
+      this.current_page = "";
+      if (writeHist) {
+        this.writePageHistory("");
+      }
     },
     processNodeParams(node, params) {
       if (params.show) {
@@ -17879,12 +17893,21 @@ const _sfc_main = {
     setNodeList(node, params) {
       node.addEventListener("click", () => this.list(params));
     },
+    setNodeTopics(node) {
+      node.addEventListener("click", this.topics);
+    },
+    setNodeVideos(node) {
+      node.addEventListener("click", this.videos);
+    },
     setNodeHeader(node, params) {
       this.customHeaderHtml = node.innerHTML;
       node.remove();
     },
     setNodeMypage(node) {
       node.addEventListener("click", this.mypage);
+    },
+    setNodeInquiry(node) {
+      node.addEventListener("click", this.inquiry);
     },
     removeNodeLogin(node) {
       node.removeEventListener("click", this.login);
@@ -17932,6 +17955,7 @@ const _sfc_main = {
     logout() {
       loginApi.doLogout();
       this.onLogout();
+      location.href = "/";
     },
     signup() {
       this.redirect({ target: "SignUp" });
@@ -17945,8 +17969,17 @@ const _sfc_main = {
     mypage() {
       this.redirect({ target: "Mypage" });
     },
+    inquiry(params) {
+      this.redirect({ target: "Inquiry", params });
+    },
     list(params) {
       this.redirect({ target: "List", params });
+    },
+    topics(params) {
+      this.redirect({ target: "Topics", params });
+    },
+    videos(params) {
+      this.redirect({ target: "Videos", params });
     },
     downloadToast() {
       if (this.current_page != "DownloadList") {
@@ -17981,9 +18014,22 @@ const _sfc_main = {
         }
       }
     },
-    redirect(pageData) {
+    redirect(pageData, writeHist = true) {
       this.showModal = true;
       this.$refs["ctrl"].onRedirect(pageData);
+      if (writeHist) {
+        this.writePageHistory(pageData.target);
+      }
+    },
+    writePageHistory(page) {
+      const newParams = __spreadValues({}, this.urlParams);
+      if (page) {
+        newParams.docdog_page = page;
+      } else {
+        delete newParams.docdog_page;
+      }
+      const qs = new URLSearchParams(newParams).toString();
+      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || "" }, null, "?" + qs);
     }
   }
 };
@@ -18114,12 +18160,27 @@ function setNodeList(node, params) {
     window.Docdog.app.setNodeList(node, params);
   }
 }
+function setNodeTopics(node, params) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeList(node, params);
+  }
+}
+function setNodeVideos(node, params) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeList(node, params);
+  }
+}
 function setNodeHeader(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeHeader(node);
   }
 }
 function setNodeMypage(node) {
+  if (window.Docdog.app) {
+    window.Docdog.app.setNodeMypage(node);
+  }
+}
+function setNodeInquiry(node) {
   if (window.Docdog.app) {
     window.Docdog.app.setNodeMypage(node);
   }
@@ -18205,11 +18266,20 @@ function parseDOM() {
       case "list":
         setNodeList(node.el, node.params);
         break;
+      case "topics":
+        setNodeTopics(node.el, node.params);
+        break;
+      case "videos":
+        setNodeVideos(node.el, node.params);
+        break;
       case "header":
         setNodeHeader(node.el, node.params);
         break;
       case "mypage":
         setNodeMypage(node.el, node.params);
+        break;
+      case "inquiry":
+        setNodeInquiry(node.el, node.params);
         break;
       case "download":
         linkNode(node.el, node.params);
