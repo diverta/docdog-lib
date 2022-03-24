@@ -98,7 +98,7 @@
               type="button"
               class="docdog-modal__head__nav__list__item"
               @click.prevent="
-                redirect('List');
+                redirect('Mypage');
                 docdog_spmenu_display = !docdog_spmenu_display;
               "
             >
@@ -304,7 +304,7 @@
             </button>
             <button
               type="button"
-              aria-label="Back to top"
+              aria-label="Menu"
               class="docdog-modal__head__nav__logo"
               @click="docdog_spmenu_display = !docdog_spmenu_display"
             >
@@ -317,6 +317,18 @@
             </button>
           </div>
           <ul class="docdog-modal__head__nav__list__menu">
+            <li>
+              <button
+                type="button"
+                class="docdog-modal__head__nav__list__item"
+                @click.prevent="
+                  redirect('Mypage');
+                  docdog_spmenu_display = !docdog_spmenu_display;
+                "
+              >
+                マイページ
+              </button>
+            </li>
             <li>
               <button
                 type="button"
@@ -381,18 +393,6 @@
             </li>
           </ul>
           <ul class="docdog-card__list" v-if="isLogin">
-            <li>
-              <button
-                type="button"
-                class="docdog-button docdog-button--primary"
-                @click="
-                  redirect('Mypage');
-                  docdog_spmenu_display = !docdog_spmenu_display;
-                "
-              >
-                マイページ
-              </button>
-            </li>
             <li>
               <button
                 type="button"
