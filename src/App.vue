@@ -23,6 +23,7 @@
       @download="download"
       @onLogin="onLogin"
       @logout="logout"
+      @writePageHistory="writePageHistory"
       ref="ctrl"
     />
     <template v-slot:footer v-if="footer_comp">
@@ -423,10 +424,7 @@ export default {
     },
     redirect(pageData, writeHist = true) {
       this.showModal = true;
-      this.$refs['ctrl'].onRedirect(pageData);
-      if (writeHist) {
-        this.writePageHistory(pageData.target);
-      }
+      this.$refs['ctrl'].onRedirect(pageData, writeHist);
     },
     writePageHistory(page) {
       const newParams = { ...this.urlParams };

@@ -22,6 +22,7 @@ import DownloadList from './DownloadList.vue';
 import List from './List.vue';
 import Topics from './Topics.vue';
 import Videos from './Videos.vue';
+import TopicDetails from './TopicDetails.vue';
 import Reminder from './Reminder.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
@@ -38,6 +39,7 @@ const pages = {
   List,
   Topics,
   Videos,
+  TopicDetails,
   Reminder,
   EmptyPage,
   Loading,
@@ -142,13 +144,16 @@ export default {
     setCurrentPage(newPage) {
       this.$emit('update:current_page', newPage);
     },
-    onRedirect({ target, msg, msg2, err, params }) {
+    onRedirect({ target, msg, msg2, err, params }, writeHist = true) {
       // Reset eventual alerts after redirect
       this.msg = msg || '';
       this.msg2 = msg2 || '';
       this.err = err || '';
       this.redirect_params = params;
       this.setCurrentPage(target);
+      if (writeHist) {
+        this.$emit('writePageHistory', target);
+      }
     },
   },
 };
