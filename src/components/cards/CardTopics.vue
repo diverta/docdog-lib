@@ -1,5 +1,5 @@
 <template>
-  <a class="docdog-card" @click.prevent="redirect({ target: 'TopicDetails', params: { data } })">
+  <div class="docdog-card--link" @click.prevent="redirect({ target: 'TopicDetails', params: { data } })">
     <div class="docdog-card__thumb" :style="thumbnailStyle">
       <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
@@ -7,7 +7,7 @@
       <time :datetime="data.ymd">{{ data.ymd }}</time>
       <p class="docdog-card__body__title">{{ data.subject }}</p>
     </div>
-  </a>
+  </div>
 </template>
 
 <script>
