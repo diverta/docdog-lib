@@ -16,4 +16,10 @@
       margin: auto;
     }
   }
+  &--article {
+    @media screen and (min-width: 768px) {
+      max-width: 1000px;
+      margin: auto;
+    }
+  }
 }

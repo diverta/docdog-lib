@@ -1,8 +1,23 @@
 <template>
   <!-- Modal Content -->
-  <div class="docdog-modal__body__section">
-    <h1 class="docdog-modal__body__pagetitle">{{ data.subject }}</h1>
-    <a @click.prevent="redirect({ target: 'Topics' })">一覧へ戻る</a>
+  <div class="docdog-container--article">
+    <article class="docdog-modal__body__section">
+      <div class="docdog-modal__body__section">
+        <h1 class="docdog-modal__body__pagetitle">{{ data.subject }}</h1>
+      </div>
+      <div class="docdog-modal__body__section">
+        <div class="docdog-article" v-html="data.wysiwyg"></div>
+      </div>
+    </article>
+    <nav class="docdog-modal__body__section">
+      <button
+        type="button"
+        class="docdog-button docdog-button--white docdog-button--wide"
+        @click.prevent="redirect({ target: 'Topics' })"
+      >
+        記事一覧に戻る
+      </button>
+    </nav>
   </div>
 </template>
 
