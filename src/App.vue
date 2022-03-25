@@ -316,10 +316,9 @@ export default {
           .catch(() => {}) // On error
           .then(() => { // In all cases
             // Clean Kuroco URL params
-            const newParams = { ...this.urlParams };
-            delete newParams.grant_token;
-            delete newParams.member_id;
-            const qs = new URLSearchParams(newParams).toString();
+            delete this.urlParams.grant_token;
+            delete this.urlParams.member_id;
+            const qs = new URLSearchParams(this.urlParams).toString();
             window.history.pushState(
               { prevUrl: window.location.href, docdog_page: this.current_page || '' },
               null,
