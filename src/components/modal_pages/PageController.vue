@@ -23,6 +23,7 @@ import List from './List.vue';
 import Topics from './Topics.vue';
 import Videos from './Videos.vue';
 import TopicDetails from './TopicDetails.vue';
+import VideoDetails from './VideoDetails.vue';
 import Reminder from './Reminder.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
@@ -40,6 +41,7 @@ const pages = {
   Topics,
   Videos,
   TopicDetails,
+  VideoDetails,
   Reminder,
   EmptyPage,
   Loading,

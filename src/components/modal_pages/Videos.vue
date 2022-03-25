@@ -11,6 +11,7 @@
           :data="doc"
           :key="doc.topics_id"
           @download="download(doc)"
+          @redirect="redirect"
         />
       </li>
     </ul>
