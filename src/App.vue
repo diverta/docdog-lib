@@ -360,7 +360,7 @@ export default {
     logout() {
       loginApi.doLogout();
       this.onLogout();
-      location.href = '/';
+      this.closeModalOuter();
     },
     signup() {
       this.redirect({ target: 'SignUp' });

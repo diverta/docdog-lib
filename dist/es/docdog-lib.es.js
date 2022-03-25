@@ -5034,7 +5034,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
               type: "button",
               class: "docdog-modal__head__nav__list__item",
               onClick: _cache[1] || (_cache[1] = withModifiers(($event) => {
-                $options.redirect("List");
+                $options.redirect("Mypage");
                 $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
               }, ["prevent"]))
             }, " \u30DE\u30A4\u30DA\u30FC\u30B8 ")
@@ -5134,7 +5134,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
             }, _hoisted_15$5),
             createBaseVNode("button", {
               type: "button",
-              "aria-label": "Back to top",
+              "aria-label": "Menu",
               class: "docdog-modal__head__nav__logo",
               onClick: _cache[12] || (_cache[12] = ($event) => $data.docdog_spmenu_display = !$data.docdog_spmenu_display)
             }, _hoisted_17$5)
@@ -5145,6 +5145,16 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
                 type: "button",
                 class: "docdog-modal__head__nav__list__item",
                 onClick: _cache[13] || (_cache[13] = withModifiers(($event) => {
+                  $options.redirect("Mypage");
+                  $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
+                }, ["prevent"]))
+              }, " \u30DE\u30A4\u30DA\u30FC\u30B8 ")
+            ]),
+            createBaseVNode("li", null, [
+              createBaseVNode("button", {
+                type: "button",
+                class: "docdog-modal__head__nav__list__item",
+                onClick: _cache[14] || (_cache[14] = withModifiers(($event) => {
                   $options.redirect("List");
                   $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
                 }, ["prevent"]))
@@ -5154,7 +5164,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("button", {
                 type: "button",
                 class: "docdog-modal__head__nav__list__item",
-                onClick: _cache[14] || (_cache[14] = withModifiers(($event) => {
+                onClick: _cache[15] || (_cache[15] = withModifiers(($event) => {
                   $options.redirect("Videos");
                   $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
                 }, ["prevent"]))
@@ -5164,7 +5174,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("button", {
                 type: "button",
                 class: "docdog-modal__head__nav__list__item",
-                onClick: _cache[15] || (_cache[15] = withModifiers(($event) => {
+                onClick: _cache[16] || (_cache[16] = withModifiers(($event) => {
                   $options.redirect("Topics");
                   $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
                 }, ["prevent"]))
@@ -5174,7 +5184,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("button", {
                 type: "button",
                 class: "docdog-modal__head__nav__list__item",
-                onClick: _cache[16] || (_cache[16] = withModifiers(($event) => {
+                onClick: _cache[17] || (_cache[17] = withModifiers(($event) => {
                   $options.redirect("Inquiry");
                   $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
                 }, ["prevent"]))
@@ -5186,7 +5196,7 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
               createBaseVNode("button", {
                 type: "button",
                 class: "docdog-button docdog-button--primary",
-                onClick: _cache[17] || (_cache[17] = ($event) => {
+                onClick: _cache[18] || (_cache[18] = ($event) => {
                   $options.redirect("SignIn");
                   $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
                 })
@@ -5194,16 +5204,6 @@ function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
             ])
           ])) : createCommentVNode("", true),
           $props.isLogin ? (openBlock(), createElementBlock("ul", _hoisted_20$4, [
-            createBaseVNode("li", null, [
-              createBaseVNode("button", {
-                type: "button",
-                class: "docdog-button docdog-button--primary",
-                onClick: _cache[18] || (_cache[18] = ($event) => {
-                  $options.redirect("Mypage");
-                  $data.docdog_spmenu_display = !$data.docdog_spmenu_display;
-                })
-              }, " \u30DE\u30A4\u30DA\u30FC\u30B8 ")
-            ]),
             createBaseVNode("li", null, [
               createBaseVNode("button", {
                 type: "button",
@@ -17169,7 +17169,7 @@ const _sfc_main = {
     logout() {
       loginApi.doLogout();
       this.onLogout();
-      location.href = "/";
+      this.closeModalOuter();
     },
     signup() {
       this.redirect({ target: "SignUp" });
