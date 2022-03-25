@@ -1,12 +1,12 @@
 <template>
-  <a href="" class="docdog-card">
-    <div class="docdog-card__video">
-      <iframe :src="data.video.url" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
+  <div class="docdog-card--link" @click.prevent="redirect({ target: 'VideoDetails', params: { data } })">
+    <div class="docdog-card__thumb" :style="thumbnailStyle">
+      <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
     <div class="docdog-card__body">
       <p class="docdog-card__body__title">{{ data.subject }}</p>
     </div>
-  </a>
+  </div>
 </template>
 
 <script>

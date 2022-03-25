@@ -10,10 +10,7 @@
         <CardVideos
           :data="doc"
           :key="doc.topics_id"
-          :toastIds="toastIds"
-          :showDownloadBtn="showDownloadBtn"
           @download="download(doc)"
-          @addToast="addToast"
         />
       </li>
     </ul>
@@ -64,7 +61,6 @@ export default {
   data() {
     return {
       category: 17,
-      showDownloadBtn: true,
     };
   },
 };
