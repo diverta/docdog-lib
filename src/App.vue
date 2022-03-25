@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import url from 'url';
 import Modal from '@/components/Modal.vue';
 import ModalHeader from '@/components/ModalHeader.vue';
 import PageController from './components/modal_pages/PageController.vue';
@@ -93,7 +92,9 @@ export default {
     };
   },
   created() {
-    this.urlParams = url.parse(window.location.href, true).query;
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    this.urlParams = Object.fromEntries(urlSearchParams);
+
     window.addEventListener(
       'popstate',
       ($event) => {
@@ -309,14 +310,23 @@ export default {
     checkLogin() {
       if (this.urlParams.grant_token) {
         // Return from successful SSO login
-        return loginApi.doLogin({ grant_token: this.urlParams.grant_token }).then(() => {
-          // Clean Kuroco URL params
-          const newParams = this.urlParams;
-          delete newParams.grant_token;
-          delete newParams.member_id;
-          //window.history.pushState(newParams, document.title, window.location.pathname);
-          return true;
-        });
+        return loginApi
+          .doLogin({ grant_token: this.urlParams.grant_token })
+          .then(() => {}) // On success
+          .catch(() => {}) // On error
+          .then(() => { // In all cases
+            // Clean Kuroco URL params
+            const newParams = { ...this.urlParams };
+            delete newParams.grant_token;
+            delete newParams.member_id;
+            const qs = new URLSearchParams(newParams).toString();
+            window.history.pushState(
+              { prevUrl: window.location.href, docdog_page: this.current_page || '' },
+              null,
+              '?' + qs
+            );
+            return true;
+          });
       } else {
         return loginApi.isLogin({
           autoLogin: true,
