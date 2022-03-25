@@ -44,6 +44,7 @@
               :showDownloadBtn="showDownloadBtn"
               @download="download(video)"
               @addToast="addToast"
+              @redirect="redirect"
             />
           </li>
         </ul>
@@ -59,6 +60,7 @@
               :showDownloadBtn="showDownloadBtn"
               @download="download(topic)"
               @addToast="addToast"
+              @redirect="redirect"
             />
           </li>
         </ul>
