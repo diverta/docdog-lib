@@ -88,18 +88,9 @@ export default {
     onDownload() {
       if (this.data) {
         // Data has been fetched
-        this.download(this.data.file.url);
+        this.download(this.data);
         this.footer_data.downloaded = true;
       }
-    },
-    download(url, name = '') {
-      const link = document.createElement('a');
-      link.download = name;
-      link.href = url;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
     },
     addToastCurrent() {
       this.addToast(this.data);

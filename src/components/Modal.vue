@@ -3,7 +3,7 @@
     <div class="docdog-modal__bg" @click.self="closeModal">
       <section class="docdog-modal">
         <slot name="header" v-bind="$attrs"></slot>
-        <div class="docdog-modal__body">
+        <div class="docdog-modal__body" ref="modalBody">
           <slot></slot>
         </div>
         <footer v-if="this.$slots.footer" class="docdog-modal__foot">
@@ -30,6 +30,9 @@ export default {
     closeModal() {
       this.$emit('close');
     },
+    resetView() {
+      this.$refs["modalBody"].scrollTop = 0;
+    }
   },
   watch: {
     show: function (shown) {

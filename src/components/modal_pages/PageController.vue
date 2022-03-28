@@ -156,6 +156,7 @@ export default {
       if (writeHist) {
         this.$emit('writePageHistory', target);
       }
+      this.$emit('onAfterRedirect', { target, params});
     },
   },
 };

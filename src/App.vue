@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:show="showModal" @close="closeModalOuter">
+  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal">
     <template v-slot:header>
       <ModalHeader
         v-if="!customHeaderHtml"
@@ -24,6 +24,7 @@
       @onLogin="onLogin"
       @logout="logout"
       @writePageHistory="writePageHistory"
+      @onAfterRedirect="onAfterRedirect"
       ref="ctrl"
     />
     <template v-slot:footer v-if="footer_comp">
@@ -315,7 +316,8 @@ export default {
           .doLogin({ grant_token: this.urlParams.grant_token })
           .then(() => {}) // On success
           .catch(() => {}) // On error
-          .then(() => { // In all cases
+          .then(() => {
+            // In all cases
             // Clean Kuroco URL params
             delete this.urlParams.grant_token;
             delete this.urlParams.member_id;
@@ -423,8 +425,12 @@ export default {
       }
     },
     redirect(pageData, writeHist = true) {
+      // Request for redirection external to PageController
       this.showModal = true;
       this.$refs['ctrl'].onRedirect(pageData, writeHist);
+    },
+    onAfterRedirect(pageData) {
+      this.$refs['modal'].resetView();
     },
     writePageHistory(page) {
       const newParams = { ...this.urlParams };
