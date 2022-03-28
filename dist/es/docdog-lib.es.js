@@ -506,7 +506,7 @@ function triggerEffects(dep, debuggerEventExtraInfo) {
 }
 const isNonTrackableKeys = /* @__PURE__ */ makeMap(`__proto__,__v_isRef,__isVue`);
 const builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map((key) => Symbol[key]).filter(isSymbol$1));
-const get$2 = /* @__PURE__ */ createGetter();
+const get$1 = /* @__PURE__ */ createGetter();
 const shallowGet = /* @__PURE__ */ createGetter(false, true);
 const readonlyGet = /* @__PURE__ */ createGetter(true);
 const arrayInstrumentations = /* @__PURE__ */ createArrayInstrumentations();
@@ -615,7 +615,7 @@ function ownKeys(target) {
   return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
-  get: get$2,
+  get: get$1,
   set,
   deleteProperty,
   has: has$4,
@@ -4715,6 +4715,54 @@ const vModelText = {
     }
   }
 };
+const vModelCheckbox = {
+  deep: true,
+  created(el, _2, vnode) {
+    el._assign = getModelAssigner(vnode);
+    addEventListener(el, "change", () => {
+      const modelValue = el._modelValue;
+      const elementValue = getValue(el);
+      const checked = el.checked;
+      const assign2 = el._assign;
+      if (isArray$5(modelValue)) {
+        const index = looseIndexOf(modelValue, elementValue);
+        const found = index !== -1;
+        if (checked && !found) {
+          assign2(modelValue.concat(elementValue));
+        } else if (!checked && found) {
+          const filtered = [...modelValue];
+          filtered.splice(index, 1);
+          assign2(filtered);
+        }
+      } else if (isSet$1(modelValue)) {
+        const cloned = new Set(modelValue);
+        if (checked) {
+          cloned.add(elementValue);
+        } else {
+          cloned.delete(elementValue);
+        }
+        assign2(cloned);
+      } else {
+        assign2(getCheckboxValue(el, checked));
+      }
+    });
+  },
+  mounted: setChecked,
+  beforeUpdate(el, binding, vnode) {
+    el._assign = getModelAssigner(vnode);
+    setChecked(el, binding, vnode);
+  }
+};
+function setChecked(el, { value, oldValue }, vnode) {
+  el._modelValue = value;
+  if (isArray$5(value)) {
+    el.checked = looseIndexOf(value, vnode.props.value) > -1;
+  } else if (isSet$1(value)) {
+    el.checked = value.has(vnode.props.value);
+  } else if (value !== oldValue) {
+    el.checked = looseEqual(value, getCheckboxValue(el, true));
+  }
+}
 const vModelSelect = {
   deep: true,
   created(el, { value, modifiers: { number } }, vnode) {
@@ -4763,6 +4811,10 @@ function setSelected(el, value) {
 }
 function getValue(el) {
   return "_value" in el ? el._value : el.value;
+}
+function getCheckboxValue(el, checked) {
+  const key = checked ? "_trueValue" : "_falseValue";
+  return key in el ? el[key] : checked;
 }
 const systemModifiers = ["ctrl", "shift", "alt", "meta"];
 const modifierGuards = {
@@ -4938,9 +4990,9 @@ const _sfc_main$x = {
     closeModal() {
       this.$emit("close");
     },
-    redirect(target, params2 = {}) {
+    redirect(target, params = {}) {
       this.docdog_menu_display = false;
-      this.$emit("redirect", { target, params: params2 });
+      this.$emit("redirect", { target, params });
     },
     logout() {
       this.docdog_menu_display = false;
@@ -4955,8 +5007,8 @@ const _hoisted_3$n = /* @__PURE__ */ createStaticVNode('<svg width="228" height=
 const _hoisted_4$j = [
   _hoisted_3$n
 ];
-const _hoisted_5$g = { class: "docdog-modal__head__nav__list docdog-u-hidden-sp" };
-const _hoisted_6$g = { class: "docdog-modal__head__nav__list__menu" };
+const _hoisted_5$f = { class: "docdog-modal__head__nav__list docdog-u-hidden-sp" };
+const _hoisted_6$f = { class: "docdog-modal__head__nav__list__menu" };
 const _hoisted_7$f = { class: "docdog-modal__head__nav" };
 const _hoisted_8$d = /* @__PURE__ */ createBaseVNode("svg", {
   width: "30",
@@ -5027,8 +5079,8 @@ function _sfc_render$t(_ctx, _cache, $props, $setup, $data, $options) {
         class: "docdog-modal__head__nav__logo",
         onClick: _cache[0] || (_cache[0] = withModifiers((...args) => $options.closeModal && $options.closeModal(...args), ["prevent"]))
       }, _hoisted_4$j),
-      createBaseVNode("nav", _hoisted_5$g, [
-        createBaseVNode("ul", _hoisted_6$g, [
+      createBaseVNode("nav", _hoisted_5$f, [
+        createBaseVNode("ul", _hoisted_6$f, [
           createBaseVNode("li", null, [
             createBaseVNode("button", {
               type: "button",
@@ -5483,18 +5535,18 @@ var utils$f = utils$g;
 function encode$1(val) {
   return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
 }
-var buildURL$2 = function buildURL(url, params2, paramsSerializer) {
-  if (!params2) {
+var buildURL$2 = function buildURL(url, params, paramsSerializer) {
+  if (!params) {
     return url;
   }
   var serializedParams;
   if (paramsSerializer) {
-    serializedParams = paramsSerializer(params2);
-  } else if (utils$f.isURLSearchParams(params2)) {
-    serializedParams = params2.toString();
+    serializedParams = paramsSerializer(params);
+  } else if (utils$f.isURLSearchParams(params)) {
+    serializedParams = params.toString();
   } else {
     var parts = [];
-    utils$f.forEach(params2, function serialize(val, key) {
+    utils$f.forEach(params, function serialize(val, key) {
       if (val === null || typeof val === "undefined") {
         return;
       }
@@ -13387,10 +13439,10 @@ var lodash = { exports: {} };
 })(lodash, lodash.exports);
 var _ = lodash.exports;
 const API_HOST = "https://docdog.g.kuroco.app";
-function get$1(uri, params2 = {}, headers = {}) {
+function get(uri, params = {}, headers = {}) {
   return axios.get(API_HOST + uri, {
     headers,
-    params: params2
+    params
   });
 }
 function post(uri, post_data = {}, headers = {}) {
@@ -13440,16 +13492,16 @@ function getAuthHeaders(options = {
   const access_token = parseToken(storage_keys.ACCESS_TOKEN, fetchData(storage_keys.ACCESS_TOKEN));
   if (!access_token.value || !options.anonLogin && access_token.isPublic) {
     const token_data = {};
-    let isPublic2 = true;
+    let isPublic = true;
     const refresh_token = parseToken(storage_keys.REFRESH_TOKEN, fetchData(storage_keys.REFRESH_TOKEN));
     if (options.autoLogin && refresh_token.value) {
       token_data[refresh_token] = refresh_token.value;
-      isPublic2 = false;
+      isPublic = false;
     } else if (!options.anonLogin) {
       return Promise.resolve({});
     }
     return getAccessToken(token_data).then((ret) => {
-      storeData(storage_keys.ACCESS_TOKEN, __spreadProps(__spreadValues({}, ret.access_token), { isPublic: isPublic2 }));
+      storeData(storage_keys.ACCESS_TOKEN, __spreadProps(__spreadValues({}, ret.access_token), { isPublic }));
       return {
         [header_keys.ACCESS_TOKEN]: ret.access_token.value
       };
@@ -13557,7 +13609,7 @@ function getProfile(options = {
   } else {
     return getAuthHeaders(options).then((headers) => {
       if (header_keys.ACCESS_TOKEN in headers && headers[header_keys.ACCESS_TOKEN].length > 0) {
-        return get$1("/rcms-api/3/profile", {}, headers).then((res) => {
+        return get("/rcms-api/3/profile", {}, headers).then((res) => {
           updateProfile(res.data.details);
           return res.data.details;
         });
@@ -13819,8 +13871,8 @@ const _hoisted_4$h = {
   key: 0,
   class: "docdog-modal__body__section"
 };
-const _hoisted_5$f = { class: "docdog-form--col-2 docdog-modal__body__section" };
-const _hoisted_6$f = { class: "docdog-form__sso" };
+const _hoisted_5$e = { class: "docdog-form--col-2 docdog-modal__body__section" };
+const _hoisted_6$e = { class: "docdog-form__sso" };
 const _hoisted_7$e = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__heading" }, "\u4ED6\u30B5\u30A4\u30C8\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u3067\u30ED\u30B0\u30A4\u30F3", -1);
 const _hoisted_8$c = /* @__PURE__ */ createStaticVNode('<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24.6 16.2273C24.6 15.5182 24.5364 14.8364 24.4182 14.1819H15V18.0501H20.3818C20.15 19.3001 19.4455 20.3592 18.3864 21.0682V23.5773H21.6182C23.5091 21.8364 24.6 19.2728 24.6 16.2273Z" fill="#4285F4"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M14.9998 25.9999C17.6998 25.9999 19.9635 25.1044 21.618 23.5772L18.3862 21.0681C17.4907 21.6681 16.3453 22.0226 14.9998 22.0226C12.3953 22.0226 10.1907 20.2635 9.40439 17.8999H6.06348V20.4908C7.70893 23.759 11.0907 25.9999 14.9998 25.9999Z" fill="#34A853"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M9.40455 17.8999C9.20455 17.2999 9.09091 16.659 9.09091 15.9999C9.09091 15.3409 9.20455 14.6999 9.40455 14.0999V11.509H6.06364C5.38636 12.859 5 14.3863 5 15.9999C5 17.6136 5.38636 19.1409 6.06364 20.4909L9.40455 17.8999Z" fill="#FBBC05"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M14.9998 9.97727C16.468 9.97727 17.7862 10.4818 18.8226 11.4727L21.6907 8.60455C19.9589 6.99091 17.6953 6 14.9998 6C11.0907 6 7.70893 8.24091 6.06348 11.5091L9.40439 14.1C10.1907 11.7364 12.3953 9.97727 14.9998 9.97727Z" fill="#EA4335"></path></svg><span>Google\u3067\u30ED\u30B0\u30A4\u30F3</span>', 2);
 const _hoisted_10$a = [
@@ -13954,8 +14006,8 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("div", _hoisted_2$l, [
       _hoisted_3$k,
       !_ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_4$h, [
-        createBaseVNode("div", _hoisted_5$f, [
-          createBaseVNode("div", _hoisted_6$f, [
+        createBaseVNode("div", _hoisted_5$e, [
+          createBaseVNode("div", _hoisted_6$e, [
             _hoisted_7$e,
             createBaseVNode("button", {
               type: "button",
@@ -14094,28 +14146,10 @@ function doWithdrawal() {
     return Promise.reject(err_msg);
   }));
 }
-function getMemberForm() {
-  return loginApi.getAuthHeaders({
-    autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get$1("/rcms-api/3/member/form", params, headers).then(processError).catch((err) => {
-    let err_msg = "Problem fetching member form";
-    switch (err.response.status) {
-      case 401:
-        err_msg = "Unauthorized request";
-        break;
-      case 404:
-        err_msg = "Member form unavailable";
-        break;
-    }
-    return Promise.reject(err_msg);
-  }));
-}
 var memberApi = {
   doSignUp,
   doEditProfile,
-  doWithdrawal,
-  getMemberForm
+  doWithdrawal
 };
 const _sfc_main$r = {
   extends: _sfc_main$w,
@@ -14132,7 +14166,8 @@ const _sfc_main$r = {
       company_nm: "",
       industry: "",
       position: "",
-      login_pwd: ""
+      login_pwd: "",
+      email_send_ng_flg: ""
     };
   },
   computed: {
@@ -14216,8 +14251,8 @@ const _hoisted_3$j = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-mod
   /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831\u306E\u7DE8\u96C6")
 ], -1);
 const _hoisted_4$g = { class: "docdog-modal__body__section" };
-const _hoisted_5$e = { class: "docdog-form__signup" };
-const _hoisted_6$e = { class: "docdog-form__item--col-2" };
+const _hoisted_5$d = { class: "docdog-form__signup" };
+const _hoisted_6$d = { class: "docdog-form__item--col-2" };
 const _hoisted_7$d = { class: "docdog-form__item" };
 const _hoisted_8$b = /* @__PURE__ */ createBaseVNode("label", {
   for: "name1",
@@ -14255,9 +14290,16 @@ const _hoisted_33$1 = { class: "docdog-form__item" };
 const _hoisted_34$1 = /* @__PURE__ */ createBaseVNode("label", {
   for: "position",
   class: "docdog-form__item__title"
+}, "\u30E1\u30FC\u30EB\u30DE\u30AC\u30B8\u30F3\u306E\u914D\u4FE1\u8A2D\u5B9A", -1);
+const _hoisted_35 = { class: "docdog-form__toggle" };
+const _hoisted_36 = /* @__PURE__ */ createBaseVNode("label", { for: "email_send_ng_flg" }, "\u30E1\u30FC\u30EB\u30DE\u30AC\u30B8\u30F3\u3092\u53D7\u3051\u53D6\u3089\u306A\u3044", -1);
+const _hoisted_37 = { class: "docdog-form__item" };
+const _hoisted_38 = /* @__PURE__ */ createBaseVNode("label", {
+  for: "position",
+  class: "docdog-form__item__title"
 }, "\u5F79\u8077", -1);
-const _hoisted_35 = { class: "docdog-form__button" };
-const _hoisted_36 = { class: "docdog-form__link" };
+const _hoisted_39 = { class: "docdog-form__button" };
+const _hoisted_40 = { class: "docdog-form__link" };
 function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_AlertError = resolveComponent("AlertError");
   const _component_AlertSuccess = resolveComponent("AlertSuccess");
@@ -14275,9 +14317,9 @@ function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("div", _hoisted_2$k, [
       _hoisted_3$j,
       createBaseVNode("div", _hoisted_4$g, [
-        createBaseVNode("div", _hoisted_5$e, [
+        createBaseVNode("div", _hoisted_5$d, [
           createBaseVNode("form", null, [
-            createBaseVNode("div", _hoisted_6$e, [
+            createBaseVNode("div", _hoisted_6$d, [
               createBaseVNode("div", _hoisted_7$d, [
                 _hoisted_8$b,
                 withDirectives(createBaseVNode("input", {
@@ -14359,30 +14401,45 @@ function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
             ]),
             createBaseVNode("div", _hoisted_33$1, [
               _hoisted_34$1,
+              createBaseVNode("div", _hoisted_35, [
+                withDirectives(createBaseVNode("input", {
+                  name: "email_send_ng_flg",
+                  id: "email_send_ng_flg",
+                  "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.email_send_ng_flg = $event),
+                  type: "checkbox",
+                  value: "1"
+                }, null, 512), [
+                  [vModelCheckbox, $data.email_send_ng_flg]
+                ]),
+                _hoisted_36
+              ])
+            ]),
+            createBaseVNode("div", _hoisted_37, [
+              _hoisted_38,
               withDirectives(createBaseVNode("input", {
                 name: "position",
                 type: "text",
                 id: "position",
                 placeholder: "",
-                "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.position = $event),
+                "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.position = $event),
                 required: ""
               }, null, 512), [
                 [vModelText, $data.position]
               ])
             ]),
-            createBaseVNode("div", _hoisted_35, [
+            createBaseVNode("div", _hoisted_39, [
               createBaseVNode("button", {
                 type: "submit",
                 class: "docdog-button docdog-button--primary",
-                onClick: _cache[7] || (_cache[7] = withModifiers((...args) => $options.editProfile && $options.editProfile(...args), ["prevent"]))
+                onClick: _cache[8] || (_cache[8] = withModifiers((...args) => $options.editProfile && $options.editProfile(...args), ["prevent"]))
               }, " \u5909\u66F4\u3059\u308B ")
             ])
           ]),
-          createBaseVNode("div", _hoisted_36, [
+          createBaseVNode("div", _hoisted_40, [
             createBaseVNode("button", {
               type: "button",
               class: "docdog-button--text",
-              onClick: _cache[8] || (_cache[8] = ($event) => _ctx.redirect({ target: "Withdrawal" }))
+              onClick: _cache[9] || (_cache[9] = ($event) => _ctx.redirect({ target: "Withdrawal" }))
             }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B ")
           ])
         ])
@@ -14411,10 +14468,10 @@ const _hoisted_3$i = {
   class: "docdog-modal__body__section"
 };
 const _hoisted_4$f = /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u524A\u9664", -1);
-const _hoisted_5$d = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B\u3068\u4ECA\u5F8C\u306F\u8CC7\u6599\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u304C\u3067\u304D\u306A\u304F\u306A\u308A\u307E\u3059\u3002\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F ", -1);
-const _hoisted_6$d = [
+const _hoisted_5$c = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3059\u308B\u3068\u4ECA\u5F8C\u306F\u8CC7\u6599\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u304C\u3067\u304D\u306A\u304F\u306A\u308A\u307E\u3059\u3002\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F ", -1);
+const _hoisted_6$c = [
   _hoisted_4$f,
-  _hoisted_5$d
+  _hoisted_5$c
 ];
 const _hoisted_7$c = {
   key: 1,
@@ -14435,7 +14492,7 @@ function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
       msg2: _ctx.msg2
     }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
     createBaseVNode("div", _hoisted_2$j, [
-      _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_3$i, _hoisted_6$d)) : createCommentVNode("", true),
+      _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_3$i, _hoisted_6$c)) : createCommentVNode("", true),
       _ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_7$c, [
         createBaseVNode("form", null, [
           createBaseVNode("div", _hoisted_8$a, [
@@ -14553,7 +14610,7 @@ const _sfc_main$p = {
     }
   }
 };
-const _withScopeId$2 = (n) => (pushScopeId("data-v-53db03a0"), n = n(), popScopeId(), n);
+const _withScopeId$2 = (n) => (pushScopeId("data-v-2961dcee"), n = n(), popScopeId(), n);
 const _hoisted_1$l = { class: "docdog-container--form" };
 const _hoisted_2$i = { class: "docdog-container--white" };
 const _hoisted_3$h = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
@@ -14563,8 +14620,8 @@ const _hoisted_4$e = {
   key: 0,
   class: "docdog-modal__body__section"
 };
-const _hoisted_5$c = { class: "docdog-modal__body__section" };
-const _hoisted_6$c = { class: "docdog-form__item--col-2" };
+const _hoisted_5$b = { class: "docdog-modal__body__section" };
+const _hoisted_6$b = { class: "docdog-form__item--col-2" };
 const _hoisted_7$b = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", {
   for: "name1",
   class: "docdog-form__item__title"
@@ -14591,7 +14648,7 @@ const _hoisted_14$5 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ creat
   for: "industry",
   class: "docdog-form__item__title"
 }, "\u696D\u7A2E", -1));
-const _hoisted_15$2 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-53db03a0>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-53db03a0>\u91D1\u878D</option><option value="2" data-v-53db03a0>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-53db03a0>\u5B66\u6821</option><option value="4" data-v-53db03a0>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-53db03a0>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-53db03a0>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-53db03a0>\u88FD\u9020\u696D</option><option value="8" data-v-53db03a0>\u98DF\u54C1</option><option value="9" data-v-53db03a0>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-53db03a0>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-53db03a0>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-53db03a0>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-53db03a0>\u305D\u306E\u4ED6</option>', 14);
+const _hoisted_15$2 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-2961dcee>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-2961dcee>\u91D1\u878D</option><option value="2" data-v-2961dcee>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-2961dcee>\u5B66\u6821</option><option value="4" data-v-2961dcee>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-2961dcee>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-2961dcee>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-2961dcee>\u88FD\u9020\u696D</option><option value="8" data-v-2961dcee>\u98DF\u54C1</option><option value="9" data-v-2961dcee>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-2961dcee>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-2961dcee>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-2961dcee>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-2961dcee>\u305D\u306E\u4ED6</option>', 14);
 const _hoisted_29 = [
   _hoisted_15$2
 ];
@@ -14623,9 +14680,9 @@ function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("div", _hoisted_2$i, [
       _hoisted_3$h,
       !_ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_4$e, [
-        createBaseVNode("div", _hoisted_5$c, [
+        createBaseVNode("div", _hoisted_5$b, [
           createBaseVNode("form", null, [
-            createBaseVNode("div", _hoisted_6$c, [
+            createBaseVNode("div", _hoisted_6$b, [
               createBaseVNode("div", {
                 class: normalizeClass(["docdog-form__item", $options.err_field == "name1" ? "docdog-form__item--error" : ""])
               }, [
@@ -14752,7 +14809,7 @@ function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$m], ["__scopeId", "data-v-53db03a0"]]);
+var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["render", _sfc_render$m], ["__scopeId", "data-v-2961dcee"]]);
 const _sfc_main$o = {
   props: {
     data: {
@@ -14850,17 +14907,15 @@ const _sfc_main$m = {
     DeleteButton
   }
 };
-const _hoisted_1$j = { class: "docdog-card" };
+const _hoisted_1$j = { class: "docdog-card docdog-card--link" };
 const _hoisted_2$g = { class: "docdog-card__thumb__badge" };
-const _hoisted_3$f = { class: "docdog-card__body" };
-const _hoisted_4$c = { class: "docdog-card__body__title" };
-const _hoisted_5$b = {
+const _hoisted_3$f = {
   key: 0,
   type: "button",
   class: "docdog-button docdog-button--white",
   disabled: ""
 };
-const _hoisted_6$b = {
+const _hoisted_4$c = {
   key: 0,
   class: "docdog-card__foot"
 };
@@ -14868,38 +14923,45 @@ function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_DeleteButton = resolveComponent("DeleteButton");
   return openBlock(), createElementBlock("div", _hoisted_1$j, [
     createBaseVNode("div", {
-      class: "docdog-card__thumb",
-      style: normalizeStyle(_ctx.thumbnailStyle)
+      class: "docdog-card__thumb docdog-card--link",
+      style: normalizeStyle(_ctx.thumbnailStyle),
+      onClick: _cache[0] || (_cache[0] = ($event) => _ctx.onDownload())
     }, [
       createBaseVNode("span", _hoisted_2$g, toDisplayString(_ctx.data.type ? _ctx.data.type.label : ""), 1)
     ], 4),
-    createBaseVNode("div", _hoisted_3$f, [
-      createBaseVNode("p", _hoisted_4$c, toDisplayString(_ctx.data.subject), 1),
+    createBaseVNode("div", {
+      class: "docdog-card__body",
+      onClick: _cache[4] || (_cache[4] = withModifiers(($event) => _ctx.onDownload(), ["self"]))
+    }, [
+      createBaseVNode("p", {
+        class: "docdog-card__body__title docdog-card--link",
+        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.onDownload())
+      }, toDisplayString(_ctx.data.subject), 1),
       _ctx.showDownloadBtn ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
         createBaseVNode("button", {
           type: "button",
           class: "docdog-button docdog-button--secondary",
-          onClick: _cache[0] || (_cache[0] = ($event) => _ctx.onDownload())
+          onClick: _cache[2] || (_cache[2] = (...args) => _ctx.download && _ctx.download(...args))
         }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B "),
-        _ctx.isInToast ? (openBlock(), createElementBlock("button", _hoisted_5$b, "\u8FFD\u52A0\u6E08\u307F")) : (openBlock(), createElementBlock("button", {
+        _ctx.isInToast ? (openBlock(), createElementBlock("button", _hoisted_3$f, "\u8FFD\u52A0\u6E08\u307F")) : (openBlock(), createElementBlock("button", {
           key: 1,
           type: "button",
           class: "docdog-button docdog-button--white",
-          onClick: _cache[1] || (_cache[1] = ($event) => _ctx.onAdd())
+          onClick: _cache[3] || (_cache[3] = ($event) => _ctx.onAdd())
         }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0\u3059\u308B "))
       ], 64)) : createCommentVNode("", true)
     ]),
-    _ctx.deleteFooter ? (openBlock(), createElementBlock("div", _hoisted_6$b, [
+    _ctx.deleteFooter ? (openBlock(), createElementBlock("div", _hoisted_4$c, [
       createVNode(_component_DeleteButton, { onClick: _ctx.removeToast }, null, 8, ["onClick"])
     ])) : createCommentVNode("", true)
   ]);
 }
 var CardModal = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$k]]);
-function getDocumentList(isPublic2 = false, params2 = {}) {
+function getDocumentList(isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/files", params2, headers).then(processError).catch((err) => {
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/files", params, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching document list";
     switch (err.response.status) {
       case 401:
@@ -14912,11 +14974,11 @@ function getDocumentList(isPublic2 = false, params2 = {}) {
     return Promise.reject(err_msg);
   }));
 }
-function getDocumentData(id, isPublic2 = false, params2 = {}) {
+function getDocumentData(id, isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/files/" + id, params2, headers).then(processError).catch((err) => {
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/files/" + id, params, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching document data";
     switch (err.response.status) {
       case 401:
@@ -15015,7 +15077,7 @@ const _sfc_main$l = {
     }
   }
 };
-const _withScopeId$1 = (n) => (pushScopeId("data-v-1911071c"), n = n(), popScopeId(), n);
+const _withScopeId$1 = (n) => (pushScopeId("data-v-264846e6"), n = n(), popScopeId(), n);
 const _hoisted_1$i = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9")
 ], -1));
@@ -15045,7 +15107,7 @@ function _sfc_render$j(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-var Download = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$j], ["__scopeId", "data-v-1911071c"]]);
+var Download = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["render", _sfc_render$j], ["__scopeId", "data-v-264846e6"]]);
 const _sfc_main$k = {
   extends: _sfc_main$w,
   props: {
@@ -15146,11 +15208,11 @@ function _sfc_render$h(_ctx, _cache, $props, $setup, $data, $options) {
 var DownloadList = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["render", _sfc_render$h]]);
 var TopicsList = {
   methods: {
-    fetchList(params2 = {}) {
-      if (!params2.cnt) {
-        delete params2["cnt"];
+    fetchList(params = {}) {
+      if (!params.cnt) {
+        delete params["cnt"];
       }
-      return docsApi.getDocumentList(true, params2).then((data2) => {
+      return docsApi.getDocumentList(true, params).then((data2) => {
         return { list: data2.list, pageInfo: data2.pageInfo };
       });
     },
@@ -15361,7 +15423,7 @@ const _hoisted_3$a = ["datetime"];
 const _hoisted_4$9 = { class: "docdog-card__body__title" };
 function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
-    class: "docdog-card--link",
+    class: "docdog-card docdog-card--link",
     onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.redirect({ target: "TopicDetails", params: { data: _ctx.data } }), ["prevent"]))
   }, [
     createBaseVNode("div", {
@@ -15506,7 +15568,7 @@ const _hoisted_2$9 = { class: "docdog-card__body" };
 const _hoisted_3$8 = { class: "docdog-card__body__title" };
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", {
-    class: "docdog-card--link",
+    class: "docdog-card docdog-card--link",
     onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.redirect({ target: "VideoDetails", params: { data: _ctx.data } }), ["prevent"]))
   }, [
     createBaseVNode("div", {
@@ -15961,7 +16023,7 @@ var Error_vue_vue_type_style_index_0_scoped_true_lang = "";
 const _sfc_main$9 = {
   extends: _sfc_main$w
 };
-const _withScopeId = (n) => (pushScopeId("data-v-7bb604a8"), n = n(), popScopeId(), n);
+const _withScopeId = (n) => (pushScopeId("data-v-65a10124"), n = n(), popScopeId(), n);
 const _hoisted_1$7 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("h2", null, "Error", -1));
 function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
@@ -15969,7 +16031,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("p", null, toDisplayString(_ctx.err), 1)
   ], 64);
 }
-var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-7bb604a8"]]);
+var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-65a10124"]]);
 const _sfc_main$8 = {
   extends: _sfc_main$w,
   components: {
@@ -15994,11 +16056,11 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var EmptyPage = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
-function getNewsList(isPublic2 = false, params2 = {}) {
+function getNewsList(isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/news", params2, headers).then(processError).catch((err) => {
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/news", params, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching news list";
     switch (err.response.status) {
       case 401:
@@ -16097,9 +16159,9 @@ const _sfc_main$7 = {
           return "";
       }
     },
-    fetchNewsList(params2 = {}) {
-      params2 = __spreadValues(__spreadValues({}, this.defaultParams), params2);
-      newsApi.getNewsList(true, params2).then((data2) => {
+    fetchNewsList(params = {}) {
+      params = __spreadValues(__spreadValues({}, this.defaultParams), params);
+      newsApi.getNewsList(true, params).then((data2) => {
         this.listNews = [];
         if (data2) {
           data2.list.forEach((topics) => {
@@ -16109,12 +16171,12 @@ const _sfc_main$7 = {
       });
     },
     fetchDocList(category) {
-      const params2 = {
+      const params = {
         pageID: this.pageIDs[category],
         cnt: this.cnts[category],
         contents_type: category
       };
-      this.fetchList(params2).then(({ list, pageInfo }) => {
+      this.fetchList(params).then(({ list, pageInfo }) => {
         this.lists[category] = list;
         this.pageInfos[category] = pageInfo;
         this.pagedButtons[category] = this.makePagedButtons(pageInfo);
@@ -16129,43 +16191,39 @@ const _hoisted_2$4 = { class: "docdog-modal__body__section docdog-container--whi
 const _hoisted_3$3 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u304A\u77E5\u3089\u305B", -1);
 const _hoisted_4$3 = { class: "docdog-list" };
 const _hoisted_5$3 = { class: "docdog-list__item" };
-const _hoisted_6$3 = {
-  type: "button",
-  class: "docdog-list__item__link"
-};
-const _hoisted_7$3 = { datetime: "2022-03-01" };
-const _hoisted_8$3 = { class: "docdog-badge" };
-const _hoisted_9$2 = { class: "docdog-list__item__title" };
-const _hoisted_10$2 = { class: "docdog-modal__body__section docdog-container--white" };
-const _hoisted_11$2 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u3042\u306A\u305F\u306B\u304A\u3059\u3059\u3081\u306E\u30B3\u30F3\u30C6\u30F3\u30C4", -1);
-const _hoisted_12$2 = { class: "docdog-list" };
-const _hoisted_13 = { class: "docdog-list__item docdog-u-py-lg" };
-const _hoisted_14 = /* @__PURE__ */ createBaseVNode("h3", { class: "docdog-modal__body__sub-heading" }, "\u8CC7\u6599", -1);
-const _hoisted_15 = {
+const _hoisted_6$3 = { datetime: "2022-03-01" };
+const _hoisted_7$3 = { class: "docdog-badge" };
+const _hoisted_8$3 = { class: "docdog-list__item__title" };
+const _hoisted_9$2 = { class: "docdog-modal__body__section docdog-container--white" };
+const _hoisted_10$2 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u3042\u306A\u305F\u306B\u304A\u3059\u3059\u3081\u306E\u30B3\u30F3\u30C6\u30F3\u30C4", -1);
+const _hoisted_11$2 = { class: "docdog-list" };
+const _hoisted_12$2 = { class: "docdog-list__item docdog-u-py-lg" };
+const _hoisted_13 = /* @__PURE__ */ createBaseVNode("h3", { class: "docdog-modal__body__sub-heading" }, "\u8CC7\u6599", -1);
+const _hoisted_14 = {
   key: 0,
   class: "docdog-card__list"
 };
-const _hoisted_16 = { class: "docdog-list__item docdog-u-py-lg" };
-const _hoisted_17$1 = /* @__PURE__ */ createBaseVNode("h3", { class: "docdog-modal__body__sub-heading" }, "\u52D5\u753B", -1);
-const _hoisted_18$1 = {
+const _hoisted_15 = { class: "docdog-list__item docdog-u-py-lg" };
+const _hoisted_16 = /* @__PURE__ */ createBaseVNode("h3", { class: "docdog-modal__body__sub-heading" }, "\u52D5\u753B", -1);
+const _hoisted_17$1 = {
   key: 0,
   class: "docdog-card__list"
 };
-const _hoisted_19$1 = { class: "docdog-list__item docdog-u-py-lg" };
-const _hoisted_20$1 = /* @__PURE__ */ createBaseVNode("h3", { class: "docdog-modal__body__sub-heading" }, "\u8A18\u4E8B", -1);
+const _hoisted_18$1 = { class: "docdog-list__item docdog-u-py-lg" };
+const _hoisted_19$1 = /* @__PURE__ */ createBaseVNode("h3", { class: "docdog-modal__body__sub-heading" }, "\u8A18\u4E8B", -1);
+const _hoisted_20$1 = {
+  key: 0,
+  class: "docdog-card__list"
+};
 const _hoisted_21 = {
-  key: 0,
-  class: "docdog-card__list"
-};
-const _hoisted_22 = {
   key: 0,
   class: "docdog-modal__body__section docdog-container--white"
 };
-const _hoisted_23 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831", -1);
-const _hoisted_24 = { class: "docdog-card__list" };
-const _hoisted_25 = { class: "docdog-modal__body__section docdog-container--white" };
-const _hoisted_26 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u30D8\u30EB\u30D7", -1);
-const _hoisted_27 = { class: "docdog-card__list" };
+const _hoisted_22 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831", -1);
+const _hoisted_23 = { class: "docdog-card__list" };
+const _hoisted_24 = { class: "docdog-modal__body__section docdog-container--white" };
+const _hoisted_25 = /* @__PURE__ */ createBaseVNode("h2", { class: "docdog-modal__body__heading" }, "\u30D8\u30EB\u30D7", -1);
+const _hoisted_26 = { class: "docdog-card__list" };
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CardModal = resolveComponent("CardModal");
   const _component_CardVideos = resolveComponent("CardVideos");
@@ -16177,21 +16235,25 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
       createBaseVNode("ul", _hoisted_4$3, [
         (openBlock(true), createElementBlock(Fragment, null, renderList($data.listNews, (news) => {
           return openBlock(), createElementBlock("li", _hoisted_5$3, [
-            createBaseVNode("button", _hoisted_6$3, [
-              createBaseVNode("time", _hoisted_7$3, toDisplayString(news.ymd), 1),
-              createBaseVNode("span", _hoisted_8$3, toDisplayString($options.getCategoryName(news.contents_type)), 1),
-              createBaseVNode("span", _hoisted_9$2, toDisplayString(news.subject), 1)
+            createBaseVNode("button", {
+              type: "button",
+              class: "docdog-list__item__link",
+              onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.redirect({ target: "NewsDetails", params: { data: _ctx.data } }), ["prevent"]))
+            }, [
+              createBaseVNode("time", _hoisted_6$3, toDisplayString(news.ymd), 1),
+              createBaseVNode("span", _hoisted_7$3, toDisplayString($options.getCategoryName(news.contents_type)), 1),
+              createBaseVNode("span", _hoisted_8$3, toDisplayString(news.subject), 1)
             ])
           ]);
         }), 256))
       ])
     ]),
-    createBaseVNode("section", _hoisted_10$2, [
-      _hoisted_11$2,
-      createBaseVNode("ul", _hoisted_12$2, [
-        createBaseVNode("li", _hoisted_13, [
-          _hoisted_14,
-          $options.docs.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_15, [
+    createBaseVNode("section", _hoisted_9$2, [
+      _hoisted_10$2,
+      createBaseVNode("ul", _hoisted_11$2, [
+        createBaseVNode("li", _hoisted_12$2, [
+          _hoisted_13,
+          $options.docs.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_14, [
             (openBlock(true), createElementBlock(Fragment, null, renderList($options.docs, (doc2) => {
               return openBlock(), createElementBlock("li", null, [
                 createVNode(_component_CardModal, {
@@ -16206,9 +16268,9 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
             }), 256))
           ])) : createCommentVNode("", true)
         ]),
-        createBaseVNode("li", _hoisted_16, [
-          _hoisted_17$1,
-          $options.videos.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_18$1, [
+        createBaseVNode("li", _hoisted_15, [
+          _hoisted_16,
+          $options.videos.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_17$1, [
             (openBlock(true), createElementBlock(Fragment, null, renderList($options.videos, (video) => {
               return openBlock(), createElementBlock("li", null, [
                 createVNode(_component_CardVideos, {
@@ -16217,15 +16279,16 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
                   toastIds: _ctx.toastIds,
                   showDownloadBtn: $data.showDownloadBtn,
                   onDownload: ($event) => _ctx.download(video),
-                  onAddToast: _ctx.addToast
-                }, null, 8, ["data", "toastIds", "showDownloadBtn", "onDownload", "onAddToast"])
+                  onAddToast: _ctx.addToast,
+                  onRedirect: _ctx.redirect
+                }, null, 8, ["data", "toastIds", "showDownloadBtn", "onDownload", "onAddToast", "onRedirect"])
               ]);
             }), 256))
           ])) : createCommentVNode("", true)
         ]),
-        createBaseVNode("li", _hoisted_19$1, [
-          _hoisted_20$1,
-          $options.topics.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_21, [
+        createBaseVNode("li", _hoisted_18$1, [
+          _hoisted_19$1,
+          $options.topics.length > 0 ? (openBlock(), createElementBlock("ul", _hoisted_20$1, [
             (openBlock(true), createElementBlock(Fragment, null, renderList($options.topics, (topic) => {
               return openBlock(), createElementBlock("li", null, [
                 createVNode(_component_CardTopics, {
@@ -16234,48 +16297,49 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
                   toastIds: _ctx.toastIds,
                   showDownloadBtn: $data.showDownloadBtn,
                   onDownload: ($event) => _ctx.download(topic),
-                  onAddToast: _ctx.addToast
-                }, null, 8, ["data", "toastIds", "showDownloadBtn", "onDownload", "onAddToast"])
+                  onAddToast: _ctx.addToast,
+                  onRedirect: _ctx.redirect
+                }, null, 8, ["data", "toastIds", "showDownloadBtn", "onDownload", "onAddToast", "onRedirect"])
               ]);
             }), 256))
           ])) : createCommentVNode("", true)
         ])
       ])
     ]),
-    _ctx.isLogin ? (openBlock(), createElementBlock("section", _hoisted_22, [
-      _hoisted_23,
-      createBaseVNode("ul", _hoisted_24, [
+    _ctx.isLogin ? (openBlock(), createElementBlock("section", _hoisted_21, [
+      _hoisted_22,
+      createBaseVNode("ul", _hoisted_23, [
         createBaseVNode("li", null, [
           createBaseVNode("button", {
             type: "button",
             class: "docdog-button docdog-button--secondary",
-            onClick: _cache[0] || (_cache[0] = ($event) => _ctx.redirect({ target: "EditProfile" }))
+            onClick: _cache[1] || (_cache[1] = ($event) => _ctx.redirect({ target: "EditProfile" }))
           }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u60C5\u5831\u306E\u5909\u66F4 ")
         ]),
         createBaseVNode("li", null, [
           createBaseVNode("button", {
             type: "button",
             class: "docdog-button docdog-button--white",
-            onClick: _cache[1] || (_cache[1] = ($event) => _ctx.redirect({ target: "Withdrawal" }))
+            onClick: _cache[2] || (_cache[2] = ($event) => _ctx.redirect({ target: "Withdrawal" }))
           }, " \u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u524A\u9664 ")
         ]),
         createBaseVNode("li", null, [
           createBaseVNode("button", {
             type: "button",
             class: "docdog-button docdog-button--white",
-            onClick: _cache[2] || (_cache[2] = ($event) => _ctx.logout())
+            onClick: _cache[3] || (_cache[3] = ($event) => _ctx.logout())
           }, "\u30ED\u30B0\u30A2\u30A6\u30C8")
         ])
       ])
     ])) : createCommentVNode("", true),
-    createBaseVNode("section", _hoisted_25, [
-      _hoisted_26,
-      createBaseVNode("ul", _hoisted_27, [
+    createBaseVNode("section", _hoisted_24, [
+      _hoisted_25,
+      createBaseVNode("ul", _hoisted_26, [
         createBaseVNode("li", null, [
           createBaseVNode("button", {
             type: "button",
             class: "docdog-button docdog-button--secondary",
-            onClick: _cache[3] || (_cache[3] = ($event) => _ctx.redirect({ target: "Inquiry" }))
+            onClick: _cache[4] || (_cache[4] = ($event) => _ctx.redirect({ target: "Inquiry" }))
           }, " \u304A\u554F\u3044\u5408\u308F\u305B ")
         ])
       ])
@@ -16301,26 +16365,8 @@ function doSend(data2) {
     return Promise.reject(err_msg);
   }));
 }
-function getInquiryForm(inquiry_id) {
-  return loginApi.getAuthHeaders({
-    autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get("/rcms-api/3/inquiry/form/" + inquiry_id, params, headers).then(processError).catch((err) => {
-    let err_msg = "Problem fetching inquiry form " + inquiry_id;
-    switch (err.response.status) {
-      case 401:
-        err_msg = "Unauthorized request";
-        break;
-      case 404:
-        err_msg = "Inquiry form " + inquiry_id + " unavailable";
-        break;
-    }
-    return Promise.reject(err_msg);
-  }));
-}
 var inquiryApi = {
-  doSend,
-  getInquiryForm
+  doSend
 };
 const _sfc_main$6 = {
   extends: _sfc_main$w,
@@ -16652,11 +16698,11 @@ const _sfc_main$5 = {
     setCurrentPage(newPage) {
       this.$emit("update:current_page", newPage);
     },
-    onRedirect({ target, msg, msg2, err, params: params2 }, writeHist = true) {
+    onRedirect({ target, msg, msg2, err, params }, writeHist = true) {
       this.msg = msg || "";
       this.msg2 = msg2 || "";
       this.err = err || "";
-      this.redirect_params = params2;
+      this.redirect_params = params;
       this.setCurrentPage(target);
       if (writeHist) {
         this.$emit("writePageHistory", target);
@@ -16851,17 +16897,17 @@ function v4(options, buf, offset) {
   }
   return stringify2(rnds);
 }
-function makeZip(entries, isPublic2 = false) {
+function makeZip(entries, isPublic = false) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
+    anonLogin: isPublic
   }).then((headers) => post("/rcms-api/3/zip", { entries }, headers).then(processError));
 }
-function getFileUrl(path, isPublic2 = false) {
+function getFileUrl(path, isPublic = false) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/get_file_url", { path }, headers).then(processError));
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/get_file_url", { path }, headers).then(processError));
 }
 var zipApi = {
   makeZip,
@@ -17119,12 +17165,12 @@ const _sfc_main = {
     });
     if (this.urlParams.docdog_page) {
       let target = "";
-      const params2 = {};
+      const params = {};
       switch (this.urlParams.docdog_page) {
         case "reminder":
           target = "Reminder";
           if (this.urlParams.token) {
-            params2.token = this.urlParams.token;
+            params.token = this.urlParams.token;
           }
           break;
         case "login":
@@ -17146,20 +17192,20 @@ const _sfc_main = {
           target = this.urlParams.docdog_page;
       }
       if (target) {
-        this.redirect({ target, params: params2 }, false);
+        this.redirect({ target, params }, false);
       }
     }
   },
   methods: {
-    linkNode(node, params2) {
+    linkNode(node, params) {
       let uuid = node.getAttribute(this.docdog_id_attr_name);
       if (uuid == null || uuid == "") {
         uuid = v4();
-        this.node_params_map[uuid] = { node, params: params2 };
+        this.node_params_map[uuid] = { node, params };
         node.setAttribute(this.docdog_id_attr_name, uuid);
         node.addEventListener("click", this.nodeAction);
       } else {
-        this.node_params_map[uuid].params = params2;
+        this.node_params_map[uuid].params = params;
       }
     },
     unlinkNode(node) {
@@ -17192,9 +17238,9 @@ const _sfc_main = {
         this.writePageHistory("");
       }
     },
-    processNodeParams(node, params2) {
-      if (params2.show) {
-        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params2.show).groups;
+    processNodeParams(node, params) {
+      if (params.show) {
+        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params.show).groups;
         if (!eventName in this.app_global_events) {
           console.error('[Docdog] "show" handler expects an existing event among :', this.app_global_events.join(","));
         } else {
@@ -17223,8 +17269,8 @@ const _sfc_main = {
     setNodeProfile(node) {
       node.addEventListener("click", this.profile);
     },
-    setNodeList(node, params2) {
-      node.addEventListener("click", () => this.list(params2));
+    setNodeList(node, params) {
+      node.addEventListener("click", () => this.list(params));
     },
     setNodeTopics(node) {
       node.addEventListener("click", this.topics);
@@ -17232,7 +17278,7 @@ const _sfc_main = {
     setNodeVideos(node) {
       node.addEventListener("click", this.videos);
     },
-    setNodeHeader(node, params2) {
+    setNodeHeader(node, params) {
       this.customHeaderHtml = node.innerHTML;
       node.remove();
     },
@@ -17305,17 +17351,17 @@ const _sfc_main = {
     mypage() {
       this.redirect({ target: "Mypage" });
     },
-    inquiry(params2) {
-      this.redirect({ target: "Inquiry", params: params2 });
+    inquiry(params) {
+      this.redirect({ target: "Inquiry", params });
     },
-    list(params2) {
-      this.redirect({ target: "List", params: params2 });
+    list(params) {
+      this.redirect({ target: "List", params });
     },
-    topics(params2) {
-      this.redirect({ target: "Topics", params: params2 });
+    topics(params) {
+      this.redirect({ target: "Topics", params });
     },
-    videos(params2) {
-      this.redirect({ target: "Videos", params: params2 });
+    videos(params) {
+      this.redirect({ target: "Videos", params });
     },
     downloadToast() {
       if (this.current_page != "DownloadList") {
@@ -17449,14 +17495,14 @@ if (window.Docdog === void 0) {
     app: null
   };
 }
-function processNodeParams(node, params2) {
+function processNodeParams(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.processNodeParams(node, params2);
+    window.Docdog.app.processNodeParams(node, params);
   }
 }
-function linkNode(node, params2) {
+function linkNode(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.linkNode(node, params2);
+    window.Docdog.app.linkNode(node, params);
   }
 }
 function unlinkNode(node) {
@@ -17489,19 +17535,19 @@ function setNodeProfile(node) {
     window.Docdog.app.setNodeProfile(node);
   }
 }
-function setNodeList(node, params2) {
+function setNodeList(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params2);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
-function setNodeTopics(node, params2) {
+function setNodeTopics(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params2);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
-function setNodeVideos(node, params2) {
+function setNodeVideos(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params2);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
 function setNodeHeader(node) {
@@ -17562,21 +17608,21 @@ function parseDOM() {
     docdogEls.push({ node, action, searchParams: new URLSearchParams(paramsQueryString) });
   });
   docdogEls.forEach((elData) => {
-    const params2 = {};
+    const params = {};
     const paramsIter = elData.searchParams.entries();
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
       if (value != "") {
         if (key == "id" || !isNaN(value) && !isNaN(parseInt(value))) {
-          params2[key] = parseInt(value);
+          params[key] = parseInt(value);
         } else {
-          params2[key] = value;
+          params[key] = value;
         }
       }
       res = paramsIter.next();
     }
-    nodes.push({ el: elData.node, action: elData.action, params: params2 });
+    nodes.push({ el: elData.node, action: elData.action, params });
   });
   initApp(el);
   nodes.forEach((node) => {
@@ -17621,9 +17667,9 @@ function parseDOM() {
     }
   });
 }
-function docdogLink(node, params2) {
+function docdogLink(node, params) {
   initApp();
-  linkNode(node, parseConfig(params2));
+  linkNode(node, parseConfig(params));
 }
 function docdogUnlink(node) {
   unlinkNode(node);

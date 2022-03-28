@@ -1,5 +1,5 @@
 <template>
-  <div class="docdog-card--link" @click.prevent="redirect({ target: 'VideoDetails', params: { data } })">
+  <div class="docdog-card docdog-card--link" @click.prevent="redirect({ target: 'VideoDetails', params: { data } })">
     <div class="docdog-card__thumb" :style="thumbnailStyle">
       <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
