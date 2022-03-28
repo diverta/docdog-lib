@@ -168,27 +168,7 @@ export default {
     },
     err_msg() {
       if (this.err.length > 0) {
-        const [err_field, err_type] = this.err.split(':');
-        let translatedField = 'データ';
-        let tranlatedProblem = '不正';
-        switch (err_field) {
-          case 'email':
-            translatedField = 'メールアドレス';
-            break;
-        }
-        switch (err_type) {
-          case 'invalid':
-            tranlatedProblem = '不正';
-            break;
-          case 'required':
-            tranlatedProblem = '必須';
-            break;
-        }
-        if (translatedField && tranlatedProblem) {
-          return translatedField + 'が' + tranlatedProblem + 'です';
-        } else {
-          return 'エラーが発生しました。';
-        }
+          return 'ログイン情報が不正です。';
       } else {
         return '';
       }
@@ -211,7 +191,7 @@ export default {
               this.setMsg('ログインしました。');
             }
           } else {
-            this.error('Could not login');
+            this.error('ログインできませんでした。');
           }
           event.target.blur();
         })
