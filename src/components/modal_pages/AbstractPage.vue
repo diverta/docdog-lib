@@ -50,7 +50,19 @@ export default {
       this.$emit('err', err);
     },
     download(data) {
-      this.redirect({ target: 'Download', params: { doc_data: data } });
+      //this.redirect({ target: 'Download', params: { doc_data: data } });
+      if (data.file && data.file.url) {
+        const url = data.file.url;
+        const link = document.createElement('a');
+        link.download = name;
+        link.href = url;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        console.error('[DocDog] Download unavailable');
+      }
     },
     addToast(item) {
       this.$emit('addToast', item);

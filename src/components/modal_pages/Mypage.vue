@@ -29,6 +29,7 @@
               :showDownloadBtn="showDownloadBtn"
               @download="download(doc)"
               @addToast="addToast"
+              @redirect="redirect"
             />
           </li>
         </ul>

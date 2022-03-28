@@ -92,15 +92,6 @@ export default {
         this.footer_data.downloaded = true;
       }
     },
-    download(url, name = '') {
-      const link = document.createElement('a');
-      link.download = name;
-      link.href = url;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    },
     addToastCurrent() {
       this.addToast(this.data);
       this.footer_data.isInToast = true;

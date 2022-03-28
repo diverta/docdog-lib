@@ -1,6 +1,10 @@
 <template>
   <div class="docdog-card">
-    <div class="docdog-card__thumb" :style="thumbnailStyle">
+    <div
+      class="docdog-card__thumb"
+      :style="thumbnailStyle"
+      @click.prevent="redirect({ target: 'Download', params: { doc_data: data } })"
+    >
       <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
     <div class="docdog-card__body">
