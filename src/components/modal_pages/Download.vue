@@ -97,6 +97,10 @@ export default {
       this.footer_data.isInToast = true;
       this.close();
     },
+    getPageHistParams() {
+      console.log('getPageHistParams: CUSTOM');
+      return this.data;
+    },
   },
 };
 </script>

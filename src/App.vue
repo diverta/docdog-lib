@@ -248,7 +248,7 @@ export default {
       this.current_node_uuid = null;
       this.current_page = ''; // Reinit the page state
       if (writeHist) {
-        this.writePageHistory('');
+        this.writePageHistory({ page: '' });
       }
     },
     processNodeParams(node, params) {
@@ -432,7 +432,7 @@ export default {
     onAfterRedirect(pageData) {
       this.$refs['modal'].resetView();
     },
-    writePageHistory(page) {
+    writePageHistory({ page, params = {} }) {
       const newParams = { ...this.urlParams };
       if (page) {
         newParams.docdog_page = page;
@@ -440,7 +440,11 @@ export default {
         delete newParams.docdog_page;
       }
       const qs = new URLSearchParams(newParams).toString();
-      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || '' }, null, '?' + qs);
+      window.history.pushState(
+        { prevUrl: window.location.href, docdog_page: this.current_page || '', params },
+        null,
+        '?' + qs
+      );
     },
   },
 };

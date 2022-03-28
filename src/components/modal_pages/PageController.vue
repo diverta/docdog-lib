@@ -24,6 +24,7 @@ import Topics from './Topics.vue';
 import Videos from './Videos.vue';
 import TopicDetails from './TopicDetails.vue';
 import VideoDetails from './VideoDetails.vue';
+import NewsDetails from './NewsDetails.vue';
 import Reminder from './Reminder.vue';
 import Error from './Error.vue';
 import Loading from './Loading.vue';
@@ -42,6 +43,7 @@ const pages = {
   Videos,
   TopicDetails,
   VideoDetails,
+  NewsDetails,
   Reminder,
   EmptyPage,
   Loading,
@@ -154,9 +156,9 @@ export default {
       this.redirect_params = params;
       this.setCurrentPage(target);
       if (writeHist) {
-        this.$emit('writePageHistory', target);
+        this.$emit('writePageHistory', { page: target });
       }
-      this.$emit('onAfterRedirect', { target, params});
+      this.$emit('onAfterRedirect', { target, params });
     },
   },
 };
