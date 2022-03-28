@@ -1,13 +1,13 @@
 <template>
-  <div class="docdog-card">
+  <div class="docdog-card docdog-card--link">
     <div
-      class="docdog-card__thumb"
+      class="docdog-card__thumb docdog-card--link"
       :style="thumbnailStyle"
       @click.prevent="redirect({ target: 'Download', params: { doc_data: data } })"
     >
       <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
-    <div class="docdog-card__body">
+    <div class="docdog-card__body" @click.prevent.self="redirect({ target: 'Download', params: { doc_data: data } })">
       <p class="docdog-card__body__title">{{ data.subject }}</p>
       <template v-if="showDownloadBtn">
         <button type="button" class="docdog-button docdog-button--secondary" @click="onDownload()">
