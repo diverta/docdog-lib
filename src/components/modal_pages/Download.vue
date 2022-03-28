@@ -88,7 +88,7 @@ export default {
     onDownload() {
       if (this.data) {
         // Data has been fetched
-        this.download(this.data.file.url);
+        this.download(this.data);
         this.footer_data.downloaded = true;
       }
     },
