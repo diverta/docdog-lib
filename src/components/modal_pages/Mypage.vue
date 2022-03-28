@@ -7,7 +7,7 @@
     <h2 class="docdog-modal__body__heading">お知らせ</h2>
     <ul class="docdog-list">
       <li class="docdog-list__item" v-for="news in listNews">
-        <button type="button" class="docdog-list__item__link">
+        <button type="button" class="docdog-list__item__link" @click.prevent="redirect({ target: 'NewsDetails', params: { data } })">
           <time datetime="2022-03-01">{{ news.ymd }}</time>
           <span class="docdog-badge">{{ getCategoryName(news.contents_type) }}</span>
           <span class="docdog-list__item__title">{{ news.subject }} </span>

@@ -51,6 +51,13 @@
               </select>
             </div>
             <div class="docdog-form__item">
+              <label for="position" class="docdog-form__item__title">メールマガジンの配信設定</label>
+              <div class="docdog-form__toggle">
+                <input name="email_send_ng_flg" id="email_send_ng_flg" v-model="email_send_ng_flg" type="checkbox" value="1" />
+                <label for="email_send_ng_flg">メールマガジンを受け取らない</label>
+              </div>
+            </div>
+            <div class="docdog-form__item">
               <label for="position" class="docdog-form__item__title">役職</label>
               <input name="position" type="text" id="position" placeholder="" v-model="position" required />
             </div>
@@ -96,6 +103,7 @@ export default {
       industry: '',
       position: '',
       login_pwd: '',
+      email_send_ng_flg: '',
     };
   },
   computed: {
