@@ -506,7 +506,7 @@ function triggerEffects(dep, debuggerEventExtraInfo) {
 }
 const isNonTrackableKeys = /* @__PURE__ */ makeMap(`__proto__,__v_isRef,__isVue`);
 const builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map((key) => Symbol[key]).filter(isSymbol$1));
-const get$1 = /* @__PURE__ */ createGetter();
+const get$2 = /* @__PURE__ */ createGetter();
 const shallowGet = /* @__PURE__ */ createGetter(false, true);
 const readonlyGet = /* @__PURE__ */ createGetter(true);
 const arrayInstrumentations = /* @__PURE__ */ createArrayInstrumentations();
@@ -615,7 +615,7 @@ function ownKeys(target) {
   return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
-  get: get$1,
+  get: get$2,
   set,
   deleteProperty,
   has: has$4,
@@ -4304,7 +4304,7 @@ function traverse(value, seen) {
   }
   return value;
 }
-const version = "3.2.20";
+const version = "3.2.21";
 const svgNS = "http://www.w3.org/2000/svg";
 const doc = typeof document !== "undefined" ? document : null;
 const staticTemplateCache = new Map();
@@ -4384,14 +4384,8 @@ function patchClass(el, value, isSVG) {
 }
 function patchStyle(el, prev, next) {
   const style = el.style;
-  const currentDisplay = style.display;
-  if (!next) {
-    el.removeAttribute("style");
-  } else if (isString$2(next)) {
-    if (prev !== next) {
-      style.cssText = next;
-    }
-  } else {
+  const isCssString = isString$2(next);
+  if (next && !isCssString) {
     for (const key in next) {
       setStyle(style, key, next[key]);
     }
@@ -4402,9 +4396,18 @@ function patchStyle(el, prev, next) {
         }
       }
     }
-  }
-  if ("_vod" in el) {
-    style.display = currentDisplay;
+  } else {
+    const currentDisplay = style.display;
+    if (isCssString) {
+      if (prev !== next) {
+        style.cssText = next;
+      }
+    } else if (prev) {
+      el.removeAttribute("style");
+    }
+    if ("_vod" in el) {
+      style.display = currentDisplay;
+    }
   }
 }
 const importantRE = /\s*!important$/;
@@ -4909,10 +4912,11 @@ function normalizeContainer(container) {
   return container;
 }
 var _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
-    sfc[key] = val;
+    target[key] = val;
   }
-  return sfc;
+  return target;
 };
 const _sfc_main$z = {
   props: {
@@ -4992,9 +4996,9 @@ const _sfc_main$y = {
     closeModal() {
       this.$emit("close");
     },
-    redirect(target, params = {}) {
+    redirect(target, params2 = {}) {
       this.docdog_menu_display = false;
-      this.$emit("redirect", { target, params });
+      this.$emit("redirect", { target, params: params2 });
     },
     logout() {
       this.docdog_menu_display = false;
@@ -5548,18 +5552,18 @@ var utils$f = utils$g;
 function encode$1(val) {
   return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
 }
-var buildURL$2 = function buildURL(url, params, paramsSerializer) {
-  if (!params) {
+var buildURL$2 = function buildURL(url, params2, paramsSerializer) {
+  if (!params2) {
     return url;
   }
   var serializedParams;
   if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils$f.isURLSearchParams(params)) {
-    serializedParams = params.toString();
+    serializedParams = paramsSerializer(params2);
+  } else if (utils$f.isURLSearchParams(params2)) {
+    serializedParams = params2.toString();
   } else {
     var parts = [];
-    utils$f.forEach(params, function serialize(val, key) {
+    utils$f.forEach(params2, function serialize(val, key) {
       if (val === null || typeof val === "undefined") {
         return;
       }
@@ -13451,17 +13455,24 @@ var lodash = { exports: {} };
   }).call(commonjsGlobal);
 })(lodash, lodash.exports);
 var _ = lodash.exports;
-const API_HOST = "https://docdog.g.kuroco.app";
-function get(uri, params = {}, headers = {}) {
-  return axios.get(API_HOST + uri, {
-    headers,
-    params
-  });
+function get$1(uri, params2 = {}, headers = {}) {
+  if (window.DOCDOG_API_HOST) {
+    return axios.get(window.DOCDOG_API_HOST + uri, {
+      headers,
+      params: params2
+    });
+  } else {
+    console.error("[Docdog] DOCDOG_API_HOST is undefined. Please check your Google Tag Manager settings");
+  }
 }
 function post(uri, post_data = {}, headers = {}) {
-  return axios.post(API_HOST + uri, JSON.stringify(post_data), {
-    headers
-  });
+  if (window.DOCDOG_API_HOST) {
+    return axios.post(window.DOCDOG_API_HOST + uri, JSON.stringify(post_data), {
+      headers
+    });
+  } else {
+    console.error("[Docdog] API Host is undefined. Please check your Google Tag Manager settings");
+  }
 }
 function processError(res) {
   if (!res.data) {
@@ -13505,16 +13516,16 @@ function getAuthHeaders(options = {
   const access_token = parseToken(storage_keys.ACCESS_TOKEN, fetchData(storage_keys.ACCESS_TOKEN));
   if (!access_token.value || !options.anonLogin && access_token.isPublic) {
     const token_data = {};
-    let isPublic = true;
+    let isPublic2 = true;
     const refresh_token = parseToken(storage_keys.REFRESH_TOKEN, fetchData(storage_keys.REFRESH_TOKEN));
     if (options.autoLogin && refresh_token.value) {
       token_data[refresh_token] = refresh_token.value;
-      isPublic = false;
+      isPublic2 = false;
     } else if (!options.anonLogin) {
       return Promise.resolve({});
     }
     return getAccessToken(token_data).then((ret) => {
-      storeData(storage_keys.ACCESS_TOKEN, __spreadProps(__spreadValues({}, ret.access_token), { isPublic }));
+      storeData(storage_keys.ACCESS_TOKEN, __spreadProps(__spreadValues({}, ret.access_token), { isPublic: isPublic2 }));
       return {
         [header_keys.ACCESS_TOKEN]: ret.access_token.value
       };
@@ -13622,7 +13633,7 @@ function getProfile(options = {
   } else {
     return getAuthHeaders(options).then((headers) => {
       if (header_keys.ACCESS_TOKEN in headers && headers[header_keys.ACCESS_TOKEN].length > 0) {
-        return get("/rcms-api/3/profile", {}, headers).then((res) => {
+        return get$1("/rcms-api/3/profile", {}, headers).then((res) => {
           updateProfile(res.data.details);
           return res.data.details;
         });
@@ -13801,27 +13812,7 @@ const _sfc_main$t = {
     },
     err_msg() {
       if (this.err.length > 0) {
-        const [err_field, err_type] = this.err.split(":");
-        let translatedField = "\u30C7\u30FC\u30BF";
-        let tranlatedProblem = "\u4E0D\u6B63";
-        switch (err_field) {
-          case "email":
-            translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
-            break;
-        }
-        switch (err_type) {
-          case "invalid":
-            tranlatedProblem = "\u4E0D\u6B63";
-            break;
-          case "required":
-            tranlatedProblem = "\u5FC5\u9808";
-            break;
-        }
-        if (translatedField && tranlatedProblem) {
-          return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
-        } else {
-          return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
-        }
+        return "\u30ED\u30B0\u30A4\u30F3\u60C5\u5831\u304C\u4E0D\u6B63\u3067\u3059\u3002";
       } else {
         return "";
       }
@@ -13842,7 +13833,7 @@ const _sfc_main$t = {
             this.setMsg("\u30ED\u30B0\u30A4\u30F3\u3057\u307E\u3057\u305F\u3002");
           }
         } else {
-          this.error("Could not login");
+          this.error("\u30ED\u30B0\u30A4\u30F3\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002");
         }
         event.target.blur();
       }).catch((err) => {
@@ -13850,25 +13841,15 @@ const _sfc_main$t = {
       });
     },
     ssoLogin(provider) {
-      switch (provider) {
-        case "google":
-          this.ssoActionUrl = "https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1";
-          break;
-        case "facebook":
-          this.ssoActionUrl = "";
-          break;
-        case "line":
-          this.ssoActionUrl = "";
-          break;
-        case "yahoo":
-          this.ssoActionUrl = "";
-          break;
-        case "apple":
-          this.ssoActionUrl = "";
-          break;
-        default:
-          console.error("Unsupported SSO provider : " + provider);
-          return;
+      if (window.DOCDOG_OAUTH_SETTINGS) {
+        const providerInfo = window.DOCDOG_OAUTH_SETTINGS[provider];
+        if (providerInfo && providerInfo.action_url) {
+          this.ssoActionUrl = providerInfo.action_url;
+        } else {
+          console.error("[Docdog] DOCDOG_OAUTH_SETTINGS for " + provider + " does not define action_url");
+        }
+      } else {
+        console.error("[Docdog] DOCDOG_OAUTH_SETTINGS is undefined. Please check your Google Tag Manager settings");
       }
       this.$refs["ssoForm"].action = this.ssoActionUrl;
       this.$refs["ssoForm"].submit();
@@ -14159,10 +14140,28 @@ function doWithdrawal() {
     return Promise.reject(err_msg);
   }));
 }
+function getMemberForm() {
+  return loginApi.getAuthHeaders({
+    autoLogin: true,
+    anonLogin: isPublic
+  }).then((headers) => get$1("/rcms-api/3/member/form", params, headers).then(processError).catch((err) => {
+    let err_msg = "Problem fetching member form";
+    switch (err.response.status) {
+      case 401:
+        err_msg = "Unauthorized request";
+        break;
+      case 404:
+        err_msg = "Member form unavailable";
+        break;
+    }
+    return Promise.reject(err_msg);
+  }));
+}
 var memberApi = {
   doSignUp,
   doEditProfile,
-  doWithdrawal
+  doWithdrawal,
+  getMemberForm
 };
 const _sfc_main$s = {
   extends: _sfc_main$x,
@@ -14968,11 +14967,11 @@ function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var CardModal = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$l]]);
-function getDocumentList(isPublic = false, params = {}) {
+function getDocumentList(isPublic2 = false, params2 = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get("/rcms-api/3/files", params, headers).then(processError).catch((err) => {
+    anonLogin: isPublic2
+  }).then((headers) => get$1("/rcms-api/3/files", params2, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching document list";
     switch (err.response.status) {
       case 401:
@@ -14985,11 +14984,11 @@ function getDocumentList(isPublic = false, params = {}) {
     return Promise.reject(err_msg);
   }));
 }
-function getDocumentData(id, isPublic = false, params = {}) {
+function getDocumentData(id, isPublic2 = false, params2 = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get("/rcms-api/3/files/" + id, params, headers).then(processError).catch((err) => {
+    anonLogin: isPublic2
+  }).then((headers) => get$1("/rcms-api/3/files/" + id, params2, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching document data";
     switch (err.response.status) {
       case 401:
@@ -15214,11 +15213,11 @@ function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
 var DownloadList = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$i]]);
 var TopicsList = {
   methods: {
-    fetchList(params = {}) {
-      if (!params.cnt) {
-        delete params["cnt"];
+    fetchList(params2 = {}) {
+      if (!params2.cnt) {
+        delete params2["cnt"];
       }
-      return docsApi.getDocumentList(true, params).then((data2) => {
+      return docsApi.getDocumentList(true, params2).then((data2) => {
         return { list: data2.list, pageInfo: data2.pageInfo };
       });
     },
@@ -16103,11 +16102,11 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var EmptyPage = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
-function getNewsList(isPublic = false, params = {}) {
+function getNewsList(isPublic2 = false, params2 = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get("/rcms-api/3/news", params, headers).then(processError).catch((err) => {
+    anonLogin: isPublic2
+  }).then((headers) => get$1("/rcms-api/3/news", params2, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching news list";
     switch (err.response.status) {
       case 401:
@@ -16206,9 +16205,9 @@ const _sfc_main$7 = {
           return "";
       }
     },
-    fetchNewsList(params = {}) {
-      params = __spreadValues(__spreadValues({}, this.defaultParams), params);
-      newsApi.getNewsList(true, params).then((data2) => {
+    fetchNewsList(params2 = {}) {
+      params2 = __spreadValues(__spreadValues({}, this.defaultParams), params2);
+      newsApi.getNewsList(true, params2).then((data2) => {
         this.listNews = [];
         if (data2) {
           data2.list.forEach((topics) => {
@@ -16218,12 +16217,12 @@ const _sfc_main$7 = {
       });
     },
     fetchDocList(category) {
-      const params = {
+      const params2 = {
         pageID: this.pageIDs[category],
         cnt: this.cnts[category],
         contents_type: category
       };
-      this.fetchList(params).then(({ list, pageInfo }) => {
+      this.fetchList(params2).then(({ list, pageInfo }) => {
         this.lists[category] = list;
         this.pageInfos[category] = pageInfo;
         this.pagedButtons[category] = this.makePagedButtons(pageInfo);
@@ -16414,8 +16413,26 @@ function doSend(data2) {
     return Promise.reject(err_msg);
   }));
 }
+function getInquiryForm(inquiry_id) {
+  return loginApi.getAuthHeaders({
+    autoLogin: true,
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/inquiry/form/" + inquiry_id, params, headers).then(processError).catch((err) => {
+    let err_msg = "Problem fetching inquiry form " + inquiry_id;
+    switch (err.response.status) {
+      case 401:
+        err_msg = "Unauthorized request";
+        break;
+      case 404:
+        err_msg = "Inquiry form " + inquiry_id + " unavailable";
+        break;
+    }
+    return Promise.reject(err_msg);
+  }));
+}
 var inquiryApi = {
-  doSend
+  doSend,
+  getInquiryForm
 };
 const _sfc_main$6 = {
   extends: _sfc_main$x,
@@ -16748,16 +16765,16 @@ const _sfc_main$5 = {
     setCurrentPage(newPage) {
       this.$emit("update:current_page", newPage);
     },
-    onRedirect({ target, msg, msg2, err, params }, writeHist = true) {
+    onRedirect({ target, msg, msg2, err, params: params2 }, writeHist = true) {
       this.msg = msg || "";
       this.msg2 = msg2 || "";
       this.err = err || "";
-      this.redirect_params = params;
+      this.redirect_params = params2;
       this.setCurrentPage(target);
       if (writeHist) {
         this.$emit("writePageHistory", { page: target });
       }
-      this.$emit("onAfterRedirect", { target, params });
+      this.$emit("onAfterRedirect", { target, params: params2 });
     }
   }
 };
@@ -16948,17 +16965,17 @@ function v4(options, buf, offset) {
   }
   return stringify2(rnds);
 }
-function makeZip(entries, isPublic = false) {
+function makeZip(entries, isPublic2 = false) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic
+    anonLogin: isPublic2
   }).then((headers) => post("/rcms-api/3/zip", { entries }, headers).then(processError));
 }
-function getFileUrl(path, isPublic = false) {
+function getFileUrl(path, isPublic2 = false) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get("/rcms-api/3/get_file_url", { path }, headers).then(processError));
+    anonLogin: isPublic2
+  }).then((headers) => get$1("/rcms-api/3/get_file_url", { path }, headers).then(processError));
 }
 var zipApi = {
   makeZip,
@@ -17216,12 +17233,12 @@ const _sfc_main = {
     });
     if (this.urlParams.docdog_page) {
       let target = "";
-      const params = {};
+      const params2 = {};
       switch (this.urlParams.docdog_page) {
         case "reminder":
           target = "Reminder";
           if (this.urlParams.token) {
-            params.token = this.urlParams.token;
+            params2.token = this.urlParams.token;
           }
           break;
         case "login":
@@ -17243,20 +17260,20 @@ const _sfc_main = {
           target = this.urlParams.docdog_page;
       }
       if (target) {
-        this.redirect({ target, params }, false);
+        this.redirect({ target, params: params2 }, false);
       }
     }
   },
   methods: {
-    linkNode(node, params) {
+    linkNode(node, params2) {
       let uuid = node.getAttribute(this.docdog_id_attr_name);
       if (uuid == null || uuid == "") {
         uuid = v4();
-        this.node_params_map[uuid] = { node, params };
+        this.node_params_map[uuid] = { node, params: params2 };
         node.setAttribute(this.docdog_id_attr_name, uuid);
         node.addEventListener("click", this.nodeAction);
       } else {
-        this.node_params_map[uuid].params = params;
+        this.node_params_map[uuid].params = params2;
       }
     },
     unlinkNode(node) {
@@ -17289,9 +17306,9 @@ const _sfc_main = {
         this.writePageHistory({ page: "" });
       }
     },
-    processNodeParams(node, params) {
-      if (params.show) {
-        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params.show).groups;
+    processNodeParams(node, params2) {
+      if (params2.show) {
+        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params2.show).groups;
         if (!eventName in this.app_global_events) {
           console.error('[Docdog] "show" handler expects an existing event among :', this.app_global_events.join(","));
         } else {
@@ -17320,8 +17337,8 @@ const _sfc_main = {
     setNodeProfile(node) {
       node.addEventListener("click", this.profile);
     },
-    setNodeList(node, params) {
-      node.addEventListener("click", () => this.list(params));
+    setNodeList(node, params2) {
+      node.addEventListener("click", () => this.list(params2));
     },
     setNodeTopics(node) {
       node.addEventListener("click", this.topics);
@@ -17329,7 +17346,7 @@ const _sfc_main = {
     setNodeVideos(node) {
       node.addEventListener("click", this.videos);
     },
-    setNodeHeader(node, params) {
+    setNodeHeader(node, params2) {
       this.customHeaderHtml = node.innerHTML;
       node.remove();
     },
@@ -17402,17 +17419,17 @@ const _sfc_main = {
     mypage() {
       this.redirect({ target: "Mypage" });
     },
-    inquiry(params) {
-      this.redirect({ target: "Inquiry", params });
+    inquiry(params2) {
+      this.redirect({ target: "Inquiry", params: params2 });
     },
-    list(params) {
-      this.redirect({ target: "List", params });
+    list(params2) {
+      this.redirect({ target: "List", params: params2 });
     },
-    topics(params) {
-      this.redirect({ target: "Topics", params });
+    topics(params2) {
+      this.redirect({ target: "Topics", params: params2 });
     },
-    videos(params) {
-      this.redirect({ target: "Videos", params });
+    videos(params2) {
+      this.redirect({ target: "Videos", params: params2 });
     },
     downloadToast() {
       if (this.current_page != "DownloadList") {
@@ -17454,7 +17471,7 @@ const _sfc_main = {
     onAfterRedirect(pageData) {
       this.$refs["modal"].resetView();
     },
-    writePageHistory({ page, params = {} }) {
+    writePageHistory({ page, params: params2 = {} }) {
       const newParams = __spreadValues({}, this.urlParams);
       if (page) {
         newParams.docdog_page = page;
@@ -17462,7 +17479,7 @@ const _sfc_main = {
         delete newParams.docdog_page;
       }
       const qs = new URLSearchParams(newParams).toString();
-      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || "", params }, null, "?" + qs);
+      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || "", params: params2 }, null, "?" + qs);
     }
   }
 };
@@ -17551,14 +17568,14 @@ if (window.Docdog === void 0) {
     app: null
   };
 }
-function processNodeParams(node, params) {
+function processNodeParams(node, params2) {
   if (window.Docdog.app) {
-    window.Docdog.app.processNodeParams(node, params);
+    window.Docdog.app.processNodeParams(node, params2);
   }
 }
-function linkNode(node, params) {
+function linkNode(node, params2) {
   if (window.Docdog.app) {
-    window.Docdog.app.linkNode(node, params);
+    window.Docdog.app.linkNode(node, params2);
   }
 }
 function unlinkNode(node) {
@@ -17591,19 +17608,19 @@ function setNodeProfile(node) {
     window.Docdog.app.setNodeProfile(node);
   }
 }
-function setNodeList(node, params) {
+function setNodeList(node, params2) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params);
+    window.Docdog.app.setNodeList(node, params2);
   }
 }
-function setNodeTopics(node, params) {
+function setNodeTopics(node, params2) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params);
+    window.Docdog.app.setNodeList(node, params2);
   }
 }
-function setNodeVideos(node, params) {
+function setNodeVideos(node, params2) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params);
+    window.Docdog.app.setNodeList(node, params2);
   }
 }
 function setNodeHeader(node) {
@@ -17664,21 +17681,21 @@ function parseDOM() {
     docdogEls.push({ node, action, searchParams: new URLSearchParams(paramsQueryString) });
   });
   docdogEls.forEach((elData) => {
-    const params = {};
+    const params2 = {};
     const paramsIter = elData.searchParams.entries();
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
       if (value != "") {
         if (key == "id" || !isNaN(value) && !isNaN(parseInt(value))) {
-          params[key] = parseInt(value);
+          params2[key] = parseInt(value);
         } else {
-          params[key] = value;
+          params2[key] = value;
         }
       }
       res = paramsIter.next();
     }
-    nodes.push({ el: elData.node, action: elData.action, params });
+    nodes.push({ el: elData.node, action: elData.action, params: params2 });
   });
   initApp(el);
   nodes.forEach((node) => {
@@ -17723,9 +17740,9 @@ function parseDOM() {
     }
   });
 }
-function docdogLink(node, params) {
+function docdogLink(node, params2) {
   initApp();
-  linkNode(node, parseConfig(params));
+  linkNode(node, parseConfig(params2));
 }
 function docdogUnlink(node) {
   unlinkNode(node);
