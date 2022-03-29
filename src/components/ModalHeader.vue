@@ -93,7 +93,7 @@
       </button>
       <nav class="docdog-modal__head__nav__list docdog-u-hidden-sp">
         <ul class="docdog-modal__head__nav__list__menu">
-          <li>
+          <li v-if="isLogin">
             <button
               type="button"
               class="docdog-modal__head__nav__list__item"
@@ -105,7 +105,7 @@
               マイページ
             </button>
           </li>
-          <li>
+          <li v-if="isLogin">
             <button
               type="button"
               class="docdog-modal__head__nav__list__item"
@@ -117,7 +117,7 @@
               動画一覧
             </button>
           </li>
-          <li>
+          <li v-if="isLogin">
             <button
               type="button"
               class="docdog-modal__head__nav__list__item"
@@ -129,7 +129,7 @@
               記事一覧
             </button>
           </li>
-          <li>
+          <li v-if="isLogin">
             <button
               type="button"
               class="docdog-modal__head__nav__list__item"
@@ -141,7 +141,7 @@
               資料一覧
             </button>
           </li>
-          <li>
+          <li v-if="isLogin">
             <button
               type="button"
               class="docdog-modal__head__nav__list__item"
@@ -317,7 +317,7 @@
             </button>
           </div>
           <ul class="docdog-modal__head__nav__list__menu">
-            <li>
+            <li v-if="isLogin">
               <button
                 type="button"
                 class="docdog-modal__head__nav__list__item"
@@ -329,7 +329,7 @@
                 マイページ
               </button>
             </li>
-            <li>
+            <li v-if="isLogin">
               <button
                 type="button"
                 class="docdog-modal__head__nav__list__item"
@@ -341,7 +341,7 @@
                 動画一覧
               </button>
             </li>
-            <li>
+            <li v-if="isLogin">
               <button
                 type="button"
                 class="docdog-modal__head__nav__list__item"
@@ -353,7 +353,7 @@
                 記事一覧
               </button>
             </li>
-            <li>
+            <li v-if="isLogin">
               <button
                 type="button"
                 class="docdog-modal__head__nav__list__item"
@@ -365,7 +365,7 @@
                 資料一覧
               </button>
             </li>
-            <li>
+            <li v-if="isLogin">
               <button
                 type="button"
                 class="docdog-modal__head__nav__list__item"
