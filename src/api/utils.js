@@ -2,19 +2,25 @@ import axios from 'axios';
 import _ from 'lodash';
 import qs from 'qs';
 
-export const API_HOST = 'https://docdog.g.kuroco.app';
-
 export function get(uri, params = {}, headers = {}) {
-  return axios.get(API_HOST + uri, {
-    headers,
-    params,
-  });
+  if (window.DOCDOG_API_HOST) {
+    return axios.get(window.DOCDOG_API_HOST + uri, {
+      headers,
+      params,
+    });
+  } else {
+    console.error('[Docdog] DOCDOG_API_HOST is undefined. Please check your Google Tag Manager settings');
+  }
 }
 
 export function post(uri, post_data = {}, headers = {}) {
-  return axios.post(API_HOST + uri, JSON.stringify(post_data), {
-    headers,
-  });
+  if (window.DOCDOG_API_HOST) {
+    return axios.post(window.DOCDOG_API_HOST + uri, JSON.stringify(post_data), {
+      headers,
+    });
+  } else {
+    console.error('[Docdog] API Host is undefined. Please check your Google Tag Manager settings');
+  }
 }
 
 export function processError(res) {

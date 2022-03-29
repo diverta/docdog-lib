@@ -91,7 +91,10 @@
               <div class="docdog-form__item" :class="err.length > 0 ? 'docdog-form__item--error' : ''">
                 <input name="email" type="text" id="email" placeholder="メールアドレス" v-model="login_id" required />
               </div>
-              <div class="docdog-form__item" :class="err.length > 0 ? 'docdog-form__item docdog-form__item--error' : ''">
+              <div
+                class="docdog-form__item"
+                :class="err.length > 0 ? 'docdog-form__item docdog-form__item--error' : ''"
+              >
                 <input
                   name="password"
                   type="password"
@@ -127,7 +130,11 @@
         </form>
       </div>
       <div class="docdog-modal__body__section" v-if="isLogin">
-        <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'Mypage' })">
+        <button
+          type="button"
+          class="docdog-button docdog-button--white"
+          @click.prevent="redirect({ target: 'Mypage' })"
+        >
           マイページへ戻る
         </button>
       </div>
@@ -147,7 +154,7 @@ export default {
   components: {
     AlertSuccess,
     AlertError,
-    FormPolicy
+    FormPolicy,
   },
   data() {
     return {
@@ -220,25 +227,15 @@ export default {
         });
     },
     ssoLogin(provider) {
-      switch (provider) {
-        case 'google':
-          this.ssoActionUrl = 'https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1';
-          break;
-        case 'facebook':
-          this.ssoActionUrl = '';
-          break;
-        case 'line':
-          this.ssoActionUrl = '';
-          break;
-        case 'yahoo':
-          this.ssoActionUrl = '';
-          break;
-        case 'apple':
-          this.ssoActionUrl = '';
-          break;
-        default:
-          console.error('Unsupported SSO provider : ' + provider);
-          return;
+      if (window.DOCDOG_OAUTH_SETTINGS) {
+        const providerInfo = window.DOCDOG_OAUTH_SETTINGS[provider];
+        if (providerInfo && providerInfo.action_url) {
+          this.ssoActionUrl = providerInfo.action_url;
+        } else {
+          console.error('[Docdog] DOCDOG_OAUTH_SETTINGS for ' + provider + ' does not define action_url');
+        }
+      } else {
+        console.error('[Docdog] DOCDOG_OAUTH_SETTINGS is undefined. Please check your Google Tag Manager settings');
       }
       this.$refs['ssoForm'].action = this.ssoActionUrl;
       this.$refs['ssoForm'].submit();
