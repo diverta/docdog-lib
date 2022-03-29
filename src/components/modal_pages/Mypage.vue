@@ -19,22 +19,6 @@
     <h2 class="docdog-modal__body__heading">あなたにおすすめのコンテンツ</h2>
     <ul class="docdog-list">
       <li class="docdog-list__item docdog-u-py-lg">
-        <h3 class="docdog-modal__body__sub-heading">資料</h3>
-        <ul class="docdog-card__list" v-if="docs.length > 0">
-          <li v-for="doc in docs">
-            <CardModal
-              :data="doc"
-              :key="doc.topics_id"
-              :toastIds="toastIds"
-              :showDownloadBtn="showDownloadBtn"
-              @download="download(doc)"
-              @addToast="addToast"
-              @redirect="redirect"
-            />
-          </li>
-        </ul>
-      </li>
-      <li class="docdog-list__item docdog-u-py-lg">
         <h3 class="docdog-modal__body__sub-heading">動画</h3>
         <ul class="docdog-card__list" v-if="videos.length > 0">
           <li v-for="video in videos">
@@ -60,6 +44,22 @@
               :toastIds="toastIds"
               :showDownloadBtn="showDownloadBtn"
               @download="download(topic)"
+              @addToast="addToast"
+              @redirect="redirect"
+            />
+          </li>
+        </ul>
+      </li>
+      <li class="docdog-list__item docdog-u-py-lg">
+        <h3 class="docdog-modal__body__sub-heading">資料</h3>
+        <ul class="docdog-card__list" v-if="docs.length > 0">
+          <li v-for="doc in docs">
+            <CardModal
+              :data="doc"
+              :key="doc.topics_id"
+              :toastIds="toastIds"
+              :showDownloadBtn="showDownloadBtn"
+              @download="download(doc)"
               @addToast="addToast"
               @redirect="redirect"
             />

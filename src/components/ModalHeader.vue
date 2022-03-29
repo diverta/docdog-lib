@@ -110,18 +110,6 @@
               type="button"
               class="docdog-modal__head__nav__list__item"
               @click.prevent="
-                redirect('List');
-                docdog_spmenu_display = !docdog_spmenu_display;
-              "
-            >
-              資料一覧
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="docdog-modal__head__nav__list__item"
-              @click.prevent="
                 redirect('Videos');
                 docdog_spmenu_display = !docdog_spmenu_display;
               "
@@ -139,6 +127,18 @@
               "
             >
               記事一覧
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="docdog-modal__head__nav__list__item"
+              @click.prevent="
+                redirect('List');
+                docdog_spmenu_display = !docdog_spmenu_display;
+              "
+            >
+              資料一覧
             </button>
           </li>
           <li>
@@ -334,18 +334,6 @@
                 type="button"
                 class="docdog-modal__head__nav__list__item"
                 @click.prevent="
-                  redirect('List');
-                  docdog_spmenu_display = !docdog_spmenu_display;
-                "
-              >
-                資料一覧
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                class="docdog-modal__head__nav__list__item"
-                @click.prevent="
                   redirect('Videos');
                   docdog_spmenu_display = !docdog_spmenu_display;
                 "
@@ -363,6 +351,18 @@
                 "
               >
                 記事一覧
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="docdog-modal__head__nav__list__item"
+                @click.prevent="
+                  redirect('List');
+                  docdog_spmenu_display = !docdog_spmenu_display;
+                "
+              >
+                資料一覧
               </button>
             </li>
             <li>
