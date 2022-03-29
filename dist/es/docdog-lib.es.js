@@ -13518,8 +13518,9 @@ function getAuthHeaders(options = {
     const token_data = {};
     let isPublic2 = true;
     const refresh_token = parseToken(storage_keys.REFRESH_TOKEN, fetchData(storage_keys.REFRESH_TOKEN));
+    removeData(storage_keys.PROFILE);
     if (options.autoLogin && refresh_token.value) {
-      token_data[refresh_token] = refresh_token.value;
+      token_data["refresh_token"] = refresh_token.value;
       isPublic2 = false;
     } else if (!options.anonLogin) {
       return Promise.resolve({});
