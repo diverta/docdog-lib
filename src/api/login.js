@@ -39,8 +39,9 @@ function getAuthHeaders(
     const token_data = {};
     let isPublic = true;
     const refresh_token = parseToken(storage_keys.REFRESH_TOKEN, fetchData(storage_keys.REFRESH_TOKEN));
+    removeData(storage_keys.PROFILE); // Make sure the profile is empty
     if (options.autoLogin && refresh_token.value) {
-      token_data[refresh_token] = refresh_token.value;
+      token_data['refresh_token'] = refresh_token.value;
       isPublic = false;
     } else if (!options.anonLogin) {
       // This case should not functionnally happen, except when checking if the user is logged in. If this code is reached, then page flow is may be incorrect.
