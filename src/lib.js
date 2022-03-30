@@ -141,12 +141,16 @@ function parseDOM() {
   let el = null; // Element to be mounted
 
   // Scan <a> tags
-  document.querySelectorAll('a[href^="https://docdog.g.kuroco-front.app/"]').forEach((node) => {
-    const url = new URL(node.href);
-    const action = url.pathname.substr(1);
-    node.removeAttribute('href'); // Disable click
-    docdogEls.push({ node, action, searchParams: url.searchParams });
-  });
+  if (window.DOCDOG_API_HOST) {
+    document.querySelectorAll('a[href^="' + window.DOCDOG_API_HOST + '"]').forEach((node) => {
+      const url = new URL(node.href);
+      const action = url.pathname.substr(1);
+      node.removeAttribute('href'); // Disable click
+      docdogEls.push({ node, action, searchParams: url.searchParams });
+    });
+  } else {
+    console.error('[Docdog] is undefined. Please check your Google Tag Manager settings');
+  }
 
   // Scan any tag having custom data-docdog attribute
   document.querySelectorAll('[data-docdog]').forEach((node) => {
