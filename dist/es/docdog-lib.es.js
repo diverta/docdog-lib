@@ -506,7 +506,7 @@ function triggerEffects(dep, debuggerEventExtraInfo) {
 }
 const isNonTrackableKeys = /* @__PURE__ */ makeMap(`__proto__,__v_isRef,__isVue`);
 const builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map((key) => Symbol[key]).filter(isSymbol$1));
-const get$2 = /* @__PURE__ */ createGetter();
+const get$1 = /* @__PURE__ */ createGetter();
 const shallowGet = /* @__PURE__ */ createGetter(false, true);
 const readonlyGet = /* @__PURE__ */ createGetter(true);
 const arrayInstrumentations = /* @__PURE__ */ createArrayInstrumentations();
@@ -615,7 +615,7 @@ function ownKeys(target) {
   return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
-  get: get$2,
+  get: get$1,
   set,
   deleteProperty,
   has: has$4,
@@ -4996,9 +4996,9 @@ const _sfc_main$y = {
     closeModal() {
       this.$emit("close");
     },
-    redirect(target, params2 = {}) {
+    redirect(target, params = {}) {
       this.docdog_menu_display = false;
-      this.$emit("redirect", { target, params: params2 });
+      this.$emit("redirect", { target, params });
     },
     logout() {
       this.docdog_menu_display = false;
@@ -5562,18 +5562,18 @@ var utils$f = utils$g;
 function encode$1(val) {
   return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+").replace(/%5B/gi, "[").replace(/%5D/gi, "]");
 }
-var buildURL$2 = function buildURL(url, params2, paramsSerializer) {
-  if (!params2) {
+var buildURL$2 = function buildURL(url, params, paramsSerializer) {
+  if (!params) {
     return url;
   }
   var serializedParams;
   if (paramsSerializer) {
-    serializedParams = paramsSerializer(params2);
-  } else if (utils$f.isURLSearchParams(params2)) {
-    serializedParams = params2.toString();
+    serializedParams = paramsSerializer(params);
+  } else if (utils$f.isURLSearchParams(params)) {
+    serializedParams = params.toString();
   } else {
     var parts = [];
-    utils$f.forEach(params2, function serialize(val, key) {
+    utils$f.forEach(params, function serialize(val, key) {
       if (val === null || typeof val === "undefined") {
         return;
       }
@@ -13465,11 +13465,11 @@ var lodash = { exports: {} };
   }).call(commonjsGlobal);
 })(lodash, lodash.exports);
 var _ = lodash.exports;
-function get$1(uri, params2 = {}, headers = {}) {
+function get(uri, params = {}, headers = {}) {
   if (window.DOCDOG_API_HOST) {
     return axios.get(window.DOCDOG_API_HOST + uri, {
       headers,
-      params: params2
+      params
     });
   } else {
     console.error("[Docdog] DOCDOG_API_HOST is undefined. Please check your Google Tag Manager settings");
@@ -13526,17 +13526,17 @@ function getAuthHeaders(options = {
   const access_token = parseToken(storage_keys.ACCESS_TOKEN, fetchData(storage_keys.ACCESS_TOKEN));
   if (!access_token.value || !options.anonLogin && access_token.isPublic) {
     const token_data = {};
-    let isPublic2 = true;
+    let isPublic = true;
     const refresh_token = parseToken(storage_keys.REFRESH_TOKEN, fetchData(storage_keys.REFRESH_TOKEN));
     removeData(storage_keys.PROFILE);
     if (options.autoLogin && refresh_token.value) {
       token_data["refresh_token"] = refresh_token.value;
-      isPublic2 = false;
+      isPublic = false;
     } else if (!options.anonLogin) {
       return Promise.resolve({});
     }
     return getAccessToken(token_data).then((ret) => {
-      storeData(storage_keys.ACCESS_TOKEN, __spreadProps(__spreadValues({}, ret.access_token), { isPublic: isPublic2 }));
+      storeData(storage_keys.ACCESS_TOKEN, __spreadProps(__spreadValues({}, ret.access_token), { isPublic }));
       return {
         [header_keys.ACCESS_TOKEN]: ret.access_token.value
       };
@@ -13644,7 +13644,7 @@ function getProfile(options = {
   } else {
     return getAuthHeaders(options).then((headers) => {
       if (header_keys.ACCESS_TOKEN in headers && headers[header_keys.ACCESS_TOKEN].length > 0) {
-        return get$1("/rcms-api/3/profile", {}, headers).then((res) => {
+        return get("/rcms-api/3/profile", {}, headers).then((res) => {
           updateProfile(res.data.details);
           return res.data.details;
         });
@@ -14151,28 +14151,10 @@ function doWithdrawal() {
     return Promise.reject(err_msg);
   }));
 }
-function getMemberForm() {
-  return loginApi.getAuthHeaders({
-    autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get$1("/rcms-api/3/member/form", params, headers).then(processError).catch((err) => {
-    let err_msg = "Problem fetching member form";
-    switch (err.response.status) {
-      case 401:
-        err_msg = "Unauthorized request";
-        break;
-      case 404:
-        err_msg = "Member form unavailable";
-        break;
-    }
-    return Promise.reject(err_msg);
-  }));
-}
 var memberApi = {
   doSignUp,
   doEditProfile,
-  doWithdrawal,
-  getMemberForm
+  doWithdrawal
 };
 const _sfc_main$s = {
   extends: _sfc_main$x,
@@ -14633,7 +14615,7 @@ const _sfc_main$q = {
     }
   }
 };
-const _withScopeId$2 = (n) => (pushScopeId("data-v-53db03a0"), n = n(), popScopeId(), n);
+const _withScopeId$2 = (n) => (pushScopeId("data-v-2961dcee"), n = n(), popScopeId(), n);
 const _hoisted_1$m = { class: "docdog-container--form" };
 const _hoisted_2$j = { class: "docdog-container--white" };
 const _hoisted_3$i = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
@@ -14671,7 +14653,7 @@ const _hoisted_14$5 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ creat
   for: "industry",
   class: "docdog-form__item__title"
 }, "\u696D\u7A2E", -1));
-const _hoisted_15$2 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-53db03a0>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-53db03a0>\u91D1\u878D</option><option value="2" data-v-53db03a0>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-53db03a0>\u5B66\u6821</option><option value="4" data-v-53db03a0>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-53db03a0>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-53db03a0>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-53db03a0>\u88FD\u9020\u696D</option><option value="8" data-v-53db03a0>\u98DF\u54C1</option><option value="9" data-v-53db03a0>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-53db03a0>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-53db03a0>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-53db03a0>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-53db03a0>\u305D\u306E\u4ED6</option>', 14);
+const _hoisted_15$2 = /* @__PURE__ */ createStaticVNode('<option value="" data-v-2961dcee>\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044</option><option value="1" data-v-2961dcee>\u91D1\u878D</option><option value="2" data-v-2961dcee>\u5B98\u516C\u5E81\u30FB\u81EA\u6CBB\u4F53</option><option value="3" data-v-2961dcee>\u5B66\u6821</option><option value="4" data-v-2961dcee>IT\u30FB\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2</option><option value="5" data-v-2961dcee>\u30E1\u30C7\u30A3\u30A2</option><option value="6" data-v-2961dcee>\u5EFA\u8A2D\u30FB\u4E0D\u52D5\u7523</option><option value="7" data-v-2961dcee>\u88FD\u9020\u696D</option><option value="8" data-v-2961dcee>\u98DF\u54C1</option><option value="9" data-v-2961dcee>\u4EBA\u6750\u30FBHR</option><option value="10" data-v-2961dcee>\u30A8\u30CD\u30EB\u30AE\u30FC\u30FB\u8CC7\u6E90</option><option value="11" data-v-2961dcee>\u6D41\u901A\u30FB\u5C0F\u58F2</option><option value="12" data-v-2961dcee>\u30B9\u30DD\u30FC\u30C4\u95A2\u9023</option><option value="99" data-v-2961dcee>\u305D\u306E\u4ED6</option>', 14);
 const _hoisted_29 = [
   _hoisted_15$2
 ];
@@ -14832,7 +14814,7 @@ function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$n], ["__scopeId", "data-v-53db03a0"]]);
+var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["render", _sfc_render$n], ["__scopeId", "data-v-2961dcee"]]);
 const _sfc_main$p = {
   props: {
     data: {
@@ -14978,11 +14960,11 @@ function _sfc_render$l(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var CardModal = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["render", _sfc_render$l]]);
-function getDocumentList(isPublic2 = false, params2 = {}) {
+function getDocumentList(isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/files", params2, headers).then(processError).catch((err) => {
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/files", params, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching document list";
     switch (err.response.status) {
       case 401:
@@ -14995,11 +14977,11 @@ function getDocumentList(isPublic2 = false, params2 = {}) {
     return Promise.reject(err_msg);
   }));
 }
-function getDocumentData(id, isPublic2 = false, params2 = {}) {
+function getDocumentData(id, isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/files/" + id, params2, headers).then(processError).catch((err) => {
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/files/" + id, params, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching document data";
     switch (err.response.status) {
       case 401:
@@ -15093,7 +15075,7 @@ const _sfc_main$m = {
     }
   }
 };
-const _withScopeId$1 = (n) => (pushScopeId("data-v-31ab6b50"), n = n(), popScopeId(), n);
+const _withScopeId$1 = (n) => (pushScopeId("data-v-d83db950"), n = n(), popScopeId(), n);
 const _hoisted_1$j = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9")
 ], -1));
@@ -15123,7 +15105,7 @@ function _sfc_render$k(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-var Download = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$k], ["__scopeId", "data-v-31ab6b50"]]);
+var Download = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["render", _sfc_render$k], ["__scopeId", "data-v-d83db950"]]);
 const _sfc_main$l = {
   extends: _sfc_main$x,
   props: {
@@ -15224,11 +15206,11 @@ function _sfc_render$i(_ctx, _cache, $props, $setup, $data, $options) {
 var DownloadList = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["render", _sfc_render$i]]);
 var TopicsList = {
   methods: {
-    fetchList(params2 = {}) {
-      if (!params2.cnt) {
-        delete params2["cnt"];
+    fetchList(params = {}) {
+      if (!params.cnt) {
+        delete params["cnt"];
       }
-      return docsApi.getDocumentList(true, params2).then((data2) => {
+      return docsApi.getDocumentList(true, params).then((data2) => {
         return { list: data2.list, pageInfo: data2.pageInfo };
       });
     },
@@ -16080,7 +16062,7 @@ var Error_vue_vue_type_style_index_0_scoped_true_lang = "";
 const _sfc_main$9 = {
   extends: _sfc_main$x
 };
-const _withScopeId = (n) => (pushScopeId("data-v-7bb604a8"), n = n(), popScopeId(), n);
+const _withScopeId = (n) => (pushScopeId("data-v-65a10124"), n = n(), popScopeId(), n);
 const _hoisted_1$7 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("h2", null, "Error", -1));
 function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
@@ -16088,7 +16070,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("p", null, toDisplayString(_ctx.err), 1)
   ], 64);
 }
-var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-7bb604a8"]]);
+var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-65a10124"]]);
 const _sfc_main$8 = {
   extends: _sfc_main$x,
   components: {
@@ -16113,11 +16095,11 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var EmptyPage = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
-function getNewsList(isPublic2 = false, params2 = {}) {
+function getNewsList(isPublic = false, params = {}) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/news", params2, headers).then(processError).catch((err) => {
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/news", params, headers).then(processError).catch((err) => {
     let err_msg = "Problem fetching news list";
     switch (err.response.status) {
       case 401:
@@ -16216,9 +16198,9 @@ const _sfc_main$7 = {
           return "";
       }
     },
-    fetchNewsList(params2 = {}) {
-      params2 = __spreadValues(__spreadValues({}, this.defaultParams), params2);
-      newsApi.getNewsList(true, params2).then((data2) => {
+    fetchNewsList(params = {}) {
+      params = __spreadValues(__spreadValues({}, this.defaultParams), params);
+      newsApi.getNewsList(true, params).then((data2) => {
         this.listNews = [];
         if (data2) {
           data2.list.forEach((topics) => {
@@ -16228,12 +16210,12 @@ const _sfc_main$7 = {
       });
     },
     fetchDocList(category) {
-      const params2 = {
+      const params = {
         pageID: this.pageIDs[category],
         cnt: this.cnts[category],
         contents_type: category
       };
-      this.fetchList(params2).then(({ list, pageInfo }) => {
+      this.fetchList(params).then(({ list, pageInfo }) => {
         this.lists[category] = list;
         this.pageInfos[category] = pageInfo;
         this.pagedButtons[category] = this.makePagedButtons(pageInfo);
@@ -16424,26 +16406,8 @@ function doSend(data2) {
     return Promise.reject(err_msg);
   }));
 }
-function getInquiryForm(inquiry_id) {
-  return loginApi.getAuthHeaders({
-    autoLogin: true,
-    anonLogin: isPublic
-  }).then((headers) => get("/rcms-api/3/inquiry/form/" + inquiry_id, params, headers).then(processError).catch((err) => {
-    let err_msg = "Problem fetching inquiry form " + inquiry_id;
-    switch (err.response.status) {
-      case 401:
-        err_msg = "Unauthorized request";
-        break;
-      case 404:
-        err_msg = "Inquiry form " + inquiry_id + " unavailable";
-        break;
-    }
-    return Promise.reject(err_msg);
-  }));
-}
 var inquiryApi = {
-  doSend,
-  getInquiryForm
+  doSend
 };
 const _sfc_main$6 = {
   extends: _sfc_main$x,
@@ -16776,16 +16740,16 @@ const _sfc_main$5 = {
     setCurrentPage(newPage) {
       this.$emit("update:current_page", newPage);
     },
-    onRedirect({ target, msg, msg2, err, params: params2 }, writeHist = true) {
+    onRedirect({ target, msg, msg2, err, params }, writeHist = true) {
       this.msg = msg || "";
       this.msg2 = msg2 || "";
       this.err = err || "";
-      this.redirect_params = params2;
+      this.redirect_params = params;
       this.setCurrentPage(target);
       if (writeHist) {
         this.$emit("writePageHistory", { page: target });
       }
-      this.$emit("onAfterRedirect", { target, params: params2 });
+      this.$emit("onAfterRedirect", { target, params });
     }
   }
 };
@@ -16976,17 +16940,17 @@ function v4(options, buf, offset) {
   }
   return stringify2(rnds);
 }
-function makeZip(entries, isPublic2 = false) {
+function makeZip(entries, isPublic = false) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
+    anonLogin: isPublic
   }).then((headers) => post("/rcms-api/3/zip", { entries }, headers).then(processError));
 }
-function getFileUrl(path, isPublic2 = false) {
+function getFileUrl(path, isPublic = false) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
-    anonLogin: isPublic2
-  }).then((headers) => get$1("/rcms-api/3/get_file_url", { path }, headers).then(processError));
+    anonLogin: isPublic
+  }).then((headers) => get("/rcms-api/3/get_file_url", { path }, headers).then(processError));
 }
 var zipApi = {
   makeZip,
@@ -17061,18 +17025,7 @@ const _sfc_main$1 = {
   }
 };
 const _hoisted_1$1 = { class: "docdog" };
-const _hoisted_2 = /* @__PURE__ */ createBaseVNode("svg", {
-  width: "24",
-  height: "24",
-  viewBox: "0 0 24 24",
-  fill: "none",
-  xmlns: "http://www.w3.org/2000/svg"
-}, [
-  /* @__PURE__ */ createBaseVNode("path", {
-    d: "M7.41 16L12 11.42L16.59 16L18 14.59L12 8.59L6 14.59L7.41 16Z",
-    fill: "#ffffff"
-  })
-], -1);
+const _hoisted_2 = /* @__PURE__ */ createStaticVNode('<div class="docdog-tooltip__outer"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_336_55)"><path d="M25.9014 19.7143H23.8571V13.2857C23.8571 12.5786 23.2786 12 22.5714 12H17.4286C16.7214 12 16.1429 12.5786 16.1429 13.2857V19.7143H14.0986C12.9543 19.7143 12.3757 21.1029 13.1857 21.9129L19.0871 27.8143C19.5886 28.3157 20.3986 28.3157 20.9 27.8143L26.8014 21.9129C27.6114 21.1029 27.0457 19.7143 25.9014 19.7143ZM11 32.5714C11 33.2786 11.5786 33.8571 12.2857 33.8571H27.7143C28.4214 33.8571 29 33.2786 29 32.5714C29 31.8643 28.4214 31.2857 27.7143 31.2857H12.2857C11.5786 31.2857 11 31.8643 11 32.5714Z" fill="white"></path></g><defs><clipPath id="clip0_336_55"><rect width="40" height="40" fill="white"></rect></clipPath></defs></svg><span class="docdog-tooltip">\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8</span></div>', 1);
 const _hoisted_3 = [
   _hoisted_2
 ];
@@ -17107,7 +17060,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     !$data.toast_expand ? (openBlock(), createElementBlock("button", {
       key: 0,
       type: "button",
-      class: "docdog-toast--contract",
+      class: "docdog-button docdog-button--floating",
       onClick: _cache[0] || (_cache[0] = ($event) => $data.toast_expand = !$data.toast_expand)
     }, _hoisted_3)) : createCommentVNode("", true),
     $data.toast_expand ? (openBlock(), createElementBlock("section", _hoisted_4, [
@@ -17244,12 +17197,12 @@ const _sfc_main = {
     });
     if (this.urlParams.docdog_page) {
       let target = "";
-      const params2 = {};
+      const params = {};
       switch (this.urlParams.docdog_page) {
         case "reminder":
           target = "Reminder";
           if (this.urlParams.token) {
-            params2.token = this.urlParams.token;
+            params.token = this.urlParams.token;
           }
           break;
         case "login":
@@ -17271,20 +17224,20 @@ const _sfc_main = {
           target = this.urlParams.docdog_page;
       }
       if (target) {
-        this.redirect({ target, params: params2 }, false);
+        this.redirect({ target, params }, false);
       }
     }
   },
   methods: {
-    linkNode(node, params2) {
+    linkNode(node, params) {
       let uuid = node.getAttribute(this.docdog_id_attr_name);
       if (uuid == null || uuid == "") {
         uuid = v4();
-        this.node_params_map[uuid] = { node, params: params2 };
+        this.node_params_map[uuid] = { node, params };
         node.setAttribute(this.docdog_id_attr_name, uuid);
         node.addEventListener("click", this.nodeAction);
       } else {
-        this.node_params_map[uuid].params = params2;
+        this.node_params_map[uuid].params = params;
       }
     },
     unlinkNode(node) {
@@ -17317,9 +17270,9 @@ const _sfc_main = {
         this.writePageHistory({ page: "" });
       }
     },
-    processNodeParams(node, params2) {
-      if (params2.show) {
-        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params2.show).groups;
+    processNodeParams(node, params) {
+      if (params.show) {
+        const { eventMod, eventName } = /(?<eventMod>\!?)(?<eventName>[a-zA-Z_-]*)/.exec(params.show).groups;
         if (!eventName in this.app_global_events) {
           console.error('[Docdog] "show" handler expects an existing event among :', this.app_global_events.join(","));
         } else {
@@ -17348,8 +17301,8 @@ const _sfc_main = {
     setNodeProfile(node) {
       node.addEventListener("click", this.profile);
     },
-    setNodeList(node, params2) {
-      node.addEventListener("click", () => this.list(params2));
+    setNodeList(node, params) {
+      node.addEventListener("click", () => this.list(params));
     },
     setNodeTopics(node) {
       node.addEventListener("click", this.topics);
@@ -17357,7 +17310,7 @@ const _sfc_main = {
     setNodeVideos(node) {
       node.addEventListener("click", this.videos);
     },
-    setNodeHeader(node, params2) {
+    setNodeHeader(node, params) {
       this.customHeaderHtml = node.innerHTML;
       node.remove();
     },
@@ -17430,17 +17383,17 @@ const _sfc_main = {
     mypage() {
       this.redirect({ target: "Mypage" });
     },
-    inquiry(params2) {
-      this.redirect({ target: "Inquiry", params: params2 });
+    inquiry(params) {
+      this.redirect({ target: "Inquiry", params });
     },
-    list(params2) {
-      this.redirect({ target: "List", params: params2 });
+    list(params) {
+      this.redirect({ target: "List", params });
     },
-    topics(params2) {
-      this.redirect({ target: "Topics", params: params2 });
+    topics(params) {
+      this.redirect({ target: "Topics", params });
     },
-    videos(params2) {
-      this.redirect({ target: "Videos", params: params2 });
+    videos(params) {
+      this.redirect({ target: "Videos", params });
     },
     downloadToast() {
       if (this.current_page != "DownloadList") {
@@ -17482,7 +17435,7 @@ const _sfc_main = {
     onAfterRedirect(pageData) {
       this.$refs["modal"].resetView();
     },
-    writePageHistory({ page, params: params2 = {} }) {
+    writePageHistory({ page, params = {} }) {
       const newParams = __spreadValues({}, this.urlParams);
       if (page) {
         newParams.docdog_page = page;
@@ -17490,7 +17443,7 @@ const _sfc_main = {
         delete newParams.docdog_page;
       }
       const qs = new URLSearchParams(newParams).toString();
-      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || "", params: params2 }, null, "?" + qs);
+      window.history.pushState({ prevUrl: window.location.href, docdog_page: this.current_page || "", params }, null, "?" + qs);
     }
   }
 };
@@ -17579,14 +17532,14 @@ if (window.Docdog === void 0) {
     app: null
   };
 }
-function processNodeParams(node, params2) {
+function processNodeParams(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.processNodeParams(node, params2);
+    window.Docdog.app.processNodeParams(node, params);
   }
 }
-function linkNode(node, params2) {
+function linkNode(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.linkNode(node, params2);
+    window.Docdog.app.linkNode(node, params);
   }
 }
 function unlinkNode(node) {
@@ -17619,19 +17572,19 @@ function setNodeProfile(node) {
     window.Docdog.app.setNodeProfile(node);
   }
 }
-function setNodeList(node, params2) {
+function setNodeList(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params2);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
-function setNodeTopics(node, params2) {
+function setNodeTopics(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params2);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
-function setNodeVideos(node, params2) {
+function setNodeVideos(node, params) {
   if (window.Docdog.app) {
-    window.Docdog.app.setNodeList(node, params2);
+    window.Docdog.app.setNodeList(node, params);
   }
 }
 function setNodeHeader(node) {
@@ -17696,21 +17649,21 @@ function parseDOM() {
     docdogEls.push({ node, action, searchParams: new URLSearchParams(paramsQueryString) });
   });
   docdogEls.forEach((elData) => {
-    const params2 = {};
+    const params = {};
     const paramsIter = elData.searchParams.entries();
     let res = paramsIter.next();
     while (!res.done) {
       const [key, value] = res.value;
       if (value != "") {
         if (key == "id" || !isNaN(value) && !isNaN(parseInt(value))) {
-          params2[key] = parseInt(value);
+          params[key] = parseInt(value);
         } else {
-          params2[key] = value;
+          params[key] = value;
         }
       }
       res = paramsIter.next();
     }
-    nodes.push({ el: elData.node, action: elData.action, params: params2 });
+    nodes.push({ el: elData.node, action: elData.action, params });
   });
   initApp(el);
   nodes.forEach((node) => {
@@ -17755,9 +17708,9 @@ function parseDOM() {
     }
   });
 }
-function docdogLink(node, params2) {
+function docdogLink(node, params) {
   initApp();
-  linkNode(node, parseConfig(params2));
+  linkNode(node, parseConfig(params));
 }
 function docdogUnlink(node) {
   unlinkNode(node);
