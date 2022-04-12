@@ -23,7 +23,7 @@ export default {
     },
     setValue(val) {
       if (Array.isArray(val)) {
-        this.value = val.map((v) => v.key);
+        this.value = val.map((v) => (typeof v === 'object' ? v.key : v));
       }
     },
     updateValue() {

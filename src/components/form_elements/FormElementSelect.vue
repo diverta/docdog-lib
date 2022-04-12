@@ -20,11 +20,6 @@ export default {
         this.value = val.key;
       }
     },
-    setValue(val) {
-      if (val) {
-        this.value = val.key;
-      }
-    },
     updateValue($event) {
       let val = $event.target.value;
       this.value = val;

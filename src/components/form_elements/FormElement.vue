@@ -58,10 +58,14 @@ export default {
     elInstance() {
       switch (this.el.type) {
         case 'text':
+        case 1: // Inquiry type : Short Text
           return FormElementText;
         case 'textarea':
+        case 2: // Inquiry type : Body & Long Text
           return FormElementTextarea;
         case 'option':
+        case 3: // Inquiry type : Category
+        case 4: // Inquiry type : Single option
           return FormElementSelect;
         case 'relation':
           return FormElementRelation;
@@ -72,11 +76,22 @@ export default {
         case 'boolean':
           return FormElementBoolean;
         case 'checkbox':
+        case 5: // Inquiry type : Multichoice
           return FormElementCheckbox;
         case 'date':
+        case 6: // Inquiry type : Date
           return FormElementDate;
         case 'url':
           return FormElementUrl;
+        case 11: // Inquiry type: File
+          console.error('[Docdog] File form element is not supported yet');
+          return null;
+        case 8: // Inquiry type: JSON
+          console.error('[Docdog] JSON form element is not supported yet');
+          return null;
+        case 10: // Inquiry type: Matrix
+          console.error('[Docdog] Matrix form element is not supported yet');
+          return null;
         default:
           console.error('[Docdog] Undefined form element for type "' + this.el.type + '" (' + this.el.key_name + ')');
       }

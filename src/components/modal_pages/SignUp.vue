@@ -112,7 +112,7 @@ export default {
           return 'name1';
         }
         if (this.err.indexOf(this.email) === 0) {
-            return 'email';
+          return 'email';
         }
         const colpos = this.err.indexOf(':');
         if (colpos !== -1) {
@@ -176,11 +176,12 @@ export default {
             })
             .catch((err) => {
               this.error(err);
+              this.resetView();
             });
         })
         .catch((err) => {
-          this.resetView();
           this.error(err);
+          this.resetView();
         });
     },
   },

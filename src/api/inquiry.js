@@ -1,7 +1,16 @@
 import axios from 'axios';
 import qs from 'qs';
-import { post, processError } from './utils';
+import { get, post, processError } from './utils';
 import loginApi from './login';
+
+function parseErr(errors) {
+  return errors.reduce((carry, obj) => {
+    if (carry != '') {
+      carry += '<br/>';
+    }
+    return obj.field ? carry.concat(obj.field + ':' + obj.code + ':' + obj.message) : carry.concat(obj.message);
+  }, '');
+}
 
 function doSend(data) {
   return loginApi
@@ -32,10 +41,10 @@ function getInquiryForm(inquiry_id) {
   return loginApi
     .getAuthHeaders({
       autoLogin: true,
-      anonLogin: isPublic,
+      anonLogin: true,
     })
     .then((headers) =>
-      get('/rcms-api/3/inquiry/form/' + inquiry_id, params, headers)
+      get('/rcms-api/3/inquiry/form/' + inquiry_id, {}, headers)
         .then(processError)
         .catch((err) => {
           let err_msg = 'Problem fetching inquiry form ' + inquiry_id; // Default error message
