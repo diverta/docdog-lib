@@ -13,12 +13,6 @@ function parseErr(errors) {
 }
 
 function doSignUp(data) {
-  if (data.email_send_ng_flg != null) {
-    data.email_send_ng_flg = parseInt(data.email_send_ng_flg); // TODO DELETE
-  }
-  if (data.tel_send_ng_flg != null) {
-    data.tel_send_ng_flg = parseInt(data.tel_send_ng_flg); // TODO DELETE
-  }
   return loginApi
     .getAuthHeaders({
       autoLogin: true,
@@ -44,12 +38,6 @@ function doSignUp(data) {
 }
 
 function doEditProfile(data) {
-  if (data.email_send_ng_flg != null) {
-    data.email_send_ng_flg = parseInt(data.email_send_ng_flg); // TODO DELETE
-  }
-  if (data.tel_send_ng_flg != null) {
-    data.tel_send_ng_flg = parseInt(data.tel_send_ng_flg); // TODO DELETE
-  }
   return loginApi.getAuthHeaders().then((headers) =>
     post('/rcms-api/3/member/edit', data, headers)
       .then(processError)

@@ -48,6 +48,7 @@
     @changeStatus="toastStatus = $event"
     ref="toast"
   />
+  <ExternalPopup v-if="docdogConfig.use_float_button" v-model:isLogin="isLogin" @redirect="redirect" />
 </template>
 
 <script>
@@ -59,6 +60,7 @@ import Footer2 from './components/modal_pages/Footer2.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
 import Toast from './components/Toast.vue';
+import ExternalPopup from './components/ExternalPopup.vue';
 // import docsApi from '@/api/docs';
 
 const footerComps = {
@@ -72,6 +74,7 @@ export default {
     ModalHeader,
     PageController,
     Toast,
+    ExternalPopup,
     ...footerComps,
   },
   data() {
@@ -114,6 +117,9 @@ export default {
     );
   },
   computed: {
+    docdogConfig() {
+      return window.DOCDOG_CONFIG || {};
+    },
     is_node_selected: {
       get() {
         return this.current_node_uuid !== null;

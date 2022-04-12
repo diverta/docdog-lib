@@ -3,7 +3,7 @@
     :modelValue="valueDate"
     @update:modelValue="updateValue"
     :format="formatCalDate"
-    :enableTimePicker="false"
+    :enableTimePicker="enableTime"
     :yearRange="yearRange"
     locale="ja"
     selectText="選択"
@@ -26,42 +26,61 @@ export default {
     return {
       valueDate: null,
       dateFormat: 'YYYY-MM-DD',
+      timeFormat: 'hh:mm',
+      defaultMinYear: 1900,
+      defaultMaxYear: 2100,
     };
   },
   created() {
     if (this.value) {
-      this.valueDate = moment(this.value, this.dateFormat);
+      this.valueDate = moment(this.value, this.format);
     }
   },
   computed: {
+    format() {
+      return this.dateFormat + (this.enableTime ? ' ' + this.timeFormat : '');
+    },
+    enableTime() {
+      return !!(this.el.options && this.el.options.add_time);
+    },
     yearRange() {
+      let min = this.defaultMinYear;
+      let max = this.defaultMaxYear;
       if (this.el.options_date) {
+        // Member settings
         const possibleDates = Object.values(this.el.options_date)
           .filter((d) => d != '')
           .sort();
-        const min = possibleDates[0];
-        const max = possibleDates[possibleDates.length - 1];
+        min = possibleDates[0];
+        max = possibleDates[possibleDates.length - 1];
         return [min, max];
-      } else {
-        return [1900, 2100];
+      } else if (this.el.options && (this.el.options.minYear || this.el.options.maxYear)) {
+        // Inquiry settings
+        if (this.el.options.minYear) {
+          min = this.el.options.minYear;
+        }
+        if (this.el.options.maxYear) {
+          max = this.el.options.maxYear;
+        }
       }
+      return [min, max];
     },
   },
   extends: AbstractFormElement,
   methods: {
     formatCalDate(date) {
-      return moment(date).format(this.dateFormat);
+      return moment(date).format(this.format);
     },
     getDefaultValue() {
       return '';
     },
     setValue(val) {
       this.value = val;
-      this.valueDate = moment(this.value, this.dateFormat);
+      this.valueDate = moment(this.value, this.format);
     },
     updateValue(val) {
       this.valueDate = val;
-      this.updateValueParent(moment(val).format(this.dateFormat));
+      this.updateValueParent(moment(val).format(this.format));
     },
   },
 };
