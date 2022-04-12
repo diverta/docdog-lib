@@ -21,9 +21,10 @@
     "serve": "vite -c vite.iife.config.js preview"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^3.0.0",
     "axios": "^0.24.0",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "qs": "^6.10.1",
     "uuid": "^8.3.2",
     "vite-plugin-css-injected-by-js": "^1.2.1",

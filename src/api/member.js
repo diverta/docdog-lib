@@ -1,6 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
-import { post, processError } from './utils';
+import { get, post, processError } from './utils';
 import loginApi from './login';
 
 function parseErr(errors) {
@@ -8,11 +8,17 @@ function parseErr(errors) {
     if (carry != '') {
       carry += '<br/>';
     }
-    return obj.field ? carry.concat(obj.field + ':' + obj.code) : carry.concat(obj.message);
+    return obj.field ? carry.concat(obj.field + ':' + obj.code + ':' + obj.message) : carry.concat(obj.message);
   }, '');
 }
 
 function doSignUp(data) {
+  if (data.email_send_ng_flg != null) {
+    data.email_send_ng_flg = parseInt(data.email_send_ng_flg); // TODO DELETE
+  }
+  if (data.tel_send_ng_flg != null) {
+    data.tel_send_ng_flg = parseInt(data.tel_send_ng_flg); // TODO DELETE
+  }
   return loginApi
     .getAuthHeaders({
       autoLogin: true,
@@ -38,6 +44,12 @@ function doSignUp(data) {
 }
 
 function doEditProfile(data) {
+  if (data.email_send_ng_flg != null) {
+    data.email_send_ng_flg = parseInt(data.email_send_ng_flg); // TODO DELETE
+  }
+  if (data.tel_send_ng_flg != null) {
+    data.tel_send_ng_flg = parseInt(data.tel_send_ng_flg); // TODO DELETE
+  }
   return loginApi.getAuthHeaders().then((headers) =>
     post('/rcms-api/3/member/edit', data, headers)
       .then(processError)
@@ -78,8 +90,33 @@ function doWithdrawal() {
   );
 }
 
+function getMemberForm() {
+  return loginApi
+    .getAuthHeaders({
+      autoLogin: true,
+      anonLogin: true,
+    })
+    .then((headers) =>
+      get('/rcms-api/3/member/form', {}, headers)
+        .then(processError)
+        .catch((err) => {
+          let err_msg = 'Problem fetching member form'; // Default error message
+          switch (err.response.status) {
+            case 401:
+              err_msg = 'Unauthorized request';
+              break;
+            case 404:
+              err_msg = 'Member form unavailable';
+              break;
+          }
+          return Promise.reject(err_msg);
+        })
+    );
+}
+
 export default {
   doSignUp,
   doEditProfile,
   doWithdrawal,
+  getMemberForm,
 };

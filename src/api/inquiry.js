@@ -28,6 +28,31 @@ function doSend(data) {
     );
 }
 
+function getInquiryForm(inquiry_id) {
+  return loginApi
+    .getAuthHeaders({
+      autoLogin: true,
+      anonLogin: isPublic,
+    })
+    .then((headers) =>
+      get('/rcms-api/3/inquiry/form/' + inquiry_id, params, headers)
+        .then(processError)
+        .catch((err) => {
+          let err_msg = 'Problem fetching inquiry form ' + inquiry_id; // Default error message
+          switch (err.response.status) {
+            case 401:
+              err_msg = 'Unauthorized request';
+              break;
+            case 404:
+              err_msg = 'Inquiry form ' + inquiry_id + ' unavailable';
+              break;
+          }
+          return Promise.reject(err_msg);
+        })
+    );
+}
+
 export default {
   doSend,
+  getInquiryForm,
 };

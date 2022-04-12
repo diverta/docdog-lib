@@ -25,6 +25,7 @@
       @logout="logout"
       @writePageHistory="writePageHistory"
       @onAfterRedirect="onAfterRedirect"
+      @resetView="resetView"
       ref="ctrl"
     />
     <template v-slot:footer v-if="footer_comp">
@@ -445,6 +446,9 @@ export default {
         null,
         '?' + qs
       );
+    },
+    resetView() {
+      this.$refs['modal'].resetView();
     },
   },
 };

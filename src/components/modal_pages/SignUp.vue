@@ -19,7 +19,7 @@
                 <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
               </div>
             </div>
-            <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
+            <div class="docdog-form__item" :class="err_field == 'email' ? errClass : ''">
               <label for="email" class="docdog-form__item__title">メールアドレス</label>
               <input name="email" type="text" id="email" placeholder="" v-model="email" required />
             </div>
@@ -27,33 +27,12 @@
               <label for="password" class="docdog-form__item__title">パスワード</label>
               <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
             </div>
-            <div class="docdog-form__item">
-              <label for="company" class="docdog-form__item__title">会社名</label>
-              <input name="company" type="text" id="company" placeholder="" v-model="company_nm" required />
-            </div>
-            <div class="docdog-form__item">
-              <label for="industry" class="docdog-form__item__title">業種</label>
-              <select name="industry" id="industry" v-model="industry" required>
-                <option value="">選択してください</option>
-                <option value="1">金融</option>
-                <option value="2">官公庁・自治体</option>
-                <option value="3">学校</option>
-                <option value="4">IT・ソフトウェア</option>
-                <option value="5">メディア</option>
-                <option value="6">建設・不動産</option>
-                <option value="7">製造業</option>
-                <option value="8">食品</option>
-                <option value="9">人材・HR</option>
-                <option value="10">エネルギー・資源</option>
-                <option value="11">流通・小売</option>
-                <option value="12">スポーツ関連</option>
-                <option value="99">その他</option>
-              </select>
-            </div>
-            <div class="docdog-form__item">
-              <label for="position" class="docdog-form__item__title">役職</label>
-              <input name="position" type="text" id="position" placeholder="" v-model="position" required />
-            </div>
+            <FormElement
+              v-for="el in formDef"
+              :el="el"
+              :class="['docdog-form__item', err_field == el.key_name ? 'docdog-form__item--error' : '']"
+              v-model="customFields[el.key_name]"
+            />
             <div class="docdog-form__button">
               <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="signup">
                 アカウント作成
@@ -69,7 +48,11 @@
         <FormPolicy />
       </div>
       <div class="docdog-modal__body__section" v-if="isLogin">
-        <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'Mypage' })">
+        <button
+          type="button"
+          class="docdog-button docdog-button--white"
+          @click.prevent="redirect({ target: 'Mypage' })"
+        >
           マイページへ戻る
         </button>
       </div>
@@ -84,28 +67,53 @@ import loginApi from '@/api/login';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
 import FormPolicy from '@/components/FormPolicy.vue';
+import FormElement from '@/components/form_elements/FormElement.vue';
 
 export default {
   extends: AbstractPage,
   components: {
     AlertSuccess,
     AlertError,
-    FormPolicy
+    FormPolicy,
+    FormElement,
   },
   data() {
     return {
       email: '',
       name1: '',
       name2: '',
-      company_nm: '',
-      industry: '',
-      position: '',
       login_pwd: '',
+      formDef: [],
+      customFields: {},
+      errClass: 'docdog-form__item--error',
     };
+  },
+  mounted() {
+    memberApi.getMemberForm().then((resp) => {
+      Object.values(resp.details).forEach((val) => {
+        const manualElements = {
+          // Exclude processing of these
+          name1: true,
+          name2: true,
+          email: true,
+          login_pwd: true,
+        };
+
+        if (!manualElements[val.key_name]) {
+          this.formDef.push(val);
+        }
+      });
+    });
   },
   computed: {
     err_field() {
       if (this.err) {
+        if (this.err.indexOf('Name is required') >= 0) {
+          return 'name1';
+        }
+        if (this.err.indexOf(this.email) === 0) {
+            return 'email';
+        }
         const colpos = this.err.indexOf(':');
         if (colpos !== -1) {
           return this.err.substring(0, colpos);
@@ -149,10 +157,8 @@ export default {
           email: this.email,
           name1: this.name1,
           name2: this.name2,
-          company_nm: this.company_nm,
-          industry: this.industry,
-          position: this.position,
           login_pwd: this.login_pwd,
+          ...this.customFields,
         })
         .then((resp) => {
           loginApi
@@ -173,6 +179,7 @@ export default {
             });
         })
         .catch((err) => {
+          this.resetView();
           this.error(err);
         });
     },

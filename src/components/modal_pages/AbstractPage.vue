@@ -36,7 +36,7 @@ export default {
       default: '',
     },
   },
-  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin', 'logout', 'update:msg'],
+  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin', 'logout', 'update:msg', 'resetView'],
   unmount() {
     this.clearFooterData();
     this.$emit('err', '');
@@ -86,6 +86,9 @@ export default {
     },
     setMsg(msg) {
       this.$emit('update:msg', msg);
+    },
+    resetView() {
+      this.$emit('resetView');
     },
   },
 };
