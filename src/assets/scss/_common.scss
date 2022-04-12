@@ -95,3 +95,7 @@ $transition: 0.2s;
     font-family: inherit;
   }
 }
+.docdog--toggle--open,
+.docdog--toggle--open * {
+  z-index: 9999 !important;
+}
