@@ -46,7 +46,7 @@ export default {
       required: true,
     },
     modelValue: {
-      type: [String, Number, Object, Array, null],
+      type: [String, Number, Object, Array, Boolean, null],
       default: () => null,
       required: true,
     },

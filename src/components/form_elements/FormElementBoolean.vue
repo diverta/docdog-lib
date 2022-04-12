@@ -1,5 +1,5 @@
 <template>
-  <input type="checkbox" @input="updateValue" v-model="value" />
+  <input type="checkbox" @input="updateValue" v-model.bool="value" />
 </template>
 
 <script>
@@ -10,6 +10,9 @@ export default {
   methods: {
     getDefaultValue() {
       return false;
+    },
+    setValue(val) {
+      this.value = val != 0; // to boolean
     },
     updateValue($event) {
       this.updateValueParent(this.value);

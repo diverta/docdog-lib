@@ -8,7 +8,7 @@ export default {
       required: true,
     },
     initValue: {
-      type: [String, Number, Object, Array, null],
+      type: [String, Number, Object, Array, Boolean, null],
       required: true,
       default: () => null,
     },
