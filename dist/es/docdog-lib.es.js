@@ -14645,7 +14645,7 @@ const _sfc_main$F = {
       required: true
     },
     initValue: {
-      type: [String, Number, Object, Array, null],
+      type: [String, Number, Object, Array, Boolean, null],
       required: true,
       default: () => null
     }
@@ -14896,6 +14896,9 @@ const _sfc_main$y = {
     getDefaultValue() {
       return false;
     },
+    setValue(val) {
+      this.value = val != 0;
+    },
     updateValue($event) {
       this.updateValueParent(this.value);
     }
@@ -14907,7 +14910,12 @@ function _sfc_render$v(_ctx, _cache, $props, $setup, $data, $options) {
     onInput: _cache[0] || (_cache[0] = (...args) => $options.updateValue && $options.updateValue(...args)),
     "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => _ctx.value = $event)
   }, null, 544)), [
-    [vModelCheckbox, _ctx.value]
+    [
+      vModelCheckbox,
+      _ctx.value,
+      void 0,
+      { bool: true }
+    ]
   ]);
 }
 var FormElementBoolean = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["render", _sfc_render$v]]);
@@ -22766,7 +22774,7 @@ const _sfc_main$u = {
       required: true
     },
     modelValue: {
-      type: [String, Number, Object, Array, null],
+      type: [String, Number, Object, Array, Boolean, null],
       default: () => null,
       required: true
     }
