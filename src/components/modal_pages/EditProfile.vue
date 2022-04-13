@@ -188,6 +188,9 @@ export default {
         })
         .catch((err) => {
           this.error(err);
+        })
+        .then(() => {
+          this.resetView();
         });
     },
   },
