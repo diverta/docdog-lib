@@ -2,6 +2,7 @@
   input[type='text'],
   input[type='email'],
   input[type='password'],
+  input[type='number'],
   select {
     width: 100%;
     height: 50px;
@@ -15,8 +16,8 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    margin-right: $spacing-sm;
     border: 1px solid $color-border;
+    cursor: pointer;
   }
   textarea {
     width: 100%;
@@ -145,6 +146,11 @@
     display: flex;
     align-items: center;
     padding: $spacing-sm 0;
+    label {
+      padding-right: $spacing-md;
+      padding-left: $spacing-md;
+      cursor: pointer;
+    }
   }
   &__button {
     margin-top: $spacing-lg;
@@ -184,6 +190,7 @@
         margin-left: $spacing-sm;
         background-color: rgba($color-danger, .2) !important;
         color: $color-danger !important;
+        line-height: 1.3;
       }
     }
     &__note {
