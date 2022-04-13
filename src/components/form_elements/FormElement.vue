@@ -54,7 +54,7 @@ export default {
   },
   computed: {
     isRequired() {
-      return this.el.limit_item && this.el.limit_item.required;
+      return (this.el.limit_item && this.el.limit_item.required) || this.el.required === 2 || false;
     },
     elInstance() {
       switch (this.el.type) {

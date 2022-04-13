@@ -137,7 +137,13 @@ export default {
     inquiryApi.getInquiryForm(this.inquiry_id).then((resp) => {
       this.formDef = Object.entries(resp.details.cols)
         .filter(([k, v]) => {
-          return k != 'from_mail' && k != 'email' && k != 'name' && !this.unsupportedTypes.includes(v.type);
+          return (
+            k != 'from_mail' &&
+            k != 'email' &&
+            k != 'name' &&
+            !this.unsupportedTypes.includes(v.type) &&
+            v.required !== 0 // Unused
+          );
         })
         .sort(([k1, v1], [k2, v2]) => {
           if (v1.order_no > v2.order_no) return -1;
