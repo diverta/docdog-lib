@@ -1,14 +1,16 @@
 <template>
   <template v-for="(opt, idx) in optionsArr">
-    <input
-      type="checkbox"
-      :value="opt.val"
-      :id="el.key_name + idx"
-      :name="el.key_name"
-      v-model="value"
-      @change="updateValue"
-    />
-    <label :for="el.key_name + idx">{{ opt.name }}</label>
+    <div class="docdog-form__toggle">
+      <input
+        type="checkbox"
+        :value="opt.val"
+        :id="el.key_name + idx"
+        :name="el.key_name"
+        v-model="value"
+        @change="updateValue"
+      />
+      <label :for="el.key_name + idx">{{ opt.name }}</label>
+    </div>
   </template>
 </template>
 
