@@ -1,7 +1,8 @@
 <template>
   <div>
-    <label :for="el.key_name" class="docdog-form__item__title">{{ el.name }}</label>
-    <span v-if="isRequired" class="docdog-form__item__required" >(必須)</span>
+    <label :for="el.key_name" class="docdog-form__item__title"
+      >{{ el.name }}<span v-if="isRequired" class="docdog-form__item__title__badge">必須</span></label
+    >
     <component
       :is="elInstance"
       :el="el"
@@ -53,8 +54,8 @@ export default {
   },
   computed: {
     isRequired() {
-      return this.el.limit_item && this.el.limit_item.required; 
-    }, 
+      return this.el.limit_item && this.el.limit_item.required;
+    },
     elInstance() {
       switch (this.el.type) {
         case 'text':
