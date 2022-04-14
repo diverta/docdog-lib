@@ -10,6 +10,7 @@
     border-radius: $border-radius-sm;
     padding: $spacing-md;
     -webkit-appearance: auto;
+    appearance: auto;
   }
   input[type='checkbox'],
   input[type='radio'] {
@@ -145,7 +146,8 @@
   &__toggle {
     display: flex;
     align-items: center;
-    padding: $spacing-sm 0;
+    padding: $spacing-x-sm 0;
+    margin: $spacing-x-sm 0;
     label {
       padding-right: $spacing-md;
       padding-left: $spacing-md;
@@ -162,8 +164,16 @@
     &--error {
       input[type='text'],
       input[type='email'],
-      input[type='password'] {
+      input[type='password'],
+      input[type='number'],
+      select,
+      textarea {
         border-color: $color-danger;
+        background-color: rgba($color-danger, .2);
+      }
+      .docdog-form__toggle {
+        border-radius: $border-radius-sm;
+        background-color: rgba($color-danger, .2);
       }
       &__msg {
         margin: $spacing-sm 0;
@@ -186,10 +196,9 @@
       font-weight: bold;
       &__badge {
         @extend .docdog-badge;
+        @extend .docdog-badge--danger;
         min-width: auto !important;
         margin-left: $spacing-sm;
-        background-color: rgba($color-danger, .2) !important;
-        color: $color-danger !important;
         line-height: 1.3;
       }
     }

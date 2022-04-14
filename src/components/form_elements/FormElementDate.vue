@@ -85,3 +85,18 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.dp__input {
+  padding: 12px;
+  border-color: #e0e0e0;
+  -webkit-appearance: auto;
+  appearance: auto;
+  outline: initial;
+  &:hover { border-color: #e0e0e0; }
+  // &:focus { outline: solid; }
+  .docdog-form__item--error & {
+    border-color: #dc0000;
+    background-color: rgba(#dc0000, .2);
+  }
+}
+</style>

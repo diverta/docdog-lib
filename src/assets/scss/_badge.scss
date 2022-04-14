@@ -7,5 +7,8 @@
   color: #fff;
   font-size: 11px;
   text-align: center;
-  &--danger { background-color: $color-danger; }
+  &--danger { 
+    background-color: rgba($color-danger, .2);
+    color: $color-danger;
+  }
 }
