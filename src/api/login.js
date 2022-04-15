@@ -39,7 +39,7 @@ function getAuthHeaders(
     const token_data = {};
     let isPublic = true;
     const refresh_token = parseToken(storage_keys.REFRESH_TOKEN, fetchData(storage_keys.REFRESH_TOKEN));
-    removeData(storage_keys.PROFILE); // Make sure the profile is empty
+    deleteProfileCache(); // Make sure the profile is empty
     if (options.autoLogin && refresh_token.value) {
       token_data['refresh_token'] = refresh_token.value;
       isPublic = false;
@@ -165,6 +165,10 @@ function getAccessToken({ grant_token, refresh_token }) {
     });
 }
 
+function deleteProfileCache() {
+  removeData(storage_keys.PROFILE);
+}
+
 function updateProfile(data) {
   const profile = getProfile();
   storeData(storage_keys.PROFILE, { ...profile, ...data });
@@ -276,6 +280,7 @@ export default {
   doLogout,
   updateProfile,
   getProfile,
+  deleteProfileCache,
   reminderSendEmail,
   reminderUpdatePassword,
 };

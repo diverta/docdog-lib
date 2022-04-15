@@ -49,6 +49,7 @@
     ref="toast"
   />
   <ExternalPopup v-if="docdogConfig.use_float_button" v-model:isLogin="isLogin" @redirect="redirect" />
+  <Hubspot :hubId="'' + docdogConfig.hubId || ''" :currentPage="current_page" :profile="userProfile" />
 </template>
 
 <script>
@@ -61,6 +62,7 @@ import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
 import Toast from './components/Toast.vue';
 import ExternalPopup from './components/ExternalPopup.vue';
+import Hubspot from './components/Hubspot.vue';
 // import docsApi from '@/api/docs';
 
 const footerComps = {
@@ -75,6 +77,7 @@ export default {
     PageController,
     Toast,
     ExternalPopup,
+    Hubspot,
     ...footerComps,
   },
   data() {
@@ -88,6 +91,7 @@ export default {
       node_params_map: {},
       current_node_uuid: null,
       current_page: '',
+      userProfile: {},
       footer_data: {}, // Data to be shared between the modal page and the footer
       isLogin: false, // Flag tracking down login state
       app_global_events: {
@@ -356,12 +360,17 @@ export default {
       this.app_global_events.isLogin.forEach((func) => {
         func(true);
       });
+      loginApi.getProfile().then((profile) => {
+        this.userProfile = profile;
+      });
     },
     onLogout() {
       this.isLogin = false;
       this.app_global_events.isLogin.forEach((func) => {
         func(false);
       });
+      loginApi.deleteProfileCache();
+      this.userProfile = {};
     },
     login() {
       this.redirect({ target: 'SignIn' });

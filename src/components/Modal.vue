@@ -31,8 +31,8 @@ export default {
       this.$emit('close');
     },
     resetView() {
-      this.$refs["modalBody"].scrollTop = 0;
-    }
+      this.$refs['modalBody'].scrollTop = 0;
+    },
   },
   watch: {
     show: function (shown) {
