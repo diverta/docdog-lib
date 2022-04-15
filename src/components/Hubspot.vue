@@ -44,8 +44,10 @@ export default {
       }
     },
     identifyUser(email) {
-      var _hsq = (window._hsq = window._hsq || []);
-      _hsq.push(['identify', { email }]);
+      if (this.hubId) {
+        var _hsq = (window._hsq = window._hsq || []);
+        _hsq.push(['identify', { email }]);
+      }
     },
   },
   watch: {
