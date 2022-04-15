@@ -11,6 +11,11 @@ import AbstractFormElement from './AbstractFormElement.vue';
 
 export default {
   extends: AbstractFormElement,
+  data() {
+    return {
+      optionsEmptyChoice: true,
+    };
+  },
   methods: {
     getDefaultValue() {
       return '';

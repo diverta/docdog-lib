@@ -65,12 +65,12 @@ export default {
         case 2: // Inquiry type : Body & Long Text
           return FormElementTextarea;
         case 'option':
-        case 3: // Inquiry type : Category
         case 4: // Inquiry type : Single option
           return FormElementSelect;
         case 'relation':
           return FormElementRelation;
         case 'radio':
+        case 3: // Inquiry type : Radio
           return FormElementRadio;
         case 'number':
           return FormElementNumber;

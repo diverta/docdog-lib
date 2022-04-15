@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       value: null,
+      optionsEmptyChoice: false, // May be overriden in child components if necessary
     };
   },
   created() {
@@ -30,7 +31,9 @@ export default {
         const arr = Object.entries(this.el.options).map(([val, name]) => {
           return { val, name };
         });
-        arr.unshift({ val: '', name: '選択してください' });
+        if (this.optionsEmptyChoice) {
+          arr.unshift({ val: '', name: '選択してください' });
+        }
         return arr;
       }
       return null;
