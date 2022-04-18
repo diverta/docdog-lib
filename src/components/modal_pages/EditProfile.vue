@@ -11,16 +11,22 @@
           <form>
             <div class="docdog-form__item--col-2">
               <div class="docdog-form__item">
-                <label for="name1" class="docdog-form__item__title">姓<span class="docdog-form__item__title__badge">必須</span></label>
+                <label for="name1" class="docdog-form__item__title"
+                  >姓<span class="docdog-form__item__title__badge">必須</span></label
+                >
                 <input name="name1" type="text" id="name1" placeholder="" v-model="name1" required />
               </div>
               <div class="docdog-form__item">
-                <label for="name2" class="docdog-form__item__title">名<span class="docdog-form__item__title__badge">必須</span></label>
+                <label for="name2" class="docdog-form__item__title"
+                  >名<span class="docdog-form__item__title__badge">必須</span></label
+                >
                 <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
               </div>
             </div>
             <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
-              <label for="email" class="docdog-form__item__title">メールアドレス<span class="docdog-form__item__title__badge">必須</span></label>
+              <label for="email" class="docdog-form__item__title"
+                >メールアドレス<span class="docdog-form__item__title__badge">必須</span></label
+              >
               <input name="email" type="text" id="email" placeholder="" v-model="email" required />
             </div>
             <div class="docdog-form__item">
@@ -145,7 +151,7 @@ export default {
           this.name2 = profile.name2;
           Object.values(this.formDef).forEach((customField) => {
             if (profile[customField.key_name] != null) {
-              let val = profile[customField.key_name];
+              let val = profile[customField.key_name] || null;
               switch (customField.type) {
                 case 'number':
                   if (val != null && val !== '') {
@@ -155,6 +161,14 @@ export default {
                 case 'relation':
                   if (val != null && val.module_id) {
                     val.module_id = parseInt(val.module_id);
+                  }
+                  break;
+                case 'boolean':
+                  val = val == '1';
+                  break;
+                case 'url':
+                  if (!val || val == '' || (typeof val === 'object' && val.url == '' && val.title == '')) {
+                    val = null;
                   }
                   break;
               }
@@ -174,8 +188,12 @@ export default {
         email: this.email,
         name1: this.name1,
         name2: this.name2,
-        ...this.customFields,
       };
+      Object.entries(this.customFields).forEach(([key, val]) => {
+        if (val != null) {
+          newData[key] = val;
+        }
+      });
       if (this.login_pwd) {
         // Only update password if inputted
         newData.login_pwd = this.login_pwd;

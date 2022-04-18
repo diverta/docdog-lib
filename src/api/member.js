@@ -87,6 +87,19 @@ function getMemberForm() {
     .then((headers) =>
       get('/rcms-api/3/member/form', {}, headers)
         .then(processError)
+        .then((resp) => {
+          console.log(resp);
+          if (resp.details) {
+            if (resp.details.email_send_ng_flg && resp.details.email_send_ng_flg.name == 'email_send_ng_flg') {
+              resp.details.email_send_ng_flg.name = 'メールマガジンの配信設定';
+              resp.details.email_send_ng_flg.label = 'メールマガジンを受け取らない';
+            }
+            if (resp.details.tel_send_ng_flg) {
+              delete resp.details.tel_send_ng_flg; // Unneeded
+            }
+          }
+          return resp;
+        })
         .catch((err) => {
           let err_msg = 'Problem fetching member form'; // Default error message
           switch (err.response.status) {
