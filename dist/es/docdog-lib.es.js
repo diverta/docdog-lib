@@ -5405,9 +5405,9 @@ const _sfc_main$N = {
     }
   }
 };
-const _hoisted_1$F = { class: "docdog" };
-const _hoisted_2$w = { class: "docdog-modal" };
-const _hoisted_3$s = {
+const _hoisted_1$G = { class: "docdog" };
+const _hoisted_2$x = { class: "docdog-modal" };
+const _hoisted_3$t = {
   class: "docdog-modal__body",
   ref: "modalBody"
 };
@@ -5416,14 +5416,14 @@ const _hoisted_4$m = {
   class: "docdog-modal__foot"
 };
 function _sfc_render$I(_ctx, _cache, $props, $setup, $data, $options) {
-  return withDirectives((openBlock(), createElementBlock("div", _hoisted_1$F, [
+  return withDirectives((openBlock(), createElementBlock("div", _hoisted_1$G, [
     createBaseVNode("div", {
       class: "docdog-modal__bg",
       onClick: _cache[0] || (_cache[0] = withModifiers((...args) => $options.closeModal && $options.closeModal(...args), ["self"]))
     }, [
-      createBaseVNode("section", _hoisted_2$w, [
+      createBaseVNode("section", _hoisted_2$x, [
         renderSlot(_ctx.$slots, "header", normalizeProps(guardReactiveProps(_ctx.$attrs))),
-        createBaseVNode("div", _hoisted_3$s, [
+        createBaseVNode("div", _hoisted_3$t, [
           renderSlot(_ctx.$slots, "default")
         ], 512),
         this.$slots.footer ? (openBlock(), createElementBlock("footer", _hoisted_4$m, [
@@ -5466,9 +5466,9 @@ const _sfc_main$M = {
     }
   }
 };
-const _hoisted_1$E = { class: "docdog-modal__head" };
-const _hoisted_2$v = { class: "docdog-modal__head__nav" };
-const _hoisted_3$r = ["src"];
+const _hoisted_1$F = { class: "docdog-modal__head" };
+const _hoisted_2$w = { class: "docdog-modal__head__nav" };
+const _hoisted_3$s = ["src"];
 const _hoisted_4$l = { class: "docdog-modal__head__nav__list docdog-u-hidden-sp" };
 const _hoisted_5$i = { class: "docdog-modal__head__nav__list__menu" };
 const _hoisted_6$g = { key: 0 };
@@ -5540,8 +5540,8 @@ const _hoisted_28 = {
   class: "docdog-card__list"
 };
 function _sfc_render$H(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("header", _hoisted_1$E, [
-    createBaseVNode("div", _hoisted_2$v, [
+  return openBlock(), createElementBlock("header", _hoisted_1$F, [
+    createBaseVNode("div", _hoisted_2$w, [
       createBaseVNode("button", {
         type: "button",
         "aria-label": "Back to top",
@@ -5551,7 +5551,7 @@ function _sfc_render$H(_ctx, _cache, $props, $setup, $data, $options) {
         createBaseVNode("img", {
           src: $data.site_logo,
           alt: "site-title"
-        }, null, 8, _hoisted_3$r)
+        }, null, 8, _hoisted_3$s)
       ]),
       createBaseVNode("nav", _hoisted_4$l, [
         createBaseVNode("ul", _hoisted_5$i, [
@@ -14196,8 +14196,8 @@ const _sfc_main$K = {
   },
   methods: {}
 };
-const _hoisted_1$D = { class: "docdog-alert docdog-alert--success" };
-const _hoisted_2$u = /* @__PURE__ */ createBaseVNode("svg", {
+const _hoisted_1$E = { class: "docdog-alert docdog-alert--success" };
+const _hoisted_2$v = /* @__PURE__ */ createBaseVNode("svg", {
   width: "60",
   height: "60",
   viewBox: "0 0 60 60",
@@ -14219,12 +14219,12 @@ const _hoisted_2$u = /* @__PURE__ */ createBaseVNode("svg", {
     fill: "#ffffff"
   })
 ], -1);
-const _hoisted_3$q = { class: "docdog-alert__heading" };
+const _hoisted_3$r = { class: "docdog-alert__heading" };
 const _hoisted_4$k = { key: 0 };
 function _sfc_render$G(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$D, [
-    _hoisted_2$u,
-    createBaseVNode("p", _hoisted_3$q, toDisplayString($props.msg), 1),
+  return openBlock(), createElementBlock("div", _hoisted_1$E, [
+    _hoisted_2$v,
+    createBaseVNode("p", _hoisted_3$r, toDisplayString($props.msg), 1),
     $props.msg2 ? (openBlock(), createElementBlock("p", _hoisted_4$k, toDisplayString($props.msg2), 1)) : createCommentVNode("", true)
   ]);
 }
@@ -14238,11 +14238,11 @@ const _sfc_main$J = {
   },
   methods: {}
 };
-const _hoisted_1$C = { class: "docdog-alert docdog-alert--error" };
-const _hoisted_2$t = /* @__PURE__ */ createStaticVNode('<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="#dc0000" stroke="#ffffff" stroke-width="4"></circle><path d="M21.6144 40.1878C20.7581 39.3315 20.7581 37.9432 21.6144 37.087L37.1186 21.5827C37.9749 20.7264 39.3632 20.7264 40.2195 21.5827V21.5827C41.0758 22.439 41.0758 23.8273 40.2195 24.6836L24.7152 40.1878C23.859 41.0441 22.4707 41.0441 21.6144 40.1878V40.1878Z" fill="#ffffff"></path><path d="M39.1554 40.1555C38.2991 41.0118 36.9108 41.0118 36.0546 40.1555L20.5503 24.6513C19.694 23.795 19.694 22.4067 20.5503 21.5504V21.5504C21.4066 20.6942 22.7949 20.6942 23.6512 21.5504L39.1554 37.0547C40.0117 37.911 40.0117 39.2993 39.1554 40.1555V40.1555Z" fill="#ffffff"></path></svg><p class="docdog-alert__heading">\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F</p>', 2);
+const _hoisted_1$D = { class: "docdog-alert docdog-alert--error" };
+const _hoisted_2$u = /* @__PURE__ */ createStaticVNode('<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="#dc0000" stroke="#ffffff" stroke-width="4"></circle><path d="M21.6144 40.1878C20.7581 39.3315 20.7581 37.9432 21.6144 37.087L37.1186 21.5827C37.9749 20.7264 39.3632 20.7264 40.2195 21.5827V21.5827C41.0758 22.439 41.0758 23.8273 40.2195 24.6836L24.7152 40.1878C23.859 41.0441 22.4707 41.0441 21.6144 40.1878V40.1878Z" fill="#ffffff"></path><path d="M39.1554 40.1555C38.2991 41.0118 36.9108 41.0118 36.0546 40.1555L20.5503 24.6513C19.694 23.795 19.694 22.4067 20.5503 21.5504V21.5504C21.4066 20.6942 22.7949 20.6942 23.6512 21.5504L39.1554 37.0547C40.0117 37.911 40.0117 39.2993 39.1554 40.1555V40.1555Z" fill="#ffffff"></path></svg><p class="docdog-alert__heading">\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F</p>', 2);
 function _sfc_render$F(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$C, [
-    _hoisted_2$t,
+  return openBlock(), createElementBlock("div", _hoisted_1$D, [
+    _hoisted_2$u,
     createBaseVNode("p", null, toDisplayString($props.err), 1)
   ]);
 }
@@ -14251,19 +14251,19 @@ const _sfc_main$I = {
   props: {},
   methods: {}
 };
-const _hoisted_1$B = { class: "docdog-modal__body__section" };
-const _hoisted_2$s = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, [
+const _hoisted_1$C = { class: "docdog-modal__body__section" };
+const _hoisted_2$t = /* @__PURE__ */ createBaseVNode("p", { class: "docdog-modal__body__text" }, [
   /* @__PURE__ */ createTextVNode(" \u7D9A\u884C\u3059\u308B\u3053\u3068\u3067"),
   /* @__PURE__ */ createBaseVNode("a", { href: "/dummy/" }, "\u5229\u7528\u898F\u7D04"),
   /* @__PURE__ */ createTextVNode("\u304A\u3088\u3073"),
   /* @__PURE__ */ createBaseVNode("a", { href: "/dummy/" }, "\u30D7\u30E9\u30A4\u30D0\u30B7\u30FC\u30DD\u30EA\u30B7\u30FC"),
   /* @__PURE__ */ createTextVNode("\u3092\u8AAD\u307F\u3001\u3053\u308C\u306B\u540C\u610F\u3059\u308B\u3082\u306E\u3068\u3057\u307E\u3059\u3002 ")
 ], -1);
-const _hoisted_3$p = [
-  _hoisted_2$s
+const _hoisted_3$q = [
+  _hoisted_2$t
 ];
 function _sfc_render$E(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$B, _hoisted_3$p);
+  return openBlock(), createElementBlock("div", _hoisted_1$C, _hoisted_3$q);
 }
 var FormPolicy = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["render", _sfc_render$E]]);
 var _imports_0 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGrSURBVHgB7dS9S8NAGMfxi1ZBrS+TFJWKgyi4VOrgJIibdHCwq4jiH6GLgiKIgi4OTp18m1w6ufiyuYh1qYuoiOBgVSwF39r4PXqBGNI0tFQQ8oNPD5Ln6fXumgjhxYuX/x5Nfui63sJw4KL+BVFN07KizPjUmEEM3QhjBLXq3ivmcIOUMSk/NsAQKPL9V4ggKdGbK1jJF2qYwbeeTw6r8rqlbhIPSKsaI194xgl68aiu32EZjU6TV2MJGdX0gYhNXSuG8abqTjGBEGplj2kBMjHUCadQ4MeuqekaXZaaAHaQxQaaLPe3TP1yxf3CTShsxoWp+dD4xYwdOFOrnYLPpjdpOq5FuZPCbSjuU2emq5WtYVSt4F5udYG+sDpvmYR1N9xOHtXzfyLjvN9xi6BDz4ppteOi1NC8p//OUJH6c1V3jCpRamhesEzc6VAbVDUphOxqfKIy+cQ80rgUZU7c4KaIFQ4wtGOdN1ValBI9/+aZxiaeLFu9r67Pwq/qfYirP9+R09kWW/EgxpBC3Oa+3IU2GM+nfMYT6MG247u5EmGl9agRXrx4+Yv8ABvMC0SCFJm4AAAAAElFTkSuQmCC";
@@ -14337,9 +14337,9 @@ const _sfc_main$H = {
     }
   }
 };
-const _hoisted_1$A = { class: "docdog-container--form" };
-const _hoisted_2$r = { class: "docdog-container--white" };
-const _hoisted_3$o = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
+const _hoisted_1$B = { class: "docdog-container--form" };
+const _hoisted_2$s = { class: "docdog-container--white" };
+const _hoisted_3$p = /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30ED\u30B0\u30A4\u30F3")
 ], -1);
 const _hoisted_4$j = {
@@ -14468,7 +14468,7 @@ function _sfc_render$D(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_AlertError = resolveComponent("AlertError");
   const _component_AlertSuccess = resolveComponent("AlertSuccess");
   const _component_FormPolicy = resolveComponent("FormPolicy");
-  return openBlock(), createElementBlock("div", _hoisted_1$A, [
+  return openBlock(), createElementBlock("div", _hoisted_1$B, [
     _ctx.err ? (openBlock(), createBlock(_component_AlertError, {
       key: 0,
       err: $options.err_msg
@@ -14478,8 +14478,8 @@ function _sfc_render$D(_ctx, _cache, $props, $setup, $data, $options) {
       msg: _ctx.msg,
       msg2: _ctx.msg2
     }, null, 8, ["msg", "msg2"])) : createCommentVNode("", true),
-    createBaseVNode("div", _hoisted_2$r, [
-      _hoisted_3$o,
+    createBaseVNode("div", _hoisted_2$s, [
+      _hoisted_3$p,
       !_ctx.isLogin ? (openBlock(), createElementBlock("div", _hoisted_4$j, [
         createBaseVNode("div", _hoisted_5$h, [
           createBaseVNode("div", _hoisted_6$f, [
@@ -14625,7 +14625,19 @@ function getMemberForm() {
   return loginApi.getAuthHeaders({
     autoLogin: true,
     anonLogin: true
-  }).then((headers) => get$3("/rcms-api/3/member/form", {}, headers).then(processError).catch((err) => {
+  }).then((headers) => get$3("/rcms-api/3/member/form", {}, headers).then(processError).then((resp) => {
+    console.log(resp);
+    if (resp.details) {
+      if (resp.details.email_send_ng_flg && resp.details.email_send_ng_flg.name == "email_send_ng_flg") {
+        resp.details.email_send_ng_flg.name = "\u30E1\u30FC\u30EB\u30DE\u30AC\u30B8\u30F3\u306E\u914D\u4FE1\u8A2D\u5B9A";
+        resp.details.email_send_ng_flg.label = "\u30E1\u30FC\u30EB\u30DE\u30AC\u30B8\u30F3\u3092\u53D7\u3051\u53D6\u3089\u306A\u3044";
+      }
+      if (resp.details.tel_send_ng_flg) {
+        delete resp.details.tel_send_ng_flg;
+      }
+    }
+    return resp;
+  }).catch((err) => {
     let err_msg = "Problem fetching member form";
     switch (err.response.status) {
       case 401:
@@ -14733,13 +14745,13 @@ const _sfc_main$F = {
     }
   }
 };
-const _hoisted_1$z = ["type", "value"];
+const _hoisted_1$A = ["type", "value"];
 function _sfc_render$C(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("input", {
     type: $options.isNumber ? "number" : "text",
     value: _ctx.value,
     onInput: _cache[0] || (_cache[0] = (...args) => $options.updateValue && $options.updateValue(...args))
-  }, null, 40, _hoisted_1$z);
+  }, null, 40, _hoisted_1$A);
 }
 var FormElementText = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["render", _sfc_render$C]]);
 const _sfc_main$E = {
@@ -14765,7 +14777,7 @@ const _sfc_main$E = {
     }
   }
 };
-const _hoisted_1$y = ["value"];
+const _hoisted_1$z = ["value"];
 function _sfc_render$B(_ctx, _cache, $props, $setup, $data, $options) {
   return withDirectives((openBlock(), createElementBlock("select", {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.value = $event),
@@ -14774,7 +14786,7 @@ function _sfc_render$B(_ctx, _cache, $props, $setup, $data, $options) {
     (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.optionsArr, (opt) => {
       return openBlock(), createElementBlock("option", {
         value: opt.val
-      }, toDisplayString(opt.name), 9, _hoisted_1$y);
+      }, toDisplayString(opt.name), 9, _hoisted_1$z);
     }), 256))
   ], 544)), [
     [vModelSelect, _ctx.value]
@@ -14789,12 +14801,12 @@ const _sfc_main$D = {
     }
   }
 };
-const _hoisted_1$x = ["value"];
+const _hoisted_1$y = ["value"];
 function _sfc_render$A(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("textarea", {
     value: _ctx.value,
     onInput: _cache[0] || (_cache[0] = ($event) => _ctx.updateValue($event.target.value))
-  }, null, 40, _hoisted_1$x);
+  }, null, 40, _hoisted_1$y);
 }
 var FormElementTextarea = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["render", _sfc_render$A]]);
 const _sfc_main$C = {
@@ -14828,10 +14840,10 @@ const _sfc_main$C = {
     }
   }
 };
-const _hoisted_1$w = /* @__PURE__ */ createTextVNode("\u30E2\u30B8\u30E5\u30FC\u30EBID : ");
+const _hoisted_1$x = /* @__PURE__ */ createTextVNode("\u30E2\u30B8\u30E5\u30FC\u30EBID : ");
 function _sfc_render$z(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
-    _hoisted_1$w,
+    _hoisted_1$x,
     withDirectives(createBaseVNode("input", {
       type: "number",
       "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.value.module_id = $event),
@@ -14860,12 +14872,12 @@ const _sfc_main$B = {
     }
   }
 };
-const _hoisted_1$v = { class: "docdog-form__toggle" };
-const _hoisted_2$q = ["value", "id", "name"];
-const _hoisted_3$n = ["for"];
+const _hoisted_1$w = { class: "docdog-form__toggle" };
+const _hoisted_2$r = ["value", "id", "name"];
+const _hoisted_3$o = ["for"];
 function _sfc_render$y(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.optionsArr, (opt, idx) => {
-    return openBlock(), createElementBlock("div", _hoisted_1$v, [
+    return openBlock(), createElementBlock("div", _hoisted_1$w, [
       withDirectives(createBaseVNode("input", {
         type: "radio",
         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.value = $event),
@@ -14873,12 +14885,12 @@ function _sfc_render$y(_ctx, _cache, $props, $setup, $data, $options) {
         onInput: _cache[1] || (_cache[1] = ($event) => _ctx.updateValue($event.target.value)),
         id: _ctx.el.key_name + idx,
         name: _ctx.el.key_name
-      }, null, 40, _hoisted_2$q), [
+      }, null, 40, _hoisted_2$r), [
         [vModelRadio, _ctx.value]
       ]),
       createBaseVNode("label", {
         for: _ctx.el.key_name + idx
-      }, toDisplayString(opt.name), 9, _hoisted_3$n)
+      }, toDisplayString(opt.name), 9, _hoisted_3$o)
     ]);
   }), 256);
 }
@@ -14899,13 +14911,13 @@ const _sfc_main$A = {
     }
   }
 };
-const _hoisted_1$u = ["value"];
+const _hoisted_1$v = ["value"];
 function _sfc_render$x(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("input", {
     type: "number",
     value: _ctx.value,
     onInput: _cache[0] || (_cache[0] = (...args) => $options.updateValue && $options.updateValue(...args))
-  }, null, 40, _hoisted_1$u);
+  }, null, 40, _hoisted_1$v);
 }
 var FormElementNumber = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["render", _sfc_render$x]]);
 const _sfc_main$z = {
@@ -14922,18 +14934,29 @@ const _sfc_main$z = {
     }
   }
 };
+const _hoisted_1$u = { class: "docdog-form__toggle" };
+const _hoisted_2$q = ["id"];
+const _hoisted_3$n = ["for"];
 function _sfc_render$w(_ctx, _cache, $props, $setup, $data, $options) {
-  return withDirectives((openBlock(), createElementBlock("input", {
-    type: "checkbox",
-    onInput: _cache[0] || (_cache[0] = (...args) => $options.updateValue && $options.updateValue(...args)),
-    "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => _ctx.value = $event)
-  }, null, 544)), [
-    [
-      vModelCheckbox,
-      _ctx.value,
-      void 0,
-      { bool: true }
-    ]
+  return openBlock(), createElementBlock("div", _hoisted_1$u, [
+    withDirectives(createBaseVNode("input", {
+      name: "email_send_ng_flg",
+      id: _ctx.el.key_name,
+      type: "checkbox",
+      onChange: _cache[0] || (_cache[0] = (...args) => $options.updateValue && $options.updateValue(...args)),
+      "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => _ctx.value = $event)
+    }, null, 40, _hoisted_2$q), [
+      [
+        vModelCheckbox,
+        _ctx.value,
+        void 0,
+        { bool: true }
+      ]
+    ]),
+    _ctx.el.label ? (openBlock(), createElementBlock("label", {
+      key: 0,
+      for: _ctx.el.key_name
+    }, toDisplayString(_ctx.el.label), 9, _hoisted_3$n)) : createCommentVNode("", true)
   ]);
 }
 var FormElementBoolean = /* @__PURE__ */ _export_sfc(_sfc_main$z, [["render", _sfc_render$w]]);
@@ -22738,11 +22761,12 @@ const _sfc_main$w = {
     },
     setValue(val) {
       this.value = {
-        url: val.url,
-        title: val.title
+        url: val.url || "",
+        title: val.title || ""
       };
     },
     updateValue($event, type) {
+      console.log("URL UPDATED", $event.target.value);
       this.value[type] = $event.target.value;
       this.updateValueParent(this.value);
     }
@@ -22871,7 +22895,7 @@ function _sfc_render$s(_ctx, _cache, $props, $setup, $data, $options) {
     (openBlock(), createBlock(resolveDynamicComponent($options.elInstance), {
       el: $props.el,
       initValue: $options.processedModelValue,
-      onUpdate: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("update:modelValue", $event))
+      onUpdate: _cache[0] || (_cache[0] = ($event) => $options.processedModelValue = $event)
     }, null, 8, ["el", "initValue"]))
   ]);
 }
@@ -22959,7 +22983,7 @@ const _sfc_main$u = {
           this.name2 = profile.name2;
           Object.values(this.formDef).forEach((customField) => {
             if (profile[customField.key_name] != null) {
-              let val = profile[customField.key_name];
+              let val = profile[customField.key_name] || null;
               switch (customField.type) {
                 case "number":
                   if (val != null && val !== "") {
@@ -22969,6 +22993,14 @@ const _sfc_main$u = {
                 case "relation":
                   if (val != null && val.module_id) {
                     val.module_id = parseInt(val.module_id);
+                  }
+                  break;
+                case "boolean":
+                  val = val == "1";
+                  break;
+                case "url":
+                  if (!val || val == "" || typeof val === "object" && val.url == "" && val.title == "") {
+                    val = null;
                   }
                   break;
               }
@@ -22984,11 +23016,16 @@ const _sfc_main$u = {
   methods: {
     editProfile(event) {
       this.error("");
-      const newData = __spreadValues({
+      const newData = {
         email: this.email,
         name1: this.name1,
         name2: this.name2
-      }, this.customFields);
+      };
+      Object.entries(this.customFields).forEach(([key, val]) => {
+        if (val != null) {
+          newData[key] = val;
+        }
+      });
       if (this.login_pwd) {
         newData.login_pwd = this.login_pwd;
       }
