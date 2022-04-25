@@ -22,7 +22,6 @@ export default {
       };
     },
     updateValue($event, type) {
-        console.log("URL UPDATED",$event.target.value);
       this.value[type] = $event.target.value;
       this.updateValueParent(this.value);
     },

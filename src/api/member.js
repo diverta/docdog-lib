@@ -3,15 +3,6 @@ import qs from 'qs';
 import { get, post, processError } from './utils';
 import loginApi from './login';
 
-function parseErr(errors) {
-  return errors.reduce((carry, obj) => {
-    if (carry != '') {
-      carry += '<br/>';
-    }
-    return obj.field ? carry.concat(obj.field + ':' + obj.code + ':' + obj.message) : carry.concat(obj.message);
-  }, '');
-}
-
 function doSignUp(data) {
   return loginApi
     .getAuthHeaders({
@@ -24,7 +15,7 @@ function doSignUp(data) {
         .catch((err) => {
           let err_msg = 'Error during signup'; // Default error message
           if (err.response && err.response.data && err.response.data.errors) {
-            err_msg = parseErr(err.response.data.errors);
+            err_msg = err.response.data.errors;
           } else {
             switch (err.response.status) {
               case 404:
@@ -44,7 +35,7 @@ function doEditProfile(data) {
       .catch((err) => {
         let err_msg = 'Error during profile edit'; // Default error message
         if (err.response && err.response.data && err.response.data.errors) {
-          err_msg = parseErr(err.response.data.errors);
+          err_msg = err.response.data.errors;
         } else {
           switch (err.response.status) {
             case 404:
@@ -65,7 +56,7 @@ function doWithdrawal() {
       .catch((err) => {
         let err_msg = 'Error during withdrawal'; // Default error message
         if (err.response && err.response.data && err.response.data.errors) {
-          err_msg = parseErr(err.response.data.errors);
+          err_msg = err.response.data.errors;
         } else {
           switch (err.response.status) {
             case 404:
@@ -88,7 +79,6 @@ function getMemberForm() {
       get('/rcms-api/3/member/form', {}, headers)
         .then(processError)
         .then((resp) => {
-          console.log(resp);
           if (resp.details) {
             if (resp.details.email_send_ng_flg && resp.details.email_send_ng_flg.name == 'email_send_ng_flg') {
               resp.details.email_send_ng_flg.name = 'メールマガジンの配信設定';

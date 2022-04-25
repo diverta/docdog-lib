@@ -98,7 +98,6 @@ export default {
       this.close();
     },
     getPageHistParams() {
-      console.log('getPageHistParams: CUSTOM');
       return this.data;
     },
   },

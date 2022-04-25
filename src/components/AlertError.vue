@@ -12,7 +12,7 @@
       />
     </svg>
     <p class="docdog-alert__heading">エラーが発生しました</p>
-    <p>{{ err }}</p>
+    <p v-for="err_msg in err_arr">{{ err_msg }}</p>
   </div>
 </template>
 
@@ -20,10 +20,30 @@
 export default {
   props: {
     err: {
-      type: String,
+      type: [String, Array],
       default: '',
     },
   },
-  methods: {},
+  computed: {
+    err_arr() {
+      // Normalize errors as array of strings for all
+      if (typeof this.err === 'string' || this.err instanceof String) {
+        return [this.err];
+      } else {
+        // Could be array : use parseErr to make sure each item is a string
+        return this.err.map((err) => this.parseErr(err)).filter((err) => err != null && err != '');
+      }
+    },
+  },
+  methods: {
+    parseErr(err) {
+      if (typeof err === 'string' || err instanceof String) {
+        return err;
+      } else if (typeof err === 'object' && err !== null) {
+        // Handling necessary ? For now accept only strings or arrays of string
+      }
+      return null;
+    },
+  },
 };
 </script>

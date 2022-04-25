@@ -4,7 +4,7 @@ export default {
   inheritAttrs: false, // disable automatic event propagation
   props: {
     err: {
-      type: String,
+      type: [String, Array],
       default: '',
     },
     msg: {

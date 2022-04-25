@@ -10,7 +10,7 @@
         <div class="docdog-form__signup">
           <form>
             <template v-if="!isLogin">
-              <div :class="['docdog-form__item', { 'docdog-form__item--error': err_field == 'name' }]">
+              <div :class="['docdog-form__item', { 'docdog-form__item--error': err_fields['name'] != null }]">
                 <div class="docdog-form__item">
                   <label for="name" class="docdog-form__item__title">
                     名前
@@ -19,7 +19,7 @@
                   <input name="name" type="text" id="name" v-model="nameInput" placeholder="" required />
                 </div>
               </div>
-              <div :class="['docdog-form__item', { 'docdog-form__item--error': err_field == 'email' }]">
+              <div :class="['docdog-form__item', { 'docdog-form__item--error': err_fields['email'] != null }]">
                 <label for="email" class="docdog-form__item__title"
                   >メールアドレス<span class="docdog-form__item__title__badge">必須</span></label
                 >
@@ -29,7 +29,7 @@
             <FormElement
               v-for="el in formDef"
               :el="el"
-              :class="['docdog-form__item', { 'docdog-form__item--error': err_field == el.key_name }]"
+              :class="['docdog-form__item', { 'docdog-form__item--error': err_fields[el.key_name] != null }]"
               v-model="customFields[el.key_name]"
             />
             <div class="docdog-form__button">
@@ -83,54 +83,53 @@ export default {
         return this.nameInput;
       }
     },
-    err_field() {
+    err_fields() {
       if (this.err) {
-        const colpos = this.err.indexOf(':');
-        if (colpos !== -1) {
-          return this.err.substring(0, colpos);
-        }
+        return this.err.reduce((carry, item) => {
+          return { ...carry, [item.field]: true };
+        }, {});
       }
-      return '';
+      return {};
     },
     err_msg() {
-      if (this.err.length > 0) {
-        const [err_field, err_type] = this.err.split(':');
-        let translatedField = 'データ';
-        let tranlatedProblem = '不正';
-        const fieldNames = this.formDef.reduce((carry, item) => {
-          return {
-            ...carry,
-            [item.key_name]: item.title,
-          };
-        }, {});
-        if (fieldNames[err_field]) {
-          translatedField = fieldNames[err_field];
-        } else {
-          switch (err_field) {
-            case 'email':
-              translatedField = 'メールアドレス';
+      return this.err.map((err) => {
+        if (err) {
+          const { field, code } = err;
+          let translatedField = 'データ';
+          let tranlatedProblem = '不正';
+          const fieldNames = this.formDef.reduce((carry, item) => {
+            return {
+              ...carry,
+              [item.key_name]: item.title,
+            };
+          }, {});
+          if (fieldNames[field]) {
+            translatedField = fieldNames[field];
+          } else {
+            switch (field) {
+              case 'email':
+                translatedField = 'メールアドレス';
+                break;
+              case 'name':
+                translatedField = '名前';
+                break;
+            }
+          }
+          switch (code) {
+            case 'invalid':
+              tranlatedProblem = '不正';
               break;
-            case 'name':
-              translatedField = '名前';
+            case 'required':
+              tranlatedProblem = '必須';
               break;
           }
+          if (translatedField && tranlatedProblem) {
+            return translatedField + 'が' + tranlatedProblem + 'です';
+          } else {
+            return 'エラーが発生しました。';
+          }
         }
-        switch (err_type) {
-          case 'invalid':
-            tranlatedProblem = '不正';
-            break;
-          case 'required':
-            tranlatedProblem = '必須';
-            break;
-        }
-        if (translatedField && tranlatedProblem) {
-          return translatedField + 'が' + tranlatedProblem + 'です';
-        } else {
-          return 'エラーが発生しました。';
-        }
-      } else {
-        return '';
-      }
+      });
     },
   },
   mounted() {
@@ -172,34 +171,22 @@ export default {
   },
   methods: {
     send() {
-      if (!this.email) {
-        this.error('email:required');
-        this.resetView();
-        return;
-      }
-      if (!this.name) {
-        this.error('name:required');
-        this.resetView();
-        return;
-      }
-      if (this.name && this.email) {
-        inquiryApi
-          .doSend({
-            ...this.customFields,
-            name: this.name,
-            email: this.email,
-          })
-          .then((resp) => {
-            if (resp.id) {
-              this.setMsg('送信しました。');
-              this.resetView();
-            }
-          })
-          .catch((err) => {
-            this.error(err);
+      inquiryApi
+        .doSend({
+          ...this.customFields,
+          name: this.name,
+          email: this.email,
+        })
+        .then((resp) => {
+          if (resp.id) {
+            this.setMsg('送信しました。');
             this.resetView();
-          });
-      }
+          }
+        })
+        .catch((err) => {
+          this.error(err);
+          this.resetView();
+        });
     },
   },
 };

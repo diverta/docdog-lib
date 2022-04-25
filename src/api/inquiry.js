@@ -3,15 +3,6 @@ import qs from 'qs';
 import { get, post, processError } from './utils';
 import loginApi from './login';
 
-function parseErr(errors) {
-  return errors.reduce((carry, obj) => {
-    if (carry != '') {
-      carry += '<br/>';
-    }
-    return obj.field ? carry.concat(obj.field + ':' + obj.code + ':' + obj.message) : carry.concat(obj.message);
-  }, '');
-}
-
 function doSend(data) {
   return loginApi
     .getAuthHeaders({
@@ -24,7 +15,7 @@ function doSend(data) {
         .catch((err) => {
           let err_msg = 'Error during inquiry send'; // Default error message
           if (err.response && err.response.data && err.response.data.errors) {
-            err_msg = parseErr(err.response.data.errors);
+            err_msg = err.response.data.errors; // Array is handled
           } else {
             switch (err.response.status) {
               case 404:
