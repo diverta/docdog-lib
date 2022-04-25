@@ -5763,7 +5763,7 @@ const _sfc_main$L = {
   inheritAttrs: false,
   props: {
     err: {
-      type: String,
+      type: [String, Array],
       default: ""
     },
     msg: {
@@ -14232,18 +14232,36 @@ var AlertSuccess = /* @__PURE__ */ _export_sfc(_sfc_main$K, [["render", _sfc_ren
 const _sfc_main$J = {
   props: {
     err: {
-      type: String,
+      type: [String, Array],
       default: ""
     }
   },
-  methods: {}
+  computed: {
+    err_arr() {
+      if (typeof this.err === "string" || this.err instanceof String) {
+        return [this.err];
+      } else {
+        return this.err.map((err) => this.parseErr(err)).filter((err) => err != null && err != "");
+      }
+    }
+  },
+  methods: {
+    parseErr(err) {
+      if (typeof err === "string" || err instanceof String) {
+        return err;
+      }
+      return null;
+    }
+  }
 };
 const _hoisted_1$D = { class: "docdog-alert docdog-alert--error" };
 const _hoisted_2$u = /* @__PURE__ */ createStaticVNode('<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="28" fill="#dc0000" stroke="#ffffff" stroke-width="4"></circle><path d="M21.6144 40.1878C20.7581 39.3315 20.7581 37.9432 21.6144 37.087L37.1186 21.5827C37.9749 20.7264 39.3632 20.7264 40.2195 21.5827V21.5827C41.0758 22.439 41.0758 23.8273 40.2195 24.6836L24.7152 40.1878C23.859 41.0441 22.4707 41.0441 21.6144 40.1878V40.1878Z" fill="#ffffff"></path><path d="M39.1554 40.1555C38.2991 41.0118 36.9108 41.0118 36.0546 40.1555L20.5503 24.6513C19.694 23.795 19.694 22.4067 20.5503 21.5504V21.5504C21.4066 20.6942 22.7949 20.6942 23.6512 21.5504L39.1554 37.0547C40.0117 37.911 40.0117 39.2993 39.1554 40.1555V40.1555Z" fill="#ffffff"></path></svg><p class="docdog-alert__heading">\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F</p>', 2);
 function _sfc_render$F(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$D, [
     _hoisted_2$u,
-    createBaseVNode("p", null, toDisplayString($props.err), 1)
+    (openBlock(true), createElementBlock(Fragment, null, renderList($options.err_arr, (err_msg) => {
+      return openBlock(), createElementBlock("p", null, toDisplayString(err_msg), 1);
+    }), 256))
   ]);
 }
 var AlertError = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["render", _sfc_render$F]]);
@@ -14565,14 +14583,6 @@ function _sfc_render$D(_ctx, _cache, $props, $setup, $data, $options) {
   ]);
 }
 var SignIn = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["render", _sfc_render$D]]);
-function parseErr$1(errors) {
-  return errors.reduce((carry, obj) => {
-    if (carry != "") {
-      carry += "<br/>";
-    }
-    return obj.field ? carry.concat(obj.field + ":" + obj.code + ":" + obj.message) : carry.concat(obj.message);
-  }, "");
-}
 function doSignUp(data2) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
@@ -14580,7 +14590,7 @@ function doSignUp(data2) {
   }).then((headers) => post("/rcms-api/3/member/new", data2, headers).then(processError).catch((err) => {
     let err_msg = "Error during signup";
     if (err.response && err.response.data && err.response.data.errors) {
-      err_msg = parseErr$1(err.response.data.errors);
+      err_msg = err.response.data.errors;
     } else {
       switch (err.response.status) {
         case 404:
@@ -14595,7 +14605,7 @@ function doEditProfile(data2) {
   return loginApi.getAuthHeaders().then((headers) => post("/rcms-api/3/member/edit", data2, headers).then(processError).catch((err) => {
     let err_msg = "Error during profile edit";
     if (err.response && err.response.data && err.response.data.errors) {
-      err_msg = parseErr$1(err.response.data.errors);
+      err_msg = err.response.data.errors;
     } else {
       switch (err.response.status) {
         case 404:
@@ -14610,7 +14620,7 @@ function doWithdrawal() {
   return loginApi.getAuthHeaders().then((headers) => post("/rcms-api/3/member/withdraw", {}, headers).then(processError).then(() => loginApi.doLogout()).catch((err) => {
     let err_msg = "Error during withdrawal";
     if (err.response && err.response.data && err.response.data.errors) {
-      err_msg = parseErr$1(err.response.data.errors);
+      err_msg = err.response.data.errors;
     } else {
       switch (err.response.status) {
         case 404:
@@ -14626,7 +14636,6 @@ function getMemberForm() {
     autoLogin: true,
     anonLogin: true
   }).then((headers) => get$3("/rcms-api/3/member/form", {}, headers).then(processError).then((resp) => {
-    console.log(resp);
     if (resp.details) {
       if (resp.details.email_send_ng_flg && resp.details.email_send_ng_flg.name == "email_send_ng_flg") {
         resp.details.email_send_ng_flg.name = "\u30E1\u30FC\u30EB\u30DE\u30AC\u30B8\u30F3\u306E\u914D\u4FE1\u8A2D\u5B9A";
@@ -22766,7 +22775,6 @@ const _sfc_main$w = {
       };
     },
     updateValue($event, type) {
-      console.log("URL UPDATED", $event.target.value);
       this.value[type] = $event.target.value;
       this.updateValueParent(this.value);
     }
@@ -23293,47 +23301,54 @@ const _sfc_main$s = {
     });
   },
   computed: {
-    err_field() {
+    err_fields() {
       if (this.err) {
-        if (this.err.indexOf("Name is required") >= 0) {
-          return "name1";
-        }
-        if (this.err.indexOf(this.email) === 0) {
-          return "email";
-        }
-        const colpos = this.err.indexOf(":");
-        if (colpos !== -1) {
-          return this.err.substring(0, colpos);
-        }
+        return this.err.reduce((carry, item) => {
+          item.field;
+          if (item.message.indexOf("Name is required") >= 0)
+            ;
+          if (item.message.indexOf(this.email) === 0)
+            ;
+          return __spreadProps(__spreadValues({}, carry), { [item.field]: true });
+        }, {});
       }
-      return "";
+      return {};
     },
     err_msg() {
-      if (this.err.length > 0) {
-        const [err_field, err_type] = this.err.split(":");
-        let translatedField = "\u30C7\u30FC\u30BF";
-        let tranlatedProblem = "\u4E0D\u6B63";
-        switch (err_field) {
-          case "email":
-            translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
-            break;
+      return this.err.map((err) => {
+        if (err) {
+          const { field, code } = err;
+          let translatedField = "\u30C7\u30FC\u30BF";
+          let tranlatedProblem = "\u4E0D\u6B63";
+          const fieldNames = this.formDef.reduce((carry, item) => {
+            return __spreadProps(__spreadValues({}, carry), {
+              [item.key_name]: item.name
+            });
+          }, {});
+          if (fieldNames[field]) {
+            translatedField = fieldNames[field];
+          } else {
+            switch (field) {
+              case "email":
+                translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
+                break;
+            }
+          }
+          switch (code) {
+            case "invalid":
+              tranlatedProblem = "\u4E0D\u6B63";
+              break;
+            case "required":
+              tranlatedProblem = "\u5FC5\u9808";
+              break;
+          }
+          if (translatedField && tranlatedProblem) {
+            return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
+          } else {
+            return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
+          }
         }
-        switch (err_type) {
-          case "invalid":
-            tranlatedProblem = "\u4E0D\u6B63";
-            break;
-          case "required":
-            tranlatedProblem = "\u5FC5\u9808";
-            break;
-        }
-        if (translatedField && tranlatedProblem) {
-          return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
-        } else {
-          return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
-        }
-      } else {
-        return "";
-      }
+      });
     }
   },
   methods: {
@@ -23366,7 +23381,7 @@ const _sfc_main$s = {
     }
   }
 };
-const _withScopeId$2 = (n) => (pushScopeId("data-v-958aae26"), n = n(), popScopeId(), n);
+const _withScopeId$2 = (n) => (pushScopeId("data-v-36e75302"), n = n(), popScopeId(), n);
 const _hoisted_1$o = { class: "docdog-container--form" };
 const _hoisted_2$k = { class: "docdog-container--white" };
 const _hoisted_3$j = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
@@ -23434,7 +23449,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
           createBaseVNode("form", null, [
             createBaseVNode("div", _hoisted_6$c, [
               createBaseVNode("div", {
-                class: normalizeClass(["docdog-form__item", $options.err_field == "name1" ? "docdog-form__item--error" : ""])
+                class: normalizeClass(["docdog-form__item", $options.err_fields["name1"] ? "docdog-form__item--error" : ""])
               }, [
                 _hoisted_7$c,
                 withDirectives(createBaseVNode("input", {
@@ -23449,7 +23464,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
                 ])
               ], 2),
               createBaseVNode("div", {
-                class: normalizeClass(["docdog-form__item", $options.err_field == "name2" ? "docdog-form__item--error" : ""])
+                class: normalizeClass(["docdog-form__item", $options.err_fields["name2"] ? "docdog-form__item--error" : ""])
               }, [
                 _hoisted_8$9,
                 withDirectives(createBaseVNode("input", {
@@ -23465,7 +23480,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
               ], 2)
             ]),
             createBaseVNode("div", {
-              class: normalizeClass(["docdog-form__item", $options.err_field == "email" ? $data.errClass : ""])
+              class: normalizeClass(["docdog-form__item", $options.err_fields["email"] ? $data.errClass : ""])
             }, [
               _hoisted_9$7,
               withDirectives(createBaseVNode("input", {
@@ -23480,7 +23495,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
               ])
             ], 2),
             createBaseVNode("div", {
-              class: normalizeClass(["docdog-form__item", $options.err_field == "password" ? "docdog-form__item--error" : ""])
+              class: normalizeClass(["docdog-form__item", $options.err_fields["password"] ? "docdog-form__item--error" : ""])
             }, [
               _hoisted_10$6,
               withDirectives(createBaseVNode("input", {
@@ -23497,7 +23512,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
             (openBlock(true), createElementBlock(Fragment, null, renderList($data.formDef, (el2) => {
               return openBlock(), createBlock(_component_FormElement, {
                 el: el2,
-                class: normalizeClass(["docdog-form__item", $options.err_field == el2.key_name ? "docdog-form__item--error" : ""]),
+                class: normalizeClass(["docdog-form__item", $options.err_fields[el2.key_name] ? "docdog-form__item--error" : ""]),
                 modelValue: $data.customFields[el2.key_name],
                 "onUpdate:modelValue": ($event) => $data.customFields[el2.key_name] = $event
               }, null, 8, ["el", "class", "modelValue", "onUpdate:modelValue"]);
@@ -23530,7 +23545,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$p], ["__scopeId", "data-v-958aae26"]]);
+var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$p], ["__scopeId", "data-v-36e75302"]]);
 const _sfc_main$r = {
   props: {
     data: {
@@ -23786,12 +23801,11 @@ const _sfc_main$o = {
       this.close();
     },
     getPageHistParams() {
-      console.log("getPageHistParams: CUSTOM");
       return this.data;
     }
   }
 };
-const _withScopeId$1 = (n) => (pushScopeId("data-v-31ab6b50"), n = n(), popScopeId(), n);
+const _withScopeId$1 = (n) => (pushScopeId("data-v-47ad3699"), n = n(), popScopeId(), n);
 const _hoisted_1$l = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9")
 ], -1));
@@ -23821,7 +23835,7 @@ function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-var Download = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$m], ["__scopeId", "data-v-31ab6b50"]]);
+var Download = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$m], ["__scopeId", "data-v-47ad3699"]]);
 const _sfc_main$n = {
   extends: _sfc_main$L,
   props: {
@@ -25104,14 +25118,6 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64);
 }
 var Mypage = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
-function parseErr(errors) {
-  return errors.reduce((carry, obj) => {
-    if (carry != "") {
-      carry += "<br/>";
-    }
-    return obj.field ? carry.concat(obj.field + ":" + obj.code + ":" + obj.message) : carry.concat(obj.message);
-  }, "");
-}
 function doSend(data2) {
   return loginApi.getAuthHeaders({
     autoLogin: true,
@@ -25119,7 +25125,7 @@ function doSend(data2) {
   }).then((headers) => post("/rcms-api/3/inquiry/send", data2, headers).then(processError).catch((err) => {
     let err_msg = "Error during inquiry send";
     if (err.response && err.response.data && err.response.data.errors) {
-      err_msg = parseErr(err.response.data.errors);
+      err_msg = err.response.data.errors;
     } else {
       switch (err.response.status) {
         case 404:
@@ -25182,53 +25188,52 @@ const _sfc_main$8 = {
         return this.nameInput;
       }
     },
-    err_field() {
+    err_fields() {
       if (this.err) {
-        const colpos = this.err.indexOf(":");
-        if (colpos !== -1) {
-          return this.err.substring(0, colpos);
-        }
+        return this.err.reduce((carry, item) => {
+          return __spreadProps(__spreadValues({}, carry), { [item.field]: true });
+        }, {});
       }
-      return "";
+      return {};
     },
     err_msg() {
-      if (this.err.length > 0) {
-        const [err_field, err_type] = this.err.split(":");
-        let translatedField = "\u30C7\u30FC\u30BF";
-        let tranlatedProblem = "\u4E0D\u6B63";
-        const fieldNames = this.formDef.reduce((carry, item) => {
-          return __spreadProps(__spreadValues({}, carry), {
-            [item.key_name]: item.title
-          });
-        }, {});
-        if (fieldNames[err_field]) {
-          translatedField = fieldNames[err_field];
-        } else {
-          switch (err_field) {
-            case "email":
-              translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
+      return this.err.map((err) => {
+        if (err) {
+          const { field, code } = err;
+          let translatedField = "\u30C7\u30FC\u30BF";
+          let tranlatedProblem = "\u4E0D\u6B63";
+          const fieldNames = this.formDef.reduce((carry, item) => {
+            return __spreadProps(__spreadValues({}, carry), {
+              [item.key_name]: item.title
+            });
+          }, {});
+          if (fieldNames[field]) {
+            translatedField = fieldNames[field];
+          } else {
+            switch (field) {
+              case "email":
+                translatedField = "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9";
+                break;
+              case "name":
+                translatedField = "\u540D\u524D";
+                break;
+            }
+          }
+          switch (code) {
+            case "invalid":
+              tranlatedProblem = "\u4E0D\u6B63";
               break;
-            case "name":
-              translatedField = "\u540D\u524D";
+            case "required":
+              tranlatedProblem = "\u5FC5\u9808";
               break;
           }
+          if (translatedField && tranlatedProblem) {
+            return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
+          } else {
+            return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
+          }
         }
-        switch (err_type) {
-          case "invalid":
-            tranlatedProblem = "\u4E0D\u6B63";
-            break;
-          case "required":
-            tranlatedProblem = "\u5FC5\u9808";
-            break;
-        }
-        if (translatedField && tranlatedProblem) {
-          return translatedField + "\u304C" + tranlatedProblem + "\u3067\u3059";
-        } else {
-          return "\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002";
-        }
-      } else {
-        return "";
-      }
+      });
     }
   },
   mounted() {
@@ -25262,30 +25267,18 @@ const _sfc_main$8 = {
   },
   methods: {
     send() {
-      if (!this.email) {
-        this.error("email:required");
-        this.resetView();
-        return;
-      }
-      if (!this.name) {
-        this.error("name:required");
-        this.resetView();
-        return;
-      }
-      if (this.name && this.email) {
-        inquiryApi.doSend(__spreadProps(__spreadValues({}, this.customFields), {
-          name: this.name,
-          email: this.email
-        })).then((resp) => {
-          if (resp.id) {
-            this.setMsg("\u9001\u4FE1\u3057\u307E\u3057\u305F\u3002");
-            this.resetView();
-          }
-        }).catch((err) => {
-          this.error(err);
+      inquiryApi.doSend(__spreadProps(__spreadValues({}, this.customFields), {
+        name: this.name,
+        email: this.email
+      })).then((resp) => {
+        if (resp.id) {
+          this.setMsg("\u9001\u4FE1\u3057\u307E\u3057\u305F\u3002");
           this.resetView();
-        });
-      }
+        }
+      }).catch((err) => {
+        this.error(err);
+        this.resetView();
+      });
     }
   }
 };
@@ -25334,7 +25327,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
           createBaseVNode("form", null, [
             !_ctx.isLogin ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
               createBaseVNode("div", {
-                class: normalizeClass(["docdog-form__item", { "docdog-form__item--error": $options.err_field == "name" }])
+                class: normalizeClass(["docdog-form__item", { "docdog-form__item--error": $options.err_fields["name"] != null }])
               }, [
                 createBaseVNode("div", _hoisted_6$2, [
                   _hoisted_7$2,
@@ -25351,7 +25344,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
                 ])
               ], 2),
               createBaseVNode("div", {
-                class: normalizeClass(["docdog-form__item", { "docdog-form__item--error": $options.err_field == "email" }])
+                class: normalizeClass(["docdog-form__item", { "docdog-form__item--error": $options.err_fields["email"] != null }])
               }, [
                 _hoisted_8$2,
                 withDirectives(createBaseVNode("input", {
@@ -25369,7 +25362,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
             (openBlock(true), createElementBlock(Fragment, null, renderList($data.formDef, (el2) => {
               return openBlock(), createBlock(_component_FormElement, {
                 el: el2,
-                class: normalizeClass(["docdog-form__item", { "docdog-form__item--error": $options.err_field == el2.key_name }]),
+                class: normalizeClass(["docdog-form__item", { "docdog-form__item--error": $options.err_fields[el2.key_name] != null }]),
                 modelValue: $data.customFields[el2.key_name],
                 "onUpdate:modelValue": ($event) => $data.customFields[el2.key_name] = $event
               }, null, 8, ["el", "class", "modelValue", "onUpdate:modelValue"]);
