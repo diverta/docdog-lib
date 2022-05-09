@@ -23381,7 +23381,7 @@ const _sfc_main$s = {
     }
   }
 };
-const _withScopeId$2 = (n) => (pushScopeId("data-v-36e75302"), n = n(), popScopeId(), n);
+const _withScopeId$2 = (n) => (pushScopeId("data-v-574089fe"), n = n(), popScopeId(), n);
 const _hoisted_1$o = { class: "docdog-container--form" };
 const _hoisted_2$k = { class: "docdog-container--white" };
 const _hoisted_3$j = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
@@ -23545,7 +23545,7 @@ function _sfc_render$p(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$p], ["__scopeId", "data-v-36e75302"]]);
+var SignUp = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["render", _sfc_render$p], ["__scopeId", "data-v-574089fe"]]);
 const _sfc_main$r = {
   props: {
     data: {
@@ -23668,20 +23668,15 @@ function _sfc_render$n(_ctx, _cache, $props, $setup, $data, $options) {
     ], 4),
     createBaseVNode("div", {
       class: "docdog-card__body",
-      onClick: _cache[3] || (_cache[3] = withModifiers(($event) => _ctx.redirect({ target: "Download", params: { doc_data: _ctx.data } }), ["prevent", "self"]))
+      onClick: _cache[2] || (_cache[2] = withModifiers(($event) => _ctx.redirect({ target: "Download", params: { doc_data: _ctx.data } }), ["prevent", "self"]))
     }, [
       createBaseVNode("p", _hoisted_3$h, toDisplayString(_ctx.data.subject), 1),
       _ctx.showDownloadBtn ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-        createBaseVNode("button", {
-          type: "button",
-          class: "docdog-button docdog-button--secondary",
-          onClick: _cache[1] || (_cache[1] = ($event) => _ctx.onDownload())
-        }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3059\u308B "),
         _ctx.isInToast ? (openBlock(), createElementBlock("button", _hoisted_4$e, "\u8FFD\u52A0\u6E08\u307F")) : (openBlock(), createElementBlock("button", {
           key: 1,
           type: "button",
           class: "docdog-button docdog-button--white",
-          onClick: _cache[2] || (_cache[2] = ($event) => _ctx.onAdd())
+          onClick: _cache[1] || (_cache[1] = ($event) => _ctx.onAdd())
         }, " \u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u30EA\u30B9\u30C8\u306B\u8FFD\u52A0\u3059\u308B "))
       ], 64)) : createCommentVNode("", true)
     ]),
@@ -23805,7 +23800,7 @@ const _sfc_main$o = {
     }
   }
 };
-const _withScopeId$1 = (n) => (pushScopeId("data-v-47ad3699"), n = n(), popScopeId(), n);
+const _withScopeId$1 = (n) => (pushScopeId("data-v-21a8a578"), n = n(), popScopeId(), n);
 const _hoisted_1$l = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "docdog-modal__body__section" }, [
   /* @__PURE__ */ createBaseVNode("h1", { class: "docdog-modal__body__pagetitle" }, "\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9")
 ], -1));
@@ -23835,7 +23830,7 @@ function _sfc_render$m(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ], 64);
 }
-var Download = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$m], ["__scopeId", "data-v-47ad3699"]]);
+var Download = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["render", _sfc_render$m], ["__scopeId", "data-v-21a8a578"]]);
 const _sfc_main$n = {
   extends: _sfc_main$L,
   props: {
@@ -24792,7 +24787,7 @@ var Error_vue_vue_type_style_index_0_scoped_true_lang = "";
 const _sfc_main$b = {
   extends: _sfc_main$L
 };
-const _withScopeId = (n) => (pushScopeId("data-v-7bb604a8"), n = n(), popScopeId(), n);
+const _withScopeId = (n) => (pushScopeId("data-v-65a10124"), n = n(), popScopeId(), n);
 const _hoisted_1$9 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("h2", null, "Error", -1));
 function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
@@ -24800,7 +24795,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("p", null, toDisplayString(_ctx.err), 1)
   ], 64);
 }
-var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-7bb604a8"]]);
+var Error$1 = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-65a10124"]]);
 const _sfc_main$a = {
   extends: _sfc_main$L,
   components: {
