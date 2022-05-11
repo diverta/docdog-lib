@@ -4,8 +4,8 @@
   padding: $spacing-x-sm $spacing-md;
   background-color: $color-primary;
   border-radius: 20px;
-  color: #fff;
-  font-size: 11px;
+  color: #fff !important;
+  font-size: 11px !important;
   text-align: center;
   &--danger { 
     background-color: rgba($color-danger, .2);

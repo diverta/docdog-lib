@@ -6,8 +6,8 @@
     <h1 class="docdog-modal__body__pagetitle">ダウンロード</h1>
   </div>
   <div class="docdog-modal__body__section">
-    <div class="docdog-card__single">
-      <CardModal :data="data" :toastIds="toastIds" />
+    <div class="docdog-container--article">
+      <CardDocsDetail :data="data" :toastIds="toastIds" />
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
 import AbstractPage from './AbstractPage.vue';
 import AlertSuccess from '@/components/AlertSuccess.vue';
 import AlertError from '@/components/AlertError.vue';
-import CardModal from '@/components/cards/CardModal.vue';
+import CardDocsDetail from '@/components/cards/CardDocsDetail.vue';
 import docsApi from '@/api/docs';
 import loginApi from '@/api/login';
 
@@ -25,7 +25,7 @@ export default {
   components: {
     AlertSuccess,
     AlertError,
-    CardModal,
+    CardDocsDetail,
   },
   props: {
     doc_id: {
@@ -103,9 +103,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.err {
-  color: red;
-}
-</style>
