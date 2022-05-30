@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- This file is not served in the built package. It's only used in dev mode -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+        // On the real env, these globals are defined in the GTM template
+        var setInWindow = function(key, val) {
+            window[key] = val;
+        }
+        setInWindow("DOCDOG_API_HOST", "https://docdog.g.kuroco.app");
+        setInWindow("DOCDOG_CONFIG", {
+          "use_float_button": true,
+          //"hubId": 21706870 // Disable hubspot tracking for local dev
+        });
+        setInWindow("DOCDOG_OAUTH_SETTINGS", {
+          "google": {"action_url": "https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1"},
+          "facebook": {},
+          "yahoo": {},
+          "line": {},
+          "apple": {}
+        });
+    </script>
+    <script type="module" src="/src/main-lib1.iife.js"></script>
+    <title>Docdog Testing Page - Lib1</title>
+  </head>
+  <body>
+      <!-- <a href="https://docdog.g.kuroco.app/header">My header A</a> -->
+    <a href="https://docdog.g.kuroco.app/download?id=3">Docdog id=3 download (PRIVATE)</a><br/>
+    <a href="https://docdog.g.kuroco.app/download?id=4&public=true">Docdog id=4 download (PUBLIC)</a><br/>
+    <a href="https://docdog.g.kuroco.app/logout">Docdog Logout</a><br/>
+    <a href="https://docdog.g.kuroco.app/login">Docdog Login</a><br/>
+    <a href="https://docdog.g.kuroco.app/signup">Docdog SignUp</a><br/>
+    <a href="https://docdog.g.kuroco.app/profile">Docdog Profile</a><br/>
+    <a href="https://docdog.g.kuroco.app/list?cnt=1">Docdog List</a><br/>
+    <br/>
+    Alternative using data-docdog attribute :<br/>
+    <button data-docdog="list">Docdog List</button><br/>
+    <button data-docdog="download?id=4&public=true">Docdog Download 4</button><br/>
+    <br/>
+    Demo of isLogin toggle :<br/>
+    <button type="button" data-docdog="login?show=!isLogin">ログイン</button>
+    <button type="button" data-docdog="reminder?show=!isLogin">PWリマインダー</button>
+    <button type="button" data-docdog="?show=isLogin" onclick="toggleDocdogMemberMenu()">Member</button>
+    <a href="https://docdog.g.kuroco.app/mypage?show=isLogin">Docdog Mypage</a><br/>
+    <nav style="display:none" name="docdogMemberMenu">
+      <button type="button" class="l-header__nav--user__button" data-docdog="profile" onclick="toggleDocdogMemberMenu()">アカウント情報の編集</button>
+      <button type="button" class="l-header__nav--user__button" data-docdog="logout" onclick="toggleDocdogMemberMenu()">ログアウト</button>
+    </nav>
+
+<script>
+      function toggleDocdogMemberMenu() {
+        document.getElementsByName("docdogMemberMenu").forEach(function(el) {
+          if (el.style.display === "none") {
+            el.style.display = "block";
+          } else {
+            el.style.display = "none";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

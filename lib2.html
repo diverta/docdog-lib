@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!-- This file is not served in the built package. It's only used in dev mode -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+        // On the real env, these globals are defined in the GTM template
+        var setInWindow = function(key, val) {
+            window[key] = val;
+        }
+        setInWindow("DOCDOG_API_HOST", "https://docdog.g.kuroco.app");
+        setInWindow("DOCDOG_CONFIG", {
+          "use_float_button": true,
+          //"hubId": 21706870 // Disable hubspot tracking for local dev
+        });
+        setInWindow("DOCDOG_OAUTH_SETTINGS", {
+          "google": {"action_url": "https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1"},
+          "facebook": {},
+          "yahoo": {},
+          "line": {},
+          "apple": {}
+        });
+    </script>
+    <script type="module" src="/src/main-lib2.iife.js"></script>
+    <title>Docdog Testing Page - Lib2</title>
+  </head>
+  <body>
+  </body>
+</html>
