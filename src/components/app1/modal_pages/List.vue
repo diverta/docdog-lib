@@ -7,7 +7,7 @@
   <div class="docdog-modal__body__section">
     <ul class="docdog-card__list" v-if="list.length > 0">
       <li v-for="doc in list">
-        <CardModal
+        <CardDocs
           :data="doc"
           :key="doc.topics_id"
           :toastIds="toastIds"
@@ -55,12 +55,12 @@
 
 <script>
 import AbstractList from './AbstractList.vue';
-import CardModal from '@/components/app1/cards/CardModal.vue';
+import CardDocs from '@/components/app1/cards/CardDocs.vue';
 
 export default {
   extends: AbstractList,
   components: {
-    CardModal,
+    CardDocs,
   },
   data() {
     return {

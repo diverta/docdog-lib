@@ -9,7 +9,7 @@
     <p>選択中のファイル</p>
     <ul class="docdog-card__list">
       <li v-for="(item, idx) in list">
-        <CardModal :data="item" :toastIds="toastIds" :deleteFooter="true" @removeToast="onRemoveToast(idx)" />
+        <CardDocs :data="item" :toastIds="toastIds" :deleteFooter="true" @removeToast="onRemoveToast(idx)" />
       </li>
     </ul>
   </div>
@@ -24,14 +24,14 @@
 <script>
 import AbstractPage from './AbstractPage.vue';
 import AlertSuccess from '@/components/app1/AlertSuccess.vue';
-import CardModal from '@/components/app1/cards/CardModal.vue';
+import CardDocs from '@/components/app1/cards/CardDocs.vue';
 import Loading from '@/components/app1/modal_pages/Loading.vue';
 
 export default {
   extends: AbstractPage,
   components: {
     AlertSuccess,
-    CardModal,
+    CardDocs,
     Loading,
   },
   props: {

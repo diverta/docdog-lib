@@ -54,7 +54,7 @@
         <h3 class="docdog-modal__body__sub-heading">資料</h3>
         <ul class="docdog-card__list" v-if="docs.length > 0">
           <li v-for="doc in docs">
-            <CardModal
+            <CardDocs
               :data="doc"
               :key="doc.topics_id"
               :toastIds="toastIds"
@@ -104,7 +104,7 @@
 
 <script>
 import AbstractPage from './AbstractPage.vue';
-import CardModal from '@/components/app1/cards/CardModal.vue';
+import CardDocs from '@/components/app1/cards/CardDocs.vue';
 import CardVideos from '@/components/app1/cards/CardVideos.vue';
 import CardTopics from '@/components/app1/cards/CardTopics.vue';
 import TopicsList from '@/mixins/TopicsList';
@@ -114,7 +114,7 @@ export default {
   extends: AbstractPage,
   mixins: [TopicsList],
   components: {
-    CardModal,
+    CardDocs,
     CardVideos,
     CardTopics,
   },
