@@ -66,9 +66,6 @@
     justify-content: center;
     padding: $spacing-md;
     .docdog-toast__body + & { border-top: 1px solid $color-border; }
-    @media screen and (min-width: 768px) {
-      .docdog-button { height: 40px; }
-    }
   }
 
 }

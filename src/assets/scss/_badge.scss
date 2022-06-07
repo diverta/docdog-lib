@@ -2,13 +2,13 @@
   display: inline-block;
   min-width: 68px;
   padding: $spacing-x-sm $spacing-md;
-  background-color: $color-primary;
+  background-color: $color-gray;
   border-radius: 20px;
   color: #fff !important;
   font-size: 11px !important;
   text-align: center;
   &--danger { 
     background-color: rgba($color-danger, .2);
-    color: $color-danger;
+    color: $color-danger !important;
   }
 }

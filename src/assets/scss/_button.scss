@@ -6,7 +6,6 @@
   height: 50px;
   border-radius: $border-radius-sm;
   transition: $transition;
-
   // color
   &--primary {
     background-color: $color-primary;
@@ -29,18 +28,6 @@
     &:hover { 
       background-color: lighten($color-border, 8%);
     }
-    &:disabled {
-      background-color: lighten($color-border, 8%);
-    }
-  }
-  &--white-outline {
-    border: 1px solid #fff !important;
-    background-color: transparent;
-    color: #fff;
-    &:hover { 
-      background-color: #fff;
-      svg { fill: $color-link; }
-    }
   }
   &--danger {
     background-color: $color-danger;
@@ -48,6 +35,10 @@
     &:hover {
       background-color: darken($color-danger, 8%);
     }
+  }
+  &:disabled {
+    background-color: $color-disabled;
+    color: $color-gray;
   }
 
   // type
@@ -62,6 +53,31 @@
     &:hover { 
       background-color: transparent;
     }
+  }
+
+  &--add-list {
+    @extend .docdog-button;
+    @extend .docdog-button--primary;
+    padding: $spacing-md;
+    background: url("/src/assets/image/icon-add-list.svg") no-repeat right $spacing-md center $color-primary;
+    background-size: 20px;
+    .docdog-card__foot & {
+      width: 212px !important;
+      height: 45px !important;
+      font-size: 13px;
+      justify-content: flex-start;
+    }
+    &:disabled {
+      background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center $color-disabled !important;
+      background-size: 20px;
+      justify-content: center;
+    }
+  }
+  &--download {
+    @extend .docdog-button;
+    @extend .docdog-button--primary;
+    background: url("/src/assets/image/icon-download.svg") no-repeat right $spacing-md center $color-primary;
+    background-size: 20px;
   }
   &--del {
     display: flex;
@@ -88,8 +104,8 @@
     align-items: center;
     justify-content: center;
     position: fixed;
-    right: 40px;
-    bottom: 40px;
+    right: $spacing-lg;
+    bottom: $spacing-lg;
     width: 60px;
     height: 60px;
     border-radius: 30px;
@@ -105,27 +121,15 @@
 
   // size
   &--sm {
+    display: inline-flex;
     flex: 0 0 auto !important;
     width: auto !important;
+    height: 45px !important;
+    font-size: 13px;
   }
   &--wide {
     flex: 1 1 100% !important;
     width: 100% !important;
-  }
-
-  // list
-  &__list {
-    width: 100%;
-    @media screen and (min-width: 768px) {
-      display: flex;
-      justify-content: space-between;
-      .docdog-button { margin: 0 $spacing-sm;}
-    }
-    @media screen and (max-width: 767px) {
-      .docdog-button + .docdog-button { 
-        margin-top: $spacing-sm;
-      }
-    }
   }
 
 }

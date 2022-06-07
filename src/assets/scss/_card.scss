@@ -30,6 +30,7 @@
       position: absolute;
       bottom: $spacing-sm;
       right:  $spacing-sm;
+      box-shadow: 0 0 $spacing-sm 0 rgba(0,0,0,.2);
     }
   }
   &__video {
@@ -51,9 +52,9 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    padding: $spacing-md;
+    padding: $spacing-lg;
     @media screen and (max-width: 767px) {
-      padding: $spacing-sm;
+      padding: $spacing-md;
     }
     &__title {
       flex: 1 1 auto;
@@ -68,9 +69,9 @@
   &__foot {
     display: flex;
     justify-content: flex-end;
-    padding: 0 $spacing-md $spacing-md;
+    padding: 0 $spacing-lg $spacing-lg;
     @media screen and (max-width: 767px) {
-      padding: 0 $spacing-sm $spacing-sm;
+      padding: 0 $spacing-md $spacing-md;
     }
   }
   &__list {
@@ -95,7 +96,7 @@
       }
       @media screen and (max-width: 767px) {
         width: 100%;
-        &:not(:first-child) { margin-top: $spacing-md; }
+        &:not(:first-child) { margin-top: $spacing-lg; }
       }
     }
   }

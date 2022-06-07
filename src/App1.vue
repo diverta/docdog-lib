@@ -42,7 +42,7 @@
   </Modal>
   <Toast
     v-model:list="toastList"
-    v-show="toastList.length > 0 && current_page != 'DownloadList' && current_page != 'Download'"
+    v-show="toastList.length > 0 && current_page != 'DownloadList'"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
     @changeStatus="toastStatus = $event"
