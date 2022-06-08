@@ -1,6 +1,6 @@
 <template>
   <!-- Modal Content -->
-  <div class="docdog-container--article">
+  <div class="docdog-container--middle">
     <article class="docdog-modal__body__section">
       <div class="docdog-modal__body__section">
         <h1 class="docdog-modal__body__pagetitle">{{ data.subject }}</h1>
