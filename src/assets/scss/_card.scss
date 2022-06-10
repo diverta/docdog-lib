@@ -15,6 +15,8 @@
       box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
     }
   }
+
+  // card element
   &__thumb { 
     height: 200px;
     position: relative;
@@ -74,25 +76,22 @@
       padding: 0 $spacing-md $spacing-md;
     }
   }
+
+  // list
   &__list {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     li { 
-      @media screen and (min-width: 1441px) {
-        width: 18.4%;
-        &:not(:nth-of-type(5n)) { margin-right: 2%; }
-        &:nth-of-type(n+6) { margin-top: $spacing-lg; }
+      @media screen and (min-width: 1025px) {
+        width: calc( (100% - ($spacing-x-lg * 2 )) / 3 );
+        &:not(:nth-of-type(3n)) { margin-right: $spacing-x-lg; }
+        &:nth-of-type(n+4) { margin-top: $spacing-x-lg; }
       }
-      @media screen and (min-width: 1281px) and (max-width: 1440px) {
-        width: 23.1%;
-        &:not(:nth-of-type(4n)) { margin-right: 2.5%; }
-        &:nth-of-type(n+5) { margin-top: $spacing-lg; }
-      }
-      @media screen and (min-width: 768px) and (max-width: 1280px) {
-        width: 31.3%;
-        &:not(:nth-of-type(3n)) { margin-right: 3%; }
-        &:nth-of-type(n+4) { margin-top: $spacing-lg; }
+      @media screen and (min-width: 768px) and  (max-width: 1024px){
+        width: calc( (100% - ($spacing-x-lg)) / 2 );
+        &:not(:nth-of-type(2n)) { margin-right: $spacing-x-lg; }
+        &:nth-of-type(n+3) { margin-top: $spacing-x-lg; }
       }
       @media screen and (max-width: 767px) {
         width: 100%;
@@ -100,12 +99,72 @@
       }
     }
   }
-  &__single {
-    display: flex;
-    justify-content: center;
-    .docdog-card { 
+
+  // type
+  &--media {
+    @extend .docdog-card;
+    flex-direction: row;
+    padding: $spacing-lg;
+    @media screen and (max-width: 767px) {
+      padding: $spacing-md;
+    }
+    // card element
+    &__thumb {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 140px;
+      height: 199px;
+      border: 1px solid $color-border;
+      border-radius: $border-radius-sm;
+      overflow: hidden;
+      @media screen and (max-width: 767px) {
+        width: 70.25px;
+        height: 100px;
+      }
+      img { 
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    &__body {
+      &__inner {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        padding: 0 0 0 $spacing-lg;
+        @media screen and (max-width: 767px) {
+          padding: 0 0 0 $spacing-md;
+        }
+      }
+      flex: 1 1 auto;
+      &__title {
+        @extend .docdog-card__body__title;
+      }
+    }
+    &__foot {
+      @extend .docdog-card__foot;
+      padding: $spacing-lg 0 0;
+    }
+
+    // list
+    &__list {
+      display: flex;
+      flex-wrap: wrap;
       width: 100%;
-      max-width: 500px;
+      li {
+        @media screen and (min-width: 768px) {
+          width: calc( (100% - ($spacing-x-lg)) / 2 );
+          &:not(:nth-of-type(2n)) { margin-right: $spacing-x-lg; }
+          &:nth-of-type(n+3) { margin-top: $spacing-x-lg; }
+        }
+        @media screen and (max-width: 767px) {
+          width: 100%;
+          &:not(:first-child) { margin-top: $spacing-lg; }
+        }
+      }
     }
   }
+
 }

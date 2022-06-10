@@ -61,7 +61,9 @@
     padding: $spacing-md;
     background: url("/src/assets/image/icon-add-list.svg") no-repeat right $spacing-md center $color-primary;
     background-size: 20px;
-    .docdog-card__foot & {
+    .docdog-card__foot &,
+    .docdog-article__title & {
+      flex: 0 0 auto;
       width: 212px !important;
       height: 45px !important;
       font-size: 13px;
@@ -76,27 +78,30 @@
   &--download {
     @extend .docdog-button;
     @extend .docdog-button--primary;
+    padding: $spacing-md;
     background: url("/src/assets/image/icon-download.svg") no-repeat right $spacing-md center $color-primary;
     background-size: 20px;
+    .docdog-sidebar__foot & {
+      font-size: 13px;
+      justify-content: flex-start;
+    }
   }
   &--del {
     display: flex;
     align-items: center;
-    padding: $spacing-sm;
-    border: 1px solid $color-border !important;
+    padding: $spacing-x-sm;
     border-radius: $border-radius-sm;
-    background-color: #fff;
+    background-color: $color-gray;
     font-size: 13px;
     transition: $transition;
     @media screen and (max-width: 767px) {
       font-size: 12px;
     }
     &:hover {
-      background-color: lighten($color-border, 8%);
+      background-color: lighten($color-gray, 8%);
     }
     span { 
-      margin-left: $spacing-x-sm;
-      line-height: 1;
+      visibility: hidden;
     }
   }
   &--floating {

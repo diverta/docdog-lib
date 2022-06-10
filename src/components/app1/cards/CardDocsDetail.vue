@@ -1,13 +1,22 @@
 <template>
   <div class="docdog-article">
-    <h2 class="docdog-card__body__title">
-      {{ data.subject }}
-      <span class="docdog-badge docdog-u-mx-md docdog-u-vertical-align-middle">{{ data.type ? data.type.label : '' }}</span>
-    </h2>
+    <div class="docdog-article__title">
+      <h2>{{ data.subject }}</h2>
+      <button type="button" class="docdog-button--add-list" @click.stop="onAdd()" :disabled="isInToast">
+        <span v-if="isInToast">追加済み</span>
+        <span v-else>ダウンロードリストに追加</span>
+      </button>
+    </div>
     <figure v-if="data.thumbnail && data.thumbnail.url" class="docdog-u-my-lg">
       <img :src="data.thumbnail.url">
     </figure>
     <div v-if="data.wysiwyg" v-html="data.wysiwyg" class="docdog-u-my-lg"></div>
+    <!-- TODO: Display file type / total page / file size -->
+    <p>PDF / 21ページ / 5.3MB</p>
+    <button type="button" class="docdog-button--add-list" @click.stop="onAdd()" :disabled="isInToast">
+      <span v-if="isInToast">追加済み</span>
+      <span v-else>ダウンロードリストに追加</span>
+    </button>
   </div>
 </template>
 

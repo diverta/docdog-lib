@@ -1,23 +1,24 @@
 <template>
-  <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
+  <div class="docdog-container--middle">
+    <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
-  <div class="docdog-modal__body__section">
-    <h1 class="docdog-modal__body__pagetitle">ダウンロードリスト</h1>
+    <div class="docdog-modal__body__section">
+      <h1 class="docdog-modal__body__pagetitle">ダウンロードリスト</h1>
+    </div>
+
+    <div class="docdog-modal__body__section" v-if="list.length">
+      <p>選択中のファイル</p>
+      <ul class="docdog-card__list">
+        <li v-for="(item, idx) in list">
+          <CardDocs :data="item" :toastIds="toastIds" :deleteFooter="true" @removeToast="onRemoveToast(idx)" />
+        </li>
+      </ul>
+    </div>
+
+    <div class="docdog-modal__body__section" v-if="!list.length">
+      <p>選択中のファイルはありません。</p>
+    </div>
   </div>
-
-  <div class="docdog-modal__body__section" v-if="list.length">
-    <p>選択中のファイル</p>
-    <ul class="docdog-card__list">
-      <li v-for="(item, idx) in list">
-        <CardDocs :data="item" :toastIds="toastIds" :deleteFooter="true" @removeToast="onRemoveToast(idx)" />
-      </li>
-    </ul>
-  </div>
-
-  <div class="docdog-modal__body__section" v-if="!list.length">
-    <p>選択中のファイルはありません。</p>
-  </div>
-
   <Loading v-if="toastStatus == 'downloading'" :loadingMessage="'圧縮ファイル作成中'" />
 </template>
 
