@@ -135,4 +135,14 @@
   p { line-height: 2; }
   u { text-decoration: underline; }
 
+  &__check-list {
+    padding-left: 0 !important;
+    li {
+      padding-left: $spacing-lg !important;
+      list-style: none !important;
+      background: url("/src/assets/image/icon-success.svg") no-repeat left $spacing-x-sm;
+      &:not(:last-child) { margin-top: $spacing-x-sm; }
+    }
+  }
+
 }

@@ -143,10 +143,12 @@
 
   // flex
   &-d-flex {
-    & { display: flex; }
-    &-align-center { align-items: center; }
-    &-justify-center { justify-content: center; }
-    &-justify-between { justify-content: space-between; }
+    & { display: flex !important; }
+    &-align-center { align-items: center !important; }
+    &-justify-center { justify-content: center !important; }
+    &-justify-between { justify-content: space-between !important; }
+    &-grow-0 { flex-grow: 0 !important; } 
+    &-grow-1 { flex-grow: 1 !important; } 
   }
 
 }

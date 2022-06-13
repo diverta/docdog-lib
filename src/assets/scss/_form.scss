@@ -11,6 +11,10 @@
     padding: $spacing-md;
     -webkit-appearance: auto;
     appearance: auto;
+    &:disabled {
+      background-color: $color-background;
+      color: $color-gray;
+    }
   }
   input[type='checkbox'],
   input[type='radio'] {
@@ -168,18 +172,31 @@
       input[type='number'],
       select,
       textarea {
+        padding-right: $spacing-xx-lg !important;
         border-color: $color-danger;
-        background-color: rgba($color-danger, .2);
+        background: url("/src/assets/image/icon-error.svg") no-repeat right $spacing-md center rgba($color-danger, .12);
       }
       .docdog-form__toggle {
         border-radius: $border-radius-sm;
         background-color: rgba($color-danger, .2);
       }
       &__msg {
-        margin: $spacing-sm 0;
-        color: $color-danger;
+        margin: $spacing-sm 0 !important;
+        color: $color-danger !important;
         font-size: 12px;
       }
+    }
+    &--success {
+      input[type='text'],
+      input[type='email'],
+      input[type='password'],
+      input[type='number'],
+      select,
+      textarea {
+        padding-right: $spacing-xx-lg !important;
+        background: url("/src/assets/image/icon-success.svg") no-repeat right $spacing-md center;
+      }
+
     }
     &--col-2 {
       display: flex;
@@ -201,6 +218,12 @@
         margin-left: $spacing-sm;
         line-height: 1.3;
       }
+    }
+    &__required {
+      display: inline-block;
+      margin-left: $spacing-x-sm;
+      color: $color-danger;
+      font-size: 12px;
     }
     &__note {
       margin-top: $spacing-x-sm;
