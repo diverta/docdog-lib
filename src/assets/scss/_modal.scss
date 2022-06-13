@@ -20,8 +20,13 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    transition: 2s;
+    transition: $transition;
     z-index: 10000;
+    @media screen and (min-width: 1001px) {
+      .docdog-modal__open-sidebar & {
+        width: calc( 100% - 200px );
+      }
+    }
   }
   // header
   &__head {
@@ -159,9 +164,9 @@
   }
   &__body {
     flex: 1 1 auto;
-    padding: $spacing-x-lg;
+    padding: $spacing-xx-lg;
     overflow-y: auto;
-    background-color: #f6f6f6;
+    background-color: $color-background;
     &::-webkit-scrollbar {
       background-color: #f0f0f0;
       width: $border-radius-md;
@@ -211,9 +216,10 @@
     .docdog-modal__body + & {
       box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
      }
-    @media screen and (min-width: 768px) {
-      .docdog-button { width: 48%; }
-    }
+     .docdog-button,
+     .docdog-button--add-list {
+       max-width: 1000px;
+     }
   }
   @media screen and (max-width: 767px) {
     .docdog-modal__head {

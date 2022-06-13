@@ -28,7 +28,8 @@
       @resetView="resetView"
       ref="ctrl"
     />
-    <template v-slot:footer v-if="footer_comp">
+    <!-- TODO: remove footer -->
+    <!-- <template v-slot:footer v-if="footer_comp">
       <component
         :is="footer_comp"
         :footer_data="footer_data"
@@ -38,11 +39,11 @@
         @downloadToast="downloadToast"
         @redirect="redirect"
       />
-    </template>
+    </template> -->
   </Modal>
   <Toast
     v-model:list="toastList"
-    v-show="toastList.length > 0 && current_page != 'DownloadList' && current_page != 'Download'"
+    v-show="toastList.length > 0 && current_page != 'DownloadList'"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
     @changeStatus="toastStatus = $event"

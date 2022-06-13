@@ -2,16 +2,30 @@
   <!-- Modal Content -->
   <div class="docdog-container--middle">
     <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">動画一覧</h1>
+      <h1 class="docdog-modal__body__pagetitle">資料一覧</h1>
       <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
     </div>
     <div class="docdog-modal__body__section">
-      <ul class="docdog-card__list" v-if="list.length > 0">
+      <!-- TODO: Tab change -->
+      <nav class="docdog-tab__list__outer">
+        <ul role="tablist" class="docdog-tab__list">
+          <li role="tab"><button type="button" class="docdog-tab docdog-tab--active">すべて</button></li>
+          <li role="tab"><button type="button" class="docdog-tab">サービス説明</button></li>
+          <li role="tab"><button type="button" class="docdog-tab">規約・契約書</button></li>
+          <li role="tab"><button type="button" class="docdog-tab">プロジェクト進行お役立ちツール</button></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="docdog-modal__body__section">
+      <ul class="docdog-card--media__list" v-if="list.length > 0">
         <li v-for="doc in list">
-          <CardVideos
+          <CardDocs
             :data="doc"
             :key="doc.topics_id"
+            :toastIds="toastIds"
+            :showDownloadBtn="showDownloadBtn"
             @download="download(doc)"
+            @addToast="addToast"
             @redirect="redirect"
           />
         </li>
@@ -54,16 +68,17 @@
 
 <script>
 import AbstractList from './AbstractList.vue';
-import CardVideos from '@/components/app1/cards/CardVideos.vue';
+import CardDocs from '@/components/app1/cards/CardDocs.vue';
 
 export default {
   extends: AbstractList,
   components: {
-    CardVideos,
+    CardDocs,
   },
   data() {
     return {
-      category: 17,
+      category: 15,
+      showDownloadBtn: true,
     };
   },
 };

@@ -16,10 +16,32 @@
       margin: auto;
     }
   }
-  &--article {
+  &--middle {
     @media screen and (min-width: 768px) {
       max-width: 1000px;
       margin: auto;
     }
   }
+
+  // col-2
+  &--col-2 {
+    @media screen and (min-width: 768px) {
+      display: flex;
+      justify-content: space-between;
+    }
+    &__side {
+      @media screen and (min-width: 768px) {
+        width: 200px;
+        margin: 0 auto 0 0;
+      }
+    }
+    &__main {
+      @media screen and (min-width: 768px) {
+        width: 700px;
+        margin: 0 0 0 auto;
+      }
+    }
+  }
+
+
 }

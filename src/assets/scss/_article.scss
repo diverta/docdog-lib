@@ -2,15 +2,31 @@
   @extend .docdog-card;
   display: block !important;
   margin: 0;
-  padding: $spacing-x-lg;
+  padding: $spacing-xx-lg;
   @media screen and (max-width: 767px) {
     margin-right: -$spacing-lg;
     margin-left: -$spacing-lg;
     padding: $spacing-lg;
     border-radius: 0;
   }
+  &__title {
+    display: flex;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px solid $color-border;
+    h1, h2 { 
+      flex: 1 1 auto;
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    h2 { border-bottom: 0 !important; }
+  }
+
+  // spacing
   *:first-child { margin-top: 0; }
   *:last-child {margin-bottom: 0; }
+
+  // element
   h1 { 
     margin: $spacing-x-lg 0;
     font-size: 36px;
@@ -118,4 +134,15 @@
   }
   p { line-height: 2; }
   u { text-decoration: underline; }
+
+  &__check-list {
+    padding-left: 0 !important;
+    li {
+      padding-left: $spacing-lg !important;
+      list-style: none !important;
+      background: url("/src/assets/image/icon-success.svg") no-repeat left $spacing-x-sm;
+      &:not(:last-child) { margin-top: $spacing-x-sm; }
+    }
+  }
+
 }

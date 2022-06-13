@@ -1,0 +1,48 @@
+.docdog-tab {
+  padding: $spacing-md $spacing-lg;
+  background-color: transparent;
+  color: $color-gray;
+  transition: $transition;
+  @media screen and (max-width: 767px) {
+    padding: $spacing-md;
+  }
+  &:hover {
+    color: $color-primary;
+  }
+  &--active {
+    color: $color-primary;
+    border-bottom: $spacing-x-sm solid $color-primary !important;
+    font-weight: bold;
+  }
+
+  // list
+  &__list {
+    display: flex;
+    border-bottom: 1px solid $color-disabled;
+    white-space: nowrap;
+    @media screen and (min-width: 768px) {
+      flex-wrap: wrap;
+    }
+    @media screen and (max-width: 767px) {
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      &__outer {
+        position: relative;
+        &::after {
+          width: $spacing-lg;
+          height: $spacing-xx-lg;
+          position: absolute;
+          top: 0;
+          right: 0;
+          background:linear-gradient(to right, rgba(255,255,255,0), $color-background);
+          content: "";
+        }
+      }
+    }
+  }
+
+}

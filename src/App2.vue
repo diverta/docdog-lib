@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal">
+  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal" :class="toastList.length > 0 ? 'docdog-modal__open-sidebar' : ''">
     <template v-slot:header>
       <ModalHeader
         v-if="!customHeaderHtml"
@@ -28,17 +28,6 @@
       @resetView="resetView"
       ref="ctrl"
     />
-    <template v-slot:footer v-if="footer_comp">
-      <component
-        :is="footer_comp"
-        :footer_data="footer_data"
-        :toastStatus="toastStatus"
-        @download="download"
-        @addToast="addToast"
-        @downloadToast="downloadToast"
-        @redirect="redirect"
-      />
-    </template>
   </Modal>
   <Toast
     v-model:list="toastList"
