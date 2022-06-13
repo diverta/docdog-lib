@@ -205,9 +205,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.err {
-  color: red;
-}
-</style>

@@ -11,6 +11,7 @@
     </div>
     <template v-if="showDownloadBtn">
       <div class="docdog-card__foot docdog-u-d-flex-justify-center">
+        <!-- TODO: Componentize add list button -->
         <button type="button" class="docdog-button--add-list" @click.stop="onAdd()" :disabled="isInToast">
           <span v-if="isInToast">追加済み</span>
           <span v-else>ダウンロードリストに追加</span>
