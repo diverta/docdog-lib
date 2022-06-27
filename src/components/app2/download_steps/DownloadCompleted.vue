@@ -13,7 +13,12 @@
         </ul>
       </div>
       <p>など、気になる点がございましたらお気軽にお問い合わせください。</p>
-      <a href="#" target="_blank" rel="noopener" class="docdog-button docdog-button--primary">
+      <a
+        href="https://kuroco.zendesk.com/hc/ja/requests/new?ticket_form_id=900002698263"
+        target="_blank"
+        rel="noopener"
+        class="docdog-button docdog-button--primary"
+      >
         <span class="docdog-u-d-flex-grow-1">問い合わせる</span>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -26,7 +31,7 @@
   </section>
   <section class="docdog-modal__body__section docdog-container--white">
     <h2 class="docdog-modal__body__heading">あなたにおすすめのコンテンツ</h2>
-    <ul class="docdog-card__list" v-if="recommended_list.length > 0">
+    <ul class="docdog-card--media__list" v-if="recommended_list.length > 0">
       <li v-for="doc in recommended_list">
         <CardDocs
           :data="doc"
@@ -38,7 +43,11 @@
         />
       </li>
     </ul>
-    <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
+    <button
+      type="button"
+      class="docdog-button docdog-button--white docdog-u-mt-lg"
+      @click.prevent="redirect({ target: 'List' })"
+    >
       営業資料一覧を見る
     </button>
   </section>
