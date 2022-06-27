@@ -38,5 +38,8 @@ export default {
       }
       return pagedButtons;
     },
+    getDocumentCategories() {
+      return docsApi.getDocumentCategories(true);
+    }
   },
 };

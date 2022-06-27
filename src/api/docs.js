@@ -50,7 +50,32 @@ export function getDocumentData(id, isPublic = false, params = {}) {
     );
 }
 
+export function getDocumentCategories(isPublic = false, params = {}) {
+  return loginApi
+    .getAuthHeaders({
+      autoLogin: true,
+      anonLogin: isPublic,
+    })
+    .then((headers) =>
+      get('/rcms-api/3/file_categories', params, headers)
+        .then(processError)
+        .catch((err) => {
+          let err_msg = 'Problem fetching document categories'; // Default error message
+          switch (err.response.status) {
+            case 401:
+              err_msg = 'Unauthorized request';
+              break;
+            case 404:
+              err_msg = 'Documents unavailable';
+              break;
+          }
+          return Promise.reject(err_msg);
+        })
+    );
+}
+
 export default {
   getDocumentList,
   getDocumentData,
+  getDocumentCategories,
 };

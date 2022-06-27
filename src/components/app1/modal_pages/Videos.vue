@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import AbstractList from './AbstractList.vue';
+import AbstractList from '@/components/common/AbstractList.vue';
 import CardVideos from '@/components/app1/cards/CardVideos.vue';
 
 export default {

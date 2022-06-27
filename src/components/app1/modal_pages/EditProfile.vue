@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import AbstractPage from './AbstractPage.vue';
+import AbstractPage from '@/components/common/AbstractPage.vue';
 import memberApi from '@/api/member';
 import loginApi from '@/api/login';
 import AlertSuccess from '@/components/app1/AlertSuccess.vue';

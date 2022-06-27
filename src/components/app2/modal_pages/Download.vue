@@ -8,17 +8,17 @@
     </div>
     <div class="docdog-modal__body__section">
       <div class="docdog-container--middle">
-        <CardDocsDetail :data="data" :toastIds="toastIds" />
+        <CardDocsDetail :data="data" :toastIds="toastIds" @addToast="addToast"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import AbstractPage from './AbstractPage.vue';
-import AlertSuccess from '@/components/app1/AlertSuccess.vue';
-import AlertError from '@/components/app1/AlertError.vue';
-import CardDocsDetail from '@/components/app1/cards/CardDocsDetail.vue';
+import AbstractPage from '@/components/common/AbstractPage.vue';
+import AlertSuccess from '@/components/app2/AlertSuccess.vue';
+import AlertError from '@/components/app2/AlertError.vue';
+import CardDocsDetail from '@/components/app2/cards/CardDocsDetail.vue';
 import docsApi from '@/api/docs';
 import loginApi from '@/api/login';
 
@@ -78,10 +78,12 @@ export default {
                 this.error(err);
               });
           } else {
+            /*
             this.redirect({
               target: 'SignIn',
               params: { return: { target: 'Download', params: { doc_id: this.doc_id, doc_data: this.doc_data } } },
             });
+            */
           }
         });
     }

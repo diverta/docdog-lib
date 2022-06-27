@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import AbstractList from './AbstractList.vue';
+import AbstractList from '@/components/common/AbstractList.vue';
 import CardTopics from '@/components/app1/cards/CardTopics.vue';
 
 export default {

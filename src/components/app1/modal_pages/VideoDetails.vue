@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import AbstractPage from './AbstractPage.vue';
+import AbstractPage from '@/components/common/AbstractPage.vue';
 
 export default {
   extends: AbstractPage,

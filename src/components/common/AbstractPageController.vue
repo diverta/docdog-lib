@@ -13,48 +13,11 @@
 </template>
 
 <script>
-import SignIn from '@/components/app1/modal_pages/SignIn.vue';
-import EditProfile from '@/components/app1/modal_pages/EditProfile.vue';
-import Withdrawal from '@/components/app1/modal_pages/Withdrawal.vue';
-import SignUp from '@/components/app1/modal_pages/SignUp.vue';
-import Download from '@/components/app1/modal_pages/Download.vue';
-import DownloadList from '@/components/app1/modal_pages/DownloadList.vue';
-import List from '@/components/app1/modal_pages/List.vue';
-import Topics from '@/components/app1/modal_pages/Topics.vue';
-import Videos from '@/components/app1/modal_pages/Videos.vue';
-import TopicDetails from '@/components/app1/modal_pages/TopicDetails.vue';
-import VideoDetails from '@/components/app1/modal_pages/VideoDetails.vue';
-import NewsDetails from '@/components/app1/modal_pages/NewsDetails.vue';
-import Reminder from '@/components/app1/modal_pages/Reminder.vue';
-import Error from '@/components/app1/modal_pages/Error.vue';
-import Loading from '@/components/app1/modal_pages/Loading.vue';
-import EmptyPage from '@/components/app1/modal_pages/EmptyPage.vue';
-import Mypage from '@/components/app1/modal_pages/Mypage.vue';
-import Inquiry from '@/components/app1/modal_pages/Inquiry.vue';
+// Common
 import loginApi from '@/api/login';
 
-const pages = {
-  SignIn,
-  SignUp,
-  Download,
-  DownloadList,
-  List,
-  Topics,
-  Videos,
-  TopicDetails,
-  VideoDetails,
-  NewsDetails,
-  Reminder,
-  EmptyPage,
-  Loading,
-  EditProfile,
-  Mypage,
-  Inquiry,
-  Withdrawal,
-  Error, // In case a dynamic component is incorrectly indicated - should only be a case during development
-};
 export default {
-  components: pages,
+  emits: ['hideToast', 'writePageHistory', 'onAfterRedirect', 'update:current_page'],
   props: {
     node_params: {
       type: Object,
@@ -93,9 +56,12 @@ export default {
     this.init();
   },
   computed: {
+    pages() {
+      return {}; // To override
+    },
     err: {
       get() {
-        if (!this.current_page in pages) {
+        if (!this.current_page in this.pages) {
           return 'Page component <' + this.current_page + '> does not exist';
         }
         return this.p_err_msg;
@@ -105,11 +71,7 @@ export default {
       },
     },
     current_page_comp() {
-      if (this.current_page in pages) {
-        return pages[this.current_page];
-      } else {
-        return pages['Error'];
-      }
+      return null; // To override
     },
     comp_props() {
       const page_params = {};
@@ -154,6 +116,7 @@ export default {
       this.msg2 = msg2 || '';
       this.err = err || '';
       this.redirect_params = params;
+      this.$emit('hideToast', false);
       this.setCurrentPage(target);
       if (writeHist) {
         this.$emit('writePageHistory', { page: target });

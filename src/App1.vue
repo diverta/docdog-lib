@@ -26,6 +26,7 @@
       @writePageHistory="writePageHistory"
       @onAfterRedirect="onAfterRedirect"
       @resetView="resetView"
+      @hideToast="hideToast = $event"
       ref="ctrl"
     />
     <!-- TODO: remove footer -->
@@ -50,21 +51,24 @@
     ref="toast"
   />
   <ExternalPopup v-if="docdogConfig.use_float_button" v-model:isLogin="isLogin" @redirect="redirect" />
-  <Hubspot :hubId="'' + docdogConfig.hubId || ''" :currentPage="current_page" :profile="userProfile" />
+  <Hubspot
+    :hubId="docdogConfig.hubId ? '' + docdogConfig.hubId : ''"
+    :currentPage="current_page"
+    :profile="userProfile"
+  />
 </template>
 
 <script>
 import Modal from '@/components/common/Modal.vue';
 import ModalHeader from '@/components/app1/ModalHeader.vue';
-import PageController from './components/common/PageController.vue';
+import PageController from './components/app1/PageController.vue';
 import Footer1 from './components/app1/modal_pages/Footer1.vue';
 import Footer2 from './components/app1/modal_pages/Footer2.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
 import Toast from './components/app1/Toast.vue';
 import ExternalPopup from './components/app1/ExternalPopup.vue';
-import Hubspot from './components/app1/Hubspot.vue';
-// import docsApi from '@/api/docs';
+import Hubspot from './components/common/Hubspot.vue';
 
 const footerComps = {
   Footer1,
@@ -444,6 +448,7 @@ export default {
     redirect(pageData, writeHist = true) {
       // Request for redirection external to PageController
       this.showModal = true;
+      this.hideToast = false; // Each page determines its own logic of displaying/hiding the toast
       this.$refs['ctrl'].onRedirect(pageData, writeHist);
     },
     onAfterRedirect(pageData) {

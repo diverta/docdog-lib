@@ -25,6 +25,7 @@
   "dependencies": {
     "@vuepic/vue-datepicker": "^3.0.0",
     "axios": "^0.24.0",
+    "email-validator": "^2.0.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.2",
     "qs": "^6.10.1",

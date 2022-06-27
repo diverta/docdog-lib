@@ -1,5 +1,4 @@
 <script>
-// This is an abstract parent component of other page /components/app1. It is used define shared properties, such as props or data
 export default {
   inheritAttrs: false, // disable automatic event propagation
   props: {
@@ -36,7 +35,20 @@ export default {
       default: '',
     },
   },
-  emits: ['close', 'err', 'redirect', 'addToast', 'removeToast', 'onLogin', 'logout', 'update:msg', 'resetView'],
+  emits: [
+    'close',
+    'err',
+    'redirect',
+    'addToast',
+    'removeToast',
+    'hideToast',
+    'onLogin',
+    'logout',
+    'update:msg',
+    'resetView',
+    'update:current_page',
+    'downloadToast',
+  ],
   unmount() {
     this.clearFooterData();
     this.$emit('err', '');
@@ -89,6 +101,9 @@ export default {
     },
     resetView() {
       this.$emit('resetView');
+    },
+    downloadToast() {
+      this.$emit('downloadToast');
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal" :class="toastList.length > 0 ? 'docdog-modal__open-sidebar' : ''">
+  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal" :class="modalClass">
     <template v-slot:header>
       <ModalHeader
         v-if="!customHeaderHtml"
@@ -26,38 +26,35 @@
       @writePageHistory="writePageHistory"
       @onAfterRedirect="onAfterRedirect"
       @resetView="resetView"
+      @hideToast="hideToast = $event"
+      @downloadToast="downloadToast"
       ref="ctrl"
     />
   </Modal>
   <Toast
     v-model:list="toastList"
-    v-show="toastList.length > 0 && current_page != 'DownloadList' && current_page != 'Download'"
+    v-show="toastList.length > 0 && !hideToast"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
     @changeStatus="toastStatus = $event"
+    @toggleExpand="onToastExpand"
     ref="toast"
   />
-  <ExternalPopup v-if="docdogConfig.use_float_button" v-model:isLogin="isLogin" @redirect="redirect" />
-  <Hubspot :hubId="'' + docdogConfig.hubId || ''" :currentPage="current_page" :profile="userProfile" />
+  <Hubspot
+    :hubId="docdogConfig.hubId ? '' + docdogConfig.hubId : ''"
+    :currentPage="current_page"
+    :profile="userProfile"
+  />
 </template>
 
 <script>
 import Modal from '@/components/common/Modal.vue';
-import ModalHeader from '@/components/app1/ModalHeader.vue';
-import PageController from './components/common/PageController.vue';
-import Footer1 from './components/app1/modal_pages/Footer1.vue';
-import Footer2 from './components/app1/modal_pages/Footer2.vue';
+import ModalHeader from '@/components/app2/ModalHeader.vue';
+import PageController from './components/app2/PageController.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
-import Toast from './components/app1/Toast.vue';
-import ExternalPopup from './components/app1/ExternalPopup.vue';
-import Hubspot from './components/app1/Hubspot.vue';
-// import docsApi from '@/api/docs';
-
-const footerComps = {
-  Footer1,
-  Footer2,
-};
+import Toast from './components/app2/Toast.vue';
+import Hubspot from './components/common/Hubspot.vue';
 
 export default {
   components: {
@@ -65,12 +62,11 @@ export default {
     ModalHeader,
     PageController,
     Toast,
-    ExternalPopup,
     Hubspot,
-    ...footerComps,
   },
   data() {
     return {
+      hideToast: true,
       customHeaderHtml: null,
       urlParams: {},
       showModal: false,
@@ -83,6 +79,7 @@ export default {
       userProfile: {},
       footer_data: {}, // Data to be shared between the modal page and the footer
       isLogin: false, // Flag tracking down login state
+      isToastExpanded: false,
       app_global_events: {
         // List of events that are handled by Docdog
         isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
@@ -137,21 +134,17 @@ export default {
       }
     },
     footer_comp() {
+      // Currently, no footer components for this app
       let comp = '';
-      switch (this.current_page) {
-        case 'Download':
-          comp = footerComps['Footer1'];
-          break;
-        case 'DownloadList':
-          comp = footerComps['Footer2'];
-          break;
-      }
       return comp;
     },
     toastIds() {
       return this.toastList.reduce((carry, item) => {
         return { ...carry, [item.topics_id]: true };
       }, {});
+    },
+    modalClass() {
+      return this.toastList.length > 0 && this.isToastExpanded ? 'docdog-modal__open-sidebar' : '';
     },
   },
   mounted() {
@@ -336,6 +329,9 @@ export default {
         });
       }
     },
+    onToastExpand(isExpanded) {
+      this.isToastExpanded = isExpanded;
+    },
     download(data) {
       if (this.current_page != 'Download') {
         this.redirect({ target: 'Download', params: { doc_data: data } });
@@ -397,7 +393,7 @@ export default {
       if (this.current_page != 'DownloadList') {
         this.redirect({ target: 'DownloadList', params: { list: this.toastList } });
       } else {
-        // Coming from footer => execute page action
+        // Coming from DownloadList (or footer in the future)
         this.$refs['toast'].downloadAll();
       }
     },
@@ -432,6 +428,7 @@ export default {
     redirect(pageData, writeHist = true) {
       // Request for redirection external to PageController
       this.showModal = true;
+      this.hideToast = false; // Each page determines its own logic of displaying/hiding the toast
       this.$refs['ctrl'].onRedirect(pageData, writeHist);
     },
     onAfterRedirect(pageData) {

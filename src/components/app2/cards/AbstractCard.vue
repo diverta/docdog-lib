@@ -18,7 +18,7 @@ export default {
       default: false,
     },
   },
-  emits: ['download', 'addToast', 'removeToast', 'redirect'],
+  emits: ['download', 'addToast', 'removeToast', 'hideToast', 'redirect'],
   computed: {
     thumbnailStyle() {
       if (this.data && this.data.thumbnail && this.data.thumbnail.url) {

@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import AbstractPage from './AbstractPage.vue';
+import AbstractPage from '@/components/common/AbstractPage.vue';
 import CardDocs from '@/components/app1/cards/CardDocs.vue';
 import CardVideos from '@/components/app1/cards/CardVideos.vue';
 import CardTopics from '@/components/app1/cards/CardTopics.vue';

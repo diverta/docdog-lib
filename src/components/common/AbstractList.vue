@@ -1,5 +1,5 @@
 <script>
-import AbstractPage from './AbstractPage.vue';
+import AbstractPage from '@/components/common/AbstractPage.vue';
 import TopicsList from '@/mixins/TopicsList';
 
 export default {
@@ -42,8 +42,8 @@ export default {
     });
   },
   methods: {
-    changePage(num) {
-      if (this.pageID != num) {
+    changePage(num, force = false) {
+      if (this.pageID != num || force) {
         this.pageID = num;
         this.fetchList(this.defaultParams).then(({ list, pageInfo }) => {
           this.list = list;
