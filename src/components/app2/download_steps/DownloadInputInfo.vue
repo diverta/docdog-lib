@@ -66,7 +66,7 @@
               { 'docdog-form__item--success': validated.company_nm === true },
             ]"
           >
-            <label for="company_nm">
+            <label for="company_nm" class="docdog-form__item__title">
               会社名
               <span class="docdog-form__item__required">（必須）</span>
             </label>
