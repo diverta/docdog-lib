@@ -1,6 +1,12 @@
 <template>
   <div class="docdog">
-    <button type="button" class="docdog-sidebar__toggle" @click="toggleExpand" v-show="toastDisplayed">
+    <button
+      type="button"
+      class="docdog-sidebar__toggle"
+      @click="toggleExpand"
+      v-show="toastDisplayed"
+      :class="expanded ? 'docdog-sidebar__toggle--fixed' : ''"
+    >
       <span class="docdog-sidebar__toggle__badge">{{ total_items }}</span>
       <div class="docdog-tooltip__outer">
         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
