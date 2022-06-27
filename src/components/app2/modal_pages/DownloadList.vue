@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     hideToast(val) {
-      this.$emit('hideToast', true);
+      this.$emit('hideToast', val);
     },
     onRemoveToast(idx) {
       this.removeToast(idx);

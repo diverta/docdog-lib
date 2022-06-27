@@ -8,6 +8,7 @@
     :toastStatus="toastStatus"
     @err="err = $event"
     @redirect="onRedirect"
+    @hideToast="onHideToast"
     ref="page"
   />
 </template>
@@ -122,6 +123,9 @@ export default {
         this.$emit('writePageHistory', { page: target });
       }
       this.$emit('onAfterRedirect', { target, params });
+    },
+    onHideToast(val) {
+      this.$emit('hideToast', val);
     },
   },
 };

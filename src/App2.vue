@@ -26,14 +26,14 @@
       @writePageHistory="writePageHistory"
       @onAfterRedirect="onAfterRedirect"
       @resetView="resetView"
-      @hideToast="hideToast = $event"
+      @hideToast="onHideToast"
       @downloadToast="downloadToast"
       ref="ctrl"
     />
   </Modal>
   <Toast
     v-model:list="toastList"
-    v-show="toastList.length > 0 && !hideToast"
+    :hide="hideToast"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
     @changeStatus="toastStatus = $event"
@@ -450,6 +450,9 @@ export default {
     },
     resetView() {
       this.$refs['modal'].resetView();
+    },
+    onHideToast(val) {
+      this.hideToast = val;
     },
   },
 };

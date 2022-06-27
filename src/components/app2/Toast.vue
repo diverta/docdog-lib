@@ -1,6 +1,6 @@
 <template>
   <div class="docdog">
-    <button type="button" class="docdog-sidebar__toggle" @click="toggleExpand">
+    <button type="button" class="docdog-sidebar__toggle" @click="toggleExpand" v-show="toastDisplayed">
       <span class="docdog-sidebar__toggle__badge">{{ total_items }}</span>
       <div class="docdog-tooltip__outer">
         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,7 +12,7 @@
         <span class="docdog-tooltip">ダウンロードリスト</span>
       </div>
     </button>
-    <section class="docdog-sidebar" :class="toast_expand ? 'docdog-sidebar--fixed' : ''">
+    <section class="docdog-sidebar" :class="expanded ? 'docdog-sidebar--fixed' : ''">
       <header class="docdog-sidebar__head">
         <p class="docdog-sidebar__head__heading">ダウンロードリスト</p>
         <button type="button" aria-label="Close" class="docdog-sidebar__head__close" @click="toggleExpand">
@@ -57,19 +57,29 @@ export default {
       type: Array,
       default: () => [],
     },
+    hide: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       status: '',
       toast_expand: true,
-      replay_delay: 3, // seconds between zip download retry
-      max_replay_times: 10, // max tries
+      replay_delay: 2, // seconds between zip download retry
+      max_replay_times: 5, // max tries
     };
   },
   mounted() {
     this.updateStatus('');
   },
   computed: {
+    toastDisplayed() {
+      return this.list.length > 0 && !this.hide;
+    },
+    expanded() {
+      return this.list.length > 0 && this.toast_expand && !this.hide;
+    },
     noimage_vertical() {
       return noimage_vertical; // Need to reference the instance variable for rendering
     },
