@@ -410,6 +410,10 @@ export default {
       if (this.footer_data && this.footer_data.doc_data && this.footer_data.doc_data.topics_id == item.topics_id) {
         this.footer_data.isInToast = true;
       }
+      if (this.toastList.length === 1 && !this.hideToast) {
+        // Went from 0 to 1 => set expanded
+        this.isToastExpanded = true;
+      }
     },
     removeToast(idx) {
       if (idx != null) {
