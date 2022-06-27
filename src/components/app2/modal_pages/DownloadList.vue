@@ -8,17 +8,9 @@
 
     <div class="docdog-modal__body__section docdog-container--col-2" v-if="list.length">
       <div class="docdog-container--col-2__side">
-        <!-- TODO: Download list -->
         <div class="docdog-card docdog-cart--download-list">
           <ul class="docdog-cart">
-            <!-- TODO: Componentize cart item -->
-            <li v-for="(item, idx) in list" class="docdog-cart__item">
-              <div class="docdog-cart__item__thumb">
-                <img v-if="item.thumbnail.url" :src="item.thumbnail.url" :alt="item.subject" />
-                <img v-else :src="noimage_vertical" :alt="item.subject" />
-              </div>
-              <p class="docdog-cart__item__title">{{ item.subject }}</p>
-            </li>
+            <CardToast v-for="(data, idx) in list" :data="data" :can_remove="false"></CardToast>
           </ul>
         </div>
       </div>
@@ -63,6 +55,7 @@
 import AbstractPage from '@/components/common/AbstractPage.vue';
 import AlertSuccess from '@/components/app2/AlertSuccess.vue';
 import Loading from '@/components/app2/modal_pages/Loading.vue';
+import CardToast from '@/components/app2/cards/CardToast.vue';
 import { noimage_vertical } from '@/components/app2/svg_images';
 
 import DownloadInputEmail from '@/components/app2/download_steps/DownloadInputEmail.vue';
@@ -74,6 +67,7 @@ export default {
   components: {
     AlertSuccess,
     Loading,
+    CardToast,
     DownloadInputEmail,
     DownloadInputInfo,
     DownloadCompleted,

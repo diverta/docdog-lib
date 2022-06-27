@@ -16,7 +16,6 @@
         <p v-if="data.file && data.file.desc">{{ data.file.desc }}</p>
       </div>
       <div class="docdog-card--media__foot">
-        <!-- TODO: Componentize add list button -->
         <AddToastButton @click.stop="onAdd()" :isInToast="isInToast" />
       </div>
     </div>

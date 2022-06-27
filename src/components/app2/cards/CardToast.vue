@@ -5,7 +5,7 @@
       <img v-else :src="noimage_vertical" :alt="data.subject" />
     </div>
     <p class="docdog-cart__item__title">{{ data.subject }}</p>
-    <DeleteButton @click="removeToast" />
+    <DeleteButton v-if="can_remove" @click="removeToast" />
   </li>
 </template>
 
@@ -18,6 +18,12 @@ export default {
   extends: AbstractCard,
   components: {
     DeleteButton,
+  },
+  props: {
+    can_remove: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
