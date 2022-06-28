@@ -105,6 +105,10 @@ export default {
     downloadToast() {
       this.$emit('downloadToast');
     },
+    onToastDownload() {
+      // Each page may override this method to add handling when the download has started
+      // Dont add code here, as any overrided method will run instead
+    },
   },
 };
 </script>

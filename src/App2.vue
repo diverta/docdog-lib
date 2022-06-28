@@ -395,6 +395,7 @@ export default {
       } else {
         // Coming from DownloadList (or footer in the future)
         this.$refs['toast'].downloadAll();
+        this.$refs['ctrl'].onToastDownload(); // Letting the current page know the download has started (might come from different component)
       }
     },
     getThumbnailStyle(doc) {
@@ -457,6 +458,9 @@ export default {
     },
     onHideToast(val) {
       this.hideToast = val;
+      if (val) {
+        this.isToastExpanded = false;
+      }
     },
   },
 };

@@ -97,6 +97,7 @@ export default {
     }
     if (this.isLogin) {
       this.setStep('downloading');
+      this.downloadToast(); // Begin downloading
     } else {
       this.setStep('inputEmail');
     }
@@ -137,13 +138,9 @@ export default {
     setStep(step) {
       this.current_step = step;
       if (step == 'inputCompleted') {
-        this.removeToast(null); // Clear all items from Toast, get ready to add new from recommended
         this.hideToast(false);
       } else {
         this.hideToast(true);
-      }
-      if (step == 'downloading') {
-        this.downloadToast(); // Begin downloading
       }
     },
     onInputInfoError(err) {
@@ -151,6 +148,10 @@ export default {
       this.setStep('inputEmail');
     },
     afterLogin() {
+      this.setStep('downloading');
+      this.downloadToast(); // Begin downloading
+    },
+    onToastDownload() {
       this.setStep('downloading');
     },
   },

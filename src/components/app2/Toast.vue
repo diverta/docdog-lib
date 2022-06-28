@@ -116,6 +116,7 @@ export default {
             })
         )
         .then((resp) => {
+          this.removeByIdx(null); // Clear toast contents after download has begun
           const tempFileId = resp.data;
           let currentRetry = 1;
           let downloadUrl = null;

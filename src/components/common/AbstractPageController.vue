@@ -127,6 +127,10 @@ export default {
     onHideToast(val) {
       this.$emit('hideToast', val);
     },
+    onToastDownload() {
+      // Notify the page about download started event
+      this.$refs['page'].onToastDownload();
+    }
   },
 };
 </script>
