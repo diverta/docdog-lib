@@ -1,9 +1,11 @@
 <template>
-  <div class="docdog-loader">
-    <div class="docdog-loader__message">
-      {{ loadingMessage }}
+  <div class="docdog-modal__bg">
+    <div class="docdog-loader">
+      <div class="docdog-loader__message">
+        {{ loadingMessage }}
+      </div>
+      <div class="docdog-loader__icon"></div>
     </div>
-    <div class="docdog-loader__icon"></div>
   </div>
 </template>
 

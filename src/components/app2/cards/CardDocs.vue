@@ -10,7 +10,7 @@
     <div class="docdog-card--media__body__inner">
       <div class="docdog-card--media__body">
         <p class="docdog-card--media__body__title">{{ data.subject }}</p>
-        <p>
+        <p class="docdog-u-my-sm">
           <span class="docdog-badge">{{ data.contents_type_nm }}</span>
         </p>
         <p v-if="data.file && data.file.desc">{{ data.file.desc }}</p>

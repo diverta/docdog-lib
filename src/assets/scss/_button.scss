@@ -66,13 +66,38 @@
     padding: $spacing-md;
     background: url("/src/assets/image/icon-add-list.svg") no-repeat right $spacing-md center $color-primary;
     background-size: 20px;
-    .docdog-card__foot &,
+    .docdog-card--media .docdog-card__foot &,
     .docdog-article__title & {
-      flex: 0 0 auto;
-      width: 212px !important;
-      height: 45px !important;
       font-size: 13px;
+      @media screen and (min-width: 768px) {
+        flex: 0 0 auto;
+        justify-content: flex-start;
+        width: 212px !important;
+        height: 45px !important;
+      }
+    }
+    .docdog-article__title & {
+      @media screen and (min-width: 768px) {
+        margin-left: $spacing-lg;
+      }
+      @media screen and (max-width: 767px) {
+        height: 45px !important;
+      }
+    }
+    .docdog-card--media .docdog-card__foot & {
       justify-content: flex-start;
+      text-align: left !important;
+      @media screen and (max-width: 1024px) {
+        flex: 1 1 auto;
+        width: auto !important;
+        height: auto !important;
+        padding-right: $spacing-x-lg;
+        font-size: 12px;
+      }
+      @media screen and (max-width: 375px) {
+        padding-top: $spacing-sm;
+        padding-bottom: $spacing-sm;
+      }
     }
     &:disabled {
       background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center $color-disabled !important;
