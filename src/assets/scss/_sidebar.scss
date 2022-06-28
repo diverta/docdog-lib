@@ -30,6 +30,7 @@
       width: 50px;
       border: 0 !important;
       background-color: #fff;
+      svg { flex: 0 0 auto; }
     }
   }
   &__body {
@@ -69,6 +70,9 @@
     }
     &.docdog-sidebar__toggle--fixed {
       right: 200px;
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
     }
     &__badge {
       position: absolute;
