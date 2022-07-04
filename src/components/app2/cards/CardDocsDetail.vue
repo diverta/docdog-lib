@@ -8,8 +8,7 @@
       <img :src="data.thumbnail.url" />
     </figure>
     <div v-if="data.wysiwyg" v-html="data.wysiwyg" class="docdog-u-my-lg"></div>
-    <!-- TODO: Display file type / total page / file size -->
-    <p>PDF / 21ページ / 5.3MB</p>
+    <p>{{ data.desc }}</p>
     <AddToastButton @click.stop="onAdd()" :isInToast="isInToast" />
   </div>
 </template>

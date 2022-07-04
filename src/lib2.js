@@ -104,7 +104,7 @@ function loadCSS() {
     link.id = cssId;
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = 'https://docdog.g.kuroco-img.app/files/user/docdog-lib/iife/lib1/docdog-lib2.css';
+    link.href = 'https://docdog.g.kuroco-img.app/files/user/docdog-lib/iife/lib2/docdog-lib2.css';
     link.media = 'all';
     head.appendChild(link);
   }

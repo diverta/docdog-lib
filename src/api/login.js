@@ -7,8 +7,8 @@ const header_keys = {
 };
 
 const storage_keys = {
-  REFRESH_TOKEN: { name: 'docdog.refresh_token', location: 'local' },
-  ACCESS_TOKEN: { name: 'docdog.access_token', location: 'local' },
+  REFRESH_TOKEN: { name: 'docdog.refresh_token.' + appName, location: 'local' },
+  ACCESS_TOKEN: { name: 'docdog.access_token.' + appName, location: 'local' },
   PROFILE: { name: 'docdog.profile', location: 'session' },
 };
 

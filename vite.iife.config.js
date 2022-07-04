@@ -7,6 +7,9 @@ import vue from '@vitejs/plugin-vue';
 // https://vitejs.dev/config/
 export default function defineConfigIife(settings, keyname) {
   return {
+    define: {
+      appName: JSON.stringify(keyname),
+    },
     build: {
       lib: {
         entry: resolve(__dirname, `src/main-${keyname}.iife.js`),

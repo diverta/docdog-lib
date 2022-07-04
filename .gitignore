@@ -1,5 +1,6 @@
 node_modules
 **/*.swp
+dist/**/*
 .DS_Store
 *.local
 log.txt
