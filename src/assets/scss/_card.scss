@@ -105,9 +105,6 @@
     @extend .docdog-card;
     flex-direction: row;
     padding: $spacing-lg;
-    @media screen and (max-width: 767px) {
-      padding: $spacing-md;
-    }
     // card element
     &__thumb {
       display: flex;
@@ -119,9 +116,13 @@
       border: 1px solid $color-border;
       border-radius: $border-radius-sm;
       overflow: hidden;
-      @media screen and (max-width: 767px) {
-        width: 70.25px;
-        height: 100px;
+      @media screen and (min-width: 768px) and (max-width: 1024px) {
+        width: 100px;
+        height: 142px;
+      }
+      @media screen and (max-width: 414px) {
+        width: 80px;
+        height: 113px;
       }
       img { 
         max-width: 100%;
@@ -146,6 +147,9 @@
     &__foot {
       @extend .docdog-card__foot;
       padding: $spacing-lg 0 0;
+      @media screen and (max-width: 767px) {
+        padding-top: $spacing-md;
+      }
     }
 
     // list

@@ -11,9 +11,11 @@
       width: 80px;
       height: 80px;
       margin: auto;
-      .docdog-cart--download-list & {
-        width: 150px;
-        height: 150px;  
+      @media screen and (min-width: 769px) {
+        .docdog-cart--download-list & {
+          width: 150px;
+          height: 150px;  
+        }
       }
       img { 
         max-width: 100%;
@@ -35,4 +37,19 @@
       right: 0;
     }
   }
+
+  // SP download page
+  .docdog-cart--download-list & {
+    @media screen and (max-width: 768px) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      &__item {
+        flex: 0 0 48%;
+        width: 48%;
+        &:nth-of-type(2n-1):nth-last-child(2) { border-bottom: none; }
+      }
+    }
+  }
+
 }

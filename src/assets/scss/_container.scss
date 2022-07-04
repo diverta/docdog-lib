@@ -25,20 +25,30 @@
 
   // col-2
   &--col-2 {
+    display: flex;
     @media screen and (min-width: 768px) {
-      display: flex;
       justify-content: space-between;
+    }
+    @media screen and (max-width: 767px) {
+      flex-direction: column;
     }
     &__side {
       @media screen and (min-width: 768px) {
         width: 200px;
         margin: 0 auto 0 0;
       }
+      @media screen and (max-width: 767px) {
+        order: 2;
+        margin-top: $spacing-lg;
+      }
     }
     &__main {
       @media screen and (min-width: 768px) {
         width: 700px;
         margin: 0 0 0 auto;
+      }
+      @media screen and (max-width: 767px) {
+        order: 1;
       }
     }
   }
