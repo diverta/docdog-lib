@@ -6,7 +6,7 @@
     <div class="docdog-modal__body__section">
       <div class="docdog-modal__body__section">
         <form>
-          <div class="docdog-form__item docdog-form__item--success">
+          <div class="docdog-form__item docdog-form__item--success docdog-u-mb-x-lg">
             <label for="email" class="docdog-form__item__title">
               メールアドレス
               <span class="docdog-form__item__required">（必須）</span>
@@ -35,6 +35,10 @@
                 v-on:focusout="updateField('name1', $event)"
                 required
               />
+              <!-- TODO: Error validation -->
+              <p class="docdog-form__item--error__msg">
+                <span v-if="require_valid === false">{{ err || '必須項目です' }}</span>
+              </p>
             </div>
             <div
               :class="[
@@ -57,6 +61,10 @@
                 v-on:focusout="updateField('name2', $event)"
                 required
               />
+              <!-- TODO: Error validation -->
+              <p class="docdog-form__item--error__msg">
+                <span v-if="require_valid === false">{{ err || '必須項目です' }}</span>
+              </p>
             </div>
           </div>
           <div
@@ -80,6 +88,10 @@
               v-on:focusout="updateField('company_nm', $event)"
               required
             />
+              <!-- TODO: Error validation -->
+            <p class="docdog-form__item--error__msg">
+              <span v-if="require_valid === false">{{ err || '必須項目です' }}</span>
+            </p>
           </div>
           <div class="docdog-form__button">
             <button
@@ -246,33 +258,33 @@ export default {
     },
     registerMember() {
       if (!this.updating) {
-      this.updating = true;
-      memberApi
-        .doSignUp({
-          email: this.email,
-          name1: this.name1,
-          name2: this.name2,
-          login_pwd: 'qwerty123', // TODO change
-        })
-        .then((resp) => {
-          loginApi
-            .doLogin({
-              email: this.email,
-              password: 'qwerty123', // TODO change
-            })
-            .then(() => {
-              this.$emit('onLogin');
-              this.updating = false;
-            })
-            .catch((err) => {
-              this.processErr(err);
-              this.updating = false;
-            });
-        })
-        .catch((err) => {
-          this.processErr(err);
-          this.updating = false;
-        });
+        this.updating = true;
+        memberApi
+          .doSignUp({
+            email: this.email,
+            name1: this.name1,
+            name2: this.name2,
+            login_pwd: 'qwerty123', // TODO change
+          })
+          .then((resp) => {
+            loginApi
+              .doLogin({
+                email: this.email,
+                password: 'qwerty123', // TODO change
+              })
+              .then(() => {
+                this.$emit('onLogin');
+                this.updating = false;
+              })
+              .catch((err) => {
+                this.processErr(err);
+                this.updating = false;
+              });
+          })
+          .catch((err) => {
+            this.processErr(err);
+            this.updating = false;
+          });
       }
     },
     processErr(errors) {

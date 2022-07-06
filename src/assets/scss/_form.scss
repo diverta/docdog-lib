@@ -163,7 +163,7 @@
   }
   &__item {
     &:not(:first-child) {
-      margin-top: $spacing-lg;
+      margin-top: $spacing-md;
     }
     &--error {
       input[type='text'],
@@ -181,9 +181,10 @@
         background-color: rgba($color-danger, .2);
       }
       &__msg {
-        margin: $spacing-sm 0 !important;
+        min-height: 1.5em;
+        margin: $spacing-sm 0 0 !important;
         color: $color-danger !important;
-        font-size: 12px;
+        font-size: 12px !important;
       }
     }
     &--success {
