@@ -35,9 +35,8 @@
                 v-on:focusout="updateField('name1', $event)"
                 required
               />
-              <!-- TODO: Error validation -->
               <p class="docdog-form__item--error__msg">
-                <span v-if="require_valid === false">{{ err || '必須項目です' }}</span>
+                <span v-if="validated.name1 === false">{{ err || '必須項目です' }}</span>
               </p>
             </div>
             <div
@@ -61,9 +60,8 @@
                 v-on:focusout="updateField('name2', $event)"
                 required
               />
-              <!-- TODO: Error validation -->
               <p class="docdog-form__item--error__msg">
-                <span v-if="require_valid === false">{{ err || '必須項目です' }}</span>
+                <span v-if="validated.name2 === false">{{ err || '必須項目です' }}</span>
               </p>
             </div>
           </div>
@@ -88,9 +86,8 @@
               v-on:focusout="updateField('company_nm', $event)"
               required
             />
-              <!-- TODO: Error validation -->
             <p class="docdog-form__item--error__msg">
-              <span v-if="require_valid === false">{{ err || '必須項目です' }}</span>
+              <span v-if="validated.company_nm === false">{{ err || '必須項目です' }}</span>
             </p>
           </div>
           <div class="docdog-form__button">

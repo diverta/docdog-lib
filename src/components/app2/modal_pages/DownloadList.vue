@@ -21,6 +21,7 @@
           v-model:email="email"
           v-if="current_step == 'inputEmail'"
           :err="err"
+          @update:email="onEmailInput"
           @next="setStep('inputInfo')"
         />
         <!-- Step2 -->
@@ -153,6 +154,11 @@ export default {
     },
     onToastDownload() {
       this.setStep('downloading');
+    },
+    onEmailInput() {
+      if (this.err) {
+        this.error(''); // Clear error
+      }
     },
   },
   watch: {
