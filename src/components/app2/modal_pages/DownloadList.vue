@@ -2,10 +2,6 @@
   <div class="docdog-container--middle">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
-    <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">営業資料ダウンロード</h1>
-    </div>
-
     <div class="docdog-modal__body__section docdog-container--col-2" v-if="list.length">
       <div class="docdog-container--col-2__side">
         <div class="docdog-card docdog-cart--download-list">
