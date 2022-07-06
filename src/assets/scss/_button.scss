@@ -87,6 +87,15 @@
     .docdog-card--media .docdog-card__foot & {
       justify-content: flex-start;
       text-align: left !important;
+      @media screen and (max-width: 1280px) {
+        .docdog-modal__open-sidebar & {
+          flex: 1 1 auto;
+          width: auto !important;
+          height: auto !important;
+          padding-right: $spacing-x-lg;
+          font-size: 12px;
+        }
+      }
       @media screen and (max-width: 1024px) {
         flex: 1 1 auto;
         width: auto !important;
