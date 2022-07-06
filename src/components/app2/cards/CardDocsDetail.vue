@@ -8,7 +8,6 @@
       <img :src="data.thumbnail.url" />
     </figure>
     <div v-if="data.wysiwyg" v-html="data.wysiwyg" class="docdog-u-my-lg"></div>
-    <p>{{ data.desc }}</p>
     <AddToastButton @click.stop="onAdd()" :isInToast="isInToast" />
   </div>
 </template>

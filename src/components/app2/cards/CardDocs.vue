@@ -13,7 +13,7 @@
         <p class="docdog-u-my-sm">
           <span class="docdog-badge">{{ data.contents_type_nm }}</span>
         </p>
-        <p v-if="data.file && data.file.desc">{{ data.file.desc }}</p>
+        <p v-if="data.desc">{{ data.desc }}</p>
       </div>
       <div class="docdog-card--media__foot">
         <AddToastButton @click.stop="onAdd()" :isInToast="isInToast" />

@@ -51,10 +51,6 @@
       営業資料一覧を見る
     </button>
   </section>
-
-  <div class="docdog-modal__body__section" v-if="!list.length">
-    <p>選択中のファイルはありません。</p>
-  </div>
 </template>
 
 <script>

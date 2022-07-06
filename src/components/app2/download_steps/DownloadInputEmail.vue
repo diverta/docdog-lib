@@ -26,8 +26,8 @@
               @input="onEmailInput"
               required
             />
-            <p v-if="email_valid === false" class="docdog-form__item--error__msg">
-              {{ err || 'メールアドレスの形式ではありません' }}
+            <p class="docdog-form__item--error__msg">
+              <span v-if="email_valid === false">{{ err || 'メールアドレスの形式ではありません' }}</span>
             </p>
           </div>
           <div class="docdog-form__button">
