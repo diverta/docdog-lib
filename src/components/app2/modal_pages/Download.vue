@@ -4,7 +4,7 @@
     <AlertError v-if="err" :err="err" />
 
     <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">ダウンロード</h1>
+      <h1 class="docdog-modal__body__pagetitle">一覧に戻る</h1>
     </div>
     <div class="docdog-modal__body__section">
       <div class="docdog-container--middle">
