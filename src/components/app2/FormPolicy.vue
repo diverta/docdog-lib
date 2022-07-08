@@ -1,17 +1,15 @@
 <template>
-  <div class="docdog-modal__body__section docdog-modal__body__text">
-    <p>
-      続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
-      >を読み、これに同意するものとします。
-    </p>
-  </div>
+  <div class="docdog-modal__body__section docdog-modal__body__text" v-html="content" />
 </template>
 
 <script>
 export default {
   props: {
+    content: {
+      type: String,
+      default: () => '',
+    },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>

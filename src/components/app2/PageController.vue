@@ -10,6 +10,12 @@ import loginApi from '@/api/login';
 export default {
   extends: AbstractPageController,
   components: pages,
+  props: {
+    htmlParts: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   computed: {
     pages() {
       const pagesWithoutComponentValues = {};
@@ -24,6 +30,11 @@ export default {
       } else {
         return pages['Error'];
       }
+    },
+    custom_data() {
+      return {
+        htmlParts: this.htmlParts,
+      };
     },
   },
 };

@@ -6,6 +6,7 @@
     v-model:msg="msg"
     v-model:isLogin="isLogin"
     :toastStatus="toastStatus"
+    :custom_data="custom_data"
     @err="err = $event"
     @redirect="onRedirect"
     @hideToast="onHideToast"
@@ -93,6 +94,10 @@ export default {
         ...this.redirect_params,
       };
     },
+    custom_data() {
+      // Custom for each app : to override
+      return {};
+    },
   },
   methods: {
     init() {
@@ -130,7 +135,7 @@ export default {
     onToastDownload() {
       // Notify the page about download started event
       this.$refs['page'].onToastDownload();
-    }
+    },
   },
 };
 </script>

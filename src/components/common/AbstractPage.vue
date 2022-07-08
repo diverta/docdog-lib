@@ -34,6 +34,10 @@ export default {
       type: String,
       default: '',
     },
+    custom_data: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: [
     'close',

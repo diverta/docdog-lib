@@ -14,6 +14,7 @@
       v-model:current_page="current_page"
       :node_params="current_node_params"
       :toastIds="toastIds"
+      :htmlParts="htmlParts"
       v-model:footer_data="footer_data"
       v-model:isLogin="isLogin"
       v-model:toastStatus="toastStatus"
@@ -53,6 +54,7 @@ import ModalHeader from '@/components/app2/ModalHeader.vue';
 import PageController from './components/app2/PageController.vue';
 import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
+import partsApi from '@/api/parts';
 import Toast from './components/app2/Toast.vue';
 import Hubspot from './components/common/Hubspot.vue';
 
@@ -85,6 +87,8 @@ export default {
         isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
       },
       toastStatus: '',
+      originalViewport: null,
+      htmlParts: {},
     };
   },
   created() {
@@ -105,6 +109,7 @@ export default {
       },
       false
     );
+    this.saveViewport();
   },
   computed: {
     docdogConfig() {
@@ -194,6 +199,7 @@ export default {
         this.redirect({ target, params }, false); // Initial page load, no need to add history
       }
     }
+    this.getHTMLParts();
   },
   methods: {
     linkNode(node, params) {
@@ -243,6 +249,7 @@ export default {
       if (writeHist) {
         this.writePageHistory({ page: '' });
       }
+      this.restoreViewport();
     },
     processNodeParams(node, params) {
       // Processing only relevant params
@@ -433,6 +440,7 @@ export default {
     redirect(pageData, writeHist = true) {
       // Request for redirection external to PageController
       this.showModal = true;
+      this.writeViewport();
       this.hideToast = false; // Each page determines its own logic of displaying/hiding the toast
       this.$refs['ctrl'].onRedirect(pageData, writeHist);
     },
@@ -461,6 +469,47 @@ export default {
       if (val) {
         this.isToastExpanded = false;
       }
+    },
+    getViewportEl() {
+      return document.head.querySelector('[name=viewport]');
+    },
+    saveViewport() {
+      // Saves initial port. This runs once at page load
+      const el = this.getViewportEl();
+      if (el) {
+        this.originalViewport = el.content;
+      }
+    },
+    writeViewport() {
+      // Write our viewport
+      const el = this.getViewportEl();
+      const content = 'width=device-width, initial-scale=1.0';
+      if (el) {
+        el.content = content;
+      } else {
+        // create new el, but not save anything to originalViewport (keep null)
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = content;
+        document.getElementsByTagName('head')[0].appendChild(meta);
+      }
+    },
+    restoreViewport() {
+      const el = this.getViewportEl();
+      // Restore original viewport
+      if (this.originalViewport) {
+        this.getViewportEl().content = this.originalViewport;
+      } else {
+        // Case where we had created this element
+        el.remove();
+      }
+    },
+    getHTMLParts() {
+      partsApi.getHTMLParts().then((resp) => {
+        if (resp.list && resp.list.length == 1) {
+          this.htmlParts = resp.list[0];
+        }
+      });
     },
   },
 };

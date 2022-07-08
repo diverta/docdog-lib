@@ -4,6 +4,7 @@ import login from './login';
 import member from './member';
 import zip from './zip';
 import inquiry from './inquiry';
+import parts from './parts';
 
 export default {
   docs,
@@ -12,4 +13,5 @@ export default {
   member,
   zip,
   inquiry,
+  parts,
 };

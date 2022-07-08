@@ -17,6 +17,7 @@
           v-model:email="email"
           v-if="current_step == 'inputEmail'"
           :err="err"
+          :htmlParts="htmlParts"
           @update:email="onEmailInput"
           @next="setStep('inputInfo')"
         />
@@ -26,6 +27,7 @@
           v-model:name1="name1"
           v-model:name2="name2"
           v-model:company_nm="company_nm"
+          :htmlParts="htmlParts"
           :err="err"
           v-if="current_step == 'inputInfo'"
           @onLogin="afterLogin"
@@ -40,6 +42,7 @@
     <DownloadCompleted
       v-if="current_step == 'inputCompleted'"
       :list="list"
+      :htmlParts="htmlParts"
       @redirect="redirect"
       :toastIds="toastIds"
       @addToast="addToast"
@@ -120,6 +123,9 @@ export default {
   computed: {
     noimage_vertical() {
       return noimage_vertical; // Need to reference the instance variable for rendering
+    },
+    htmlParts() {
+      return this.custom_data.htmlParts || {};
     },
   },
   methods: {

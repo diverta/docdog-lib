@@ -1,9 +1,6 @@
 <template>
   <div class="docdog-container--white">
-    <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
-      <!-- TODO: Implement "ダウンロードフォーム上部" dynamic text -->
-      <h1>必要事項を入力してダウンロード</h1>
-    </div>
+    <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-html="htmlParts.ext_3" />
     <div class="docdog-modal__body__section">
       <div class="docdog-modal__body__section">
         <form>
@@ -123,7 +120,7 @@
           </button>
         </div>
       </div>
-      <FormPolicy />
+      <FormPolicy :content="htmlParts.ext_4" />
     </div>
   </div>
 </template>
@@ -157,6 +154,10 @@ export default {
     err: {
       type: [String, Array],
       default: () => [],
+    },
+    htmlParts: {
+      type: Object,
+      default: () => ({}),
     },
   },
   mounted() {
