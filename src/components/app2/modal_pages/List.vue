@@ -2,6 +2,7 @@
   <!-- Modal Content -->
   <div class="docdog-container--middle">
     <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+      <!-- TODO: Implement "一覧ヘッダー" dynamic text -->
       <h1>資料一覧</h1>
       <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
     </div>
