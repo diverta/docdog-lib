@@ -2,9 +2,9 @@
   <div class="docdog-container--form">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
     <div class="docdog-container--white">
-      <div class="docdog-modal__body__section" v-if="isLogin">
-        <h1 class="docdog-modal__body__pagetitle">アカウントの削除</h1>
-        <p class="docdog-modal__body__text">
+      <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-if="isLogin">
+        <h1>アカウントの削除</h1>
+        <p>
           アカウントを削除すると今後は資料ダウンロードができなくなります。アカウントを削除しますか？
         </p>
       </div>

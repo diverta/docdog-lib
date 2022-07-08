@@ -1,8 +1,8 @@
 <template>
   <!-- Modal Content -->
   <div class="docdog-container--middle">
-    <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">マイページ</h1>
+    <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+      <h1>マイページ</h1>
     </div>
     <section class="docdog-modal__body__section docdog-container--white">
       <h2 class="docdog-modal__body__heading">お知らせ</h2>

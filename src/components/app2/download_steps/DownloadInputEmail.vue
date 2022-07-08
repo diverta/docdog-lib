@@ -1,7 +1,8 @@
 <template>
   <div class="docdog-container--white">
-    <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">必要事項を入力してダウンロード</h1>
+    <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+      <!-- TODO: Implement "ダウンロードフォーム上部" dynamic text -->
+      <h1>必要事項を入力してダウンロード</h1>
     </div>
     <div class="docdog-modal__body__section">
       <div class="docdog-modal__body__section">

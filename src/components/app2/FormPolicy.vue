@@ -1,6 +1,6 @@
 <template>
-  <div class="docdog-modal__body__section">
-    <p class="docdog-modal__body__text">
+  <div class="docdog-modal__body__section docdog-modal__body__text">
+    <p>
       続行することで<a href="/dummy/">利用規約</a>および<a href="/dummy/">プライバシーポリシー</a
       >を読み、これに同意するものとします。
     </p>

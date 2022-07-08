@@ -1,17 +1,16 @@
 <template>
   <section class="docdog-modal__body__section">
     <div class="docdog-article">
+      <!-- TODO: Implement "ダウンロード完了画面" dynamic text -->
       <h2>ダウンロードしました</h2>
       <p>営業資料にご興味をお持ちいただきありがとうございます。</p>
-      <div class="docdog-u-pa-x-sm">
-        <ul class="docdog-article__check-list">
-          <li><strong>資料の内容について質問したい</strong></li>
-          <li><strong>構築方法やプロジェクト進行にういて相談したい</strong></li>
-          <li><strong>デモを依頼したい</strong></li>
-          <li><strong>機能や料金についてもっと知りたい</strong></li>
-          <li><strong>パートナー契約について知りたい</strong></li>
-        </ul>
-      </div>
+      <ul class="docdog-article__check-list">
+        <li><strong>資料の内容について質問したい</strong></li>
+        <li><strong>構築方法やプロジェクト進行にういて相談したい</strong></li>
+        <li><strong>デモを依頼したい</strong></li>
+        <li><strong>機能や料金についてもっと知りたい</strong></li>
+        <li><strong>パートナー契約について知りたい</strong></li>
+      </ul>
       <p>など、気になる点がございましたらお気軽にお問い合わせください。</p>
       <a
         href="https://kuroco.zendesk.com/hc/ja/requests/new?ticket_form_id=900002698263"
@@ -48,7 +47,7 @@
       class="docdog-button docdog-button--white docdog-u-mt-lg"
       @click.prevent="redirect({ target: 'List' })"
     >
-      営業資料一覧を見る
+      一覧を見る
     </button>
   </section>
 </template>
