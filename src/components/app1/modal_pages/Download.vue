@@ -3,8 +3,8 @@
     <AlertSuccess v-if="msg" :msg="msg" />
     <AlertError v-if="err" :err="err" />
 
-    <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">ダウンロード</h1>
+    <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+      <h1>ダウンロード</h1>
     </div>
     <div class="docdog-modal__body__section">
       <div class="docdog-container--middle">

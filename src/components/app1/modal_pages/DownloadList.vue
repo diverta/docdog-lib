@@ -2,8 +2,8 @@
   <div class="docdog-container--middle">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
-    <div class="docdog-modal__body__section">
-      <h1 class="docdog-modal__body__pagetitle">ダウンロードリスト</h1>
+    <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+      <h1>ダウンロードリスト</h1>
     </div>
 
     <div class="docdog-modal__body__section" v-if="list.length">

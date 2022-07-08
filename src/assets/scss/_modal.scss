@@ -177,11 +177,16 @@
       border:2px solid $color-border;
     }
     &__pagetitle {
-      margin: 0;
-      font-size: 18px;
-      font-weight: bold;
-      & + p {
-        margin: $spacing-lg 0 !important;
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+        + p:first-of-type {
+          margin-top: $spacing-lg !important;
+        }
+      }
+      .docdog-container--white & p {
+        @extend .docdog-modal__body__text;
       }
     }
     &__heading {

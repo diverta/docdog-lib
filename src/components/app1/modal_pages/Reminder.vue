@@ -3,10 +3,9 @@
     <AlertError v-if="err" :err="err" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
     <div class="docdog-container--white">
-      <div class="docdog-modal__body__section">
-        <h1 class="docdog-modal__body__pagetitle">パスワード再設定</h1>
-
-        <p class="docdog-modal__body__text" v-if="step == 'input_email'">
+      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+        <h1>パスワード再設定</h1>
+        <p v-if="step == 'input_email'">
           パスワード再設定用のURLを送信します。ご登録されているメールアドレスを入力してください。
         </p>
       </div>

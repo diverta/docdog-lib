@@ -48,7 +48,7 @@
       class="docdog-button docdog-button--white docdog-u-mt-lg"
       @click.prevent="redirect({ target: 'List' })"
     >
-      営業資料一覧を見る
+      一覧を見る
     </button>
   </section>
 </template>

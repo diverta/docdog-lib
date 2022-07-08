@@ -1,8 +1,8 @@
 <template>
   <div class="docdog-container--middle">
     <article class="docdog-modal__body__section">
-      <div class="docdog-modal__body__section">
-        <h1 class="docdog-modal__body__pagetitle">{{ data ? data.subject : '' }}</h1>
+      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+        <h1>{{ data ? data.subject : '' }}</h1>
       </div>
       <div class="docdog-modal__body__section">
         <div class="docdog-card">

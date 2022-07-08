@@ -3,8 +3,8 @@
     <AlertError v-if="err" :err="err_msg" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
     <div class="docdog-container--white">
-      <div class="docdog-modal__body__section">
-        <h1 class="docdog-modal__body__pagetitle">ログイン</h1>
+      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+        <h1>ログイン</h1>
       </div>
       <div class="docdog-modal__body__section" v-if="!isLogin">
         <div class="docdog-form--col-2 docdog-modal__body__section">
