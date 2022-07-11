@@ -102,7 +102,9 @@ export default {
       ($event) => {
         // When user changes page state (back/forward buttons for ex)
         const new_page = $event.state ? $event.state.docdog_page || '' : '';
-        this.urlParams.docdog_page = new_page;
+        if (new_page) {
+          this.urlParams.docdog_page = new_page;
+        }
         const docdog_id = $event.state ? $event.state.docdog_id || '' : '';
         if (docdog_id) {
           this.urlParams.docdog_id = docdog_id;
