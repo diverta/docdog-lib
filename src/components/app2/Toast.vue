@@ -72,8 +72,8 @@ export default {
     return {
       status: '',
       toast_expand: true,
-      replay_delay: 2, // seconds between zip download retry
-      max_replay_times: 5, // max tries
+      replay_delay: 3, // seconds between zip download retry
+      max_replay_times: 10, // max tries
     };
   },
   mounted() {
