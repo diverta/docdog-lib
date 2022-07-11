@@ -14,6 +14,7 @@
       v-model:current_page="current_page"
       :node_params="current_node_params"
       :toastIds="toastIds"
+      :urlParams="urlParams"
       v-model:footer_data="footer_data"
       v-model:isLogin="isLogin"
       v-model:toastStatus="toastStatus"

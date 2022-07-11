@@ -15,6 +15,7 @@
       :node_params="current_node_params"
       :toastIds="toastIds"
       :htmlParts="htmlParts"
+      :urlParams="urlParams"
       v-model:footer_data="footer_data"
       v-model:isLogin="isLogin"
       v-model:toastStatus="toastStatus"
@@ -27,7 +28,7 @@
       @writePageHistory="writePageHistory"
       @onAfterRedirect="onAfterRedirect"
       @resetView="resetView"
-      @hideToast="onHideToast"
+      @hideToast="doHideToast"
       @downloadToast="downloadToast"
       ref="ctrl"
     />
@@ -68,7 +69,7 @@ export default {
   },
   data() {
     return {
-      hideToast: true,
+      hideToast: true, // A page might want to not display toast on individual level
       customHeaderHtml: null,
       urlParams: {},
       showModal: false,
@@ -87,6 +88,7 @@ export default {
         isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
       },
       toastStatus: '',
+      toast_storage_key: 'docdog.toast',
       originalViewport: null,
       htmlParts: {},
     };
@@ -153,6 +155,7 @@ export default {
     },
   },
   mounted() {
+    this.hideToast = true;
     document.addEventListener('keydown', (event) => {
       if (event.key == 'Escape' && this.showModal) {
         this.closeModalOuter();
@@ -200,6 +203,10 @@ export default {
       }
     }
     this.getHTMLParts();
+    const toastInit = localStorage.getItem(this.toast_storage_key);
+    if (toastInit) {
+      this.toastList = JSON.parse(toastInit);
+    }
   },
   methods: {
     linkNode(node, params) {
@@ -226,7 +233,10 @@ export default {
       if (this.current_node_uuid === null) {
         // No node is opened => open
         this.current_node_uuid = node_id;
-        this.redirect({ target: 'Download', params: { doc_id: this.current_node_params.id } });
+        this.redirect({
+          target: 'Download',
+          params: { doc_id: this.current_node_params.id, page_params: { docdog_id: this.current_node_params.id } },
+        });
       } else if (this.current_node_uuid === node_id) {
         // Current node is opened => close
         this.closeModalOuter();
@@ -242,7 +252,8 @@ export default {
     },
     closeModal(writeHist = true) {
       // Can be triggered through 'close' event by any modal page
-      this.removeToast();
+      //this.removeToast(); // Delete toast on close modal
+      this.doHideToast(true);
       this.showModal = false;
       this.current_node_uuid = null;
       this.current_page = ''; // Reinit the page state
@@ -422,6 +433,7 @@ export default {
         // Went from 0 to 1 => set expanded
         this.isToastExpanded = true;
       }
+      localStorage.setItem(this.toast_storage_key, JSON.stringify(this.toastList));
     },
     removeToast(idx) {
       if (idx != null) {
@@ -436,6 +448,7 @@ export default {
           this.footer_data.isInToast = false;
         }
       }
+      localStorage.setItem(this.toast_storage_key, JSON.stringify(this.toastList));
     },
     redirect(pageData, writeHist = true) {
       // Request for redirection external to PageController
@@ -454,9 +467,14 @@ export default {
       } else {
         delete newParams.docdog_page;
       }
+      if (params.docdog_id) {
+        newParams.docdog_id = params.docdog_id;
+      } else {
+        delete newParams.docdog_id;
+      }
       const qs = new URLSearchParams(newParams).toString();
       window.history.pushState(
-        { prevUrl: window.location.href, docdog_page: this.current_page || '', params },
+        { prevUrl: window.location.href, docdog_page: this.current_page || '', ...params },
         null,
         '?' + qs
       );
@@ -464,7 +482,7 @@ export default {
     resetView() {
       this.$refs['modal'].resetView();
     },
-    onHideToast(val) {
+    doHideToast(val) {
       this.hideToast = val;
       if (val) {
         this.isToastExpanded = false;

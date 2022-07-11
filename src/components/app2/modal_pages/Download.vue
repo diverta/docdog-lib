@@ -61,43 +61,51 @@ export default {
     };
   },
   mounted() {
-    if (!this.doc_id && !this.doc_data) {
-      this.error('Document id is undefined and data not provided');
-    }
     if (this.doc_data) {
       this.data = { ...this.doc_data };
       this.footer_data.doc_data = this.data;
       this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
       this.footer_data.downloaded = false;
     } else {
-      // Fetch data using doc id
-      loginApi
-        .isLogin({
-          autoLogin: true,
-          anonLogin: false,
-        })
-        .then((isLogin) => {
-          if (isLogin || this.isPublic) {
-            docsApi
-              .getDocumentData(this.doc_id, !isLogin) // If not logged in, do anonLogin
-              .then((resp) => {
-                this.data = resp.details;
-                this.footer_data.doc_data = this.data;
-                this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
-                this.footer_data.downloaded = false;
-              })
-              .catch((err) => {
-                this.error(err);
-              });
-          } else {
-            /*
+      let isPublic = this.isPublic;
+      let doc_id = this.doc_id;
+      if (!doc_id && this.urlParams.docdog_id) {
+        // Case when the doc is accessed by docdog_id in url
+        doc_id = this.urlParams.docdog_id;
+        isPublic = true;
+      }
+      if (!doc_id) {
+        this.error('Document id is undefined and data not provided');
+      } else {
+        // Fetch data using doc id
+        loginApi
+          .isLogin({
+            autoLogin: true,
+            anonLogin: false,
+          })
+          .then((isLogin) => {
+            if (isLogin || isPublic) {
+              docsApi
+                .getDocumentData(doc_id, !isLogin) // If not logged in, do anonLogin
+                .then((resp) => {
+                  this.data = resp.details;
+                  this.footer_data.doc_data = this.data;
+                  this.footer_data.isInToast = this.toastIds[this.data.topics_id] || false;
+                  this.footer_data.downloaded = false;
+                })
+                .catch((err) => {
+                  this.error(err);
+                });
+            } else {
+              /*
             this.redirect({
               target: 'SignIn',
-              params: { return: { target: 'Download', params: { doc_id: this.doc_id, doc_data: this.doc_data } } },
+              params: { return: { target: 'Download', params: { doc_id, doc_data: this.doc_data } } },
             });
             */
-          }
-        });
+            }
+          });
+      }
     }
   },
   methods: {
