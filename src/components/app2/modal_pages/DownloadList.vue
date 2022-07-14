@@ -48,7 +48,7 @@
       @addToast="addToast"
     />
   </div>
-  <Loading v-if="toastStatus == 'downloading'" :loadingMessage="'圧縮ファイル作成中です。暫くお待ちください。'" />
+  <Loading v-if="toastStatus == 'downloading'" :loadingMessage="'圧縮ファイル作成中です。しばらくお待ちください。'" />
 </template>
 
 <script>
