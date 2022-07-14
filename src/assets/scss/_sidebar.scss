@@ -5,7 +5,7 @@
   height: 100%;
   position: fixed;
   top: 0;
-  right: -200px;
+  right: -245px;
   background-color: #fff;
   box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
   z-index: 11200;
@@ -16,9 +16,8 @@
   &__head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     height: 70px;
-    padding: $spacing-md $spacing-x-sm $spacing-md $spacing-md ;
+    padding: $spacing-md;
     border-bottom: 1px solid $color-border;
     &__heading {
       margin: 0 !important;
@@ -54,43 +53,95 @@
     padding: $spacing-md;
   }
 
-
+  // toggle
   &__toggle {
+    display: flex;
+    align-items: center;
     position: fixed;
-    top: 0;
     right: $spacing-x-lg;
-    width: 70px;
-    height: 69px;
-    background-color: #fff;
+    bottom: $spacing-lg;
+    width: 230px;
+    height: 70px;
+    padding: $spacing-md;
+    background-color: rgba(0,0,0,.7);
+    border-radius: $border-radius-md;
+    box-shadow: 0 0 $spacing-sm 0 rgba(0,0,0,.1);
     z-index: 11200;
     transition: $transition;
+    cursor: pointer;
     @media screen and (max-width: 767px) {
       height: 60px;
       right: $spacing-md;
+      bottom: $spacing-md;
     }
-    &.docdog-sidebar__toggle--fixed {
-      right: 200px;
+    &:hover {
+      background-color: rgba(0,0,0,.8);
+      box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+    }
+    &--up {
       @media screen and (max-width: 767px) {
-        display: none;
+        &--sp {
+          bottom: 80px;
+        }
       }
     }
-    &__badge {
-      position: absolute;
-      top: $spacing-sm;
-      right: $spacing-sm;
-      display: inline-flex;
+    // Element
+    &__icon {
+      display: flex;
       align-items: center;
       justify-content: center;
-      width: $spacing-lg;
-      height: $spacing-lg;
-      border-radius: $spacing-lg;
-      background-color: $color-danger;
+      flex: 0 0 auto;
+      position: relative;
+      width: 40px;
+      height: 50px;
+      &__badge {
+        position: absolute;
+        top: $spacing-x-sm;
+        right: $spacing-x-sm;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $spacing-lg;
+        height: 16px;
+        border-radius: $spacing-lg;
+        background-color: $color-danger;
+        color: #fff;
+        font-size: 11px;
+        font-weight: bold;
+        line-height: 16px;
+      }
+    }
+    &__heading { 
+      flex: 1 0 auto;
+      padding-right: $spacing-sm;
       color: #fff;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: bold;
     }
-    svg {
-      vertical-align: bottom;
+    &__button {
+      @extend .docdog-button;
+      @extend .docdog-button--primary;
+      width: 45px !important;
+      height: 45px !important;
+      padding: 0 !important;
+    }
+    // toggle state
+    &--close {
+      position: absolute;
+      right: 200px;
+      width: 45px;
+      height: 70px;
+      border-radius: $border-radius-sm 0 0 $border-radius-sm;
+      @media screen and (max-width: 767px) {
+        height: 60px;
+      }
+    }
+    &--shrink {
+      right: -170px;
+      .docdog-sidebar__toggle__heading { opacity: 0;}
+    }
+    &--hidden {
+      right: -230px;
     }
   }
 
