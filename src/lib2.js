@@ -110,4 +110,4 @@ function loadCSS() {
   }
 }
 
-export { parseDOM };
+export { parseDOM, initApp };

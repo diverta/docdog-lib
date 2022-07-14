@@ -1,7 +1,9 @@
 <template>
   <div
     class="docdog-card--media docdog-card--link"
-    @click.prevent="redirect({ target: 'Download', params: { doc_data: data } })"
+    @click.prevent="
+      redirect({ target: 'Download', params: { doc_data: data, page_params: { docdog_id: data.topics_id } } })
+    "
   >
     <div class="docdog-card--media__thumb">
       <img v-if="data.thumbnail.url" :src="data.thumbnail.url" :alt="data.subject" />

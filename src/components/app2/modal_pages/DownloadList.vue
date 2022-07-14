@@ -92,14 +92,15 @@ export default {
     };
   },
   mounted() {
-    if (this.list.length == 0) {
-      this.redirect({ target: 'List' });
-    }
     if (this.isLogin) {
       this.setStep('downloading');
       this.downloadToast(); // Begin downloading
     } else {
       this.setStep('inputEmail');
+    }
+    if (this.list.length == 0) {
+      // Redirect must happen after setStep because we want hideToast false set by redirect to not be overridden by the emit in setStep
+      this.redirect({ target: 'List' });
     }
     this.footer_data.toastList = this.list;
     /*

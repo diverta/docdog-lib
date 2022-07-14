@@ -7,6 +7,7 @@
     v-model:isLogin="isLogin"
     :toastStatus="toastStatus"
     :custom_data="custom_data"
+    :urlParams="urlParams"
     @err="err = $event"
     @redirect="onRedirect"
     @hideToast="onHideToast"
@@ -44,6 +45,10 @@ export default {
     toastStatus: {
       type: String,
       default: '',
+    },
+    urlParams: {
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
@@ -122,12 +127,16 @@ export default {
       this.msg2 = msg2 || '';
       this.err = err || '';
       this.redirect_params = params;
-      this.$emit('hideToast', false);
       this.setCurrentPage(target);
+      const page_params = params ? params.page_params || {} : {};
       if (writeHist) {
-        this.$emit('writePageHistory', { page: target });
+        this.$emit('writePageHistory', { page: target, params: page_params });
       }
-      this.$emit('onAfterRedirect', { target, params });
+      this.$emit('hideToast', false);
+      this.$nextTick(() => {
+        // Some actions need to be done after the redirect is completed (to avoid being overridden)
+        this.$emit('onAfterRedirect', { target, params });
+      });
     },
     onHideToast(val) {
       this.$emit('hideToast', val);

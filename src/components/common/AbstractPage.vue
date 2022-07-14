@@ -34,6 +34,10 @@ export default {
       type: String,
       default: '',
     },
+    urlParams: {
+      type: Object,
+      default: () => ({}),
+    },
     custom_data: {
       type: Object,
       default: () => ({}),
