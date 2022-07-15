@@ -1,5 +1,5 @@
 .docdog-button {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -108,31 +108,24 @@
         padding-bottom: $spacing-sm;
       }
     }
-    &:disabled {
+    &:disabled,
+    &--disabled {
+      @extend .docdog-button--add-list;
+      justify-content: center;
       background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center $color-disabled !important;
       background-size: 20px;
-      justify-content: center;
+      color: $color-gray !important;
+      svg { fill: $color-gray; }
     }
   }
   &--download {
     @extend .docdog-button;
     @extend .docdog-button--primary;
+    justify-content: space-between;
     padding: $spacing-md;
-    background: url("/src/assets/image/icon-download.svg") no-repeat right $spacing-md center $color-primary;
-    background-size: 20px;
+    font-size: 13px !important;
+    span { flex: 1 1 auto; }
     .docdog-sidebar__foot & {
-      font-size: 13px;
-      justify-content: flex-start;
-    }
-  }
-  &--mail {
-    @extend .docdog-button;
-    @extend .docdog-button--primary;
-    padding: $spacing-md;
-    background: url("/src/assets/image/icon-mail.svg") no-repeat right $spacing-md center $color-primary;
-    background-size: 20px;
-    .docdog-sidebar__foot & {
-      font-size: 13px;
       justify-content: flex-start;
     }
   }
@@ -170,6 +163,17 @@
     z-index: 11200;
     &:hover {
       background-color: darken($color-primary, 8%);
+    }
+  }
+  &--fixed--sp {
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      padding: $spacing-sm $spacing-lg; 
+      box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+      background-color: #fff;
     }
   }
 
