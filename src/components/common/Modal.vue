@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   props: {
     show: {
@@ -25,6 +27,15 @@ export default {
       type: String,
       default: '',
     },
+  },
+  emits: ['scroll'],
+  mounted() {
+    this.$refs.modalBody.addEventListener(
+      'scroll',
+      _.throttle(() => {
+        this.$emit('scroll');
+      }, 500)
+    );
   },
   methods: {
     closeModal() {

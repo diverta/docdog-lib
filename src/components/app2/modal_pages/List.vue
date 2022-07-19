@@ -35,6 +35,7 @@
             :showDownloadBtn="showDownloadBtn"
             @download="download(doc)"
             @addToast="addToast"
+            @removeToast="removeToastById(doc.topics_id)"
             @redirect="redirect"
           />
         </li>

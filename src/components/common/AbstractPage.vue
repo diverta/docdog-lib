@@ -49,6 +49,7 @@ export default {
     'redirect',
     'addToast',
     'removeToast',
+    'removeToastById',
     'hideToast',
     'onLogin',
     'logout',
@@ -89,6 +90,9 @@ export default {
     },
     removeToast(idx) {
       this.$emit('removeToast', idx);
+    },
+    removeToastById(id) {
+      this.$emit('removeToastById', id);
     },
     redirect(pageData) {
       // pageData = {target, msg}

@@ -3,7 +3,7 @@
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
 
     <div class="docdog-modal__body__section docdog-container--col-2" v-if="list.length">
-      <div class="docdog-container--col-2__side">
+      <div class="docdog-container--col-2__side" v-if="current_step != 'inputCompleted'">
         <div class="docdog-card docdog-cart--download-list">
           <ul class="docdog-cart">
             <CardToast v-for="(data, idx) in list" :data="data" :can_remove="false"></CardToast>

@@ -4,10 +4,14 @@
     <!-- TODO: When scrolling, add class "docdog-sidebar__toggle--shrink" -->
     <!-- TODO: On Topic detail page, add classes "docdog-sidebar__toggle--shrink" and "docdog-sidebar__toggle--up--sp" -->
     <div
-      class="docdog-sidebar__toggle"
       @click="toggleExpand"
       v-show="toastDisplayed"
-      :class="expanded ? 'docdog-sidebar__toggle--hidden' : ''"
+      :class="[
+        'docdog-sidebar__toggle',
+        { 'docdog-sidebar__toggle--hidden': expanded },
+        { 'docdog-sidebar__toggle--shrink': toast_shrink || currentPage === 'Download' },
+        { 'docdog-sidebar__toggle--up--sp': currentPage === 'Download' },
+      ]"
     >
       <div class="docdog-sidebar__toggle__icon">
         <span class="docdog-sidebar__toggle__icon__badge">{{ total_items }}</span>
@@ -47,12 +51,15 @@
       </button>
     </div>
     <section class="docdog-sidebar" :class="expanded ? 'docdog-sidebar--fixed' : ''">
-      <!-- TODO: On Topic detail page, add class "docdog-sidebar__toggle--up--sp" -->
       <button
         type="button"
         aria-label="Close"
-        class="docdog-sidebar__toggle docdog-sidebar__toggle--close"
-        @click="toggleExpand"
+        :class="[
+          'docdog-sidebar__toggle',
+          'docdog-sidebar__toggle--close',
+          { 'docdog-sidebar__toggle--up--sp': currentPage === 'Download' },
+        ]"
+        @click="toggleExpand(false)"
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -111,7 +118,7 @@ export default {
   components: {
     CardToast,
   },
-  emits: ['downloadToast', 'removeToast', 'changeStatus', 'toggleExpand'],
+  emits: ['downloadToast', 'removeToast', 'changeStatus', 'toggleExpand', 'toggleShrink'],
   props: {
     list: {
       type: Array,
@@ -121,17 +128,22 @@ export default {
       type: Boolean,
       default: false,
     },
+    currentPage: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       status: '',
       toast_expand: true,
-      replay_delay: 3, // seconds between zip download retry
-      max_replay_times: 10, // max tries
+      toast_shrink: false,
+      replay_delay: 1, // seconds between zip download retry
+      max_replay_times: 1, // max tries
     };
   },
   mounted() {
-    this.updateStatus('');    
+    this.updateStatus('');
   },
   computed: {
     toastDisplayed() {
@@ -148,9 +160,33 @@ export default {
     },
   },
   methods: {
-    toggleExpand() {
-      this.toast_expand = !this.toast_expand;
+    toggleExpand(expand = undefined) {
+      if (expand === undefined) {
+        // Unspecified => toggle
+        this.toast_expand = !this.toast_expand;
+      } else {
+        if (this.toast_expand == expand) {
+          // Already in specified state
+          return;
+        }
+        // Specified => set (as bool)
+        this.toast_expand = !!expand;
+      }
       this.$emit('toggleExpand', this.toast_expand);
+    },
+    toggleShrink(shrink = undefined) {
+      if (shrink === undefined) {
+        // Unspecified => toggle
+        this.toast_shrink = !this.toast_shrink;
+      } else {
+        if (this.toast_shrink == shrink) {
+          // Already in specified state
+          return;
+        }
+        // Specified => set (as bool)
+        this.toast_shrink = !!shrink;
+      }
+      this.$emit('toggleShrink', this.toast_shrink);
     },
     updateStatus(status) {
       this.status = status;
@@ -204,6 +240,9 @@ export default {
     },
     removeByIdx(idx) {
       this.$emit('removeToast', idx);
+    },
+    onModalScroll() {
+      this.toggleShrink(true);
     },
   },
 };

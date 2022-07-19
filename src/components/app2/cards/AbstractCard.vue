@@ -46,6 +46,13 @@ export default {
     redirect(pageData) {
       this.$emit('redirect', pageData);
     },
+    onToggle() {
+      if (this.isInToast) {
+        this.removeToast();
+      } else {
+        this.onAdd();
+      }
+    },
   },
 };
 </script>

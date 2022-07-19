@@ -20,7 +20,12 @@
     </div>
     <div class="docdog-modal__body__section">
       <div class="docdog-container--middle">
-        <CardDocsDetail :data="data" :toastIds="toastIds" @addToast="addToast" />
+        <CardDocsDetail
+          :data="data"
+          :toastIds="toastIds"
+          @addToast="addToast"
+          @removeToast="removeToastById(data.topics_id)"
+        />
       </div>
     </div>
   </div>

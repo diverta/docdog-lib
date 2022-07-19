@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal" :class="modalClass">
+  <Modal v-model:show="showModal" @close="closeModalOuter" ref="modal" :class="modalClass" @scroll="onModalScroll">
     <template v-slot:header>
       <ModalHeader
         v-if="!customHeaderHtml"
@@ -22,6 +22,7 @@
       @close="closeModal"
       @addToast="addToast"
       @removeToast="removeToast"
+      @removeToastById="removeToastById"
       @download="download"
       @onLogin="onLogin"
       @logout="logout"
@@ -36,6 +37,7 @@
   <Toast
     v-model:list="toastList"
     :hide="hideToast"
+    :currentPage="current_page"
     @downloadToast="downloadToast"
     @removeToast="removeToast"
     @changeStatus="toastStatus = $event"
@@ -440,6 +442,8 @@ export default {
         this.isToastExpanded = true;
       }
       localStorage.setItem(this.toast_storage_key, JSON.stringify(this.toastList));
+      //this.$refs.toast.toggleExpand(true);
+      this.$refs.toast.toggleShrink(false);
     },
     removeToast(idx) {
       if (idx != null) {
@@ -447,6 +451,8 @@ export default {
         if (this.footer_data && this.footer_data.doc_data && this.footer_data.doc_data.topics_id == item.topics_id) {
           this.footer_data.isInToast = false;
         }
+        //this.$refs.toast.toggleExpand(true);
+        this.$refs.toast.toggleShrink(false);
       } else {
         // Delete all indexes
         this.toastList.splice(0, this.toastList.length);
@@ -455,6 +461,10 @@ export default {
         }
       }
       localStorage.setItem(this.toast_storage_key, JSON.stringify(this.toastList));
+    },
+    removeToastById(id) {
+      const idx = this.toastList.findIndex((item) => item.topics_id == id);
+      this.removeToast(idx);
     },
     redirect(pageData, writeHist = true) {
       // Request for redirection external to PageController
@@ -534,6 +544,9 @@ export default {
           this.htmlParts = resp.list[0];
         }
       });
+    },
+    onModalScroll() {
+      this.$refs.toast.onModalScroll();
     },
   },
 };

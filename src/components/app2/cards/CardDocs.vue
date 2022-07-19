@@ -18,7 +18,7 @@
         <p v-if="data.desc">{{ data.desc }}</p>
       </div>
       <div class="docdog-card--media__foot">
-        <AddToastButton @click.stop="onAdd()" :isInToast="isInToast" />
+        <AddToastButton @click.stop="onToggle()" :isInToast="isInToast" />
       </div>
     </div>
   </div>
