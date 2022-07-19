@@ -135,7 +135,6 @@ export default {
       this.$emit('hideToast', val);
     },
     onRemoveToast(idx) {
-        console.log("on remove");
       this.removeToast(idx);
       if (this.list.length == 0) {
         this.close();
