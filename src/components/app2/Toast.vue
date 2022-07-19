@@ -1,8 +1,5 @@
 <template>
   <div class="docdog">
-    <!-- TODO: Open sidebar each time user click "ダウンロードリストに追加" button -->
-    <!-- TODO: When scrolling, add class "docdog-sidebar__toggle--shrink" -->
-    <!-- TODO: On Topic detail page, add classes "docdog-sidebar__toggle--shrink" and "docdog-sidebar__toggle--up--sp" -->
     <div
       @click="toggleExpand"
       v-show="toastDisplayed"
