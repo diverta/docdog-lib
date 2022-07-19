@@ -14,6 +14,7 @@
           :toastIds="toastIds"
           @download="download(doc)"
           @addToast="addToast"
+          @removeToast="removeToast"
           @redirect="redirect"
         />
       </li>
@@ -39,7 +40,7 @@ import CardDocs from '@/components/app2/cards/CardDocs.vue';
 import TopicsList from '@/mixins/TopicsList';
 
 export default {
-  emits: ['redirect', 'addToast'],
+  emits: ['redirect', 'addToast', 'removeToast'],
   mixins: [TopicsList],
   components: {
     CardDocs,
@@ -77,6 +78,9 @@ export default {
     },
     addToast(params) {
       this.$emit('addToast', params);
+    },
+    removeToast(params) {
+      this.$emit('removeToast', params);
     },
   },
 };

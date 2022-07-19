@@ -46,6 +46,7 @@
       @redirect="redirect"
       :toastIds="toastIds"
       @addToast="addToast"
+      @removeToast="removeToast"
     />
   </div>
   <Loading v-if="toastStatus == 'downloading'" :loadingMessage="'圧縮ファイル作成中です。しばらくお待ちください。'" />
@@ -134,6 +135,7 @@ export default {
       this.$emit('hideToast', val);
     },
     onRemoveToast(idx) {
+        console.log("on remove");
       this.removeToast(idx);
       if (this.list.length == 0) {
         this.close();
