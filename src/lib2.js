@@ -24,7 +24,6 @@ function setNodeList(node, params) {
 }
 
 function parseDOM() {
-  loadCSS();
   const docdogEls = [];
   const nodes = [];
   let el = null; // Element to be mounted
@@ -81,28 +80,29 @@ function parseDOM() {
 }
 
 const initApp = _.once((el) => {
-  if (window.Docdog.app2 == null) {
-    // Even if the lib is loaded multiple times, ensure app init only once
-
-    let docdogAppDiv = null;
-    if (el) {
-      docdogAppDiv = el;
-    } else {
-      docdogAppDiv = document.createElement('div');
-      docdogAppDiv.classList.add('docdog-container');
-      document.body.appendChild(docdogAppDiv);
+  loadCSS().onload = () => {
+    if (window.Docdog.app2 == null) {
+      // Even if the lib is loaded multiple times, ensure app init only once
+      let docdogAppDiv = null;
+      if (el) {
+        docdogAppDiv = el;
+      } else {
+        docdogAppDiv = document.createElement('div');
+        docdogAppDiv.classList.add('docdog-container');
+        document.body.appendChild(docdogAppDiv);
+      }
+      window.Docdog.el = docdogAppDiv;
+      window.Docdog.app2 = createApp(App).mount(docdogAppDiv);
     }
-    //docdogAppDiv.style.display = "none"; // Prevent flickering during loading
-    window.Docdog.el = docdogAppDiv;
-    window.Docdog.app2 = createApp(App).mount(docdogAppDiv);
-  }
+  };
 });
 
 function loadCSS() {
-  const cssId = 'docdog-lib1-css';
-  if (!document.getElementById(cssId)) {
-    var head = document.getElementsByTagName('head')[0];
-    var link = document.createElement('link');
+  const cssId = 'docdog-lib2-css';
+  let link = document.getElementById(cssId);
+  if (!link) {
+    const head = document.getElementsByTagName('head')[0];
+    link = document.createElement('link');
     link.id = cssId;
     link.rel = 'stylesheet';
     link.type = 'text/css';
@@ -110,6 +110,7 @@ function loadCSS() {
     link.media = 'all';
     head.appendChild(link);
   }
+  return link;
 }
 
 export { parseDOM, initApp };

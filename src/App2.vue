@@ -163,7 +163,6 @@ export default {
     },
   },
   mounted() {
-    window.Docdog.el.style.display = ''; // Make sure that mounting element is not shown until done (flickering)
     this.hideToast = true;
     document.addEventListener('keydown', (event) => {
       if (event.key == 'Escape' && this.showModal) {

@@ -6,7 +6,7 @@
     "
   >
     <div class="docdog-card--media__thumb">
-      <img v-if="data.thumbnail.url" :src="data.thumbnail.url" :alt="data.subject" />
+      <img v-if="data.thumbnail && data.thumbnail.url" :src="data.thumbnail.url" :alt="data.subject" />
       <img v-else :src="noimage_vertical" :alt="data.subject" />
     </div>
     <div class="docdog-card--media__body__inner">
