@@ -92,6 +92,8 @@ const initApp = _.once((el) => {
       docdogAppDiv.classList.add('docdog-container');
       document.body.appendChild(docdogAppDiv);
     }
+    //docdogAppDiv.style.display = "none"; // Prevent flickering during loading
+    window.Docdog.el = docdogAppDiv;
     window.Docdog.app2 = createApp(App).mount(docdogAppDiv);
   }
 });
