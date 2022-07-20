@@ -66,6 +66,7 @@
     padding: $spacing-md;
     background: url("/src/assets/image/icon-add-list.svg") no-repeat right $spacing-md center $color-primary;
     background-size: 20px;
+    transition: border-color $transition, background-color $transition, color $transition;
     .docdog-card--media .docdog-card__foot &,
     .docdog-article__title & {
       font-size: 13px;
@@ -108,14 +109,17 @@
         padding-bottom: $spacing-sm;
       }
     }
-    &:disabled,
-    &--disabled {
+    &--remove {
       @extend .docdog-button--add-list;
       justify-content: center;
-      background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center $color-disabled !important;
+      border: 1px solid $color-border !important;
+      background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center lighten($color-border, 8%) !important;
       background-size: 20px;
-      color: $color-gray !important;
-      svg { fill: $color-gray; }
+      color: lighten($color-gray, 8%) !important;
+      svg { fill: lighten($color-gray, 8%); }
+      &:hover {
+        background-color: lighten($color-border, 4%) !important;
+      }
     }
   }
   &--download {
