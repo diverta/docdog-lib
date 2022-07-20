@@ -33,15 +33,39 @@
   }
 
   // SP download page
-  .docdog-cart--download-list & {
-    @media screen and (max-width: 768px) {
+  &--download-list {
+    position: relative;
+    &--hidden {
+      @media screen and (max-width: 768px) {
+        display: none;
+      }
+    }
+    &--show {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      &__item {
-        flex: 0 0 48%;
-        width: 48%;
-        &:nth-of-type(2n-1):nth-last-child(2) { border-bottom: none; }
+    }
+    &__toggle {
+      @extend .docdog-button;
+      background-color: $color-gray;
+      color: #fff;
+      transition: $transition;
+      &--open {
+        border-radius: $border-radius-sm $border-radius-sm 0 0;
+        svg {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    .docdog-cart {
+      @media screen and (max-width: 768px) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        transition: $transition;
+        &__item {
+          flex: 0 0 48%;
+          width: 48%;
+          &:nth-of-type(2n-1):nth-last-child(2) { border-bottom: none; }
+        }
       }
     }
   }

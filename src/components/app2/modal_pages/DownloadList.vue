@@ -5,9 +5,27 @@
     <div class="docdog-modal__body__section docdog-container--col-2" v-if="list.length">
       <div class="docdog-container--col-2__side" v-if="current_step != 'inputCompleted'">
         <div class="docdog-card docdog-cart--download-list">
-          <ul class="docdog-cart">
-            <CardToast v-for="(data, idx) in list" :data="data" :can_remove="false"></CardToast>
-          </ul>
+          <button
+            type="button"
+            @click="isShowListSp = !isShowListSp"
+            class="docdog-cart--download-list__toggle docdog-u-hidden-pc"
+            :class="isShowListSp ? 'docdog-cart--download-list__toggle--open' : ''"
+          >
+            <span class="docdog-u-d-flex-grow-1">ダウンロードリストを確認する</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M9.91304 13.9414C9.77971 13.9414 9.65471 13.9164 9.53804 13.8664C9.42138 13.8164 9.31304 13.7414 9.21304 13.6414L4.26304 8.69138C4.07971 8.50805 3.99221 8.27471 4.00054 7.99138C4.00888 7.70805 4.10471 7.47471 4.28804 7.29138C4.50471 7.07471 4.74221 6.97888 5.00054 7.00388C5.25888 7.02888 5.48804 7.13305 5.68804 7.31638L9.91304 11.5414L14.138 7.31638C14.3214 7.13305 14.5589 7.03305 14.8505 7.01638C15.1422 6.99971 15.3797 7.09971 15.563 7.31638C15.7797 7.49971 15.8755 7.72888 15.8505 8.00388C15.8255 8.27888 15.7214 8.51638 15.538 8.71638L10.613 13.6414C10.513 13.7414 10.4047 13.8164 10.288 13.8664C10.1714 13.9164 10.0464 13.9414 9.91304 13.9414Z"
+                fill="#ffffff"
+              />
+            </svg>
+          </button>
+          <div
+            :class="isShowListSp ? 'docdog-cart--download-list--show' : 'docdog-cart--download-list--hidden'"
+          >
+            <ul class="docdog-cart">
+              <CardToast v-for="(data, idx) in list" :data="data" :can_remove="false"></CardToast>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -90,6 +108,7 @@ export default {
       formDef: [],
       customFields: {},
       errClass: 'docdog-form__item--error',
+      isShowListSp: false,
     };
   },
   mounted() {
