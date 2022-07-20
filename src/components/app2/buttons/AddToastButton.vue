@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="docdog-button--add-list" :class="isInToast ? 'docdog-button--add-list--disabled' : ''">
+  <button type="button" :class="isInToast ? 'docdog-button--add-list--remove' : 'docdog-button--add-list'">
     <span v-if="isInToast">追加済み</span>
     <span v-else>ダウンロードリストに追加</span>
   </button>
