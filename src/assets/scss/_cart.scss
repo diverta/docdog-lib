@@ -46,11 +46,11 @@
     }
     &__toggle {
       @extend .docdog-button;
-      background-color: $color-gray;
-      color: #fff;
+      border-radius: $border-radius-md;
+      background-color: #fff;
       transition: $transition;
       &--open {
-        border-radius: $border-radius-sm $border-radius-sm 0 0;
+        border-radius: $border-radius-md $border-radius-md 0 0;
         svg {
           transform: rotate(180deg);
         }
