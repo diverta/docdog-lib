@@ -3,7 +3,7 @@
     <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-html="htmlParts.ext_3" />
     <div class="docdog-modal__body__section">
       <div class="docdog-modal__body__section">
-        <form>
+        <form @submit.prevent>
           <div
             class="docdog-form__item"
             :class="[
@@ -21,6 +21,8 @@
               id="email"
               placeholder=""
               v-model="email_internal"
+              v-on:focusout="validateEmail"
+              v-on:focusin="email_valid = null"
               @input="onEmailInput"
               required
             />
@@ -93,18 +95,21 @@ export default {
     }
   },
   methods: {
-    onEmailInput($event) {
-      this.email_valid = null; // Reset state
-      this.updateEmail($event.target.value);
-    },
-    updateEmail: _.debounce(function (email) {
-      if (validator.validate(email)) {
+    validateEmail() {
+      if (validator.validate(this.email_internal)) {
         this.email_valid = true;
-        this.$emit('update:email', email);
+        this.$emit('update:email', this.email_internal);
       } else {
         this.email_valid = false;
       }
-    }, 200),
+    },
+    onEmailInput() {
+      this.email_valid = null;
+      this.validateEmailDelayed();
+    },
+    validateEmailDelayed: _.debounce(function () {
+      return this.validateEmail();
+    }, 1000),
     nextStep() {
       this.$emit('next');
     },
