@@ -1,7 +1,7 @@
 <template>
   <div>
     <label :for="el.key_name" class="docdog-form__item__title"
-      >{{ el.name }}<span v-if="isRequired" class="docdog-form__item__title__badge">必須</span></label
+      >{{ el.name }}<span v-if="isRequired" class="docdog-form__item__required">（必須）</span></label
     >
     <component :is="elInstance" :el="el" :initValue="processedModelValue" @update="processedModelValue = $event" />
   </div>
