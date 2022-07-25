@@ -15,9 +15,9 @@
           >
             <input
               name="email"
-              type="text"
+              type="email"
               id="email"
-              placeholder=""
+              placeholder="you@example.co.jp"
               v-model="email_internal"
               v-on:focusout="validateEmail"
               v-on:focusin="email_valid = null"
