@@ -1,6 +1,5 @@
 <template>
   <div class="docdog-container--white">
-    <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-html="htmlParts.ext_3" />
     <div class="docdog-modal__body__section">
       <div class="docdog-modal__body__section">
         <form>

@@ -1,7 +1,9 @@
 <template>
   <div class="docdog-container--white">
-    <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-html="htmlParts.ext_3" />
     <div class="docdog-modal__body__section">
+      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+        <h2>メールアドレスを入力してください</h2>
+      </div>
       <div class="docdog-modal__body__section">
         <form @submit.prevent>
           <div
@@ -11,10 +13,6 @@
               { 'docdog-form__item--success': email_valid === true },
             ]"
           >
-            <label for="email" class="docdog-form__item__title">
-              メールアドレス
-              <span class="docdog-form__item__required">（必須）</span>
-            </label>
             <input
               name="email"
               type="text"

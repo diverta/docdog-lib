@@ -12,7 +12,7 @@
     }
   }
 
-  // margin
+  // spacing
   &-ma {
     &-0 { margin: 0 !important; }
     &-x-sm { margin: $spacing-x-sm !important; }
@@ -228,6 +228,11 @@
     &-justify-between { justify-content: space-between !important; }
     &-grow-0 { flex-grow: 0 !important; } 
     &-grow-1 { flex-grow: 1 !important; } 
+  }
+
+  // color
+  &-text-gray {
+    color: $color-gray !important;
   }
 
 }
