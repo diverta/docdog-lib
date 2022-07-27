@@ -23,7 +23,12 @@ export default {
     },
     updateValue($event, type) {
       this.value[type] = $event.target.value;
-      this.updateValueParent(this.value);
+      if (!val.url && !val.title) {
+        // Revert to null when both fields are empty, to avoid inserting them
+        this.updateValueParent(null);
+      } else {
+        this.updateValueParent(this.value);
+      }
     },
   },
 };
