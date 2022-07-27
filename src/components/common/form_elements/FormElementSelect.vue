@@ -1,6 +1,6 @@
 <template>
-  <select v-model="value" @change="updateValue">
-    <option v-for="opt in optionsArr" :value="opt.val">
+  <select v-model="value" @change="updateValue" @blur.native="validate">
+    <option v-for="opt in optionsArr" :value="opt.value">
       {{ opt.name }}
     </option>
   </select>
@@ -21,8 +21,12 @@ export default {
       return '';
     },
     setValue(val) {
-      if (val && val.key) {
-        this.value = val.key;
+      if (val) {
+        if (typeof val === 'string' || val instanceof String) {
+          this.value = val;
+        } else if (val.key) {
+          this.value = val.key;
+        }
       }
     },
     updateValue($event) {

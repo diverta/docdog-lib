@@ -1,6 +1,6 @@
 <script>
 export default {
-  emits: ['update'],
+  emits: ['update', 'validate'],
   props: {
     el: {
       type: Object,
@@ -20,7 +20,7 @@ export default {
     };
   },
   created() {
-    this.value = this.initValue != null ? this.initValue : this.getDefaultValue(this.el.type);
+    this.value = this.initValue != null ? this.initValue : this.getDefaultValue();
   },
   computed: {
     isRequired() {
@@ -28,11 +28,11 @@ export default {
     },
     optionsArr() {
       if (this.el.options) {
-        const arr = Object.entries(this.el.options).map(([val, name]) => {
-          return { val, name };
+        const arr = Object.entries(this.el.options).map(([idx, { key, value }]) => {
+          return { value: key, name: value };
         });
         if (this.optionsEmptyChoice) {
-          arr.unshift({ val: '', name: '選択してください' });
+          arr.unshift({ value: '', name: '選択してください' });
         }
         return arr;
       }
@@ -54,6 +54,9 @@ export default {
     updateValueParent(val) {
       // Shared handling of update
       this.$emit('update', val);
+    },
+    validate() {
+      this.$emit('validate');
     },
   },
   watch: {

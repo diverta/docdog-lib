@@ -47,14 +47,17 @@
           v-model:email="email"
           v-model:name1="name1"
           v-model:name2="name2"
-          v-model:company_nm="company_nm"
+          :formDef="formDef"
           :htmlParts="htmlParts"
           :err="err"
+          :initFields="customFields"
           v-if="current_step == 'inputInfo'"
           @onLogin="afterLogin"
           @prev="setStep('inputEmail')"
           @next="setStep('inputCompleted')"
           @error="onInputInfoError"
+          @updateField="onUpdateField"
+          @resetView="resetView"
         />
       </div>
     </div>
@@ -84,6 +87,8 @@ import DownloadInputEmail from '@/components/app2/download_steps/DownloadInputEm
 import DownloadInputInfo from '@/components/app2/download_steps/DownloadInputInfo.vue';
 import DownloadCompleted from '@/components/app2/download_steps/DownloadCompleted.vue';
 
+import memberApi from '@/api/member';
+
 export default {
   extends: AbstractPage,
   components: {
@@ -107,7 +112,6 @@ export default {
       email: '',
       name1: '',
       name2: '',
-      company_nm: '',
       formDef: [],
       customFields: {},
       errClass: 'docdog-form__item--error',
@@ -115,6 +119,26 @@ export default {
     };
   },
   mounted() {
+    memberApi.getMemberForm().then((resp) => {
+      Object.values(resp.details).forEach((val) => {
+        const exclude = {
+          // These are handled separately
+          name1: true,
+          name2: true,
+          email: true,
+          login_pwd: true,
+          // These are excluded
+          login_id: true,
+          login_ok_flg: true,
+          login_ok_ymd: true,
+          email_send_ng_flg: true,
+        };
+
+        if (!exclude[val.key_name]) {
+          this.formDef.push(val);
+        }
+      });
+    });
     if (this.isLogin) {
       this.setStep('downloading');
       this.downloadToast(); // Begin downloading
@@ -126,23 +150,6 @@ export default {
       this.redirect({ target: 'List' });
     }
     this.footer_data.toastList = this.list;
-    /*
-    memberApi.getMemberForm().then((resp) => {
-      Object.values(resp.details).forEach((val) => {
-        const manualElements = {
-          // Exclude processing of these
-          name1: true,
-          name2: true,
-          email: true,
-          login_pwd: true,
-        };
-
-        if (!manualElements[val.key_name]) {
-          this.formDef.push(val);
-        }
-      });
-    });
-    */
   },
   computed: {
     noimage_vertical() {
@@ -182,6 +189,9 @@ export default {
       if (this.err) {
         this.error(''); // Clear error
       }
+    },
+    onUpdateField({ key, value }) {
+      this.customFields[key] = value;
     },
   },
   watch: {

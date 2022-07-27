@@ -62,31 +62,14 @@
               </p>
             </div>
           </div>
-          <div
-            :class="[
-              'docdog-form__item',
-              { 'docdog-form__item--error': validated.company_nm === false },
-              { 'docdog-form__item--success': validated.company_nm === true },
-            ]"
-          >
-            <label for="company_nm" class="docdog-form__item__title">
-              会社名
-              <span class="docdog-form__item__required">（必須）</span>
-            </label>
-            <input
-              name="company_nm"
-              type="text"
-              id="company_nm"
-              placeholder=""
-              :value="company_nm"
-              @input="updateField('company_nm', $event)"
-              v-on:focusout="updateField('company_nm', $event)"
-              required
-            />
-            <p class="docdog-form__item--error__msg">
-              <span v-if="validated.company_nm === false">{{ err || '必須項目です' }}</span>
-            </p>
-          </div>
+          <FormElement
+            v-for="el in formDef"
+            :el="el"
+            :class="['docdog-form__item', err_fields[el.key_name] ? 'docdog-form__item--error' : '']"
+            :validErrMsg="errByField[el.key_name]"
+            v-model="customFields[el.key_name]"
+            @update:modelValue="onCustomFieldUpdate(el.key_name, $event)"
+          />
           <div class="docdog-form__button">
             <button
               type="button"
@@ -128,10 +111,13 @@
 import FormPolicy from '@/components/app2/FormPolicy.vue';
 import memberApi from '@/api/member';
 import loginApi from '@/api/login';
+import FormElement from '@/components/common/form_elements/FormElement.vue';
 
 export default {
+  emits: ['update:name1', 'update:name2', 'error', 'prev', 'next', 'onLogin', 'updateField', 'resetView'],
   components: {
     FormPolicy,
+    FormElement,
   },
   props: {
     email: {
@@ -146,15 +132,19 @@ export default {
       type: String,
       default: () => '',
     },
-    company_nm: {
-      type: String,
-      default: () => '',
-    },
     err: {
       type: [String, Array],
       default: () => [],
     },
     htmlParts: {
+      type: Object,
+      default: () => ({}),
+    },
+    formDef: {
+      type: Object,
+      default: () => ({}),
+    },
+    initFields: {
       type: Object,
       default: () => ({}),
     },
@@ -167,24 +157,34 @@ export default {
     if (this.name2) {
       this.validated.name2 = true;
     }
-    if (this.company_nm) {
-      this.validated.company_nm = true;
+    for (const key in this.initFields) {
+      this.customFields[key] = this.initFields[key];
     }
   },
   data() {
     return {
       updating: false, // To avoid double clicks
+      customFields: {},
       validated: {
         name1: null,
         name2: null,
-        company_nm: null,
       },
+      errByField: {},
     };
   },
-  emits: ['update:name1', 'update:name2', 'error', 'update:company_nm', 'prev', 'next', 'onLogin'],
   computed: {
     all_valid() {
-      return this.validated.name1 && this.validated.name2 && this.validated.company_nm;
+      return !!(
+        this.validated.name1 &&
+        this.validated.name2 &&
+        this.formDef.reduce((carry, item) => {
+          return (
+            carry &&
+            (!((item.limit_item && item.limit_item.required) || item.required === 2) || // Either the item is not required
+              (this.customFields[item.key_name] != null && this.customFields[item.key_name] != '')) // Or it is required AND has a value
+          );
+        }, true)
+      );
     },
     err_fields() {
       if (this.err) {
@@ -202,41 +202,43 @@ export default {
       return {};
     },
     err_msg() {
-      return this.err.map((err) => {
-        if (err) {
-          const { field, code } = err;
-          let translatedField = 'データ';
-          let tranlatedProblem = '不正';
-          const fieldNames = this.formDef.reduce((carry, item) => {
-            return {
-              ...carry,
-              [item.key_name]: item.name,
-            };
-          }, {});
-          if (fieldNames[field]) {
-            translatedField = fieldNames[field];
-          } else {
-            switch (field) {
-              case 'email':
-                translatedField = 'メールアドレス';
-                break;
+      return this.err
+        ? this.err.map((err) => {
+            if (err) {
+              const { field, code } = err;
+              let translatedField = 'データ';
+              let tranlatedProblem = '不正';
+              const fieldNames = this.formDef.reduce((carry, item) => {
+                return {
+                  ...carry,
+                  [item.key_name]: item.name,
+                };
+              }, {});
+              if (fieldNames[field]) {
+                translatedField = fieldNames[field];
+              } else {
+                switch (field) {
+                  case 'email':
+                    translatedField = 'メールアドレス';
+                    break;
+                }
+              }
+              switch (code) {
+                case 'invalid':
+                  tranlatedProblem = '不正';
+                  break;
+                case 'required':
+                  tranlatedProblem = '必須';
+                  break;
+              }
+              if (translatedField && tranlatedProblem) {
+                return translatedField + 'が' + tranlatedProblem + 'です';
+              } else {
+                return 'エラーが発生しました。';
+              }
             }
-          }
-          switch (code) {
-            case 'invalid':
-              tranlatedProblem = '不正';
-              break;
-            case 'required':
-              tranlatedProblem = '必須';
-              break;
-          }
-          if (translatedField && tranlatedProblem) {
-            return translatedField + 'が' + tranlatedProblem + 'です';
-          } else {
-            return 'エラーが発生しました。';
-          }
-        }
-      });
+          })
+        : '';
     },
   },
   methods: {
@@ -256,6 +258,7 @@ export default {
     },
     registerMember() {
       if (!this.updating) {
+        this.errByField = {};
         this.updating = true;
         memberApi
           .doSignUp({
@@ -263,6 +266,7 @@ export default {
             name1: this.name1,
             name2: this.name2,
             login_pwd: 'qwerty123', // TODO change
+            ...this.customFields,
           })
           .then((resp) => {
             loginApi
@@ -289,16 +293,32 @@ export default {
       if (!Array.isArray(errors)) {
         errors = [errors];
       }
+      let anyErrors = false;
       errors.forEach((err) => {
-        if (err.field) {
-          if (err.field == 'email') {
+        let errField = err.field ? err.field : null;
+        const idxOfArrow = err.field.indexOf('->');
+        if (err.field && idxOfArrow !== -1) {
+          // Invalid link's field is like this : 'url->properties:url'
+          errField = err.field.substring(0, idxOfArrow);
+        }
+        if (errField) {
+          if (!anyErrors) anyErrors = true;
+          if (errField == 'email') {
             // We emit error only for email now (all others can be handled within this component)
             this.$emit('error', err.message);
           } else {
-            this.validated[err.field] = false;
+            this.errByField[errField] = err.message;
+            this.validated[errField] = false;
           }
         }
       });
+      if (anyErrors) {
+        this.$emit('resetView');
+      }
+    },
+    onCustomFieldUpdate(key, value) {
+      delete this.errByField[key]; // Reset error after input:w
+      this.$emit('updateField', { key, value });
     },
   },
 };

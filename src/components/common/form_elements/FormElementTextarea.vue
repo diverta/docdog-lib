@@ -1,5 +1,5 @@
 <template>
-  <textarea :value="value" @input="updateValue($event.target.value)" />
+  <textarea :value="value" @input="updateValue($event.target.value)"  @focusout="validate" />
 </template>
 
 <script>

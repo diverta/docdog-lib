@@ -64,7 +64,7 @@ import loginApi from '@/api/login';
 import AlertSuccess from '@/components/app1/AlertSuccess.vue';
 import AlertError from '@/components/app1/AlertError.vue';
 import FormPolicy from '@/components/app1/FormPolicy.vue';
-import FormElement from '@/components/app1/form_elements/FormElement.vue';
+import FormElement from '@/components/common/form_elements/FormElement.vue';
 
 export default {
   extends: AbstractPage,

@@ -1,4 +1,4 @@
-<template>モジュールID : <input type="number" v-model.int="value.module_id" @input="updateValue" /></template>
+<template>モジュールID : <input type="number" v-if="value" v-model.int="value.module_id" @input="updateValue" /></template>
 
 <script>
 import AbstractFormElement from './AbstractFormElement.vue';

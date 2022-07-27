@@ -1,5 +1,6 @@
 <template>
   <component
+    v-if="showModal"
     :is="current_page_comp"
     v-bind="comp_props"
     v-model:footer_data="footer_data"
@@ -49,6 +50,10 @@ export default {
     urlParams: {
       type: Object,
       default: () => ({}),
+    },
+    showModal: {
+      type: Boolean,
+      default: () => false,
     },
   },
   data() {

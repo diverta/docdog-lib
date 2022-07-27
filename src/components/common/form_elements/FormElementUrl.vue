@@ -1,6 +1,6 @@
 <template>
-  タイトル: <input type="text" v-model="value.title" @input="updateValue($event, 'title')" /> リンク:
-  <input type="text" v-model="value.url" @input="updateValue($event, 'url')" />
+  タイトル: <input type="text" v-if="value" v-model="value.title" @input="updateValue($event, 'title')" /> リンク:
+  <input type="text" v-if="value" v-model="value.url" @input="updateValue($event, 'url')" @focusout="validate" />
 </template>
 
 <script>

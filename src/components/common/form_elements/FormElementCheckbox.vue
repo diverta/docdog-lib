@@ -2,12 +2,12 @@
   <template v-for="(opt, idx) in optionsArr">
     <div class="docdog-form__toggle">
       <input
-        type="radio"
-        v-model="value"
-        :value="opt.val"
-        @input="updateValue($event.target.value)"
+        type="checkbox"
+        :value="opt.value"
         :id="el.key_name + idx"
         :name="el.key_name"
+        v-model="value"
+        @change="updateValue"
       />
       <label :for="el.key_name + idx">{{ opt.name }}</label>
     </div>
@@ -21,12 +21,15 @@ export default {
   extends: AbstractFormElement,
   methods: {
     getDefaultValue() {
-      return '';
+      return [];
     },
     setValue(val) {
-      if (val) {
-        this.value = val.key;
+      if (Array.isArray(val)) {
+        this.value = val.map((v) => (typeof v === 'object' ? v.key : v));
       }
+    },
+    updateValue() {
+      this.updateValueParent(this.value.sort());
     },
   },
 };

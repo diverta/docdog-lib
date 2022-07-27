@@ -1,9 +1,19 @@
 <template>
-  <div>
-    <label :for="el.key_name" class="docdog-form__item__title"
-      >{{ el.name }}<span v-if="isRequired" class="docdog-form__item__title__badge">必須</span></label
-    >
-    <component :is="elInstance" :el="el" :initValue="processedModelValue" @update="processedModelValue = $event" />
+  <div :class="[{ 'docdog-form__item--error': !isValidFinal }]">
+    <label :for="el.key_name" class="docdog-form__item__title">
+      {{ el.name }}
+      <span v-if="isRequired" class="docdog-form__item__title__badge">必須</span>
+    </label>
+    <component
+      :is="elInstance"
+      :el="el"
+      :initValue="processedModelValue"
+      @update="processedModelValue = $event"
+      @validate="validateValue()"
+    />
+    <p v-if="!isValidFinal" class="docdog-form__item--error__msg">
+      <span> {{ validErrMsgFinal }}</span>
+    </p>
   </div>
 </template>
 
@@ -46,8 +56,23 @@ export default {
       default: () => null,
       required: true,
     },
+    validErrMsg: {
+      type: String,
+      default: () => '',
+    },
+  },
+  data() {
+    return {
+      isValid: null,
+    };
   },
   computed: {
+    isValidFinal() {
+      return this.isValid !== false && !this.validErrMsg;
+    },
+    validErrMsgFinal() {
+      return this.validErrMsg ? '項目が不正です' : '必須項目です';
+    },
     isRequired() {
       return (this.el.limit_item && this.el.limit_item.required) || this.el.required === 2 || false;
     },
@@ -98,7 +123,25 @@ export default {
       },
       set(val) {
         this.$emit('update:modelValue', val);
+        this.$nextTick(function () {
+          // Next tick delay is required because validation happens before the value is actually updated
+          this.validateValue();
+        });
       },
+    },
+  },
+  methods: {
+    validateValue() {
+      if (this.isRequired) {
+        if (this.processedModelValue == null || this.processedModelValue == '') {
+          this.isValid = false;
+        } else {
+          this.isValid = true;
+        }
+      } else {
+        // If not required then always valid (for now)
+        this.isValid = true;
+      }
     },
   },
 };

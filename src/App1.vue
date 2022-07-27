@@ -12,6 +12,7 @@
     </template>
     <PageController
       v-model:current_page="current_page"
+      :showModal="showModal"
       :node_params="current_node_params"
       :toastIds="toastIds"
       :urlParams="urlParams"

@@ -9,6 +9,7 @@
     selectText="選択"
     cancelText="取消"
     :autoApply="true"
+    @blur="validate"
   />
 </template>
 

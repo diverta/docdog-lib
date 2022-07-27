@@ -1,5 +1,5 @@
 <template>
-  <input type="number" :value="value" @input="updateValue" />
+  <input type="number" :value="value" @input="updateValue" @focusout="validate" />
 </template>
 
 <script>

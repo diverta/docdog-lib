@@ -12,6 +12,7 @@
     </template>
     <PageController
       v-model:current_page="current_page"
+      :showModal="showModal"
       :node_params="current_node_params"
       :toastIds="toastIds"
       :htmlParts="htmlParts"
@@ -45,6 +46,7 @@
     ref="toast"
   />
   <Hubspot
+    v-if="showModal"
     :hubId="docdogConfig.hubId ? '' + docdogConfig.hubId : ''"
     :currentPage="current_page"
     :profile="userProfile"
@@ -210,7 +212,6 @@ export default {
         this.redirect({ target, params }, false); // Initial page load, no need to add history
       }
     }
-    this.getHTMLParts();
     const toastInit = localStorage.getItem(this.toast_storage_key);
     if (toastInit) {
       this.toastList = JSON.parse(toastInit);
@@ -469,6 +470,7 @@ export default {
     redirect(pageData, writeHist = true) {
       // Request for redirection external to PageController
       this.showModal = true;
+      this.getHTMLParts();
       this.writeViewport();
       this.hideToast = false; // Each page determines its own logic of displaying/hiding the toast
       this.$refs['ctrl'].onRedirect(pageData, writeHist);
@@ -539,11 +541,13 @@ export default {
       }
     },
     getHTMLParts() {
-      partsApi.getHTMLParts().then((resp) => {
-        if (resp.list && resp.list.length == 1) {
-          this.htmlParts = resp.list[0];
-        }
-      });
+      if (Object.keys(this.htmlParts).length == 0) {
+        partsApi.getHTMLParts().then((resp) => {
+          if (resp.list && resp.list.length == 1) {
+            this.htmlParts = resp.list[0];
+          }
+        });
+      }
     },
     onModalScroll() {
       this.$refs.toast.onModalScroll();
