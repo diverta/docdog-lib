@@ -8,7 +8,7 @@
               メールアドレス
               <span class="docdog-form__item__required">（必須）</span>
             </label>
-            <input name="email" type="text" id="email" placeholder="" required :value="email" disabled />
+            <input name="email" type="email" id="email" placeholder="you@example.co.jp" required :value="email" disabled />
           </div>
           <div class="docdog-form__item docdog-form__item--col-2">
             <div

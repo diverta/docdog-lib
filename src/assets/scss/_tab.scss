@@ -18,7 +18,7 @@
   // list
   &__list {
     display: flex;
-    border-bottom: 1px solid $color-disabled;
+    border-bottom: 1px solid darken($color-border, 4%);
     white-space: nowrap;
     @media screen and (min-width: 768px) {
       flex-wrap: wrap;

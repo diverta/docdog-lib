@@ -14,14 +14,14 @@
                 <div class="docdog-form__item">
                   <label for="name" class="docdog-form__item__title">
                     名前
-                    <span class="docdog-form__item__title__badge">必須</span></label
+                    <span class="docdog-form__item__required">（必須）</span></label
                   >
                   <input name="name" type="text" id="name" v-model="nameInput" placeholder="" required />
                 </div>
               </div>
               <div :class="['docdog-form__item', { 'docdog-form__item--error': err_fields['email'] != null }]">
                 <label for="email" class="docdog-form__item__title"
-                  >メールアドレス<span class="docdog-form__item__title__badge">必須</span></label
+                  >メールアドレス<span class="docdog-form__item__required">（必須）</span></label
                 >
                 <input name="email" type="text" id="email" placeholder="" v-model="email" required />
               </div>

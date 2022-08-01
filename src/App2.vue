@@ -45,6 +45,7 @@
     @toggleExpand="onToastExpand"
     ref="toast"
   />
+  <ExternalPopup v-if="docdogConfig.use_float_button" @redirect="redirect" />
   <Hubspot
     v-if="showModal"
     :hubId="docdogConfig.hubId ? '' + docdogConfig.hubId : ''"
@@ -61,6 +62,7 @@ import { v4 as uuidv4 } from 'uuid';
 import loginApi from '@/api/login';
 import partsApi from '@/api/parts';
 import Toast from './components/app2/Toast.vue';
+import ExternalPopup from './components/app2/ExternalPopup.vue';
 import Hubspot from './components/common/Hubspot.vue';
 
 export default {
@@ -69,6 +71,7 @@ export default {
     ModalHeader,
     PageController,
     Toast,
+    ExternalPopup,
     Hubspot,
   },
   data() {

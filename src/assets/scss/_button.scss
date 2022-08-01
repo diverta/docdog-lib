@@ -41,9 +41,9 @@
     }
   }
   &:disabled {
-    background-color: $color-disabled;
-    color: $color-gray !important;
-    svg { fill: $color-gray; }
+    background-color: lighten($color-disabled, 28%);
+    color: $color-disabled !important;
+    svg { fill: $color-disabled; }
   }
 
   // type
@@ -115,7 +115,7 @@
       border: 1px solid $color-border !important;
       background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center lighten($color-border, 8%) !important;
       background-size: 20px;
-      color: lighten($color-gray, 8%) !important;
+      color: $color-gray !important;
       svg { fill: lighten($color-gray, 8%); }
       &:hover {
         background-color: lighten($color-border, 4%) !important;
@@ -168,6 +168,12 @@
     &:hover {
       background-color: darken($color-primary, 8%);
     }
+  }
+  &--floating--wide {
+    @extend .docdog-button--floating;
+    width: auto;
+    padding: $spacing-md $spacing-lg;
+    color: #fff;
   }
   &--fixed--sp {
     @media screen and (max-width: 767px) {
