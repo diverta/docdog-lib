@@ -45,7 +45,7 @@
     @toggleExpand="onToastExpand"
     ref="toast"
   />
-  <ExternalPopup v-if="docdogConfig.use_float_button" @redirect="redirect" />
+  <ExternalPopup v-if="docdogConfig.use_float_button" @redirect="redirect" v-show="!showModal" />
   <Hubspot
     v-if="showModal"
     :hubId="docdogConfig.hubId ? '' + docdogConfig.hubId : ''"
