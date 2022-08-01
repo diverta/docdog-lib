@@ -2,7 +2,7 @@
   <div :class="[{ 'docdog-form__item--error': !isValidFinal }]">
     <label :for="el.key_name" class="docdog-form__item__title">
       {{ el.name }}
-      <span v-if="isRequired" class="docdog-form__item__title__badge">必須</span>
+      <span v-if="isRequired" class="docdog-form__item__required">（必須）</span>
     </label>
     <component
       :is="elInstance"
