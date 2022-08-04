@@ -1,9 +1,9 @@
 <template>
-  <div class="docdog-loader">
-    <div class="docdog-loader__message">
+  <div class="kuroco-loader">
+    <div class="kuroco-loader__message">
       {{ loadingMessage }}
     </div>
-    <div class="docdog-loader__icon"></div>
+    <div class="kuroco-loader__icon"></div>
   </div>
 </template>
 

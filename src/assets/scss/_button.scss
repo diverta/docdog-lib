@@ -1,74 +1,78 @@
-.docdog-button {
+.kuroco-button {
   display: flex !important;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 50px;
-  padding: $spacing-lg;
-  border-radius: $border-radius-sm;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-sm);
   text-align: center !important;
   text-decoration: none !important;
-  transition: $transition;
+  transition: var(--transition);
   // color
   &--primary {
-    background-color: $color-primary;
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-primary);
     color: #fff !important;
     svg { fill: #fff; }
     &:hover {
-      background-color: darken($color-primary, 8%);
+      @extend %hover;
     }
   }
   &--secondary {
-    background-color: $color-secondary;
+    background-color: var(--color-secondary);
     color: #fff !important;
     &:hover {
-      background-color: darken($color-secondary, 8%);
+      @extend %hover;
     }
   }
   &--white {
-    border: 1px solid $color-border !important;
+    border: 1px solid var(--color-border) !important;
     background-color: #fff;
-    color: $color-primary;
+    color: var(--color-primary);
     &:hover { 
-      background-color: lighten($color-border, 8%);
+      @extend %hover;
     }
   }
   &--danger {
-    background-color: $color-danger;
+    background-color: var(--color-danger);
     color: #fff !important;
     &:hover {
-      background-color: darken($color-danger, 8%);
+      @extend %hover;
     }
   }
   &:disabled {
-    background-color: lighten($color-disabled, 28%);
-    color: $color-disabled !important;
-    svg { fill: $color-disabled; }
+    background-color: var(--color-disabled);
+    color: var(--color-gray) !important;
+    svg { fill: var(--color-gray) !important; }
   }
 
   // type
   &--text {
-    padding: $spacing-x-sm;
+    padding: var(--spacing-x-sm);
     background-color: transparent;
-    color: $color-link;
+    color: var(--color-primary);
     line-height: 1.5 !important;
     & + & {
-      margin-top: $spacing-x-sm;
+      margin-top: var(--spacing-x-sm);
     }
+    svg { fill: var(--color-primary); }
     &:hover { 
       background-color: transparent;
     }
   }
 
   &--add-list {
-    @extend .docdog-button;
-    @extend .docdog-button--primary;
-    padding: $spacing-md;
-    background: url("/src/assets/image/icon-add-list.svg") no-repeat right $spacing-md center $color-primary;
+    @extend .kuroco-button;
+    @extend .kuroco-button--primary;
+    padding: var(--spacing-md);
+    background-image: url("/src/assets/image/icon-add-list.svg");
+    background-repeat:  no-repeat;
+    background-position:  right var(--spacing-md) center;
     background-size: 20px;
-    transition: border-color $transition, background-color $transition, color $transition;
-    .docdog-card--media .docdog-card__foot &,
-    .docdog-article__title & {
+    transition: border-color var(--transition), background-color var(--transition), color var(--transition);
+    .kuroco-card--media .kuroco-card__foot &,
+    .kuroco-article__title & {
       font-size: 13px;
       @media screen and (min-width: 768px) {
         flex: 0 0 auto;
@@ -77,23 +81,23 @@
         height: 45px !important;
       }
     }
-    .docdog-article__title & {
+    .kuroco-article__title & {
       @media screen and (min-width: 768px) {
-        margin-left: $spacing-lg;
+        margin-left: var(--spacing-lg);
       }
       @media screen and (max-width: 767px) {
         height: 45px !important;
       }
     }
-    .docdog-card--media .docdog-card__foot & {
+    .kuroco-card--media .kuroco-card__foot & {
       justify-content: flex-start;
       text-align: left !important;
       @media screen and (max-width: 1280px) {
-        .docdog-modal__open-sidebar & {
+        .kuroco-modal__open-sidebar & {
           flex: 1 1 auto;
           width: auto !important;
           height: auto !important;
-          padding-right: $spacing-x-lg;
+          padding-right: var(--spacing-x-lg);
           font-size: 12px;
         }
       }
@@ -101,51 +105,64 @@
         flex: 1 1 auto;
         width: auto !important;
         height: auto !important;
-        padding-right: $spacing-x-lg;
+        padding-right: var(--spacing-x-lg);
         font-size: 12px;
       }
       @media screen and (max-width: 375px) {
-        padding-top: $spacing-sm;
-        padding-bottom: $spacing-sm;
+        padding-top: var(--spacing-sm);
+        padding-bottom: var(--spacing-sm);
       }
     }
     &--remove {
-      @extend .docdog-button--add-list;
+      @extend .kuroco-button--add-list;
       justify-content: center;
-      border: 1px solid $color-border !important;
-      background: url("/src/assets/image/icon-check-list.svg") no-repeat right $spacing-md center lighten($color-border, 8%) !important;
+      border: 1px solid var(--color-border) !important;
+      background: url("/src/assets/image/icon-check-list.svg") no-repeat right var(--spacing-md) center var(--color-border-light) !important;
       background-size: 20px;
-      color: $color-gray !important;
-      svg { fill: lighten($color-gray, 8%); }
+      color: var(--color-gray) !important;
+      svg { fill: var(--color-gray); }
       &:hover {
-        background-color: lighten($color-border, 4%) !important;
+        @extend %hover;
       }
     }
   }
   &--download {
-    @extend .docdog-button;
-    @extend .docdog-button--primary;
+    @extend .kuroco-button;
+    position: relative;
     justify-content: space-between;
-    padding: $spacing-md;
+    padding: var(--spacing-md);
+    background-color: transparent;
     font-size: 13px !important;
-    span { flex: 1 1 auto; }
-    .docdog-sidebar__foot & {
+    z-index: 1;
+    span { 
+      flex: 1 1 auto;
+      color: #fff;
+    }
+    &::before {
+      @extend .kuroco-button;
+      @extend .kuroco-button--primary;
+      @extend %spread-background;
+      .kuroco-sidebar--fixed & {
+        animation: button-bounce calc(var(--transition) * 4);
+      }
+    }
+    .kuroco-sidebar__foot & {
       justify-content: flex-start;
     }
   }
   &--del {
     display: flex;
     align-items: center;
-    padding: $spacing-x-sm;
-    border-radius: $border-radius-sm;
-    background-color: $color-gray;
+    padding: var(--spacing-x-sm);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-gray);
     font-size: 13px;
-    transition: $transition;
+    transition: var(--transition);
     @media screen and (max-width: 767px) {
       font-size: 12px;
     }
     &:hover {
-      background-color: lighten($color-gray, 8%);
+      @extend %hover;
     }
     span { 
       visibility: hidden;
@@ -156,23 +173,21 @@
     align-items: center;
     justify-content: center;
     position: fixed;
-    right: $spacing-lg;
-    bottom: $spacing-lg;
     width: 60px;
     height: 60px;
     border-radius: 30px;
-    background: $color-primary;
-    box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
-    transition: $transition;
-    z-index: 11200;
+    background: var(--color-primary);
+    box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
+    transition: var(--transition);
+    z-index: calc(var(--z-index) + 10);
     &:hover {
-      background-color: darken($color-primary, 8%);
+      @extend %hover;
     }
   }
   &--floating--wide {
-    @extend .docdog-button--floating;
+    @extend .kuroco-button--floating;
     width: auto;
-    padding: $spacing-md $spacing-lg;
+    padding: var(--spacing-md) var(--spacing-lg);
     color: #fff;
   }
   &--fixed--sp {
@@ -181,8 +196,8 @@
       position: fixed;
       bottom: 0;
       right: 0;
-      padding: $spacing-sm $spacing-lg; 
-      box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+      padding: var(--spacing-sm) var(--spacing-lg); 
+      box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
       background-color: #fff;
     }
   }

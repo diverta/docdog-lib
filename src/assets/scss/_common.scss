@@ -1,4 +1,4 @@
-.docdog {
+.kuroco {
   color: #222;
   font-size: 14px;
   font-family: sans-serif;
@@ -20,18 +20,18 @@
     font-family: inherit;
     line-height: inherit;
     &:not(:first-child) {
-      margin: $spacing-md 0 0;
+      margin: var(--spacing-md) 0 0;
     }
     &:not(:last-child) {
-      margin: 0 0 $spacing-md;
+      margin: 0 0 var(--spacing-md);
     }
     &:first-child:last-child,
     &:not(:first-child):not(:last-child) {
-      margin: $spacing-md 0;
+      margin: var(--spacing-md) 0;
     }
     a {
       display: inline-block;
-      padding: 0 $spacing-x-sm;
+      padding: 0 var(--spacing-x-sm);
       text-decoration: underline;
     }
   }
@@ -52,7 +52,7 @@
     line-height: inherit;
   }
   a {
-    color: $color-link;
+    color: var(--color-primary);
     font-size: inherit;
     font-family: inherit;
     line-height: inherit;
@@ -68,17 +68,17 @@
     cursor: pointer;
     &:disabled {
       pointer-events: none;
-      color: $color-gray;
+      color: var(--color-gray);
     }
   }
   strong { font-weight: bold; }
   time {
-    color: $color-gray;
+    color: var(--color-gray);
     font-size: 13px;
     font-family: inherit;
   }
 }
-.docdog--toggle--open,
-.docdog--toggle--open * {
-  z-index: 99999 !important;
+.kuroco--toggle--open,
+.kuroco--toggle--open * {
+  z-index: var(--z-index) !important;
 }

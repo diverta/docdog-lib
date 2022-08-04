@@ -8,7 +8,7 @@
         @close="closeModal"
         @logout="logout"
       />
-      <header v-else v-html="customHeaderHtml" class="docdog-modal__head"></header>
+      <header v-else v-html="customHeaderHtml" class="kuroco-modal__head"></header>
     </template>
     <PageController
       v-model:current_page="current_page"
@@ -478,5 +478,28 @@ export default {
 </script>
 
 <style lang="scss">
-@import './src/assets/scss/docdog.scss';
+:root {
+  --color-primary: #1371ff;
+  --color-secondary: #5d6775;
+  --color-gray: #565758;
+  --color-background: #f5f6f8;
+  --color-border-light: #dde0e7;
+  --color-border: #d1d6df;
+  --color-disabled: #dcdcdc;
+  --color-danger: #dc0000;
+  --color-success: #05a87c;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --spacing-x-sm: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 24px;
+  --spacing-x-lg: 36px;
+  --spacing-xx-lg: 48px;
+  --spacing-xxx-lg: 60px;
+  --z-index: 10000;
+  --transition: 0.2s;
+}
+@import './src/assets/scss/kuroco.scss';
 </style>

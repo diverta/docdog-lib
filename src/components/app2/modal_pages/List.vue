@@ -1,14 +1,14 @@
 <template>
   <!-- Modal Content -->
-  <div class="docdog-container--middle">
-    <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-html="htmlParts.ext_1" />
-    <div class="docdog-modal__body__section">
-      <nav class="docdog-tab__list__outer">
-        <ul role="tablist" class="docdog-tab__list">
+  <div class="kuroco-container--middle">
+    <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section" v-html="htmlParts.ext_1" />
+    <div class="kuroco-modal__body__section">
+      <nav class="kuroco-tab__list__outer">
+        <ul role="tablist" class="kuroco-tab__list">
           <li role="tab">
             <button
               type="button"
-              :class="['docdog-tab', { 'docdog-tab--active': category == null }]"
+              :class="['kuroco-tab', { 'kuroco-tab--active': category == null }]"
               @click="changeCategory(null)"
             >
               すべて
@@ -18,15 +18,15 @@
             role="tab"
             v-for="current_category in all_categories"
             @click="changeCategory(current_category.topics_category_id)"
-            :class="{ 'docdog-tab--active': current_category.topics_category_id == category }"
+            :class="{ 'kuroco-tab--active': current_category.topics_category_id == category }"
           >
-            <button type="button" class="docdog-tab">{{ current_category.category_nm }}</button>
+            <button type="button" class="kuroco-tab">{{ current_category.category_nm }}</button>
           </li>
         </ul>
       </nav>
     </div>
-    <div class="docdog-modal__body__section">
-      <ul class="docdog-card--media__list" v-if="list.length > 0">
+    <div class="kuroco-modal__body__section">
+      <ul class="kuroco-card--media__list" v-if="list.length > 0">
         <li v-for="doc in list">
           <CardDocs
             :data="doc"
@@ -40,8 +40,8 @@
           />
         </li>
       </ul>
-      <nav class="docdog-pagination">
-        <ul class="docdog-pagination__list">
+      <nav class="kuroco-pagination">
+        <ul class="kuroco-pagination__list">
           <li>
             <button type="button" aria-label="Previous" :disabled="pageID == 1" @click="changePage(pageID - 1)">
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
@@ -51,11 +51,11 @@
             </button>
           </li>
           <li v-for="num in pagedButtons">
-            <span v-if="Number.isInteger(num) && num == pageInfo.pageNo" class="docdog-pagination__item--active">{{
+            <span v-if="Number.isInteger(num) && num == pageInfo.pageNo" class="kuroco-pagination__item--active">{{
               num
             }}</span>
             <button v-else-if="Number.isInteger(num)" type="button" @click="changePage(num)">{{ num }}</button>
-            <span v-else class="docdog-pagination__item--ellipses">{{ num }}</span>
+            <span v-else class="kuroco-pagination__item--ellipses">{{ num }}</span>
           </li>
           <li>
             <button

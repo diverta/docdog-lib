@@ -1,6 +1,12 @@
 <template>
-  <div class="docdog docdog--toggle--open">
-    <button type="button" class="docdog-button--floating--wide" @click="redirect({ target: 'List' })">
+  <div class="kuroco kuroco--toggle--open">
+    <!-- TODO: Position style -->
+    <button
+      type="button"
+      class="kuroco-button--floating--wide"
+      @click="redirect({ target: 'List' })"
+      style="bottom: 24px; right: 24px"
+    >
       資料ダウンロード
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path

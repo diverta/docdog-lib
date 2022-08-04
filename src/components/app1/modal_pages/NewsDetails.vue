@@ -1,18 +1,18 @@
 <template>
   <!-- Modal Content -->
-  <div class="docdog-container--middle">
-    <article class="docdog-modal__body__section">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+  <div class="kuroco-container--middle">
+    <article class="kuroco-modal__body__section">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>{{ data.subject }}</h1>
       </div>
-      <div class="docdog-modal__body__section">
-        <div class="docdog-article" v-html="data.wysiwyg"></div>
+      <div class="kuroco-modal__body__section">
+        <div class="kuroco-article" v-html="data.wysiwyg"></div>
       </div>
     </article>
-    <nav class="docdog-modal__body__section">
+    <nav class="kuroco-modal__body__section">
       <button
         type="button"
-        class="docdog-button docdog-button--white docdog-button--wide"
+        class="kuroco-button kuroco-button--white kuroco-button--wide"
         @click.prevent="redirect({ target: 'Mypage' })"
       >
         マイページに戻る

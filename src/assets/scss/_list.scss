@@ -1,23 +1,23 @@
-.docdog-list {
-  margin: $spacing-md 0 !important;
-  border-top: 1px solid lighten($color-border, 4%);
+.kuroco-list {
+  margin: var(--spacing-md) 0 !important;
+  border-top: 1px solid var(--color-border);
   &__item {
-    border-bottom: 1px solid lighten($color-border, 4%);
+    border-bottom: 1px solid var(--color-border);
     &__link {
       display: flex;
       align-items: center;
       width: 100%;
-      border-radius: $border-radius-sm;
-      padding: $spacing-sm;
+      border-radius: var(--border-radius-sm);
+      padding: var(--spacing-sm);
       background-color: #fff;
       @media screen and (max-width: 767px) {
         flex-wrap: wrap;
       }
       &:hover {
-        background-color: lighten($color-border, 8%);
+        background-color: var(--color-border-light);
       }
       time {
-        margin-right: $spacing-md;
+        margin-right: var(--spacing-md);
       }
     }
     &__title {
@@ -25,13 +25,13 @@
       @media screen and (max-width: 767px) {
         flex: 1 1 100%;
         text-align: left;
-        .docdog-badge + & {
-          margin-top: $spacing-sm;
+        .kuroco-badge + & {
+          margin-top: var(--spacing-sm);
         }
       }
       @media screen and (min-width: 768px) {
-        .docdog-badge + & {
-          margin-left: $spacing-md;
+        .kuroco-badge + & {
+          margin-left: var(--spacing-md);
         }
       }
     }

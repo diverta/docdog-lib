@@ -1,12 +1,12 @@
-.docdog-container {
+.kuroco-container {
   // color
   &--white {
-    padding: $spacing-x-lg;
-    border-radius: $border-radius-md;
-    box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.1);
+    padding: var(--spacing-x-lg);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.1);
     background-color: #fff;
     @media screen and (max-width: 767px) {
-      padding: $spacing-lg;
+      padding: var(--spacing-lg);
     }
   }
   // size
@@ -38,7 +38,7 @@
         margin: 0 auto 0 0;
       }
       @media screen and (max-width: 767px) {
-        margin-bottom: $spacing-lg;
+        margin-bottom: var(--spacing-lg);
       }
     }
     &__main {

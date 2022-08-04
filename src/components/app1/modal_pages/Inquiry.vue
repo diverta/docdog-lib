@@ -1,39 +1,53 @@
 <template>
-  <div class="docdog-container--form">
+  <div class="kuroco-container--form">
     <AlertError v-if="err" :err="err_msg" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div class="docdog-container--white">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+    <div class="kuroco-container--white">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>お問い合わせ</h1>
       </div>
-      <div class="docdog-modal__body__section">
-        <div class="docdog-form__signup">
+      <div class="kuroco-modal__body__section">
+        <div class="kuroco-form__signup">
           <form>
             <template v-if="!isLogin">
-              <div :class="['docdog-form__item', { 'docdog-form__item--error': err_fields['name'] != null }]">
-                <div class="docdog-form__item">
-                  <label for="name" class="docdog-form__item__title">
-                    名前
-                    <span class="docdog-form__item__required">（必須）</span></label
-                  >
-                  <input name="name" type="text" id="name" v-model="nameInput" placeholder="" required />
+              <div class="kuroco-form__item">
+                <label for="name" class="kuroco-form__item__title">
+                  名前
+                  <span class="kuroco-form__item__required">（必須）</span></label
+                >
+                <div :class="[{ 'kuroco-form__item--error': err_fields['name'] != null }]">
+                  <input
+                    name="name"
+                    type="text"
+                    id="name"
+                    autocomplete="name"
+                    v-model="nameInput"
+                    placeholder=""
+                    required
+                  />
                 </div>
               </div>
-              <div :class="['docdog-form__item', { 'docdog-form__item--error': err_fields['email'] != null }]">
-                <label for="email" class="docdog-form__item__title"
-                  >メールアドレス<span class="docdog-form__item__required">（必須）</span></label
+              <div class="kuroco-form__item">
+                <label for="email" class="kuroco-form__item__title"
+                  >メールアドレス<span class="kuroco-form__item__required">（必須）</span></label
                 >
-                <input name="email" type="text" id="email" placeholder="" v-model="email" required />
+                <div :class="{ 'kuroco-form__item--error': err_fields['email'] != null }">
+                  <input
+                    name="email"
+                    type="text"
+                    id="email"
+                    autocomplete="email"
+                    inputmode="url"
+                    placeholder=""
+                    v-model="email"
+                    required
+                  />
+                </div>
               </div>
             </template>
-            <FormElement
-              v-for="el in formDef"
-              :el="el"
-              :class="['docdog-form__item', { 'docdog-form__item--error': err_fields[el.key_name] != null }]"
-              v-model="customFields[el.key_name]"
-            />
-            <div class="docdog-form__button">
-              <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="send">送信する</button>
+            <FormElement v-for="el in formDef" :el="el" class="kuroco-form__item" v-model="customFields[el.key_name]" />
+            <div class="kuroco-form__button">
+              <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="send">送信する</button>
             </div>
           </form>
         </div>
@@ -72,7 +86,7 @@ export default {
       formDef: [],
       unsupportedTypes: [8, 10, 11],
       customFields: {},
-      errClass: 'docdog-form__item--error',
+      errClass: 'kuroco-form__item--error',
     };
   },
   computed: {

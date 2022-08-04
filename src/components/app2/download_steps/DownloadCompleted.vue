@@ -1,12 +1,12 @@
 <template>
   <section
-    class="docdog-modal__body__complete docdog-modal__body__section"
+    class="kuroco-modal__body__complete kuroco-modal__body__section"
     v-if="htmlParts.ext_2"
     v-html="htmlParts.ext_2"
   />
-  <section class="docdog-modal__body__section">
-    <h2 class="docdog-modal__body__heading docdog-u-pt-lg">あなたにおすすめのコンテンツ</h2>
-    <ul class="docdog-card--media__list" v-if="recommended_list.length > 0">
+  <section class="kuroco-modal__body__section">
+    <h2 class="kuroco-modal__body__heading kuroco-u-pt-lg">あなたにおすすめのコンテンツ</h2>
+    <ul class="kuroco-card--media__list" v-if="recommended_list.length > 0">
       <li v-for="doc in recommended_list">
         <CardDocs
           :data="doc"
@@ -21,7 +21,7 @@
     </ul>
     <button
       type="button"
-      class="docdog-button docdog-button--white docdog-u-mt-lg"
+      class="kuroco-button kuroco-button--white kuroco-u-mt-lg"
       @click.prevent="redirect({ target: 'List' })"
     >
       <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">

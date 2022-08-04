@@ -1,4 +1,4 @@
-.docdog-u {
+.kuroco-u {
 
   // breakpoint
   @media screen and (max-width: 767px) {
@@ -15,11 +15,11 @@
   // spacing
   &-ma {
     &-0 { margin: 0 !important; }
-    &-x-sm { margin: $spacing-x-sm !important; }
-    &-sm { margin: $spacing-sm !important; }
-    &-md { margin: $spacing-md !important; }
-    &-lg { margin: $spacing-lg !important; }
-    &-x-lg { margin: $spacing-x-lg !important; }
+    &-x-sm { margin: var(--spacing-x-sm) !important; }
+    &-sm { margin: var(--spacing-sm) !important; }
+    &-md { margin: var(--spacing-md) !important; }
+    &-lg { margin: var(--spacing-lg) !important; }
+    &-x-lg { margin: var(--spacing-x-lg) !important; }
   }
   &-my {
     &-0 { 
@@ -27,24 +27,24 @@
       margin-bottom: 0 !important;
     }
     &-x-sm { 
-      margin-top: $spacing-x-sm !important;
-      margin-bottom: $spacing-x-sm !important;
+      margin-top: var(--spacing-x-sm) !important;
+      margin-bottom: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      margin-top: $spacing-sm !important;
-      margin-bottom: $spacing-sm !important;
+      margin-top: var(--spacing-sm) !important;
+      margin-bottom: var(--spacing-sm) !important;
     }
     &-md { 
-      margin-top: $spacing-md !important;
-      margin-bottom: $spacing-md !important;
+      margin-top: var(--spacing-md) !important;
+      margin-bottom: var(--spacing-md) !important;
     }
     &-lg { 
-      margin-top: $spacing-lg !important;
-      margin-bottom: $spacing-lg !important;
+      margin-top: var(--spacing-lg) !important;
+      margin-bottom: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      margin-top: $spacing-x-lg !important;
-      margin-bottom: $spacing-x-lg !important;
+      margin-top: var(--spacing-x-lg) !important;
+      margin-bottom: var(--spacing-x-lg) !important;
     }
   }
   &-mx {
@@ -53,24 +53,24 @@
       margin-left: 0 !important;
     }
     &-x-sm { 
-      margin-right: $spacing-x-sm !important;
-      margin-left: $spacing-x-sm !important;
+      margin-right: var(--spacing-x-sm) !important;
+      margin-left: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      margin-right: $spacing-sm !important;
-      margin-left: $spacing-sm !important;
+      margin-right: var(--spacing-sm) !important;
+      margin-left: var(--spacing-sm) !important;
     }
     &-md { 
-      margin-right: $spacing-md !important;
-      margin-left: $spacing-md !important;
+      margin-right: var(--spacing-md) !important;
+      margin-left: var(--spacing-md) !important;
     }
     &-lg { 
-      margin-right: $spacing-lg !important;
-      margin-left: $spacing-lg !important;
+      margin-right: var(--spacing-lg) !important;
+      margin-left: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      margin-right: $spacing-x-lg !important;
-      margin-left: $spacing-x-lg !important;
+      margin-right: var(--spacing-x-lg) !important;
+      margin-left: var(--spacing-x-lg) !important;
     }
   }
   &-mt {
@@ -78,19 +78,19 @@
       margin-top: 0 !important;
     }
     &-x-sm { 
-      margin-top: $spacing-x-sm !important;
+      margin-top: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      margin-top: $spacing-sm !important;
+      margin-top: var(--spacing-sm) !important;
     }
     &-md { 
-      margin-top: $spacing-md !important;
+      margin-top: var(--spacing-md) !important;
     }
     &-lg { 
-      margin-top: $spacing-lg !important;
+      margin-top: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      margin-top: $spacing-x-lg !important;
+      margin-top: var(--spacing-x-lg) !important;
     }
   }
   &-mb {
@@ -98,29 +98,29 @@
       margin-bottom: 0 !important;
     }
     &-x-sm { 
-      margin-bottom: $spacing-x-sm !important;
+      margin-bottom: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      margin-bottom: $spacing-sm !important;
+      margin-bottom: var(--spacing-sm) !important;
     }
     &-md { 
-      margin-bottom: $spacing-md !important;
+      margin-bottom: var(--spacing-md) !important;
     }
     &-lg { 
-      margin-bottom: $spacing-lg !important;
+      margin-bottom: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      margin-bottom: $spacing-x-lg !important;
+      margin-bottom: var(--spacing-x-lg) !important;
     }
   }
   // padding
   &-pa {
     &-0 { padding: 0 !important; }
-    &-x-sm { padding: $spacing-x-sm !important; }
-    &-sm { padding: $spacing-sm !important; }
-    &-md { padding: $spacing-md !important; }
-    &-lg { padding: $spacing-lg !important; }
-    &-x-lg { padding: $spacing-x-lg !important; }
+    &-x-sm { padding: var(--spacing-x-sm) !important; }
+    &-sm { padding: var(--spacing-sm) !important; }
+    &-md { padding: var(--spacing-md) !important; }
+    &-lg { padding: var(--spacing-lg) !important; }
+    &-x-lg { padding: var(--spacing-x-lg) !important; }
   }
   &-py {
     &-0 { 
@@ -128,24 +128,24 @@
       padding-bottom: 0 !important;
     }
     &-x-sm { 
-      padding-top: $spacing-x-sm !important;
-      padding-bottom: $spacing-x-sm !important;
+      padding-top: var(--spacing-x-sm) !important;
+      padding-bottom: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      padding-top: $spacing-sm !important;
-      padding-bottom: $spacing-sm !important;
+      padding-top: var(--spacing-sm) !important;
+      padding-bottom: var(--spacing-sm) !important;
     }
     &-md { 
-      padding-top: $spacing-md !important;
-      padding-bottom: $spacing-md !important;
+      padding-top: var(--spacing-md) !important;
+      padding-bottom: var(--spacing-md) !important;
     }
     &-lg { 
-      padding-top: $spacing-lg !important;
-      padding-bottom: $spacing-lg !important;
+      padding-top: var(--spacing-lg) !important;
+      padding-bottom: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      padding-top: $spacing-x-lg !important;
-      padding-bottom: $spacing-x-lg !important;
+      padding-top: var(--spacing-x-lg) !important;
+      padding-bottom: var(--spacing-x-lg) !important;
     }
   }
   &-px {
@@ -154,24 +154,24 @@
       padding-left: 0 !important;
     }
     &-x-sm { 
-      padding-right: $spacing-x-sm !important;
-      padding-left: $spacing-x-sm !important;
+      padding-right: var(--spacing-x-sm) !important;
+      padding-left: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      padding-right: $spacing-sm !important;
-      padding-left: $spacing-sm !important;
+      padding-right: var(--spacing-sm) !important;
+      padding-left: var(--spacing-sm) !important;
     }
     &-md { 
-      padding-right: $spacing-md !important;
-      padding-left: $spacing-md !important;
+      padding-right: var(--spacing-md) !important;
+      padding-left: var(--spacing-md) !important;
     }
     &-lg { 
-      padding-right: $spacing-lg !important;
-      padding-left: $spacing-lg !important;
+      padding-right: var(--spacing-lg) !important;
+      padding-left: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      padding-right: $spacing-x-lg !important;
-      padding-left: $spacing-x-lg !important;
+      padding-right: var(--spacing-x-lg) !important;
+      padding-left: var(--spacing-x-lg) !important;
     }
   }
   &-pt {
@@ -179,19 +179,19 @@
       padding-top: 0 !important;
     }
     &-x-sm { 
-      padding-top: $spacing-x-sm !important;
+      padding-top: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      padding-top: $spacing-sm !important;
+      padding-top: var(--spacing-sm) !important;
     }
     &-md { 
-      padding-top: $spacing-md !important;
+      padding-top: var(--spacing-md) !important;
     }
     &-lg { 
-      padding-top: $spacing-lg !important;
+      padding-top: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      padding-top: $spacing-x-lg !important;
+      padding-top: var(--spacing-x-lg) !important;
     }
   }
   &-pb {
@@ -199,19 +199,19 @@
       padding-bottom: 0 !important;
     }
     &-x-sm { 
-      padding-bottom: $spacing-x-sm !important;
+      padding-bottom: var(--spacing-x-sm) !important;
     }
     &-sm { 
-      padding-bottom: $spacing-sm !important;
+      padding-bottom: var(--spacing-sm) !important;
     }
     &-md { 
-      padding-bottom: $spacing-md !important;
+      padding-bottom: var(--spacing-md) !important;
     }
     &-lg { 
-      padding-bottom: $spacing-lg !important;
+      padding-bottom: var(--spacing-lg) !important;
     }
     &-x-lg { 
-      padding-bottom: $spacing-x-lg !important;
+      padding-bottom: var(--spacing-x-lg) !important;
     }
   }
 
@@ -232,7 +232,7 @@
 
   // color
   &-text-gray {
-    color: $color-gray !important;
+    color: var(--color-gray) !important;
   }
 
 }

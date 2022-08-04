@@ -1,12 +1,12 @@
 <template>
-  <div class="docdog" v-show="show">
-    <div class="docdog-modal__bg" @click.self="closeModal">
-      <section class="docdog-modal">
+  <div class="kuroco" v-show="show">
+    <div class="kuroco-modal__bg" @click.self="closeModal">
+      <section class="kuroco-modal">
         <slot name="header" v-bind="$attrs"></slot>
-        <div class="docdog-modal__body" ref="modalBody">
+        <div class="kuroco-modal__body" ref="modalBody">
           <slot></slot>
         </div>
-        <footer v-if="this.$slots.footer" class="docdog-modal__foot">
+        <footer v-if="this.$slots.footer" class="kuroco-modal__foot">
           <slot name="footer" v-bind="$attrs"></slot>
         </footer>
       </section>
@@ -48,9 +48,9 @@ export default {
   watch: {
     show: function (shown) {
       if (shown) {
-        document.querySelector('body').classList.add('docdog-modal-open');
+        document.querySelector('body').classList.add('kuroco-modal-open');
       } else {
-        document.querySelector('body').classList.remove('docdog-modal-open');
+        document.querySelector('body').classList.remove('kuroco-modal-open');
       }
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="docdog-modal__body__section docdog-modal__body__text" v-html="content" />
+  <div class="kuroco-modal__body__section kuroco-modal__body__text" v-html="content" />
 </template>
 
 <script>

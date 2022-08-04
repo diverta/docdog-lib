@@ -1,17 +1,17 @@
 <template>
-  <div class="docdog">
+  <div class="kuroco">
     <div
       @click="toggleExpand"
       v-show="toastDisplayed"
       :class="[
-        'docdog-sidebar__toggle',
-        { 'docdog-sidebar__toggle--hidden': expanded },
-        { 'docdog-sidebar__toggle--shrink': toast_shrink || currentPage === 'Download' },
-        { 'docdog-sidebar__toggle--up--sp': currentPage === 'Download' },
+        'kuroco-sidebar__toggle',
+        { 'kuroco-sidebar__toggle--hidden': expanded },
+        { 'kuroco-sidebar__toggle--shrink': toast_shrink || currentPage === 'Download' },
+        { 'kuroco-sidebar__toggle--up--sp': currentPage === 'Download' },
       ]"
     >
-      <div class="docdog-sidebar__toggle__icon">
-        <span class="docdog-sidebar__toggle__icon__badge">{{ total_items }}</span>
+      <div class="kuroco-sidebar__toggle__icon">
+        <span class="kuroco-sidebar__toggle__icon__badge">{{ total_items }}</span>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M1.2 8.9701C0.86 8.9701 0.575 8.8551 0.345 8.6251C0.115 8.3951 0 8.1101 0 7.7701C0 7.4501 0.115 7.1751 0.345 6.9451C0.575 6.7151 0.86 6.6001 1.2 6.6001H13.2C13.54 6.6001 13.825 6.7151 14.055 6.9451C14.285 7.1751 14.4 7.4601 14.4 7.8001C14.4 8.1401 14.285 8.4201 14.055 8.6401C13.825 8.8601 13.54 8.9701 13.2 8.9701H1.2ZM1.2 14.3101C0.86 14.3101 0.575 14.1951 0.345 13.9651C0.115 13.7351 0 13.4501 0 13.1101C0 12.7901 0.115 12.5151 0.345 12.2851C0.575 12.0551 0.86 11.9401 1.2 11.9401H13.2C13.54 11.9401 13.825 12.0551 14.055 12.2851C14.285 12.5151 14.4 12.8001 14.4 13.1401C14.4 13.4801 14.285 13.7601 14.055 13.9801C13.825 14.2001 13.54 14.3101 13.2 14.3101H1.2ZM1.2 19.6801C0.86 19.6801 0.575 19.5651 0.345 19.3351C0.115 19.1051 0 18.8101 0 18.4501C0 18.1301 0.115 17.8551 0.345 17.6251C0.575 17.3951 0.86 17.2801 1.2 17.2801H8.28C8.62 17.2801 8.905 17.3951 9.135 17.6251C9.365 17.8551 9.48 18.1401 9.48 18.4801C9.48 18.8201 9.365 19.1051 9.135 19.3351C8.905 19.5651 8.62 19.6801 8.28 19.6801H1.2ZM15.75 23.1601L12.78 20.2201C12.56 19.9801 12.45 19.7001 12.45 19.3801C12.45 19.0601 12.56 18.7901 12.78 18.5701C13.04 18.3301 13.33 18.2051 13.65 18.1951C13.97 18.1851 14.25 18.2901 14.49 18.5101L16.44 20.4901L21.15 15.7801C21.39 15.5401 21.68 15.4201 22.02 15.4201C22.36 15.4201 22.64 15.5401 22.86 15.7801C23.1 16.0001 23.22 16.2751 23.22 16.6051C23.22 16.9351 23.11 17.2201 22.89 17.4601L17.16 23.1601C16.98 23.3601 16.75 23.4601 16.47 23.4601C16.19 23.4601 15.95 23.3601 15.75 23.1601Z"
@@ -19,10 +19,10 @@
           />
         </svg>
       </div>
-      <span class="docdog-sidebar__toggle__heading">ダウンロードリスト</span>
+      <span class="kuroco-sidebar__toggle__heading">ダウンロードリスト</span>
       <button
         type="button"
-        class="docdog-sidebar__toggle__button docdog-u-hidden-sp"
+        class="kuroco-sidebar__toggle__button kuroco-u-hidden-sp"
         @click="$emit('downloadToast')"
         aria-label="まとめてダウンロード"
       >
@@ -35,7 +35,7 @@
       </button>
       <button
         type="button"
-        class="docdog-sidebar__toggle__button docdog-u-hidden-pc"
+        class="kuroco-sidebar__toggle__button kuroco-u-hidden-pc"
         @click="$emit('downloadToast')"
         aria-label="まとめてURLを送る"
       >
@@ -47,14 +47,14 @@
         </svg>
       </button>
     </div>
-    <section class="docdog-sidebar" :class="expanded ? 'docdog-sidebar--fixed' : ''">
+    <section class="kuroco-sidebar" :class="expanded ? 'kuroco-sidebar--fixed' : ''">
       <button
         type="button"
         aria-label="Close"
         :class="[
-          'docdog-sidebar__toggle',
-          'docdog-sidebar__toggle--close',
-          { 'docdog-sidebar__toggle--up--sp': currentPage === 'Download' },
+          'kuroco-sidebar__toggle',
+          'kuroco-sidebar__toggle--close',
+          { 'kuroco-sidebar__toggle--up--sp': currentPage === 'Download' },
         ]"
         @click="toggleExpand(false)"
       >
@@ -65,10 +65,10 @@
           />
         </svg>
       </button>
-      <header class="docdog-sidebar__head">
-        <p class="docdog-sidebar__head__heading">ダウンロードリスト</p>
-        <div class="docdog-sidebar__toggle__icon">
-          <span class="docdog-sidebar__toggle__icon__badge">{{ total_items }}</span>
+      <header class="kuroco-sidebar__head">
+        <p class="kuroco-sidebar__head__heading">ダウンロードリスト</p>
+        <div class="kuroco-sidebar__toggle__icon">
+          <span class="kuroco-sidebar__toggle__icon__badge">{{ total_items }}</span>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M1.2 8.9701C0.86 8.9701 0.575 8.8551 0.345 8.6251C0.115 8.3951 0 8.1101 0 7.7701C0 7.4501 0.115 7.1751 0.345 6.9451C0.575 6.7151 0.86 6.6001 1.2 6.6001H13.2C13.54 6.6001 13.825 6.7151 14.055 6.9451C14.285 7.1751 14.4 7.4601 14.4 7.8001C14.4 8.1401 14.285 8.4201 14.055 8.6401C13.825 8.8601 13.54 8.9701 13.2 8.9701H1.2ZM1.2 14.3101C0.86 14.3101 0.575 14.1951 0.345 13.9651C0.115 13.7351 0 13.4501 0 13.1101C0 12.7901 0.115 12.5151 0.345 12.2851C0.575 12.0551 0.86 11.9401 1.2 11.9401H13.2C13.54 11.9401 13.825 12.0551 14.055 12.2851C14.285 12.5151 14.4 12.8001 14.4 13.1401C14.4 13.4801 14.285 13.7601 14.055 13.9801C13.825 14.2001 13.54 14.3101 13.2 14.3101H1.2ZM1.2 19.6801C0.86 19.6801 0.575 19.5651 0.345 19.3351C0.115 19.1051 0 18.8101 0 18.4501C0 18.1301 0.115 17.8551 0.345 17.6251C0.575 17.3951 0.86 17.2801 1.2 17.2801H8.28C8.62 17.2801 8.905 17.3951 9.135 17.6251C9.365 17.8551 9.48 18.1401 9.48 18.4801C9.48 18.8201 9.365 19.1051 9.135 19.3351C8.905 19.5651 8.62 19.6801 8.28 19.6801H1.2ZM15.75 23.1601L12.78 20.2201C12.56 19.9801 12.45 19.7001 12.45 19.3801C12.45 19.0601 12.56 18.7901 12.78 18.5701C13.04 18.3301 13.33 18.2051 13.65 18.1951C13.97 18.1851 14.25 18.2901 14.49 18.5101L16.44 20.4901L21.15 15.7801C21.39 15.5401 21.68 15.4201 22.02 15.4201C22.36 15.4201 22.64 15.5401 22.86 15.7801C23.1 16.0001 23.22 16.2751 23.22 16.6051C23.22 16.9351 23.11 17.2201 22.89 17.4601L17.16 23.1601C16.98 23.3601 16.75 23.4601 16.47 23.4601C16.19 23.4601 15.95 23.3601 15.75 23.1601Z"
@@ -77,13 +77,13 @@
           </svg>
         </div>
       </header>
-      <div class="docdog-sidebar__body">
-        <ul class="docdog-cart">
+      <div class="kuroco-sidebar__body">
+        <ul class="kuroco-cart">
           <CardToast v-for="(data, idx) in list" :data="data" @removeToast="removeByIdx(idx)"></CardToast>
         </ul>
       </div>
-      <footer class="docdog-sidebar__foot">
-        <button type="button" class="docdog-button--download docdog-u-hidden-sp" @click="$emit('downloadToast')">
+      <footer class="kuroco-sidebar__foot">
+        <button type="button" class="kuroco-button--download kuroco-u-hidden-sp" @click="$emit('downloadToast')">
           <span>まとめてダウンロード</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -92,7 +92,7 @@
             />
           </svg>
         </button>
-        <button type="button" class="docdog-button--download docdog-u-hidden-pc" @click="$emit('downloadToast')">
+        <button type="button" class="kuroco-button--download kuroco-u-hidden-pc" @click="$emit('downloadToast')">
           <span>まとめてURLを送る</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

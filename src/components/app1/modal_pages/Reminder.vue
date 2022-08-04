@@ -1,74 +1,100 @@
 <template>
-  <div class="docdog-container--form">
+  <div class="kuroco-container--form">
     <AlertError v-if="err" :err="err" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div class="docdog-container--white">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+    <div class="kuroco-container--white">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>パスワード再設定</h1>
         <p v-if="step == 'input_email'">
           パスワード再設定用のURLを送信します。ご登録されているメールアドレスを入力してください。
         </p>
       </div>
 
-      <div class="docdog-modal__body__section">
+      <div class="kuroco-modal__body__section">
         <form v-if="step == 'input_email'">
-          <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
-            <label for="email" class="docdog-form__item__title">メールアドレス</label>
-            <input name="email" type="text" id="email" placeholder="" v-model="email" required />
-            <p class="docdog-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
+          <div class="kuroco-form__item" :class="err_field == 'email' ? 'kuroco-form__item--error' : ''">
+            <label for="email" class="kuroco-form__item__title">メールアドレス</label>
+            <input
+              name="email"
+              type="text"
+              id="email"
+              autocomplete="email"
+              inputmode="url"
+              placeholder=""
+              v-model="email"
+              required
+            />
+            <p class="kuroco-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
           </div>
-          <div class="docdog-form__button">
-            <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="sendEmail">
+          <div class="kuroco-form__button">
+            <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="sendEmail">
               送信する
             </button>
           </div>
-          <div class="docdog-form__link">
-            <button type="submit" class="docdog-button--text" @click.prevent="redirect({ target: 'SignIn' })">
+          <div class="kuroco-form__link">
+            <button type="submit" class="kuroco-button--text" @click.prevent="redirect({ target: 'SignIn' })">
               ログイン
             </button>
           </div>
         </form>
 
         <form v-if="step == 'input_new_pwd'">
-          <div class="docdog-form__item" :class="err_field == 'temp_pwd' ? 'docdog-form__item--error' : ''">
-            <label for="temp_pwd" class="docdog-form__item__title">仮パスワード</label>
-            <input name="temp_pwd" type="text" id="temp_pwd" placeholder="" v-model="temp_pwd" required />
+          <div class="kuroco-form__item" :class="err_field == 'temp_pwd' ? 'kuroco-form__item--error' : ''">
+            <label for="temp_pwd" class="kuroco-form__item__title">仮パスワード</label>
+            <input
+              name="temp_pwd"
+              type="text"
+              id="temp_pwd"
+              inputmode="url"
+              placeholder=""
+              v-model="temp_pwd"
+              required
+            />
           </div>
-          <div class="docdog-form__item" :class="err_field == 'password' ? 'docdog-form__item--error' : ''">
-            <label for="password" class="docdog-form__item__title">新しいパスワード</label>
-            <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
-            <p class="docdog-form__item__note">8文字以上英数混在</p>
+          <div class="kuroco-form__item" :class="err_field == 'password' ? 'kuroco-form__item--error' : ''">
+            <label for="password" class="kuroco-form__item__title">新しいパスワード</label>
+            <input
+              name="password"
+              type="password"
+              id="password"
+              inputmode="url"
+              placeholder=""
+              v-model="login_pwd"
+              required
+            />
+            <p class="kuroco-form__item__note">8文字以上英数混在</p>
           </div>
-          <div class="docdog-form__item" :class="err_field == 'password_confirm' ? 'docdog-form__item--error' : ''">
-            <label for="password_confirm" class="docdog-form__item__title">新しいパスワード（確認）</label>
+          <div class="kuroco-form__item" :class="err_field == 'password_confirm' ? 'kuroco-form__item--error' : ''">
+            <label for="password_confirm" class="kuroco-form__item__title">新しいパスワード（確認）</label>
             <input
               name="password_confirm"
               type="password"
               id="password_confirm"
+              inputmode="url"
               placeholder=""
               v-model="password_confirm"
               required
             />
           </div>
-          <div class="docdog-form__button">
-            <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="updatePassword">
+          <div class="kuroco-form__button">
+            <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="updatePassword">
               再設定する
             </button>
           </div>
         </form>
 
         <div v-if="step == 'done'">
-          <div class="docdog-form__button">
+          <div class="kuroco-form__button">
             <button
               type="submit"
-              class="docdog-button docdog-button--primary"
+              class="kuroco-button kuroco-button--primary"
               @click.prevent="redirect({ target: 'SignIn' })"
             >
               ログイン
             </button>
           </div>
-          <div class="docdog-form__link">
-            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'Mypage' })">
+          <div class="kuroco-form__link">
+            <button type="button" class="kuroco-button--text" @click.prevent="redirect({ target: 'Mypage' })">
               マイページへ戻る
             </button>
           </div>

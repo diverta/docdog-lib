@@ -1,6 +1,6 @@
 <template>
   <template v-for="(opt, idx) in optionsArr">
-    <div class="docdog-form__toggle">
+    <div class="kuroco-form__toggle">
       <input
         type="checkbox"
         :value="opt.value"

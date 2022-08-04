@@ -1,5 +1,5 @@
 <template>
-  <div class="docdog-form__toggle">
+  <div class="kuroco-form__toggle">
     <input name="email_send_ng_flg" :id="el.key_name" type="checkbox" @change="updateValue" v-model.bool="value" />
     <label v-if="el.label" :for="el.key_name">{{ el.label }}</label>
   </div>

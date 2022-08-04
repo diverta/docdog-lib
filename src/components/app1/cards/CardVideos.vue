@@ -1,10 +1,10 @@
 <template>
-  <div class="docdog-card docdog-card--link" @click.prevent="redirect({ target: 'VideoDetails', params: { data } })">
-    <div class="docdog-card__thumb" :style="thumbnailStyle">
-      <span class="docdog-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
+  <div class="kuroco-card kuroco-card--link" @click.prevent="redirect({ target: 'VideoDetails', params: { data } })">
+    <div class="kuroco-card__thumb" :style="thumbnailStyle">
+      <span class="kuroco-card__thumb__badge">{{ data.type ? data.type.label : '' }}</span>
     </div>
-    <div class="docdog-card__body">
-      <p class="docdog-card__body__title">{{ data.subject }}</p>
+    <div class="kuroco-card__body">
+      <p class="kuroco-card__body__title">{{ data.subject }}</p>
     </div>
   </div>
 </template>

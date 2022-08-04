@@ -1,17 +1,17 @@
-.docdog-tooltip {
+.kuroco-tooltip {
   width: 120px;
   height: 24px;
   position: absolute;
   top: 50%;
   right: 70px;
-  padding: $spacing-x-sm $spacing-sm;
-  border-radius: $border-radius-sm;
-  background-color: $color-border;
+  padding: var(--spacing-x-sm) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-border-light);
   font-size: 10px;
   transform: translate(0,-50%);
-  transition: $transition;
+  transition: var(--transition);
   opacity: 0;
-  .docdog-tooltip:hover &,
+  .kuroco-tooltip:hover &,
   button:hover &,
   a:hover & {
     opacity: 1;
@@ -24,7 +24,7 @@
     top: 50%;
     right: -12px;
     border: 6px solid transparent;
-    border-left: 6px solid $color-border;
+    border-left: 6px solid var(--color-border-light);
     transform: translate(0,-50%);
     content: "";
   }

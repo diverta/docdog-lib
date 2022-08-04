@@ -1,17 +1,19 @@
 <template>
-  <div :class="[{ 'docdog-form__item--error': !isValidFinal }]">
-    <label :for="el.key_name" class="docdog-form__item__title">
+  <div>
+    <label :for="el.key_name" class="kuroco-form__item__title">
       {{ el.name }}
-      <span v-if="isRequired" class="docdog-form__item__required">（必須）</span>
+      <span v-if="isRequired" class="kuroco-form__item__required">（必須）</span>
     </label>
-    <component
-      :is="elInstance"
-      :el="el"
-      :initValue="processedModelValue"
-      @update="processedModelValue = $event"
-      @validate="validateValue()"
-    />
-    <p v-if="!isValidFinal" class="docdog-form__item--error__msg">
+    <div :class="{ 'kuroco-form__item--error': !isValidFinal }">
+      <component
+        :is="elInstance"
+        :el="el"
+        :initValue="processedModelValue"
+        @update="processedModelValue = $event"
+        @validate="validateValue()"
+      />
+    </div>
+    <p v-if="!isValidFinal" class="kuroco-form__item--error__msg">
       <span> {{ validErrMsgFinal }}</span>
     </p>
   </div>

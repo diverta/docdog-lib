@@ -1,21 +1,21 @@
 <template>
-  <div class="docdog-container--middle">
-    <article class="docdog-modal__body__section">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+  <div class="kuroco-container--middle">
+    <article class="kuroco-modal__body__section">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>{{ data ? data.subject : '' }}</h1>
       </div>
-      <div class="docdog-modal__body__section">
-        <div class="docdog-card">
-          <div class="docdog-card__video">
+      <div class="kuroco-modal__body__section">
+        <div class="kuroco-card">
+          <div class="kuroco-card__video">
             <iframe :src="data && data.video ? data.video.url : ''" frameborder="0" allowfullscreen></iframe>
           </div>
         </div>
       </div>
     </article>
-    <nav class="docdog-modal__body__section">
+    <nav class="kuroco-modal__body__section">
       <button
         type="button"
-        class="docdog-button docdog-button--white docdog-button--wide"
+        class="kuroco-button kuroco-button--white kuroco-button--wide"
         @click.prevent="redirect({ target: 'Videos' })"
       >
         動画一覧に戻る
