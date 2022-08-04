@@ -1,25 +1,43 @@
-.docdog-alert {
+.kuroco-alert {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: $spacing-lg;
-  border-radius: $border-radius-md;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
   &__heading { 
-    margin: $spacing-sm 0;
+    margin: var(--spacing-sm) 0;
     font-size: 16px;
     font-weight: bold;
   }
   &--success {
-    margin-bottom: $spacing-x-lg;
-    background-color: rgba($color-success, .2);
-    color: $color-success;
-    p { color: $color-success; }
+    position: relative;
+    margin-bottom: var(--spacing-x-lg);
+    border: 1px solid var(--color-success);
+    color: var(--color-success);
+    z-index: 1;
+    &::before {
+      @extend %spread-background;
+      border-radius: var(--border-radius-md);
+      background-color: var(--color-success);
+      opacity: .2;
+    }
+    p { color: var(--color-success); }
+    svg circle { fill: var(--color-success); }
   }
   &--error {
-    margin-bottom: $spacing-x-lg;
-    background-color: rgba($color-danger, .2);
-    color: $color-danger;
-    p { color: $color-danger; }
+    position: relative;
+    margin-bottom: var(--spacing-x-lg);
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+    z-index: 1;
+    &::before {
+      @extend %spread-background;
+      border-radius: var(--border-radius-md);
+      background-color: var(--color-danger);
+      opacity: .2;
+    }
+    p { color: var(--color-danger); }
+    svg circle { fill: var(--color-danger); }
   }
   p:not([class]) { 
     margin: 0;

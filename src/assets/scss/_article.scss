@@ -1,18 +1,18 @@
-.docdog-article {
-  @extend .docdog-card;
+.kuroco-article {
+  @extend .kuroco-card;
   display: block !important;
   margin: 0;
-  padding: $spacing-xx-lg;
+  padding: var(--spacing-xx-lg);
   @media screen and (max-width: 767px) {
-    margin-right: -$spacing-lg;
-    margin-left: -$spacing-lg;
-    padding: $spacing-lg;
+    margin-right: -var(--spacing-lg);
+    margin-left: -var(--spacing-lg);
+    padding: var(--spacing-lg);
     border-radius: 0 !important;
   }
   &__title {
-    margin-bottom: $spacing-lg;
-    padding-bottom: $spacing-sm;
-    border-bottom: 1px solid $color-border;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
     @media screen and (min-width: 768px) {
       display: flex;
       h1, h2 { 
@@ -32,54 +32,54 @@
 
   // element
   h1 { 
-    margin: $spacing-x-lg 0;
+    margin: var(--spacing-x-lg) 0;
     font-size: 36px;
     @media screen and (max-width: 767px) {
-      margin: $spacing-lg 0;
+      margin: var(--spacing-lg) 0;
       font-size: 28px; 
     }
   }
   h2 { 
-    margin: $spacing-x-lg 0 $spacing-lg;
-    padding-bottom: $spacing-sm;
-    border-bottom: 1px solid $color-border;
+    margin: var(--spacing-x-lg) 0 var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
     font-size: 28px;
     @media screen and (max-width: 767px) {
-      margin: $spacing-md 0;
+      margin: var(--spacing-md) 0;
       font-size: 24px; 
     }
   }
   h3 { 
-    margin: $spacing-lg 0;
-    padding: $spacing-sm $spacing-md;
-    background-color: lighten($color-border, 8%);
-    color: $color-secondary;
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-background);
+    color: var(--color-gray);
     font-size: 24px;
     @media screen and (max-width: 767px) {
-      margin: $spacing-md 0;
+      margin: var(--spacing-md) 0;
       font-size: 22px; 
     }
   }
   h4 { 
-    margin: $spacing-lg 0;
+    margin: var(--spacing-lg) 0;
     font-size: 22px;
     @media screen and (max-width: 767px) {
-      margin: $spacing-md 0;
+      margin: var(--spacing-md) 0;
       font-size: 22px; 
     }
   }
   h5 { 
-    margin: $spacing-md 0;
+    margin: var(--spacing-md) 0;
     font-size: 20px;
   }
   h6 { 
-    margin: $spacing-md 0;
+    margin: var(--spacing-md) 0;
     font-size: 18px;
   }
   ul, ol {
-    margin: $spacing-sm 0;
-    padding-left: $spacing-lg;
-    li { padding: $spacing-x-sm 0; }
+    margin: var(--spacing-sm) 0;
+    padding-left: var(--spacing-lg);
+    li { padding: var(--spacing-x-sm) 0; }
   }
   ul li {
     list-style: disc;
@@ -89,26 +89,26 @@
   }
   table {
     width: 100%;
-    margin: $spacing-sm 0;
-    border: 1px solid $color-border;
+    margin: var(--spacing-sm) 0;
+    border: 1px solid var(--color-border);
     border-collapse: collapse;
     th, td { 
-      padding: $spacing-md;
-      border: 1px solid $color-border;
+      padding: var(--spacing-md);
+      border: 1px solid var(--color-border);
       color: inherit;
       font-size: inherit;
       font-family: inherit;
       line-height: inherit;
     }
     th {
-      background-color: lighten($color-border, 8%);
+      background-color: var(--color-border-light);
       font-weight: bold;
     }
   }
   figure { 
-    margin: $spacing-sm 0;
+    margin: var(--spacing-sm) 0;
     figcaption {
-      color: $color-gray;
+      color: var(--color-gray);
       font-size: 13px;
     }
     &.image {
@@ -120,12 +120,12 @@
       &.image-style-align-left {
         float: left;
         max-width: 50%;
-        margin: 0 $spacing-lg $spacing-lg 0;
+        margin: 0 var(--spacing-lg) var(--spacing-lg) 0;
       }
       &.image-style-align-right {
         float: right;
         max-width: 50%;
-        margin: 0 0 $spacing-lg $spacing-lg;
+        margin: 0 0 var(--spacing-lg) var(--spacing-lg);
       }
     }
     &.image-style-align-center {
@@ -134,7 +134,7 @@
   }
   img { 
     max-width: 100%;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border);
   }
   p { line-height: 2; }
   u { text-decoration: underline; }
@@ -142,10 +142,10 @@
   &__check-list {
     padding-left: 0 !important;
     li {
-      padding-left: $spacing-lg !important;
+      padding-left: var(--spacing-lg) !important;
       list-style: none !important;
-      background: url("/src/assets/image/icon-success.svg") no-repeat left $spacing-x-sm;
-      &:not(:last-child) { margin-top: $spacing-x-sm; }
+      background: url("/src/assets/image/icon-success.svg") no-repeat left var(--spacing-x-sm);
+      &:not(:last-child) { margin-top: var(--spacing-x-sm); }
     }
   }
 

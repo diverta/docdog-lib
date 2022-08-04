@@ -1,22 +1,22 @@
-.docdog-card {
+.kuroco-card {
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-radius: $border-radius-md;
-  box-shadow: 0 0 $spacing-sm 0 rgba(0,0,0,.1);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 0 var(--spacing-sm) 0 rgba(0,0,0,.1);
   background-color: #fff;
-  .docdog-container--white & { border: 1px solid lighten($color-border, 8%); }
+  .kuroco-container--white & { border: 1px solid var(--color-border-light); }
   &--link { 
     color: initial;
     text-decoration: none;
-    transition: $transition;
+    transition: var(--transition);
     cursor: pointer;
-    &.docdog-card:hover {
-      box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
-      .docdog-card--media__body__title { 
-        color: $color-primary;
+    &.kuroco-card:hover {
+      box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
+      .kuroco-card--media__body__title { 
+        color: var(--color-primary);
         text-decoration: underline;
-        transition: $transition;
+        transition: var(--transition);
       }
     }
   }
@@ -25,25 +25,25 @@
   &__thumb { 
     height: 200px;
     position: relative;
-    border-bottom: 1px solid $color-thumb-border;
-    border-radius: $border-radius-md $border-radius-md 0 0;
+    border-bottom: 1px solid var(--color-border-light);;
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
     background-size: cover;
     background-position: center;
     @media screen and (max-width: 1280px) {
       height: 150px;
     }
     &__badge {
-      @extend .docdog-badge;
+      @extend .kuroco-badge;
       position: absolute;
-      bottom: $spacing-sm;
-      right:  $spacing-sm;
-      box-shadow: 0 0 $spacing-sm 0 rgba(0,0,0,.2);
+      bottom: var(--spacing-sm);
+      right:  var(--spacing-sm);
+      box-shadow: 0 0 var(--spacing-sm) 0 rgba(0,0,0,.2);
     }
   }
   &__video {
     height: 0;
     padding: 0 0 56.25%;
-    border-radius: $border-radius-md;
+    border-radius: var(--border-radius-md);
     position: relative;
     overflow: hidden;
     iframe {
@@ -59,26 +59,26 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    padding: $spacing-lg;
+    padding: var(--spacing-lg);
     @media screen and (max-width: 767px) {
-      padding: $spacing-md;
+      padding: var(--spacing-md);
     }
     &__title {
       flex: 1 1 auto;
       margin: 0 !important;
       font-weight: bold;
-      & + .docdog-button { margin-top: $spacing-sm; }
+      & + .kuroco-button { margin-top: var(--spacing-sm); }
     }
-    .docdog-button + .docdog-button {
-      margin-top: $spacing-md;
+    .kuroco-button + .kuroco-button {
+      margin-top: var(--spacing-md);
     }
   }
   &__foot {
     display: flex;
     justify-content: flex-end;
-    padding: 0 $spacing-lg $spacing-lg;
+    padding: 0 var(--spacing-lg) var(--spacing-lg);
     @media screen and (max-width: 767px) {
-      padding: 0 $spacing-md $spacing-md;
+      padding: 0 var(--spacing-md) var(--spacing-md);
     }
   }
 
@@ -89,27 +89,27 @@
     width: 100%;
     li { 
       @media screen and (min-width: 1025px) {
-        width: calc( (100% - ($spacing-x-lg * 2 )) / 3 );
-        &:not(:nth-of-type(3n)) { margin-right: $spacing-x-lg; }
-        &:nth-of-type(n+4) { margin-top: $spacing-x-lg; }
+        width: calc( (100% - (var(--spacing-x-lg) * 2 )) / 3 );
+        &:not(:nth-of-type(3n)) { margin-right: var(--spacing-x-lg); }
+        &:nth-of-type(n+4) { margin-top: var(--spacing-x-lg); }
       }
       @media screen and (min-width: 768px) and  (max-width: 1024px){
-        width: calc( (100% - ($spacing-x-lg)) / 2 );
-        &:not(:nth-of-type(2n)) { margin-right: $spacing-x-lg; }
-        &:nth-of-type(n+3) { margin-top: $spacing-x-lg; }
+        width: calc( (100% - (var(--spacing-x-lg))) / 2 );
+        &:not(:nth-of-type(2n)) { margin-right: var(--spacing-x-lg); }
+        &:nth-of-type(n+3) { margin-top: var(--spacing-x-lg); }
       }
       @media screen and (max-width: 767px) {
         width: 100%;
-        &:not(:first-child) { margin-top: $spacing-lg; }
+        &:not(:first-child) { margin-top: var(--spacing-lg); }
       }
     }
   }
 
   // type
   &--media {
-    @extend .docdog-card;
+    @extend .kuroco-card;
     flex-direction: row;
-    padding: $spacing-lg;
+    padding: var(--spacing-lg);
     // card element
     &__thumb {
       display: flex;
@@ -118,8 +118,8 @@
       flex: 0 0 auto;
       width: 140px;
       height: 199px;
-      border: 1px solid $color-thumb-border;
-      border-radius: $border-radius-sm;
+      border: 1px solid var(--color-border-light);;
+      border-radius: var(--border-radius-sm);
       overflow: hidden;
       @media screen and (min-width: 768px) and (max-width: 1024px) {
         width: 120px;
@@ -129,7 +129,7 @@
         width: 80px;
         height: 113px;
       }
-      .docdog-modal__open-sidebar & {
+      .kuroco-modal__open-sidebar & {
         @media screen and (min-width: 768px) and (max-width: 1280px) {
           width: 120px;
           height: 170px;
@@ -145,21 +145,21 @@
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        padding: 0 0 0 $spacing-lg;
+        padding: 0 0 0 var(--spacing-lg);
         @media screen and (max-width: 767px) {
-          padding: 0 0 0 $spacing-md;
+          padding: 0 0 0 var(--spacing-md);
         }
       }
       flex: 1 1 auto;
       &__title {
-        @extend .docdog-card__body__title;
+        @extend .kuroco-card__body__title;
       }
     }
     &__foot {
-      @extend .docdog-card__foot;
-      padding: $spacing-lg 0 0;
+      @extend .kuroco-card__foot;
+      padding: var(--spacing-lg) 0 0;
       @media screen and (max-width: 767px) {
-        padding-top: $spacing-md;
+        padding-top: var(--spacing-md);
       }
     }
 
@@ -170,13 +170,13 @@
       width: 100%;
       li {
         @media screen and (min-width: 768px) {
-          width: calc( (100% - ($spacing-x-lg)) / 2 );
-          &:not(:nth-of-type(2n)) { margin-right: $spacing-x-lg; }
-          &:nth-of-type(n+3) { margin-top: $spacing-x-lg; }
+          width: calc( (100% - (var(--spacing-x-lg))) / 2 );
+          &:not(:nth-of-type(2n)) { margin-right: var(--spacing-x-lg); }
+          &:nth-of-type(n+3) { margin-top: var(--spacing-x-lg); }
         }
         @media screen and (max-width: 767px) {
           width: 100%;
-          &:not(:first-child) { margin-top: $spacing-lg; }
+          &:not(:first-child) { margin-top: var(--spacing-lg); }
         }
       }
     }

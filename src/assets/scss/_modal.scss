@@ -1,14 +1,14 @@
-.docdog-modal-open {
+.kuroco-modal-open {
   overflow-y: hidden;
 }
 
-.docdog-modal {
+.kuroco-modal {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   background-color: #fff;
-  z-index: 11100;
+  z-index: var(--z-index);
   &__bg {
     position: fixed;
     top: 0;
@@ -19,10 +19,10 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    transition: $transition;
-    z-index: 10000;
+    transition: var(--transition);
+    z-index: var(--z-index);
     @media screen and (min-width: 1001px) {
-      .docdog-modal__open-sidebar & {
+      .kuroco-modal__open-sidebar & {
         width: calc( 100% - 200px );
       }
     }
@@ -32,11 +32,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: $spacing-md $spacing-x-lg;
-    box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
-    z-index: 10000;
+    padding: var(--spacing-md) var(--spacing-x-lg);
+    box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
+    z-index: calc(var(--z-index) + 1);
     @media screen and (max-width: 767px) {
-      padding: $spacing-sm $spacing-sm $spacing-sm $spacing-lg;
+      padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) var(--spacing-lg);
     }
     &__nav {
       display: flex;
@@ -62,43 +62,43 @@
       }
       &__list {
         @media screen and (min-width: 768px) {
-          margin-left: $spacing-lg;
+          margin-left: var(--spacing-lg);
           &__menu {
             display: flex;
             li {
-              margin-left: $spacing-md;
+              margin-left: var(--spacing-md);
             }
           }
         }
         @media screen and (max-width: 767px) {
           width: 90%;
           height: 100%;
-          padding: $spacing-lg;
+          padding: var(--spacing-lg);
           position: fixed;
           right: -1000px;
           top: 0;
           background-color: #fff;
-          box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
-          z-index: 11000;
+          box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
+          z-index: calc(var(--z-index) + 2);
           transition : 0.4s ease-in-out;
           &--fixed {
             right: 0;
           }
           &__menu {
-            margin: $spacing-md 0 !important;
-            border-top: 1px solid lighten($color-border, 4%);
+            margin: var(--spacing-md) 0 !important;
+            border-top: 1px solid var(--color-border-light);
             li {
-              border-bottom: 1px solid lighten($color-border, 4%);
+              border-bottom: 1px solid var(--color-border-light);
             }
           }
         }
         &__item {
-          padding: $spacing-md;
+          padding: var(--spacing-md);
           background-color: transparent;
           font-weight: bold;
-          transition: $transition;
+          transition: var(--transition);
           &:hover {
-            color: $color-primary;
+            color: var(--color-primary);
           }
           @media screen and (max-width: 767px) {
             width: 100%;
@@ -111,17 +111,17 @@
     &__account {
       &__button {
         height: 45px;
-        padding: 0 $spacing-lg;
-        border: 1px solid $color-link !important;
-        border-radius: $border-radius-sm;
+        padding: 0 var(--spacing-lg);
+        border: 1px solid var(--color-primary) !important;
+        border-radius: var(--border-radius-sm);
         background-color: transparent;
-        color:$color-link;
-        transition: $transition;
+        color:var(--color-primary);
+        transition: var(--transition);
         @media screen and (max-width: 767px) {
-          padding: 0 $spacing-sm;
+          padding: 0 var(--spacing-sm);
         }
         &:hover {
-          background-color: $color-primary;
+          background-color: var(--color-primary);
           color: #fff;
         }
       }
@@ -130,35 +130,36 @@
         height: 45px;
         padding: 0;
         background-color: transparent;
-        &:hover svg path {
-          fill: darken($color-primary, 8%);
+        &:hover {
+          @extend %hover;
         }
+        svg path { fill: var(--color-primary); }
       }
       &__nav {
         position: absolute;
         top: 70px;
         right: 2em;
         width: 200px;
-        border-radius: $border-radius-sm;
+        border-radius: var(--border-radius-sm);
         background-color: #fff;
-        box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
-        z-index: 10000;
+        box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
+        z-index: calc(var(--z-index) + 1);
         li:not(:first-child) {
-          border-top: 1px solid lighten($color-border, 4%);
+          border-top: 1px solid var(--color-border-light);
         }
         &__item {
           width: 100%;
-          padding: $spacing-md;
+          padding: var(--spacing-md);
           background-color: transparent;
           text-align: left;
           &:hover {
-            background-color: lighten($color-border, 8%);
+            background-color: var(--color-border-light);
           }
           li:first-child & {
-            border-radius: $border-radius-sm $border-radius-sm 0 0;
+            border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
           }
           li:last-child & {
-            border-radius: 0 0 $border-radius-sm $border-radius-sm;
+            border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
           }
         }
       }
@@ -166,23 +167,23 @@
   }
   &__body {
     flex: 1 1 auto;
-    padding: $spacing-xx-lg;
+    padding: var(--spacing-xx-lg);
     overflow-y: auto;
-    background-color: $color-background;
+    background-color: var(--color-background);
     &::-webkit-scrollbar {
       background-color: #f0f0f0;
-      width: $border-radius-md;
+      width: var(--border-radius-md);
     }
     &::-webkit-scrollbar-thumb {
-      background-color: $color-border;
-      border-radius: $border-radius-sm;
-      border:2px solid $color-border;
+      background-color: var(--color-border);
+      border-radius: var(--border-radius-sm);
+      border:2px solid var(--color-border);
     }
     @media screen and (max-width: 767px) {
-      padding: $spacing-lg;
+      padding: var(--spacing-lg);
     }
     &:last-child { 
-      padding-bottom: $spacing-xxx-lg;
+      padding-bottom: var(--spacing-xxx-lg);
     }
     &__pagetitle {
       h1,
@@ -192,52 +193,52 @@
         font-weight: bold;
         @media screen and (min-width: 768px) {
           + p:first-of-type {
-            margin-top: $spacing-lg !important;
+            margin-top: var(--spacing-lg) !important;
           }
         }
       }
-      .docdog-container--white & p {
-        @extend .docdog-modal__body__text;
+      .kuroco-container--white & p {
+        @extend .kuroco-modal__body__text;
       }
     }
     &__heading {
-      margin: 0 0 $spacing-lg !important;
+      margin: 0 0 var(--spacing-lg) !important;
       font-size: 16px;
       font-weight: bold;
     }
     &__sub-heading {
-      margin: 0 0 $spacing-lg !important;
+      margin: 0 0 var(--spacing-lg) !important;
       font-size: 15px;
       font-weight: bold;
     }
     &__text {
-      color: $color-gray !important;
+      color: var(--color-gray) !important;
       font-size: 13px !important;
       a {
         display: inline-block;
-        padding: 0 $spacing-x-sm;
+        padding: 0 var(--spacing-x-sm);
       }
     }
     &__complete {
-      @extend .docdog-article;
+      @extend .kuroco-article;
       a {
-        @extend .docdog-u-mt-lg;
-        @extend .docdog-button;
-        @extend .docdog-button--primary;
-        @extend .docdog-button--wide;
+        @extend .kuroco-u-mt-lg;
+        @extend .kuroco-button;
+        @extend .kuroco-button--primary;
+        @extend .kuroco-button--wide;
       }
       ul,
       ol {
-        padding: $spacing-md $spacing-md $spacing-md $spacing-x-lg;
-        border: 1px solid $color-border;
-        border-radius: $border-radius-sm;
+        padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-x-lg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius-sm);
       }
     }
     &__section {
       & + & {
-        margin-top: $spacing-x-lg;
+        margin-top: var(--spacing-x-lg);
         @media screen and (max-width: 767px) {
-          margin-top: $spacing-lg;
+          margin-top: var(--spacing-lg);
         }
       }
     }
@@ -245,17 +246,17 @@
   &__foot {
     display: flex;
     justify-content: center;
-    padding: $spacing-lg $spacing-x-lg;
-    box-shadow: 0 0 $spacing-md 0 rgba(0, 0, 0, 0.2);
-    background-color: darken($color-secondary, 16%);
+    padding: var(--spacing-lg) var(--spacing-x-lg);
+    box-shadow: 0 0 var(--spacing-md) 0 rgba(0, 0, 0, 0.2);
+    background-color: var(--color-gray);
     @media screen and (max-width: 767px) {
-      padding: $spacing-md $spacing-x-lg;
+      padding: var(--spacing-md) var(--spacing-x-lg);
     }
-    .docdog-modal__body + & {
-      box-shadow: 0 0 $spacing-md 0 rgba(0,0,0,.2);
+    .kuroco-modal__body + & {
+      box-shadow: 0 0 var(--spacing-md) 0 rgba(0,0,0,.2);
      }
-     .docdog-button,
-     .docdog-button--add-list {
+     .kuroco-button,
+     .kuroco-button--add-list {
        max-width: 1000px;
      }
   }

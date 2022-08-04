@@ -1,14 +1,14 @@
-.docdog-loader {
+.kuroco-loader {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   width: 240px;
   height: 240px;
-  padding: $spacing-lg;
-  border-radius: $border-radius-md;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
   background-color: #fff;
-  box-shadow: 0 0 $spacing-sm 0 rgba(0,0,0,.1);
+  box-shadow: 0 0 var(--spacing-sm) 0 rgba(0,0,0,.1);
   position: fixed;
   inset: 0;
   margin: auto;
@@ -20,10 +20,10 @@
     }
     font-size: 10px;
     text-indent: -9999em;
-    border-top: 10px solid rgba($color-border, .8);
-    border-right: 10px solid rgba($color-border, .8);
-    border-bottom: 10px solid rgba($color-border, .8);
-    border-left: 10px solid $color-primary;
+    border-top: 10px solid var(--color-border-light);
+    border-right: 10px solid var(--color-border-light);
+    border-bottom: 10px solid var(--color-border-light);
+    border-left: 10px solid var(--color-primary);
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);

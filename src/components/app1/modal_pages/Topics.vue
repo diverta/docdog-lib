@@ -1,12 +1,12 @@
 <template>
   <!-- Modal Content -->
-  <div class="docdog-container--middle">
-    <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+  <div class="kuroco-container--middle">
+    <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
       <h1>記事一覧</h1>
       <p>Kuroco営業時に利用できる資料をまとめています。社内での確認やお客様へのご提案などにご活用ください。</p>
     </div>
-    <div class="docdog-modal__body__section">
-      <ul class="docdog-card__list" v-if="list.length > 0">
+    <div class="kuroco-modal__body__section">
+      <ul class="kuroco-card__list" v-if="list.length > 0">
         <li v-for="doc in list">
           <CardTopics
             :data="doc"
@@ -19,8 +19,8 @@
           />
         </li>
       </ul>
-      <nav class="docdog-pagination">
-        <ul class="docdog-pagination__list">
+      <nav class="kuroco-pagination">
+        <ul class="kuroco-pagination__list">
           <li>
             <button type="button" aria-label="Previous" :disabled="pageID == 1" @click="changePage(pageID - 1)">
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
@@ -30,11 +30,11 @@
             </button>
           </li>
           <li v-for="num in pagedButtons">
-            <span v-if="Number.isInteger(num) && num == pageInfo.pageNo" class="docdog-pagination__item--active">{{
+            <span v-if="Number.isInteger(num) && num == pageInfo.pageNo" class="kuroco-pagination__item--active">{{
               num
             }}</span>
             <button v-else-if="Number.isInteger(num)" type="button" @click="changePage(num)">{{ num }}</button>
-            <span v-else class="docdog-pagination__item--ellipses">{{ num }}</span>
+            <span v-else class="kuroco-pagination__item--ellipses">{{ num }}</span>
           </li>
           <li>
             <button

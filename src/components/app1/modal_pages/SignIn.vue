@@ -1,18 +1,18 @@
 <template>
-  <div class="docdog-container--form">
+  <div class="kuroco-container--form">
     <AlertError v-if="err" :err="err_msg" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div class="docdog-container--white">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+    <div class="kuroco-container--white">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>ログイン</h1>
       </div>
-      <div class="docdog-modal__body__section" v-if="!isLogin">
-        <div class="docdog-form--col-2 docdog-modal__body__section">
-          <div class="docdog-form__sso">
-            <p class="docdog-modal__body__heading">他サイトのアカウントでログイン</p>
+      <div class="kuroco-modal__body__section" v-if="!isLogin">
+        <div class="kuroco-form--col-2 kuroco-modal__body__section">
+          <div class="kuroco-form__sso">
+            <p class="kuroco-modal__body__heading">他サイトのアカウントでログイン</p>
             <button
               type="button"
-              class="docdog-form__sso__button docdog-form__sso__button--google"
+              class="kuroco-form__sso__button kuroco-form__sso__button--google"
               @click="ssoLogin('google')"
             >
               <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +43,7 @@
               </svg>
               <span>Googleでログイン</span>
             </button>
-            <button type="button" class="docdog-form__sso__button docdog-form__sso__button--facebook">
+            <button type="button" class="kuroco-form__sso__button kuroco-form__sso__button--facebook">
               <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M27 15.5C27 8.59644 21.4036 3 14.5 3C7.59644 3 2 8.59644 2 15.5C2 21.739 6.57104 26.9104 12.5469 27.8481V19.1133H9.37305V15.5H12.5469V12.7461C12.5469 9.61328 14.4131 7.88281 17.2683 7.88281C18.6355 7.88281 20.0664 8.12695 20.0664 8.12695V11.2031H18.4902C16.9375 11.2031 16.4531 12.1667 16.4531 13.1563V15.5H19.9199L19.3657 19.1133H16.4531V27.8481C22.429 26.9104 27 21.739 27 15.5Z"
@@ -52,7 +52,7 @@
               </svg>
               <span>Facebookでログイン</span>
             </button>
-            <button type="button" class="docdog-form__sso__button docdog-form__sso__button--apple">
+            <button type="button" class="kuroco-form__sso__button kuroco-form__sso__button--apple">
               <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_241_1435)">
                   <path
@@ -68,7 +68,7 @@
               </svg>
               <span>Appleでログイン</span>
             </button>
-            <button type="button" class="docdog-form__sso__button docdog-form__sso__button--line">
+            <button type="button" class="kuroco-form__sso__button kuroco-form__sso__button--line">
               <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fill-rule="evenodd"
@@ -79,46 +79,56 @@
               </svg>
               <span>LINEでログイン</span>
             </button>
-            <button type="button" class="docdog-form__sso__button docdog-form__sso__button--yahoo">
+            <button type="button" class="kuroco-form__sso__button kuroco-form__sso__button--yahoo">
               <img src="/src/assets/image/logo-yahoo.png" />
               <span>Yahoo! JAPAN IDでログイン</span>
             </button>
           </div>
-          <div class="docdog-form__hr"><span>または</span></div>
-          <div class="docdog-form__signin">
-            <p class="docdog-modal__body__heading">ログイン</p>
+          <div class="kuroco-form__hr"><span>または</span></div>
+          <div class="kuroco-form__signin">
+            <p class="kuroco-modal__body__heading">ログイン</p>
             <form>
-              <div class="docdog-form__item" :class="err.length > 0 ? 'docdog-form__item--error' : ''">
-                <input name="email" type="text" id="email" placeholder="メールアドレス" v-model="login_id" required />
+              <div class="kuroco-form__item" :class="err.length > 0 ? 'kuroco-form__item--error' : ''">
+                <input
+                  name="email"
+                  type="text"
+                  id="email"
+                  autocomplete="email"
+                  inputmode="url"
+                  placeholder="メールアドレス"
+                  v-model="login_id"
+                  required
+                />
               </div>
               <div
-                class="docdog-form__item"
-                :class="err.length > 0 ? 'docdog-form__item docdog-form__item--error' : ''"
+                class="kuroco-form__item"
+                :class="err.length > 0 ? 'kuroco-form__item kuroco-form__item--error' : ''"
               >
                 <input
                   name="password"
                   type="password"
                   id="password"
+                  inputmode="url"
                   placeholder="パスワード"
                   v-model="password"
                   required
                 />
               </div>
-              <div class="docdog-form__item">
-                <div class="docdog-form__toggle">
+              <div class="kuroco-form__item">
+                <div class="kuroco-form__toggle">
                   <input name="login_save" id="login_save" type="checkbox" value="1" checked="checked" />
                   <label for="login_save">次回から自動的にログインする</label>
                 </div>
               </div>
-              <div class="docdog-form__item">
-                <button type="button" class="docdog-button docdog-button--primary" @click="login">ログイン</button>
+              <div class="kuroco-form__item">
+                <button type="button" class="kuroco-button kuroco-button--primary" @click="login">ログイン</button>
               </div>
             </form>
-            <div class="docdog-form__link">
-              <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignUp' })">
+            <div class="kuroco-form__link">
+              <button type="button" class="kuroco-button--text" @click.prevent="redirect({ target: 'SignUp' })">
                 アカウントを作成する
               </button>
-              <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'Reminder' })">
+              <button type="button" class="kuroco-button--text" @click.prevent="redirect({ target: 'Reminder' })">
                 パスワードを忘れた場合
               </button>
             </div>
@@ -129,10 +139,10 @@
           <input type="hidden" name="api_id" value="3" />
         </form>
       </div>
-      <div class="docdog-modal__body__section" v-if="isLogin">
+      <div class="kuroco-modal__body__section" v-if="isLogin">
         <button
           type="button"
-          class="docdog-button docdog-button--white"
+          class="kuroco-button kuroco-button--white"
           @click.prevent="redirect({ target: 'Mypage' })"
         >
           マイページへ戻る
@@ -175,7 +185,7 @@ export default {
     },
     err_msg() {
       if (this.err.length > 0) {
-          return 'ログイン情報が不正です。';
+        return 'ログイン情報が不正です。';
       } else {
         return '';
       }

@@ -1,6 +1,6 @@
 <template>
   <!-- Modal Content -->
-  <div class="docdog-modal__body__section">
+  <div class="kuroco-modal__body__section">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
     <AlertError v-if="err" :err="err" />
   </div>

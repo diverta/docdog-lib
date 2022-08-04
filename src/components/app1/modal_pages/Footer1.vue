@@ -1,15 +1,15 @@
 <template>
   <template v-if="!footer_data.downloaded">
-    <button type="button" class="docdog-button--add-list" v-if="footer_data.isInToast" disabled>
+    <button type="button" class="kuroco-button--add-list" v-if="footer_data.isInToast" disabled>
       追加済み
     </button>
-    <button type="button" class="docdog-button--add-list" v-else @click="addToast">
+    <button type="button" class="kuroco-button--add-list" v-else @click="addToast">
       ダウンロードリストに追加
     </button>
   </template>
 
   <template v-if="footer_data.downloaded">
-    <button type="button" class="docdog-button docdog-button--white docdog-button--wide" @click.prevent="redirect({ target: 'List' })">
+    <button type="button" class="kuroco-button kuroco-button--white kuroco-button--wide" @click.prevent="redirect({ target: 'List' })">
       資料一覧に戻る
     </button>
   </template>

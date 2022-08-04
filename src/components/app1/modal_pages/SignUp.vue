@@ -1,64 +1,98 @@
 <template>
-  <div class="docdog-container--form">
+  <div class="kuroco-container--form">
     <AlertError v-if="err" :err="err_msg" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div class="docdog-container--white">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+    <div class="kuroco-container--white">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>アカウントの作成</h1>
       </div>
-      <div class="docdog-modal__body__section" v-if="!isLogin">
-        <div class="docdog-modal__body__section">
+      <div class="kuroco-modal__body__section" v-if="!isLogin">
+        <div class="kuroco-modal__body__section">
           <form>
-            <div class="docdog-form__item--col-2">
-              <div class="docdog-form__item" :class="err_fields['name1'] ? 'docdog-form__item--error' : ''">
-                <label for="name1" class="docdog-form__item__title"
-                  >姓<span class="docdog-form__item__required">（必須）</span></label
+            <div class="kuroco-form__item--col-2">
+              <div class="kuroco-form__item" :class="err_fields['name1'] ? 'kuroco-form__item--error' : ''">
+                <label for="name1" class="kuroco-form__item__title"
+                  >姓<span class="kuroco-form__item__required">（必須）</span></label
                 >
-                <input name="name1" type="text" id="name1" placeholder="" v-model="name1" required />
+                <input
+                  name="name1"
+                  type="text"
+                  id="name1"
+                  autocomplete="family-name"
+                  placeholder=""
+                  v-model="name1"
+                  required
+                />
               </div>
-              <div class="docdog-form__item" :class="err_fields['name2'] ? 'docdog-form__item--error' : ''">
-                <label for="name2" class="docdog-form__item__title"
-                  >名<span class="docdog-form__item__required">（必須）</span></label
+              <div class="kuroco-form__item">
+                <label for="name2" class="kuroco-form__item__title"
+                  >名<span class="kuroco-form__item__required">（必須）</span></label
                 >
-                <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
+                <div :class="err_fields['name2'] ? 'kuroco-form__item--error' : ''">
+                  <input
+                    name="name2"
+                    type="text"
+                    id="name2"
+                    autocomplete="given-name"
+                    placeholder=""
+                    v-model="name2"
+                    required
+                  />
+                </div>
               </div>
             </div>
-            <div class="docdog-form__item" :class="err_fields['email'] ? errClass : ''">
-              <label for="email" class="docdog-form__item__title"
-                >メールアドレス<span class="docdog-form__item__required">（必須）</span></label
+            <div class="kuroco-form__item">
+              <label for="email" class="kuroco-form__item__title"
+                >メールアドレス<span class="kuroco-form__item__required">（必須）</span></label
               >
-              <input name="email" type="text" id="email" placeholder="" v-model="email" required />
+              <div :class="err_fields['email'] ? errClass : ''">
+                <input
+                  name="email"
+                  type="text"
+                  id="email"
+                  autocomplete="email"
+                  inputmode="url"
+                  placeholder=""
+                  v-model="email"
+                  required
+                />
+              </div>
             </div>
-            <div class="docdog-form__item" :class="err_fields['password'] ? 'docdog-form__item--error' : ''">
-              <label for="password" class="docdog-form__item__title"
-                >パスワード<span class="docdog-form__item__required">（必須）</span></label
+            <div class="kuroco-form__item">
+              <label for="password" class="kuroco-form__item__title"
+                >パスワード<span class="kuroco-form__item__required">（必須）</span></label
               >
-              <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
+              <div :class="err_fields['password'] ? 'kuroco-form__item--error' : ''">
+                <input
+                  name="password"
+                  type="password"
+                  id="password"
+                  inputmode="url"
+                  placeholder=""
+                  v-model="login_pwd"
+                  required
+                />
+              </div>
             </div>
-            <FormElement
-              v-for="el in formDef"
-              :el="el"
-              :class="['docdog-form__item', err_fields[el.key_name] ? 'docdog-form__item--error' : '']"
-              v-model="customFields[el.key_name]"
-            />
-            <div class="docdog-form__button">
-              <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="signup">
+            <FormElement v-for="el in formDef" :el="el" class="kuroco-form__item" v-model="customFields[el.key_name]" />
+            <div class="kuroco-form__button">
+              <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="signup">
                 アカウント作成
               </button>
             </div>
           </form>
-          <div class="docdog-form__link">
-            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'SignIn' })">
+          <div class="kuroco-form__link">
+            <button type="button" class="kuroco-button--text" @click.prevent="redirect({ target: 'SignIn' })">
               ログイン
             </button>
           </div>
         </div>
         <FormPolicy />
       </div>
-      <div class="docdog-modal__body__section" v-if="isLogin">
+      <div class="kuroco-modal__body__section" v-if="isLogin">
         <button
           type="button"
-          class="docdog-button docdog-button--white"
+          class="kuroco-button kuroco-button--white"
           @click.prevent="redirect({ target: 'Mypage' })"
         >
           マイページへ戻る
@@ -93,7 +127,7 @@ export default {
       login_pwd: '',
       formDef: [],
       customFields: {},
-      errClass: 'docdog-form__item--error',
+      errClass: 'kuroco-form__item--error',
     };
   },
   mounted() {

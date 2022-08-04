@@ -1,214 +1,128 @@
-.docdog {
+%form-validation-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  z-index: -1;
+  content: "";
+}
+.kuroco {
   input[type='text'],
   input[type='email'],
   input[type='password'],
   input[type='number'],
   select {
-    width: 100%;
-    height: 50px;
-    border: 1px solid $color-input-border;
-    border-radius: $border-radius-sm;
-    padding: $spacing-md;
     -webkit-appearance: auto;
     appearance: auto;
+    width: 100%;
+    height: 50px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-md);
     &:disabled {
-      background-color: lighten($color-input-border, 20%);
-      color: $color-disabled;
+      background-color: #f0f0f0;
+      color: var(--color-gray);
     }
   }
   input[type='checkbox'],
   input[type='radio'] {
+    -webkit-appearance: auto;
+    appearance: auto;
     display: inline-block;
     width: 16px;
     height: 16px;
-    border: 1px solid $color-input-border;
+    border: 1px solid var(--color-border);
     cursor: pointer;
   }
   textarea {
+    display: block;
     width: 100%;
     height: 100px;
-    border: 1px solid $color-input-border;
-    border-radius: $border-radius-sm;
-    padding: $spacing-md;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-md);
   }
   ::placeholder {
-    color: $color-input-border;
+    color: #aaa;
   }
+  input:-webkit-autofill {
+    background-color: transparent;
+  }
+  input:autofill {
+    background-color: transparent;
+  }
+  // Date picker
   .dp__input {
-    border-color: $color-input-border;
+    -webkit-appearance: auto;
+    appearance: auto;
+    outline: initial;
+    padding: var(--spacing-md) var(--spacing-x-lg);
+    border-color: var(--color-border);
+    &:hover { border-color: var(--color-border); }
   }
 }
 
-.docdog-form {
-  @media screen and (min-width: 768px) {
-    &--col-2 {
-      display: flex;
-      justify-content: space-between;
-    }
-    &__sso,
-    &__signin {
-      width: 43%;
-    }
-  }
-  &__sso {
-    &__button {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 50px;
-      padding: $spacing-md;
-      border-radius: $border-radius-sm;
-      transition: $transition;
-      svg {
-        flex: 0 0 auto;
-      }
-      span {
-        flex: 1 1 auto;
-        color: #fff;
-        text-align: center;
-        line-height: 1;
-      }
-      & + & {
-        margin-top: $spacing-sm;
-      }
-      &--google {
-        border: 1px solid $color-input-border !important;
-        background-color: #fff;
-        span { color: #222 !important; }
-        &:hover {
-          background-color: darken(#fff, 8%);
-        }
-      }
-      &--facebook {
-        border-color: #1877f2;
-        background-color: #1877f2;
-        &:hover {
-          border-block-color: darken(#1877f2, 8%);
-          background-color: darken(#1877f2, 8%);
-        }
-      }
-      &--apple {
-        border-color: #000;
-        background-color: #000;
-        &:hover {
-          border-color: lighten(#000, 12%);
-          background-color: lighten(#000, 12%);
-        }
-      }
-      &--line {
-        border-color: #06c755;
-        background-color: #06c755;
-        &:hover {
-          border-color: darken(#06c755, 8%);
-          background-color: darken(#06c755, 8%);
-        }
-      }
-      &--yahoo {
-        border-color: #ff0033;
-        background-color: #ff0033;
-        &:hover {
-          border-color: darken(#ff0033, 8%);
-          background-color: darken(#ff0033, 8%);
-        }
-      }
-    }
-  }
-  &__hr {
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    width: 8%;
-    position: relative;
-    @media screen and (max-width: 767px) {
-      width: 100%;
-      min-height: 20px;
-      margin: $spacing-md 0;
-      padding: $spacing-lg 0;
-    }
-    &::before {
-      width: 1px;
-      height: 100%;
-      background-color: $color-input-border;
-      content: '';
-      @media screen and (max-width: 767px) {
-        width: 100%;
-        height: 1px;
-      }
-    }
-    span {
-      display: block;
-      width: 100%;
-      padding: $spacing-md 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      background-color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-      transform: translate(-50%, -50%);
-      @media screen and (max-width: 767px) {
-        width: auto;
-        padding: 0 $spacing-md;
-      }
-    }
-  }
-  &__toggle {
-    display: flex;
-    align-items: center;
-    padding: $spacing-x-sm 0;
-    margin: $spacing-x-sm 0;
-    label {
-      padding-right: $spacing-md;
-      padding-left: $spacing-md;
-      cursor: pointer;
-    }
-  }
-  &__button {
-    margin-top: $spacing-lg;
-  }
+.kuroco-form {
   &__item {
     &:not(:first-child) {
-      margin-top: $spacing-md;
+      margin-top: var(--spacing-md);
     }
     &--error {
+      position: relative;
+      z-index: 1;
+      &::before {
+        @extend %spread-background;
+        border-radius: var(--border-radius-sm);
+        background-color: var(--color-danger);
+        opacity: .2;
+      }
+      &::after {
+        @extend %form-validation-icon;
+        background: url("/src/assets/image/icon-error.svg") no-repeat left center;
+        z-index: 1;
+      }
       input[type='text'],
       input[type='email'],
       input[type='password'],
       input[type='number'],
       select,
-      textarea {
-        padding-right: $spacing-xx-lg !important;
-        border-color: $color-danger;
-        background: url("/src/assets/image/icon-error.svg") no-repeat right $spacing-md center rgba($color-danger, .12);
+      textarea,
+      .dp__input {
+        position: relative;
+        padding-right: var(--spacing-xx-lg) !important;
+        border-color: var(--color-danger);
+        background-color: transparent !important;
+        z-index: 1;
       }
-      .docdog-form__toggle {
-        border-radius: $border-radius-sm;
-        background-color: rgba($color-danger, .12);
-      }
+      .dp__input:hover { border-color: var(--color-danger); }
       &__msg {
         min-height: 1.5em;
-        margin: $spacing-sm 0 0 !important;
-        color: $color-danger !important;
+        margin: var(--spacing-sm) 0 0 !important;
+        color: var(--color-danger) !important;
         font-size: 12px !important;
       }
     }
     &--success {
+      position: relative;
+      &::after {
+        @extend %form-validation-icon;
+        background: url("/src/assets/image/icon-success.svg") no-repeat left center;
+        z-index: 1;
+      }
       input[type='text'],
       input[type='email'],
       input[type='password'],
       input[type='number'],
       select,
       textarea {
-        padding-right: $spacing-xx-lg !important;
-        background: url("/src/assets/image/icon-success.svg") no-repeat right $spacing-md center;
+        padding-right: var(--spacing-xx-lg) !important;
       }
-
     }
     &--col-2 {
       display: flex;
       justify-content: space-between;
-      .docdog-form__item {
+      .kuroco-form__item {
         width: 48%;
         margin-top: 0;
       }
@@ -216,48 +130,178 @@
     &__title {
       display: flex;
       align-items: center;
-      margin: 0 0 $spacing-x-sm;
+      margin: 0 0 var(--spacing-x-sm);
       font-weight: bold;
       &__badge {
-        @extend .docdog-badge;
-        @extend .docdog-badge--danger;
+        @extend .kuroco-badge;
+        @extend .kuroco-badge--danger;
         min-width: auto !important;
-        margin-left: $spacing-sm;
+        margin-left: var(--spacing-sm);
         line-height: 1.3;
       }
     }
     &__required {
       display: inline-block;
-      margin-left: $spacing-x-sm;
-      color: $color-danger;
+      margin-left: var(--spacing-x-sm);
+      color: var(--color-danger);
       font-size: 12px;
     }
     &__note {
-      margin-top: $spacing-x-sm;
-      color: $color-gray;
+      margin-top: var(--spacing-x-sm);
+      color: var(--color-gray);
       font-size: 12px;
     }
   }
+  &__toggle {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-x-sm) 0;
+    margin: var(--spacing-x-sm) 0;
+    input { flex: 0 0 auto; }
+    label {
+      padding-right: var(--spacing-md);
+      padding-left: var(--spacing-md);
+      cursor: pointer;
+    }
+  }
+  &__button {
+    margin-top: var(--spacing-lg);
+  }
   &__link {
-    margin-top: $spacing-lg;
+    margin-top: var(--spacing-lg);
     text-align: center;
     a,
     button {
       display: block;
       margin: auto;
+      svg path { fill: var(--color-primary); }
+    }
+  }
+
+}
+
+// Signin form
+.kuroco-form__sso {
+  &__button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+    svg {
+      flex: 0 0 auto;
+    }
+    span {
+      flex: 1 1 auto;
+      color: #fff;
+      text-align: center;
+      line-height: 1;
+    }
+    & + & {
+      margin-top: var(--spacing-sm);
+    }
+    &--google {
+      border: 1px solid var(--color-border) !important;
+      background-color: #fff;
+      span { color: #222 !important; }
+      &:hover {
+        background-color: darken(#fff, 8%);
+      }
+    }
+    &--facebook {
+      border-color: #1877f2;
+      background-color: #1877f2;
+      &:hover {
+        border-block-color: darken(#1877f2, 8%);
+        background-color: darken(#1877f2, 8%);
+      }
+    }
+    &--apple {
+      border-color: #000;
+      background-color: #000;
+      &:hover {
+        border-color: lighten(#000, 12%);
+        background-color: lighten(#000, 12%);
+      }
+    }
+    &--line {
+      border-color: #06c755;
+      background-color: #06c755;
+      &:hover {
+        border-color: darken(#06c755, 8%);
+        background-color: darken(#06c755, 8%);
+      }
+    }
+    &--yahoo {
+      border-color: #ff0033;
+      background-color: #ff0033;
+      &:hover {
+        border-color: darken(#ff0033, 8%);
+        background-color: darken(#ff0033, 8%);
+      }
     }
   }
 }
-
-.docdog-form__signin {
-  .docdog-form__item {
+.kuroco-form__signin {
+  .kuroco-form__item {
     &:not(:first-child) {
-      margin-top: $spacing-sm;
+      margin-top: var(--spacing-sm);
     }
   }
 }
-
-.docdog-form__sso .docdog-modal__body__heading,
-.docdog-form__signin .docdog-modal__body__heading {
+.kuroco-form__hr {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 8%;
+  position: relative;
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    min-height: 20px;
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-lg) 0;
+  }
+  &::before {
+    width: 1px;
+    height: 100%;
+    background-color: var(--color-border);
+    content: '';
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      height: 1px;
+    }
+  }
+  span {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-md) 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    @media screen and (max-width: 767px) {
+      width: auto;
+      padding: 0 var(--spacing-md);
+    }
+  }
+}
+.kuroco-form__sso .kuroco-modal__body__heading,
+.kuroco-form__signin .kuroco-modal__body__heading {
   text-align: center;
+}
+@media screen and (min-width: 768px) {
+  .kuroco-form--col-2 {
+    display: flex;
+    justify-content: space-between;
+  }
+  .kuroco-form__sso,
+  .kuroco-form__signin {
+    width: 43%;
+  }
 }

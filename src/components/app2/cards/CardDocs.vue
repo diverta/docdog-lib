@@ -1,23 +1,23 @@
 <template>
   <div
-    class="docdog-card--media docdog-card--link"
+    class="kuroco-card--media kuroco-card--link"
     @click.prevent="
       redirect({ target: 'Download', params: { doc_data: data, page_params: { docdog_id: data.topics_id } } })
     "
   >
-    <div class="docdog-card--media__thumb">
+    <div class="kuroco-card--media__thumb">
       <img v-if="data.thumbnail && data.thumbnail.url" :src="data.thumbnail.url" :alt="data.subject" />
       <img v-else :src="noimage_vertical" :alt="data.subject" />
     </div>
-    <div class="docdog-card--media__body__inner">
-      <div class="docdog-card--media__body">
-        <p class="docdog-card--media__body__title">{{ data.subject }}</p>
-        <p class="docdog-u-my-sm">
-          <span class="docdog-badge">{{ data.contents_type_nm }}</span>
+    <div class="kuroco-card--media__body__inner">
+      <div class="kuroco-card--media__body">
+        <p class="kuroco-card--media__body__title">{{ data.subject }}</p>
+        <p class="kuroco-u-my-sm">
+          <span class="kuroco-badge">{{ data.contents_type_nm }}</span>
         </p>
         <p v-if="data.desc">{{ data.desc }}</p>
       </div>
-      <div class="docdog-card--media__foot">
+      <div class="kuroco-card--media__foot">
         <AddToastButton @click.stop="onToggle()" :isInToast="isInToast" />
       </div>
     </div>

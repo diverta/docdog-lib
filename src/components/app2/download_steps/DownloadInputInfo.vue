@@ -1,63 +1,77 @@
 <template>
-  <div class="docdog-container--white">
-    <div class="docdog-modal__body__section">
-      <div class="docdog-modal__body__section">
+  <div class="kuroco-container--white">
+    <div class="kuroco-modal__body__section">
+      <div class="kuroco-modal__body__section">
         <form>
-          <div class="docdog-form__item docdog-form__item--success docdog-u-mb-x-lg">
-            <label for="email" class="docdog-form__item__title">
+          <div class="kuroco-form__item kuroco-u-mb-x-lg">
+            <label for="email" class="kuroco-form__item__title">
               メールアドレス
-              <span class="docdog-form__item__required">（必須）</span>
+              <span class="kuroco-form__item__required">（必須）</span>
             </label>
-            <input name="email" type="email" id="email" placeholder="you@example.co.jp" required :value="email" disabled />
-          </div>
-          <div class="docdog-form__item docdog-form__item--col-2">
-            <div
-              :class="[
-                'docdog-form__item',
-                { 'docdog-form__item--error': validated.name1 === false },
-                { 'docdog-form__item--success': validated.name1 === true },
-              ]"
-            >
-              <label for="name1" class="docdog-form__item__title">
-                姓
-                <span class="docdog-form__item__required">（必須）</span>
-              </label>
+            <div class="kuroco-form__item--success">
               <input
-                name="name1"
-                type="text"
-                id="name1"
-                placeholder=""
-                :value="name1"
-                @input="updateField('name1', $event)"
-                v-on:focusout="updateField('name1', $event)"
+                name="email"
+                type="email"
+                id="email"
+                placeholder="you@example.co.jp"
                 required
+                :value="email"
+                disabled
               />
-              <p class="docdog-form__item--error__msg">
+            </div>
+          </div>
+          <div class="kuroco-form__item kuroco-form__item--col-2">
+            <div class="kuroco-form__item">
+              <label for="name1" class="kuroco-form__item__title">
+                姓
+                <span class="kuroco-form__item__required">（必須）</span>
+              </label>
+              <div
+                :class="[
+                  { 'kuroco-form__item--error': validated.name1 === false },
+                  { 'kuroco-form__item--success': validated.name1 === true },
+                ]"
+              >
+                <input
+                  name="name1"
+                  type="text"
+                  id="name1"
+                  autocomplete="family-name"
+                  placeholder=""
+                  :value="name1"
+                  @input="updateField('name1', $event)"
+                  v-on:focusout="updateField('name1', $event)"
+                  required
+                />
+              </div>
+              <p class="kuroco-form__item--error__msg">
                 <span v-if="validated.name1 === false">{{ err || '必須項目です' }}</span>
               </p>
             </div>
-            <div
-              :class="[
-                'docdog-form__item',
-                { 'docdog-form__item--error': validated.name2 === false },
-                { 'docdog-form__item--success': validated.name2 === true },
-              ]"
-            >
-              <label for="name2" class="docdog-form__item__title">
+            <div class="kuroco-form__item">
+              <label for="name2" class="kuroco-form__item__title">
                 名
-                <span class="docdog-form__item__required">（必須）</span>
+                <span class="kuroco-form__item__required">（必須）</span>
               </label>
-              <input
-                name="name2"
-                type="text"
-                id="name2"
-                placeholder=""
-                :value="name2"
-                @input="updateField('name2', $event)"
-                v-on:focusout="updateField('name2', $event)"
-                required
-              />
-              <p class="docdog-form__item--error__msg">
+              <div
+                :class="[
+                  { 'kuroco-form__item--error': validated.name2 === false },
+                  { 'kuroco-form__item--success': validated.name2 === true },
+                ]"
+              >
+                <input
+                  name="name2"
+                  type="text"
+                  id="name2"
+                  autocomplete="given-name"
+                  placeholder=""
+                  :value="name2"
+                  @input="updateField('name2', $event)"
+                  v-on:focusout="updateField('name2', $event)"
+                  required
+                />
+              </div>
+              <p class="kuroco-form__item--error__msg">
                 <span v-if="validated.name2 === false">{{ err || '必須項目です' }}</span>
               </p>
             </div>
@@ -65,19 +79,19 @@
           <FormElement
             v-for="el in formDef"
             :el="el"
-            :class="['docdog-form__item', err_fields[el.key_name] ? 'docdog-form__item--error' : '']"
+            :class="['kuroco-form__item', err_fields[el.key_name] ? 'kuroco-form__item--error' : '']"
             :validErrMsg="errByField[el.key_name]"
             v-model="customFields[el.key_name]"
             @update:modelValue="onCustomFieldUpdate(el.key_name, $event)"
           />
-          <div class="docdog-form__button">
+          <div class="kuroco-form__button">
             <button
               type="button"
-              class="docdog-button docdog-button--primary"
+              class="kuroco-button kuroco-button--primary"
               @click="registerMember"
               :disabled="!all_valid"
             >
-              <span class="docdog-u-d-flex-grow-1">送信してダウンロードする</span>
+              <span class="kuroco-u-d-flex-grow-1">送信してダウンロードする</span>
               <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M10.8046 14.4507C10.6775 14.3236 10.6111 14.1647 10.6053 13.9741C10.5995 13.7834 10.6602 13.6246 10.7873 13.4975L13.0751 11.227H4.85978C4.66335 11.227 4.4987 11.1605 4.36582 11.0277C4.23294 10.8948 4.1665 10.7301 4.1665 10.5337C4.1665 10.3373 4.23294 10.1726 4.36582 10.0397C4.4987 9.90685 4.66335 9.84041 4.85978 9.84041H13.0751L10.77 7.5526C10.6429 7.41394 10.5822 7.25218 10.588 7.0673C10.5938 6.88243 10.6602 6.72644 10.7873 6.59934C10.926 6.47224 11.0906 6.40869 11.2813 6.40869C11.4719 6.40869 11.6308 6.47224 11.7579 6.59934L15.2069 10.0484C15.2763 10.1177 15.3283 10.1928 15.3629 10.2737C15.3976 10.3546 15.4149 10.4413 15.4149 10.5337C15.4149 10.6261 15.3976 10.7128 15.3629 10.7937C15.3283 10.8746 15.2763 10.9497 15.2069 11.019L11.7752 14.4507C11.6366 14.5894 11.4748 14.6587 11.2899 14.6587C11.1051 14.6587 10.9433 14.5894 10.8046 14.4507Z"
@@ -86,10 +100,10 @@
             </button>
           </div>
         </form>
-        <div class="docdog-form__link">
+        <div class="kuroco-form__link">
           <button
             type="button"
-            class="docdog-button--text docdog-u-mx-0 docdog-u-d-flex docdog-u-d-flex-align-center"
+            class="kuroco-button--text kuroco-u-mx-0 kuroco-u-d-flex kuroco-u-d-flex-align-center"
             @click="prev"
           >
             <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">

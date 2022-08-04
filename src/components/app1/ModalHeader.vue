@@ -1,16 +1,16 @@
 <template>
-  <header class="docdog-modal__head">
-    <div class="docdog-modal__head__nav">
-      <button type="button" aria-label="Back to top" class="docdog-modal__head__nav__logo" @click.prevent="closeModal">
+  <header class="kuroco-modal__head">
+    <div class="kuroco-modal__head__nav">
+      <button type="button" aria-label="Back to top" class="kuroco-modal__head__nav__logo" @click.prevent="closeModal">
         <!-- site logo -->
         <img :src="site_logo" alt="site-title" />
       </button>
-      <nav class="docdog-modal__head__nav__list docdog-u-hidden-sp">
-        <ul class="docdog-modal__head__nav__list__menu">
+      <nav class="kuroco-modal__head__nav__list kuroco-u-hidden-sp">
+        <ul class="kuroco-modal__head__nav__list__menu">
           <li v-if="isLogin">
             <button
               type="button"
-              class="docdog-modal__head__nav__list__item"
+              class="kuroco-modal__head__nav__list__item"
               @click.prevent="
                 redirect('Mypage');
                 docdog_spmenu_display = !docdog_spmenu_display;
@@ -22,7 +22,7 @@
           <li v-if="isLogin">
             <button
               type="button"
-              class="docdog-modal__head__nav__list__item"
+              class="kuroco-modal__head__nav__list__item"
               @click.prevent="
                 redirect('Videos');
                 docdog_spmenu_display = !docdog_spmenu_display;
@@ -34,7 +34,7 @@
           <li v-if="isLogin">
             <button
               type="button"
-              class="docdog-modal__head__nav__list__item"
+              class="kuroco-modal__head__nav__list__item"
               @click.prevent="
                 redirect('Topics');
                 docdog_spmenu_display = !docdog_spmenu_display;
@@ -46,7 +46,7 @@
           <li v-if="isLogin">
             <button
               type="button"
-              class="docdog-modal__head__nav__list__item"
+              class="kuroco-modal__head__nav__list__item"
               @click.prevent="
                 redirect('List');
                 docdog_spmenu_display = !docdog_spmenu_display;
@@ -58,7 +58,7 @@
           <li v-if="isLogin">
             <button
               type="button"
-              class="docdog-modal__head__nav__list__item"
+              class="kuroco-modal__head__nav__list__item"
               @click.prevent="
                 redirect('Inquiry');
                 docdog_spmenu_display = !docdog_spmenu_display;
@@ -70,10 +70,10 @@
         </ul>
       </nav>
     </div>
-    <nav class="docdog-modal__head__nav">
+    <nav class="kuroco-modal__head__nav">
       <button
         type="button"
-        class="docdog-modal__head__account__button docdog-u-hidden-sp"
+        class="kuroco-modal__head__account__button kuroco-u-hidden-sp"
         v-if="!isLogin"
         @click.prevent="redirect('SignIn')"
       >
@@ -81,7 +81,7 @@
       </button>
       <button
         type="button"
-        class="docdog-modal__head__account__toggle docdog-u-hidden-sp"
+        class="kuroco-modal__head__account__toggle kuroco-u-hidden-sp"
         v-if="isLogin"
         @click="docdog_menu_display = !docdog_menu_display"
       >
@@ -92,19 +92,19 @@
           />
         </svg>
       </button>
-      <ul class="docdog-modal__head__account__nav" v-show="docdog_menu_display">
+      <ul class="kuroco-modal__head__account__nav" v-show="docdog_menu_display">
         <li>
-          <button type="button" class="docdog-modal__head__account__nav__item" @click="redirect('EditProfile')">
+          <button type="button" class="kuroco-modal__head__account__nav__item" @click="redirect('EditProfile')">
             アカウント情報の編集
           </button>
         </li>
         <li>
-          <button type="button" class="docdog-modal__head__account__nav__item" @click="logout">ログアウト</button>
+          <button type="button" class="kuroco-modal__head__account__nav__item" @click="logout">ログアウト</button>
         </li>
       </ul>
       <button
         type="button"
-        class="docdog-modal__head__account__toggle docdog-u-hidden-pc"
+        class="kuroco-modal__head__account__toggle kuroco-u-hidden-pc"
         @click="docdog_spmenu_display = !docdog_spmenu_display"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,19 +112,19 @@
         </svg>
       </button>
       <div
-        class="docdog-u-hidden-pc"
-        :class="docdog_spmenu_display ? 'docdog-modal__bg' : ''"
+        class="kuroco-u-hidden-pc"
+        :class="docdog_spmenu_display ? 'kuroco-modal__bg' : ''"
         @click.self="docdog_spmenu_display = !docdog_spmenu_display"
       >
         <div
-          class="docdog-modal__head__nav__list"
-          :class="docdog_spmenu_display ? 'docdog-modal__head__nav__list--fixed' : ''"
+          class="kuroco-modal__head__nav__list"
+          :class="docdog_spmenu_display ? 'kuroco-modal__head__nav__list--fixed' : ''"
         >
-          <div class="docdog-modal__head__nav--sp">
+          <div class="kuroco-modal__head__nav--sp">
             <button
               type="button"
               aria-label="Back to top"
-              class="docdog-modal__head__nav__logo"
+              class="kuroco-modal__head__nav__logo"
               @click.prevent="closeModal"
             >
               <!-- site logo -->
@@ -133,7 +133,7 @@
             <button
               type="button"
               aria-label="Menu"
-              class="docdog-modal__head__nav__logo"
+              class="kuroco-modal__head__nav__logo"
               @click="docdog_spmenu_display = !docdog_spmenu_display"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -144,11 +144,11 @@
               </svg>
             </button>
           </div>
-          <ul class="docdog-modal__head__nav__list__menu">
+          <ul class="kuroco-modal__head__nav__list__menu">
             <li v-if="isLogin">
               <button
                 type="button"
-                class="docdog-modal__head__nav__list__item"
+                class="kuroco-modal__head__nav__list__item"
                 @click.prevent="
                   redirect('Mypage');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -160,7 +160,7 @@
             <li v-if="isLogin">
               <button
                 type="button"
-                class="docdog-modal__head__nav__list__item"
+                class="kuroco-modal__head__nav__list__item"
                 @click.prevent="
                   redirect('Videos');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -172,7 +172,7 @@
             <li v-if="isLogin">
               <button
                 type="button"
-                class="docdog-modal__head__nav__list__item"
+                class="kuroco-modal__head__nav__list__item"
                 @click.prevent="
                   redirect('Topics');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -184,7 +184,7 @@
             <li v-if="isLogin">
               <button
                 type="button"
-                class="docdog-modal__head__nav__list__item"
+                class="kuroco-modal__head__nav__list__item"
                 @click.prevent="
                   redirect('List');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -196,7 +196,7 @@
             <li v-if="isLogin">
               <button
                 type="button"
-                class="docdog-modal__head__nav__list__item"
+                class="kuroco-modal__head__nav__list__item"
                 @click.prevent="
                   redirect('Inquiry');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -206,11 +206,11 @@
               </button>
             </li>
           </ul>
-          <ul class="docdog-card__list" v-if="!isLogin">
+          <ul class="kuroco-card__list" v-if="!isLogin">
             <li>
               <button
                 type="button"
-                class="docdog-button docdog-button--primary"
+                class="kuroco-button kuroco-button--primary"
                 @click="
                   redirect('SignIn');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -220,11 +220,11 @@
               </button>
             </li>
           </ul>
-          <ul class="docdog-card__list" v-if="isLogin">
+          <ul class="kuroco-card__list" v-if="isLogin">
             <li>
               <button
                 type="button"
-                class="docdog-button docdog-button--white"
+                class="kuroco-button kuroco-button--white"
                 @click="
                   redirect('EditProfile');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -234,7 +234,7 @@
               </button>
             </li>
             <li>
-              <button type="button" class="docdog-button docdog-button--white" @click="logout">ログアウト</button>
+              <button type="button" class="kuroco-button kuroco-button--white" @click="logout">ログアウト</button>
             </li>
           </ul>
         </div>

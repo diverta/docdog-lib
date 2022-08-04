@@ -1,10 +1,10 @@
 <template>
-  <li class="docdog-cart__item">
-    <div class="docdog-cart__item__thumb">
+  <li class="kuroco-cart__item">
+    <div class="kuroco-cart__item__thumb">
       <img v-if="data.thumbnail && data.thumbnail.url" :src="data.thumbnail.url" :alt="data.subject" />
       <img v-else :src="noimage_vertical" :alt="data.subject" />
     </div>
-    <p class="docdog-cart__item__title">{{ data.subject }}</p>
+    <p class="kuroco-cart__item__title">{{ data.subject }}</p>
     <DeleteButton v-if="can_remove" @click="removeToast" />
   </li>
 </template>

@@ -1,24 +1,24 @@
-.docdog-tab {
-  padding: $spacing-md $spacing-lg;
+.kuroco-tab {
+  padding: var(--spacing-md) var(--spacing-lg);
   background-color: transparent;
-  color: $color-gray;
-  transition: $transition;
+  color: var(--color-gray);
+  transition: var(--transition);
   @media screen and (max-width: 767px) {
-    padding: $spacing-md;
+    padding: var(--spacing-md);
   }
   &:hover {
-    color: $color-primary;
+    color: var(--color-primary);
   }
   &--active {
-    color: $color-primary;
-    border-bottom: $spacing-x-sm solid $color-primary !important;
+    color: var(--color-primary);
+    border-bottom: var(--spacing-x-sm) solid var(--color-primary) !important;
     font-weight: bold;
   }
 
   // list
   &__list {
     display: flex;
-    border-bottom: 1px solid darken($color-border, 4%);
+    border-bottom: 1px solid var(--color-border);
     white-space: nowrap;
     @media screen and (min-width: 768px) {
       flex-wrap: wrap;
@@ -33,12 +33,12 @@
       &__outer {
         position: relative;
         &::after {
-          width: $spacing-lg;
-          height: $spacing-xx-lg;
+          width: var(--spacing-lg);
+          height: var(--spacing-xx-lg);
           position: absolute;
           top: 0;
           right: 0;
-          background:linear-gradient(to right, rgba(255,255,255,0), $color-background);
+          background:linear-gradient(to right, rgba(255,255,255,0), var(--color-background));
           content: "";
         }
       }

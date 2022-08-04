@@ -1,5 +1,5 @@
 <template>
-  <div class="docdog-alert docdog-alert--error">
+  <div class="kuroco-alert kuroco-alert--error">
     <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="30" cy="30" r="28" fill="#dc0000" stroke="#ffffff" stroke-width="4" />
       <path
@@ -11,7 +11,7 @@
         fill="#ffffff"
       />
     </svg>
-    <p class="docdog-alert__heading">エラーが発生しました</p>
+    <p class="kuroco-alert__heading">エラーが発生しました</p>
     <p v-for="err_msg in err_arr">{{ err_msg }}</p>
   </div>
 </template>

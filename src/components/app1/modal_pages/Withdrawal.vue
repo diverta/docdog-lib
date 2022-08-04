@@ -1,29 +1,29 @@
 <template>
-  <div class="docdog-container--form">
+  <div class="kuroco-container--form">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div class="docdog-container--white">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section" v-if="isLogin">
+    <div class="kuroco-container--white">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section" v-if="isLogin">
         <h1>アカウントの削除</h1>
         <p>
           アカウントを削除すると今後は資料ダウンロードができなくなります。アカウントを削除しますか？
         </p>
       </div>
-      <div class="docdog-modal__body__section" v-if="isLogin">
+      <div class="kuroco-modal__body__section" v-if="isLogin">
         <form>
-          <div class="docdog-form__button">
-            <button type="submit" class="docdog-button docdog-button--danger" @click.prevent="withdrawal">
+          <div class="kuroco-form__button">
+            <button type="submit" class="kuroco-button kuroco-button--danger" @click.prevent="withdrawal">
               アカウントを削除する
             </button>
           </div>
-          <div class="docdog-form__link">
-            <button type="button" class="docdog-button--text" @click.prevent="redirect({ target: 'Mypage' })">
+          <div class="kuroco-form__link">
+            <button type="button" class="kuroco-button--text" @click.prevent="redirect({ target: 'Mypage' })">
               マイページへ戻る
             </button>
           </div>
         </form>
       </div>
-      <div class="docdog-modal__body__section" v-if="!isLogin">
-        <button type="button" class="docdog-button docdog-button--white" @click.prevent="redirect({ target: 'List' })">
+      <div class="kuroco-modal__body__section" v-if="!isLogin">
+        <button type="button" class="kuroco-button kuroco-button--white" @click.prevent="redirect({ target: 'List' })">
           資料一覧へ戻る
         </button>
       </div>
