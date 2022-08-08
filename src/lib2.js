@@ -98,7 +98,7 @@ const initApp = _.once((el) => {
 });
 
 function loadCSS() {
-  const cssId = 'docdog-lib2-css';
+  const cssId = 'kuroco-lib2-css';
   let link = document.getElementById(cssId);
   if (!link) {
     const head = document.getElementsByTagName('head')[0];
@@ -106,7 +106,7 @@ function loadCSS() {
     link.id = cssId;
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = 'https://docdog.g.kuroco-img.app/files/user/docdog-lib/iife/lib2/docdog-lib2.css';
+    link.href = 'https://docdog.g.kuroco-img.app/files/user/docdog-lib/iife/lib2/kuroco-lib2.css';
     link.media = 'all';
     head.appendChild(link);
   }
