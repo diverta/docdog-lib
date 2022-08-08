@@ -45,7 +45,12 @@
     @toggleExpand="onToastExpand"
     ref="toast"
   />
-  <ExternalPopup v-if="kurocoConfig.use_float_button" @redirect="redirect" v-show="!showModal" :kurocoConfig="kurocoConfig" />
+  <ExternalPopup
+    v-if="kurocoConfig.use_float_button"
+    @redirect="redirect"
+    v-show="!showModal"
+    :kurocoConfig="kurocoConfig"
+  />
   <Hubspot
     v-if="showModal"
     :hubId="kurocoConfig.hubId ? '' + kurocoConfig.hubId : ''"
@@ -55,6 +60,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import Modal from '@/components/common/Modal.vue';
 import ModalHeader from '@/components/app2/ModalHeader.vue';
 import PageController from './components/app2/PageController.vue';
@@ -98,6 +104,7 @@ export default {
       toast_storage_key: 'kuroco.toast',
       originalViewport: null,
       htmlParts: {},
+      deviceType: 'pc', // Changed dynamically based on screen width
     };
   },
   created() {
@@ -168,6 +175,13 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener(
+      'resize',
+      _.debounce((event) => {
+        this.determineDeviceType();
+      }, 100)
+    );
+    this.determineDeviceType(); // Run initially
     this.hideToast = true;
     if (this.kurocoConfig.css_vars) {
       for (const v in this.kurocoConfig.css_vars) {
@@ -223,6 +237,9 @@ export default {
     const toastInit = localStorage.getItem(this.toast_storage_key);
     if (toastInit) {
       this.toastList = JSON.parse(toastInit);
+      if (this.deviceType == 'sp') {
+        this.$refs.toast.toggleExpand(false);
+      }
     }
   },
   methods: {
@@ -446,12 +463,11 @@ export default {
       if (this.footer_data && this.footer_data.doc_data && this.footer_data.doc_data.topics_id == item.topics_id) {
         this.footer_data.isInToast = true;
       }
-      if (this.toastList.length === 1 && !this.hideToast) {
+      if (this.toastList.length === 1 && !this.hideToast && this.deviceType == 'pc') {
         // Went from 0 to 1 => set expanded
-        this.isToastExpanded = true;
+        this.$refs.toast.toggleExpand(true);
       }
       localStorage.setItem(this.toast_storage_key, JSON.stringify(this.toastList));
-      //this.$refs.toast.toggleExpand(true);
       this.$refs.toast.toggleShrink(false);
     },
     removeToast(idx) {
@@ -460,7 +476,6 @@ export default {
         if (this.footer_data && this.footer_data.doc_data && this.footer_data.doc_data.topics_id == item.topics_id) {
           this.footer_data.isInToast = false;
         }
-        //this.$refs.toast.toggleExpand(true);
         this.$refs.toast.toggleShrink(false);
       } else {
         // Delete all indexes
@@ -468,6 +483,9 @@ export default {
         if (this.footer_data) {
           this.footer_data.isInToast = false;
         }
+      }
+      if (this.toastList.length == 0) {
+        this.$refs.toast.toggleExpand(false);
       }
       localStorage.setItem(this.toast_storage_key, JSON.stringify(this.toastList));
     },
@@ -511,7 +529,7 @@ export default {
     doHideToast(val) {
       this.hideToast = val;
       if (val) {
-        this.isToastExpanded = false;
+        this.$refs.toast.toggleExpand(false);
       }
     },
     getViewportEl() {
@@ -559,6 +577,13 @@ export default {
     },
     onModalScroll() {
       this.$refs.toast.onModalScroll();
+    },
+    determineDeviceType() {
+      if (document.body.clientWidth <= 767) {
+        this.deviceType = 'sp';
+      } else {
+        this.deviceType = 'pc';
+      }
     },
   },
 };
