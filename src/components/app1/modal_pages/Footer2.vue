@@ -7,7 +7,7 @@
   <template v-else>
     <button
       type="button"
-      class="kuroco-button kuroco-button--white"
+      class="kuroco-button--white"
       @click.prevent="redirect({ target: 'List' })"
     >
       資料一覧に戻る

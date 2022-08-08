@@ -10,6 +10,21 @@
     z-index: -1;
     content: "";
 }
+%button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 50px;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    text-align: center !important;
+    text-decoration: none !important;
+    transition: var(--transition);
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+}
 @keyframes button-bounce {
     0% { transform: scale(0.8); }
     40% { transform: scale(1.1); }

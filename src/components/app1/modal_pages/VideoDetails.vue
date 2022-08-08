@@ -15,7 +15,7 @@
     <nav class="kuroco-modal__body__section">
       <button
         type="button"
-        class="kuroco-button kuroco-button--white kuroco-button--wide"
+        class="kuroco-button--white kuroco-button--wide"
         @click.prevent="redirect({ target: 'Videos' })"
       >
         動画一覧に戻る

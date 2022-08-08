@@ -24,7 +24,7 @@
       font-weight: bold;
     }
     &__close {
-      @extend .kuroco-button;
+      @extend %button;
       @extend .kuroco-button--white;
       width: 50px;
       border: 0 !important;
@@ -118,7 +118,7 @@
       font-weight: bold;
     }
     &__button {
-      @extend .kuroco-button;
+      @extend %button;
       @extend .kuroco-button--primary;
       width: 45px !important;
       height: 45px !important;

@@ -75,19 +75,19 @@
         <li>
           <button
             type="button"
-            class="kuroco-button kuroco-button--secondary"
+            class="kuroco-button--secondary"
             @click="redirect({ target: 'EditProfile' })"
           >
             アカウント情報の変更
           </button>
         </li>
         <li>
-          <button type="button" class="kuroco-button kuroco-button--white" @click="redirect({ target: 'Withdrawal' })">
+          <button type="button" class="kuroco-button--white" @click="redirect({ target: 'Withdrawal' })">
             アカウントの削除
           </button>
         </li>
         <li>
-          <button type="button" class="kuroco-button kuroco-button--white" @click="logout()">ログアウト</button>
+          <button type="button" class="kuroco-button--white" @click="logout()">ログアウト</button>
         </li>
       </ul>
     </section>
@@ -95,7 +95,7 @@
       <h2 class="kuroco-modal__body__heading">ヘルプ</h2>
       <ul class="kuroco-card__list">
         <li>
-          <button type="button" class="kuroco-button kuroco-button--secondary" @click="redirect({ target: 'Inquiry' })">
+          <button type="button" class="kuroco-button--secondary" @click="redirect({ target: 'Inquiry' })">
             お問い合わせ
           </button>
         </li>

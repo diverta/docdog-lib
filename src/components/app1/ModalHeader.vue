@@ -210,7 +210,7 @@
             <li>
               <button
                 type="button"
-                class="kuroco-button kuroco-button--primary"
+                class="kuroco-button--primary"
                 @click="
                   redirect('SignIn');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -224,7 +224,7 @@
             <li>
               <button
                 type="button"
-                class="kuroco-button kuroco-button--white"
+                class="kuroco-button--white"
                 @click="
                   redirect('EditProfile');
                   docdog_spmenu_display = !docdog_spmenu_display;
@@ -234,7 +234,7 @@
               </button>
             </li>
             <li>
-              <button type="button" class="kuroco-button kuroco-button--white" @click="logout">ログアウト</button>
+              <button type="button" class="kuroco-button--white" @click="logout">ログアウト</button>
             </li>
           </ul>
         </div>

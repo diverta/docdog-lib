@@ -121,7 +121,7 @@
                 </div>
               </div>
               <div class="kuroco-form__item">
-                <button type="button" class="kuroco-button kuroco-button--primary" @click="login">ログイン</button>
+                <button type="button" class="kuroco-button--primary" @click="login">ログイン</button>
               </div>
             </form>
             <div class="kuroco-form__link">
@@ -142,7 +142,7 @@
       <div class="kuroco-modal__body__section" v-if="isLogin">
         <button
           type="button"
-          class="kuroco-button kuroco-button--white"
+          class="kuroco-button--white"
           @click.prevent="redirect({ target: 'Mypage' })"
         >
           マイページへ戻る
