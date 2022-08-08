@@ -5,7 +5,7 @@
       type="button"
       class="kuroco-button--floating--wide"
       @click="redirect({ target: 'List' })"
-      style="bottom: 24px; right: 24px"
+      :style="popupStyle"
     >
       資料ダウンロード
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,8 +25,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    kurocoConfig: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: ['redirect'],
+  computed: {
+    popupStyle() {
+      if (this.kurocoConfig.popup_style) {
+        return this.kurocoConfig.popup_style;
+      } else {
+        return 'bottom: 24px; right: 24px';
+      }
+    },
+  },
   methods: {
     redirect(pageData) {
       this.$emit('redirect', pageData);

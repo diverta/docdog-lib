@@ -45,7 +45,7 @@
     @toggleExpand="onToastExpand"
     ref="toast"
   />
-  <ExternalPopup v-if="kurocoConfig.use_float_button" @redirect="redirect" v-show="!showModal" />
+  <ExternalPopup v-if="kurocoConfig.use_float_button" @redirect="redirect" v-show="!showModal" :kurocoConfig="kurocoConfig" />
   <Hubspot
     v-if="showModal"
     :hubId="kurocoConfig.hubId ? '' + kurocoConfig.hubId : ''"
