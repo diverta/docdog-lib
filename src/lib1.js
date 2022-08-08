@@ -130,7 +130,7 @@ const initApp = _.once((el) => {
 
 function parseDOM() {
   //const tags = document.evaluate(
-  //  '//*[@*[starts-with(name(), "data-docdog-")]]',
+  //  '//*[@*[starts-with(name(), "data-kuroco-")]]',
   //  document,
   //  null,
   //  XPathResult.UNORDERED_NODE_ITERATOR_TYPE,
@@ -142,8 +142,8 @@ function parseDOM() {
   let el = null; // Element to be mounted
 
   // Scan <a> tags
-  if (window.DOCDOG_API_HOST) {
-    document.querySelectorAll('a[href^="' + window.DOCDOG_API_HOST + '"]').forEach((node) => {
+  if (window.KUROCO_API_HOST) {
+    document.querySelectorAll('a[href^="' + window.KUROCO_API_HOST + '"]').forEach((node) => {
       const url = new URL(node.href);
       const action = url.pathname.substr(1);
       node.removeAttribute('href'); // Disable click
@@ -153,9 +153,9 @@ function parseDOM() {
     console.error('[Docdog] is undefined. Please check your Google Tag Manager settings');
   }
 
-  // Scan any tag having custom data-docdog attribute
-  document.querySelectorAll('[data-docdog]').forEach((node) => {
-    const [action, paramsQueryString] = node.getAttribute('data-docdog').split('?');
+  // Scan any tag having custom data-kuroco attribute
+  document.querySelectorAll('[data-kuroco]').forEach((node) => {
+    const [action, paramsQueryString] = node.getAttribute('data-kuroco').split('?');
     docdogEls.push({ node, action, searchParams: new URLSearchParams(paramsQueryString) });
   });
 

@@ -45,10 +45,10 @@
     @toggleExpand="onToastExpand"
     ref="toast"
   />
-  <ExternalPopup v-if="docdogConfig.use_float_button" @redirect="redirect" v-show="!showModal" />
+  <ExternalPopup v-if="kurocoConfig.use_float_button" @redirect="redirect" v-show="!showModal" />
   <Hubspot
     v-if="showModal"
-    :hubId="docdogConfig.hubId ? '' + docdogConfig.hubId : ''"
+    :hubId="kurocoConfig.hubId ? '' + kurocoConfig.hubId : ''"
     :currentPage="current_page"
     :profile="userProfile"
   />
@@ -82,7 +82,7 @@ export default {
       showModal: false,
       toastList: [],
       pageInfo: {},
-      docdog_id_attr_name: 'data-docdog-id',
+      kuroco_id_attr_name: 'data-kuroco-id',
       node_params_map: {},
       current_node_uuid: null,
       current_page: '',
@@ -95,7 +95,7 @@ export default {
         isLogin: [], // List of functions to be executed when isLogin event is fired. First argument is a boolean
       },
       toastStatus: '',
-      toast_storage_key: 'docdog.toast',
+      toast_storage_key: 'kuroco.toast',
       originalViewport: null,
       htmlParts: {},
     };
@@ -108,9 +108,9 @@ export default {
       'popstate',
       ($event) => {
         // When user changes page state (back/forward buttons for ex)
-        const new_page = $event.state ? $event.state.docdog_page || '' : '';
+        const new_page = $event.state ? $event.state.kuroco_page || '' : '';
         if (new_page) {
-          this.urlParams.docdog_page = new_page;
+          this.urlParams.kuroco_page = new_page;
         }
         const docdog_id = $event.state ? $event.state.docdog_id || '' : '';
         if (docdog_id) {
@@ -127,8 +127,8 @@ export default {
     this.saveViewport();
   },
   computed: {
-    docdogConfig() {
-      return window.DOCDOG_CONFIG || {};
+    kurocoConfig() {
+      return window.KUROCO_CONFIG || {};
     },
     is_node_selected: {
       get() {
@@ -169,6 +169,11 @@ export default {
   },
   mounted() {
     this.hideToast = true;
+    if (this.kurocoConfig.css_vars) {
+      for (const v in this.kurocoConfig.css_vars) {
+        document.documentElement.style.setProperty(v, this.kurocoConfig.css_vars[v]);
+      }
+    }
     document.addEventListener('keydown', (event) => {
       if (event.key == 'Escape' && this.showModal) {
         this.closeModalOuter();
@@ -183,10 +188,10 @@ export default {
         this.onLogout();
       }
     });
-    if (this.urlParams.docdog_page) {
+    if (this.urlParams.kuroco_page) {
       let target = '';
       const params = {};
-      switch (this.urlParams.docdog_page) {
+      switch (this.urlParams.kuroco_page) {
         case 'reminder':
           target = 'Reminder';
           if (this.urlParams.token) {
@@ -209,7 +214,7 @@ export default {
           target = 'Mypage';
           break;
         default:
-          target = this.urlParams.docdog_page;
+          target = this.urlParams.kuroco_page;
       }
       if (target) {
         this.redirect({ target, params }, false); // Initial page load, no need to add history
@@ -222,11 +227,11 @@ export default {
   },
   methods: {
     linkNode(node, params) {
-      let uuid = node.getAttribute(this.docdog_id_attr_name);
+      let uuid = node.getAttribute(this.kuroco_id_attr_name);
       if (uuid == null || uuid == '') {
         uuid = uuidv4();
         this.node_params_map[uuid] = { node, params };
-        node.setAttribute(this.docdog_id_attr_name, uuid);
+        node.setAttribute(this.kuroco_id_attr_name, uuid);
         node.addEventListener('click', this.nodeAction);
       } else {
         // Node already exists : update with new params
@@ -234,14 +239,14 @@ export default {
       }
     },
     unlinkNode(node) {
-      const uuid = node.getAttribute(this.docdog_id_attr_name);
+      const uuid = node.getAttribute(this.kuroco_id_attr_name);
       node.removeEventListener('click', this.nodeAction);
       delete this.node_params_map[uuid];
-      node.removeAttribute(this.docdog_id_attr_name);
+      node.removeAttribute(this.kuroco_id_attr_name);
     },
     nodeAction(event) {
       // Event can either be an HTML element having a docdoc uuid (in case el linking), or plain topics_id integer (in case of dynamic use)
-      const node_id = isNaN(event) ? event.target.getAttribute(this.docdog_id_attr_name) : event;
+      const node_id = isNaN(event) ? event.target.getAttribute(this.kuroco_id_attr_name) : event;
       if (this.current_node_uuid === null) {
         // No node is opened => open
         this.current_node_uuid = node_id;
@@ -346,7 +351,7 @@ export default {
             delete this.urlParams.member_id;
             const qs = new URLSearchParams(this.urlParams).toString();
             window.history.pushState(
-              { prevUrl: window.location.href, docdog_page: this.current_page || '' },
+              { prevUrl: window.location.href, kuroco_page: this.current_page || '' },
               null,
               '?' + qs
             );
@@ -484,9 +489,9 @@ export default {
     writePageHistory({ page, params = {} }) {
       const newParams = { ...this.urlParams };
       if (page) {
-        newParams.docdog_page = page;
+        newParams.kuroco_page = page;
       } else {
-        delete newParams.docdog_page;
+        delete newParams.kuroco_page;
       }
       if (params.docdog_id) {
         newParams.docdog_id = params.docdog_id;
@@ -495,7 +500,7 @@ export default {
       }
       const qs = new URLSearchParams(newParams).toString();
       window.history.pushState(
-        { prevUrl: window.location.href, docdog_page: this.current_page || '', ...params },
+        { prevUrl: window.location.href, kuroco_page: this.current_page || '', ...params },
         null,
         '?' + qs
       );
@@ -564,7 +569,7 @@ export default {
   --color-primary: #1371ff;
   --color-secondary: #5d6775;
   --color-gray: #565758;
-  --color-background: #F5F6F8;
+  --color-background: #f5f6f8;
   --color-border-light: #dde0e7;
   --color-border: #d1d6df;
   --color-disabled: #dcdcdc;

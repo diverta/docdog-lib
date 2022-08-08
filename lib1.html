@@ -10,12 +10,12 @@
         var setInWindow = function(key, val) {
             window[key] = val;
         }
-        setInWindow("DOCDOG_API_HOST", "https://docdog.g.kuroco.app");
-        setInWindow("DOCDOG_CONFIG", {
+        setInWindow("KUROCO_API_HOST", "https://docdog.g.kuroco.app");
+        setInWindow("KUROCO_CONFIG", {
           "use_float_button": true,
           //"hubId": 21706870 // Disable hubspot tracking for local dev
         });
-        setInWindow("DOCDOG_OAUTH_SETTINGS", {
+        setInWindow("KUROCO_OAUTH_SETTINGS", {
           "google": {"action_url": "https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1"},
           "facebook": {},
           "yahoo": {},
@@ -24,7 +24,7 @@
         });
     </script>
     <script type="module" src="/src/main-lib1.iife.js"></script>
-    <title>Docdog Testing Page - Lib1</title>
+    <title>Testing Page - Lib1</title>
   </head>
   <body>
       <!-- <a href="https://docdog.g.kuroco.app/header">My header A</a> -->
@@ -36,18 +36,18 @@
     <a href="https://docdog.g.kuroco.app/profile">Docdog Profile</a><br/>
     <a href="https://docdog.g.kuroco.app/list?cnt=1">Docdog List</a><br/>
     <br/>
-    Alternative using data-docdog attribute :<br/>
-    <button data-docdog="list">Docdog List</button><br/>
-    <button data-docdog="download?id=4&public=true">Docdog Download 4</button><br/>
+    Alternative using data-kuroco attribute :<br/>
+    <button data-kuroco="list">Docdog List</button><br/>
+    <button data-kuroco="download?id=4&public=true">Docdog Download 4</button><br/>
     <br/>
     Demo of isLogin toggle :<br/>
-    <button type="button" data-docdog="login?show=!isLogin">ログイン</button>
-    <button type="button" data-docdog="reminder?show=!isLogin">PWリマインダー</button>
-    <button type="button" data-docdog="?show=isLogin" onclick="toggleDocdogMemberMenu()">Member</button>
+    <button type="button" data-kuroco="login?show=!isLogin">ログイン</button>
+    <button type="button" data-kuroco="reminder?show=!isLogin">PWリマインダー</button>
+    <button type="button" data-kuroco="?show=isLogin" onclick="toggleDocdogMemberMenu()">Member</button>
     <a href="https://docdog.g.kuroco.app/mypage?show=isLogin">Docdog Mypage</a><br/>
     <nav style="display:none" name="docdogMemberMenu">
-      <button type="button" class="l-header__nav--user__button" data-docdog="profile" onclick="toggleDocdogMemberMenu()">アカウント情報の編集</button>
-      <button type="button" class="l-header__nav--user__button" data-docdog="logout" onclick="toggleDocdogMemberMenu()">ログアウト</button>
+      <button type="button" class="l-header__nav--user__button" data-kuroco="profile" onclick="toggleDocdogMemberMenu()">アカウント情報の編集</button>
+      <button type="button" class="l-header__nav--user__button" data-kuroco="logout" onclick="toggleDocdogMemberMenu()">ログアウト</button>
     </nav>
 
     <script>

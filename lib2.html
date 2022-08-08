@@ -10,12 +10,15 @@
         var setInWindow = function(key, val) {
             window[key] = val;
         }
-        setInWindow("DOCDOG_API_HOST", "https://hubspot.g.kuroco.app");
-        setInWindow("DOCDOG_CONFIG", {
+        setInWindow("KUROCO_API_HOST", "https://hubspot.g.kuroco.app");
+        setInWindow("KUROCO_CONFIG", {
           "use_float_button": true,
+          "css_vars": {
+            "--color-primary": "#AA2222"
+          }
           //"hubId": 21706870 // Disable hubspot tracking for local dev
         });
-        setInWindow("DOCDOG_OAUTH_SETTINGS", {
+        setInWindow("KUROCO_OAUTH_SETTINGS", {
           "google": {"action_url": "https://docdog.g.kuroco.app/direct/login/oauth_login/?spid=1"},
           "facebook": {},
           "yahoo": {},
@@ -24,13 +27,13 @@
         });
     </script>
     <script type="module" src="/src/main-lib2.iife.js"></script>
-    <title>Docdog Testing Page - Lib2</title>
+    <title>Testing Page - Lib2</title>
   </head>
   <body>
-    <button data-docdog="list">Docdog List</button><br/>
+    <button data-kuroco="list">File List</button><br/>
     <script>
       function toggleDocdogMemberMenu() {
-        document.getElementsByName("docdogMemberMenu").forEach(function(el) {
+        document.getElementsByName("kurocoMemberMenu").forEach(function(el) {
           if (el.style.display === "none") {
             el.style.display = "block";
           } else {

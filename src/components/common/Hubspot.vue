@@ -33,7 +33,7 @@ export default {
       if (this.hubId) {
         let pathQS = '';
         if (newPage) {
-          pathQS = '?docdog_page=' + newPage;
+          pathQS = '?kuroco_page=' + newPage;
         } else {
           // Modal closed : no QS
         }

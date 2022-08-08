@@ -1,4 +1,5 @@
 // This is not directly a Vite config file : it is meant to export a configuration function as a preset of Vite's defineConfig for IIFE type build, used by multiple libraries
+import scssVariable from 'rollup-plugin-sass-variables'
 
 const { resolve } = require('path');
 import vue from '@vitejs/plugin-vue';
@@ -13,15 +14,15 @@ export default function defineConfigIife(settings, keyname) {
     build: {
       lib: {
         entry: resolve(__dirname, `src/main-${keyname}.iife.js`),
-        name: `docdog-${keyname}.iife.js`,
-        fileName: (format) => `docdog-${keyname}.${format}.js`,
+        name: `kuroco-${keyname}.iife.js`,
+        fileName: (format) => `kuroco-${keyname}.${format}.js`,
         formats: ['iife'],
       },
       outDir: `dist/iife/${keyname}`,
       rollupOptions: {
         output: {
           assetFileNames: (assetInfo) => {
-            if (assetInfo.name === 'style.css') return `docdog-${keyname}.css`;
+            if (assetInfo.name === 'style.css') return `kuroco-${keyname}.css`;
             return assetInfo.name;
           },
         },
@@ -32,6 +33,6 @@ export default function defineConfigIife(settings, keyname) {
         '@': resolve(__dirname, './src'),
       },
     },
-    plugins: [vue()],
+    plugins: [vue()],// scssVariable()],
   };
 }

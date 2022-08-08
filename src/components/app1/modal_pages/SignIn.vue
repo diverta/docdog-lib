@@ -217,15 +217,15 @@ export default {
         });
     },
     ssoLogin(provider) {
-      if (window.DOCDOG_OAUTH_SETTINGS) {
-        const providerInfo = window.DOCDOG_OAUTH_SETTINGS[provider];
+      if (window.KUROCO_OAUTH_SETTINGS) {
+        const providerInfo = window.KUROCO_OAUTH_SETTINGS[provider];
         if (providerInfo && providerInfo.action_url) {
           this.ssoActionUrl = providerInfo.action_url;
         } else {
-          console.error('[Docdog] DOCDOG_OAUTH_SETTINGS for ' + provider + ' does not define action_url');
+          console.error('[Docdog] KUROCO_OAUTH_SETTINGS for ' + provider + ' does not define action_url');
         }
       } else {
-        console.error('[Docdog] DOCDOG_OAUTH_SETTINGS is undefined. Please check your Google Tag Manager settings');
+        console.error('[Docdog] KUROCO_OAUTH_SETTINGS is undefined. Please check your Google Tag Manager settings');
       }
       this.$refs['ssoForm'].action = this.ssoActionUrl;
       this.$refs['ssoForm'].submit();

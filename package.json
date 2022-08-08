@@ -37,6 +37,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.10.0",
     "prettier": "2.4.1",
+    "rollup-plugin-sass-variables": "^0.1.1",
     "sass": "^1.49.7",
     "url": "^0.11.0",
     "vfonts": "^0.1.0",
