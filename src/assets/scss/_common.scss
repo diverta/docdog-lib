@@ -69,6 +69,7 @@
     &:disabled {
       background-color: var(--color-disabled);
       color: var(--color-gray) !important;
+      pointer-events: none;
       svg,
       svg path { 
         fill: var(--color-gray) !important;

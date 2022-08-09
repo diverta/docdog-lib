@@ -484,7 +484,7 @@ export default {
   --color-gray: #565758;
   --color-background: #f5f6f8;
   --color-border-light: #dde0e7;
-  --color-border: #d1d6df;
+  --color-border: #c1c6cf;
   --color-disabled: #dcdcdc;
   --color-danger: #dc0000;
   --color-success: #05a87c;
