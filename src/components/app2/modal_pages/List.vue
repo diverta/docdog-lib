@@ -11,7 +11,7 @@
               :class="['kuroco-tab', { 'kuroco-tab--active': category == null }]"
               @click="changeCategory(null)"
             >
-              すべて
+              おすすめ
             </button>
           </li>
           <li
