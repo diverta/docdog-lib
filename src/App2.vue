@@ -4,6 +4,7 @@
       <ModalHeader
         v-if="!customHeaderHtml"
         v-model:isLogin="isLogin"
+        :htmlParts="htmlParts"
         @redirect="redirect"
         @close="closeModal"
         @logout="logout"

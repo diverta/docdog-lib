@@ -1,6 +1,5 @@
 <template>
   <div class="kuroco kuroco--toggle--open">
-    <!-- TODO: Position style -->
     <button
       type="button"
       class="kuroco-button--floating--wide"

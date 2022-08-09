@@ -99,6 +99,20 @@ export default {
     htmlParts() {
       return this.custom_data.htmlParts || {};
     },
+    defaultParams() {
+      const defaultParams = {
+        pageID: this.pageID,
+      };
+      if (this.cnt) {
+        defaultParams.cnt = this.cnt;
+      }
+      if (this.category) {
+        defaultParams.contents_type = this.category;
+      } else {
+        defaultParams.filter = 'recommend_flg eq "1"';
+      }
+      return defaultParams;
+    },
   },
   data() {
     return {

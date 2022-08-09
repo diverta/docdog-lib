@@ -71,6 +71,7 @@
       :toastIds="toastIds"
       @addToast="addToast"
       @removeToastById="removeToastById"
+      @closeModal="close"
     />
   </div>
   <Loading v-if="toastStatus == 'downloading'" :loadingMessage="'圧縮ファイル作成中です。しばらくお待ちください。'" />

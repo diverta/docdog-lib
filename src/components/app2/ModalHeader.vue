@@ -25,14 +25,22 @@ export default {
       type: Boolean,
       default: false,
     },
+    htmlParts: {
+      type: Object,
+      default: () => {},
+    },
   },
   emits: ['close', 'redirect', 'logout'],
   data() {
     return {
       kuroco_menu_display: false,
       kuroco_spmenu_display: false,
-      site_logo,
     };
+  },
+  computed: {
+    site_logo() {
+      return (this.htmlParts && this.htmlParts.ext_5 && this.htmlParts.ext_5.url) || site_logo;
+    },
   },
   methods: {
     closeModal() {

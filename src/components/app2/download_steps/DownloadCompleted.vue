@@ -22,7 +22,7 @@ import CardDocs from '@/components/app2/cards/CardDocs.vue';
 import TopicsList from '@/mixins/TopicsList';
 
 export default {
-  emits: ['redirect', 'addToast', 'removeToastById'],
+  emits: ['redirect', 'addToast', 'removeToastById', 'closeModal'],
   mixins: [TopicsList],
   components: {
     CardDocs,
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$emit('close');
+      this.$emit('closeModal');
     },
     redirect(params) {
       this.$emit('redirect', params);
