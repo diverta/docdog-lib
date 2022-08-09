@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import url from 'url';
 import { noimage_vertical } from '@/components/app2/svg_images';
 import CardToast from '@/components/app2/cards/CardToast.vue';
 import zipApi from '@/api/zip';
@@ -193,15 +194,20 @@ export default {
       if (this.status == 'downloading') return; // Already downloading
       this.updateStatus('downloading');
       zipApi
-        .makeZip(
-          this.list
+        .makeZip({
+          entries: this.list
             .filter((i) => i.file && i.file.url)
             .map((i) => {
-              const url = i.file.url;
-              const firstIdx = url.indexOf('/files');
-              return { url: url.substr(firstIdx + 1, url.indexOf('?') - firstIdx - 1) };
-            })
-        )
+              const firstIdx = i.file.url.indexOf('/files');
+              const urlObj = url.parse(i.file.url);
+              const path = urlObj.pathname;
+              const extension = path.substr(path.lastIndexOf('.') + 1);
+              return {
+                url: i.file.url.substr(firstIdx + 1, i.file.url.indexOf('?') - firstIdx - 1),
+                name: i.file.desc + '.' + extension,
+              };
+            }),
+        })
         .then((resp) => {
           this.removeByIdx(null); // Clear toast contents after download has begun
           const tempFileId = resp.data;
