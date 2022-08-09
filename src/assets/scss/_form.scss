@@ -22,7 +22,12 @@
     padding: var(--spacing-md);
     &:disabled {
       background-color: #f0f0f0;
+      -webkit-text-fill-color: var(--color-gray);
       color: var(--color-gray);
+      opacity: 1;
+    }
+    @media screen and (max-width: 767px) {
+      font-size: 16px;
     }
   }
   input[type='checkbox'],
@@ -30,10 +35,14 @@
     -webkit-appearance: auto;
     appearance: auto;
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border: 1px solid var(--color-border);
     cursor: pointer;
+    @media screen and (max-width: 767px) {
+      width: 24px;
+      height: 24px;
+    }
   }
   textarea {
     display: block;
@@ -42,6 +51,9 @@
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius-sm);
     padding: var(--spacing-md);
+    @media screen and (max-width: 767px) {
+      font-size: 16px;
+    }
   }
   ::placeholder {
     color: #aaa;
@@ -67,7 +79,7 @@
 .kuroco-form {
   &__item {
     &:not(:first-child) {
-      margin-top: var(--spacing-md);
+      margin-top: var(--spacing-lg);
     }
     &--error {
       position: relative;
@@ -161,7 +173,7 @@
     input { flex: 0 0 auto; }
     label {
       padding-right: var(--spacing-md);
-      padding-left: var(--spacing-md);
+      padding-left: var(--spacing-sm);
       cursor: pointer;
     }
   }
