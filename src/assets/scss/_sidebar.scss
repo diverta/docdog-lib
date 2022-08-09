@@ -62,7 +62,7 @@
     width: 230px;
     height: 70px;
     padding: var(--spacing-md);
-    background-color: var(--color-gray);
+    background-color: rgba(0,0,0,.8);
     border-radius: var(--border-radius-md);
     box-shadow: 0 0 var(--spacing-sm) 0 rgba(0,0,0,.1);
     z-index: calc(var(--z-index) + 10);
