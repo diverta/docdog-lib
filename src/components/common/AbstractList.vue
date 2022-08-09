@@ -34,7 +34,6 @@ export default {
     },
   },
   mounted() {
-    console.log("Def params",this.defaultParams);
     this.list = [];
     this.fetchList(this.defaultParams).then(({ list, pageInfo }) => {
       this.list = list;
