@@ -27,7 +27,7 @@
             <p class="kuroco-form__item--error__msg" v-if="err_field == 'email'">メールアドレスが不正です。</p>
           </div>
           <div class="kuroco-form__button">
-            <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="sendEmail">
+            <button type="submit" class="kuroco-button--primary" @click.prevent="sendEmail">
               送信する
             </button>
           </div>
@@ -77,7 +77,7 @@
             />
           </div>
           <div class="kuroco-form__button">
-            <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="updatePassword">
+            <button type="submit" class="kuroco-button--primary" @click.prevent="updatePassword">
               再設定する
             </button>
           </div>
@@ -87,7 +87,7 @@
           <div class="kuroco-form__button">
             <button
               type="submit"
-              class="kuroco-button kuroco-button--primary"
+              class="kuroco-button--primary"
               @click.prevent="redirect({ target: 'SignIn' })"
             >
               ログイン

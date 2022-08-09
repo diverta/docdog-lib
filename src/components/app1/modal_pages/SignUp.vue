@@ -76,7 +76,7 @@
             </div>
             <FormElement v-for="el in formDef" :el="el" class="kuroco-form__item" v-model="customFields[el.key_name]" />
             <div class="kuroco-form__button">
-              <button type="submit" class="kuroco-button kuroco-button--primary" @click.prevent="signup">
+              <button type="submit" class="kuroco-button--primary" @click.prevent="signup">
                 アカウント作成
               </button>
             </div>
@@ -92,7 +92,7 @@
       <div class="kuroco-modal__body__section" v-if="isLogin">
         <button
           type="button"
-          class="kuroco-button kuroco-button--white"
+          class="kuroco-button--white"
           @click.prevent="redirect({ target: 'Mypage' })"
         >
           マイページへ戻る

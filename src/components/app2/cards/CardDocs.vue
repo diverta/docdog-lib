@@ -9,17 +9,15 @@
       <img v-if="data.thumbnail && data.thumbnail.url" :src="data.thumbnail.url" :alt="data.subject" />
       <img v-else :src="noimage_vertical" :alt="data.subject" />
     </div>
-    <div class="kuroco-card--media__body__inner">
-      <div class="kuroco-card--media__body">
-        <p class="kuroco-card--media__body__title">{{ data.subject }}</p>
-        <p class="kuroco-u-my-sm">
-          <span class="kuroco-badge">{{ data.contents_type_nm }}</span>
-        </p>
-        <p v-if="data.desc">{{ data.desc }}</p>
-      </div>
-      <div class="kuroco-card--media__foot">
-        <AddToastButton @click.stop="onToggle()" :isInToast="isInToast" />
-      </div>
+    <div class="kuroco-card--media__body">
+      <p class="kuroco-card--media__body__title">{{ data.subject }}</p>
+      <p class="kuroco-u-my-sm">
+        <span class="kuroco-badge">{{ data.contents_type_nm }}</span>
+      </p>
+      <p v-if="data.desc">{{ data.desc }}</p>
+    </div>
+    <div class="kuroco-card--media__foot">
+      <AddToastButton @click.stop="onToggle()" :isInToast="isInToast" />
     </div>
   </div>
 </template>

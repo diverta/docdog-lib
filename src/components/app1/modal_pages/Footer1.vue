@@ -9,7 +9,7 @@
   </template>
 
   <template v-if="footer_data.downloaded">
-    <button type="button" class="kuroco-button kuroco-button--white kuroco-button--wide" @click.prevent="redirect({ target: 'List' })">
+    <button type="button" class="kuroco-button--white kuroco-button--wide" @click.prevent="redirect({ target: 'List' })">
       資料一覧に戻る
     </button>
   </template>

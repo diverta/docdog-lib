@@ -1,52 +1,50 @@
 <template>
-  <div class="docdog-container--form">
+  <div class="kuroco-container--form">
     <AlertError v-if="err" :err="err_msg" />
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div class="docdog-container--white">
-      <div class="docdog-modal__body__pagetitle docdog-modal__body__section">
+    <div class="kuroco-container--white">
+      <div class="kuroco-modal__body__pagetitle kuroco-modal__body__section">
         <h1>アカウント情報の編集</h1>
       </div>
-      <div class="docdog-modal__body__section">
-        <div class="docdog-form__signup">
+      <div class="kuroco-modal__body__section">
+        <div class="kuroco-form__signup">
           <form>
-            <div class="docdog-form__item--col-2">
-              <div class="docdog-form__item">
-                <label for="name1" class="docdog-form__item__title"
-                  >姓<span class="docdog-form__item__required">（必須）</span></label
+            <div class="kuroco-form__item--col-2">
+              <div class="kuroco-form__item">
+                <label for="name1" class="kuroco-form__item__title"
+                  >姓<span class="kuroco-form__item__required">（必須）</span></label
                 >
                 <input name="name1" type="text" id="name1" placeholder="" v-model="name1" required />
               </div>
-              <div class="docdog-form__item">
-                <label for="name2" class="docdog-form__item__title"
-                  >名<span class="docdog-form__item__required">（必須）</span></label
+              <div class="kuroco-form__item">
+                <label for="name2" class="kuroco-form__item__title"
+                  >名<span class="kuroco-form__item__required">（必須）</span></label
                 >
                 <input name="name2" type="text" id="name2" placeholder="" v-model="name2" required />
               </div>
             </div>
-            <div class="docdog-form__item" :class="err_field == 'email' ? 'docdog-form__item--error' : ''">
-              <label for="email" class="docdog-form__item__title"
-                >メールアドレス<span class="docdog-form__item__required">（必須）</span></label
+            <div class="kuroco-form__item" :class="err_field == 'email' ? 'kuroco-form__item--error' : ''">
+              <label for="email" class="kuroco-form__item__title"
+                >メールアドレス<span class="kuroco-form__item__required">（必須）</span></label
               >
               <input name="email" type="text" id="email" placeholder="" v-model="email" required />
             </div>
-            <div class="docdog-form__item">
-              <label for="password" class="docdog-form__item__title">パスワード</label>
+            <div class="kuroco-form__item">
+              <label for="password" class="kuroco-form__item__title">パスワード</label>
               <input name="password" type="password" id="password" placeholder="" v-model="login_pwd" required />
             </div>
             <FormElement
               v-for="el in formDef"
               :el="el"
-              :class="['docdog-form__item', err_field == el.key_name ? 'docdog-form__item--error' : '']"
+              :class="['kuroco-form__item', err_field == el.key_name ? 'kuroco-form__item--error' : '']"
               v-model="customFields[el.key_name]"
             />
-            <div class="docdog-form__button">
-              <button type="submit" class="docdog-button docdog-button--primary" @click.prevent="editProfile">
-                変更する
-              </button>
+            <div class="kuroco-form__button">
+              <button type="submit" class="kuroco-button--primary" @click.prevent="editProfile">変更する</button>
             </div>
           </form>
-          <div class="docdog-form__link">
-            <button type="button" class="docdog-button--text" @click="redirect({ target: 'Withdrawal' })">
+          <div class="kuroco-form__link">
+            <button type="button" class="kuroco-button--text" @click="redirect({ target: 'Withdrawal' })">
               アカウントを削除する
             </button>
           </div>
@@ -82,7 +80,7 @@ export default {
       login_pwd: '',
       formDef: [],
       customFields: {},
-      errClass: 'docdog-form__item--error',
+      errClass: 'kuroco-form__item--error',
     };
   },
   computed: {

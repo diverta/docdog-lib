@@ -11,7 +11,7 @@
       <div class="kuroco-modal__body__section" v-if="isLogin">
         <form>
           <div class="kuroco-form__button">
-            <button type="submit" class="kuroco-button kuroco-button--danger" @click.prevent="withdrawal">
+            <button type="submit" class="kuroco-button--danger" @click.prevent="withdrawal">
               アカウントを削除する
             </button>
           </div>
@@ -23,7 +23,7 @@
         </form>
       </div>
       <div class="kuroco-modal__body__section" v-if="!isLogin">
-        <button type="button" class="kuroco-button kuroco-button--white" @click.prevent="redirect({ target: 'List' })">
+        <button type="button" class="kuroco-button--white" @click.prevent="redirect({ target: 'List' })">
           資料一覧へ戻る
         </button>
       </div>

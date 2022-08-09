@@ -21,14 +21,13 @@
       background-color: transparent;
       color: var(--color-primary);
       transition: var(--transition);
-      svg { fill: var(--color-primary); }
+      svg path { fill: var(--color-primary); }
       &:hover {
         background-color: #ffffff;
       }
       &:disabled {
-        svg {
-          fill: var(--color-border);
-        }
+        background-color: transparent;
+        svg path { fill: var(--color-border) !important; }
       }
     }
   }

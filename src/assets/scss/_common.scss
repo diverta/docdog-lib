@@ -67,8 +67,12 @@
     line-height: inherit;
     cursor: pointer;
     &:disabled {
-      pointer-events: none;
-      color: var(--color-gray);
+      background-color: var(--color-disabled);
+      color: var(--color-gray) !important;
+      svg,
+      svg path { 
+        fill: var(--color-gray) !important;
+      }
     }
   }
   strong { font-weight: bold; }
@@ -76,6 +80,12 @@
     color: var(--color-gray);
     font-size: 13px;
     font-family: inherit;
+  }
+  img:not([class]),
+  svg:not([class]) {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
   }
 }
 .kuroco--toggle--open,
