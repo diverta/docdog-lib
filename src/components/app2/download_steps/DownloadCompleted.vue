@@ -1,9 +1,14 @@
 <template>
   <section
-    class="kuroco-modal__body__complete kuroco-modal__body__section"
+    class="kuroco-modal__body__complete kuroco-modal__body__section kuroco-u-hidden-sp"
     v-if="htmlParts.ext_2"
     v-html="htmlParts.ext_2"
     ref="customContents"
+  />
+  <section
+    class="kuroco-modal__body__complete kuroco-modal__body__section kuroco-u-hidden-pc"
+    v-if="htmlParts.ext_6"
+    v-html="htmlParts.ext_6"
   />
   <nav class="kuroco-modal__body__section" v-if="!htmlParts.ext_2">
     <button type="button" class="kuroco-button--white kuroco-u-mt-lg" @click="redirect({ target: 'List' })">
