@@ -4,6 +4,12 @@ import _ from 'lodash';
 import axios from 'axios';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.interceptors.response.use(undefined, function (error) {
+  if (window.Docdog.app2 && window.Docdog.app2.globalAxiosErrorHandler) {
+    window.Docdog.app2.globalAxiosErrorHandler(error);
+  }
+  return Promise.reject(error);
+});
 
 if (window.Docdog === undefined) {
   window.Docdog = {

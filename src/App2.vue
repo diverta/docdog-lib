@@ -592,6 +592,21 @@ export default {
         this.deviceType = 'pc';
       }
     },
+    globalAxiosErrorHandler(error) {
+      if (
+        error.response.status == 401 &&
+        error.response.data &&
+        error.response.data.errors &&
+        error.response.data.errors.length > 0 &&
+        error.response.data.errors[0].message.startsWith('Access token is invalid')
+      ) {
+        console.log('H');
+        // Can happen if Kuroco member gets deleted, while the token on the browser side has still valid expiry date
+        loginApi.doLogout();
+        this.onLogout();
+        this.redirect({ target: 'List' });
+      }
+    },
   },
 };
 </script>
