@@ -1,6 +1,6 @@
 <template>
   <header class="kuroco-modal__head">
-    <div class="kuroco-modal__head__logo">
+    <div class="kuroco-modal__head__logo" v-if="site_logo">
       <img :src="site_logo" alt="site-title" />
     </div>
     <nav class="kuroco-modal__head__nav" v-if="showReturnButton">
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { site_logo } from '@/components/app2/svg_images';
+//import { site_logo } from '@/components/app2/svg_images';
 
 export default {
   props: {
@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     site_logo() {
-      return (this.htmlParts && this.htmlParts.ext_5 && this.htmlParts.ext_5.url) || site_logo;
+      return (this.htmlParts && this.htmlParts.ext_5 && this.htmlParts.ext_5.url) || null;
     },
   },
   methods: {
