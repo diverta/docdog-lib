@@ -62,7 +62,8 @@ export default {
       // Mapping custom html to dynamic events
       const matches = node.href.match(/.*kuroco_page=([^&#]*)/);
       if (matches[1]) {
-        node.addEventListener('click', () => {
+        node.addEventListener('click', (event) => {
+          event.preventDefault();
           this.redirect({ target: matches[1] });
         });
       }
