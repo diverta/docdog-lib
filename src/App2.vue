@@ -5,6 +5,7 @@
         v-if="!customHeaderHtml"
         v-model:isLogin="isLogin"
         :htmlParts="htmlParts"
+        :showReturnButton="pageParams.headerShowReturnButton"
         @redirect="redirect"
         @close="closeModal"
         @logout="logout"
@@ -21,6 +22,7 @@
       v-model:footer_data="footer_data"
       v-model:isLogin="isLogin"
       v-model:toastStatus="toastStatus"
+      v-model:pageParams="pageParams"
       @close="closeModal"
       @addToast="addToast"
       @removeToast="removeToast"
@@ -106,6 +108,9 @@ export default {
       originalViewport: null,
       htmlParts: {},
       deviceType: 'pc', // Changed dynamically based on screen width
+      pageParams: {
+        headerShowReturnButton: true,
+      },
     };
   },
   created() {
@@ -504,6 +509,7 @@ export default {
     },
     onAfterRedirect(pageData) {
       this.$refs['modal'].resetView();
+      this.pageParams.headerShowReturnButton = true;
     },
     writePageHistory({ page, params = {} }) {
       const newParams = { ...this.urlParams };

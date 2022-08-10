@@ -3,7 +3,7 @@
     <div class="kuroco-modal__head__logo">
       <img :src="site_logo" alt="site-title" />
     </div>
-    <nav class="kuroco-modal__head__nav">
+    <nav class="kuroco-modal__head__nav" v-if="showReturnButton">
       <button type="button" class="kuroco-modal__head__nav__button" @click.prevent="closeModal">
         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -28,6 +28,10 @@ export default {
     htmlParts: {
       type: Object,
       default: () => {},
+    },
+    showReturnButton: {
+      type: Boolean,
+      default: true,
     },
   },
   emits: ['close', 'redirect', 'logout'],

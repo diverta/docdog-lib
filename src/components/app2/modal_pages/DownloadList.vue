@@ -169,10 +169,23 @@ export default {
     },
     setStep(step) {
       this.current_step = step;
-      if (step == 'inputCompleted') {
-        this.hideToast(false);
-      } else {
-        this.hideToast(true);
+      switch (step) {
+        case 'inputEmail':
+          this.hideToast(true);
+          this.updatePageParam('headerShowReturnButton', true)
+          break;
+        case 'inputInfo':
+          this.hideToast(true);
+          this.updatePageParam('headerShowReturnButton', true)
+          break;
+        case 'downloading':
+          this.hideToast(true);
+          this.updatePageParam('headerShowReturnButton', false)
+          break;
+        case 'inputCompleted':
+          this.hideToast(false);
+          this.updatePageParam('headerShowReturnButton', false)
+          break;
       }
     },
     onInputInfoError(err) {
@@ -180,6 +193,7 @@ export default {
       this.setStep('inputEmail');
     },
     afterLogin() {
+      this.$emit('update:isLogin', true);
       this.setStep('downloading');
       this.downloadToast(); // Begin downloading
     },

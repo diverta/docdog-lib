@@ -6,12 +6,15 @@
     v-model:footer_data="footer_data"
     v-model:msg="msg"
     v-model:isLogin="isLogin"
+    v-model:pageParams="pageParams"
     :toastStatus="toastStatus"
     :custom_data="custom_data"
     :urlParams="urlParams"
     @err="err = $event"
     @redirect="onRedirect"
     @hideToast="onHideToast"
+    @update:isLogin="onUpdateIsLogin"
+    @update:pageParams="$emit('update:pageParams', $event)"
     ref="page"
   />
 </template>
@@ -21,7 +24,7 @@
 import loginApi from '@/api/login';
 
 export default {
-  emits: ['hideToast', 'writePageHistory', 'onAfterRedirect', 'update:current_page'],
+  emits: ['hideToast', 'writePageHistory', 'onAfterRedirect', 'update:current_page', 'update:isLogin', 'update:pageParams'],
   props: {
     node_params: {
       type: Object,
@@ -54,6 +57,10 @@ export default {
     showModal: {
       type: Boolean,
       default: () => false,
+    },
+    pageParams: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -149,6 +156,9 @@ export default {
     onToastDownload() {
       // Notify the page about download started event
       this.$refs['page'].onToastDownload();
+    },
+    onUpdateIsLogin(isLogin) {
+      this.$emit('update:isLogin', isLogin);
     },
   },
 };

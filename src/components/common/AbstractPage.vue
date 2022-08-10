@@ -42,6 +42,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    pageParams: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   emits: [
     'close',
@@ -54,6 +58,8 @@ export default {
     'onLogin',
     'logout',
     'update:msg',
+    'update:isLogin',
+    'update:pageParams',
     'resetView',
     'update:current_page',
     'downloadToast',
@@ -120,6 +126,9 @@ export default {
     onToastDownload() {
       // Each page may override this method to add handling when the download has started
       // Dont add code here, as any overrided method will run instead
+    },
+    updatePageParam(param, value) {
+      this.$emit('update:pageParams', { ...this.pageParams, [param]: value });
     },
   },
 };
