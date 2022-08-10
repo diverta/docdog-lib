@@ -600,7 +600,6 @@ export default {
         error.response.data.errors.length > 0 &&
         error.response.data.errors[0].message.startsWith('Access token is invalid')
       ) {
-        console.log('H');
         // Can happen if Kuroco member gets deleted, while the token on the browser side has still valid expiry date
         loginApi.doLogout();
         this.onLogout();
