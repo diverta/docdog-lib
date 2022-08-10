@@ -41,9 +41,6 @@
         display: none;
       }
     }
-    &--show {
-      display: flex;
-    }
     &__toggle {
       @extend %button;
       border-radius: var(--border-radius-md);
@@ -57,6 +54,9 @@
       }
     }
     .kuroco-cart {
+      &__item {
+        &:last-child { border-bottom: 1px solid var(--color-border); }
+      }
       @media screen and (max-width: 768px) {
         display: flex;
         flex-wrap: wrap;
@@ -65,7 +65,6 @@
         &__item {
           flex: 0 0 48%;
           width: 48%;
-          &:nth-of-type(2n-1):nth-last-child(2) { border-bottom: none; }
         }
       }
     }

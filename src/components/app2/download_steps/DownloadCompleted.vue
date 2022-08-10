@@ -1,8 +1,13 @@
 <template>
   <section
-    class="kuroco-modal__body__complete kuroco-modal__body__section"
+    class="kuroco-modal__body__complete kuroco-modal__body__section kuroco-u-hidden-sp"
     v-if="htmlParts.ext_2"
     v-html="htmlParts.ext_2"
+  />
+  <section
+    class="kuroco-modal__body__complete kuroco-modal__body__section kuroco-u-hidden-pc"
+    v-if="htmlParts.ext_6"
+    v-html="htmlParts.ext_6"
   />
   <nav class="kuroco-modal__body__section" v-if="!htmlParts.ext_2">
     <!-- TODO: Implement modal close button -->
