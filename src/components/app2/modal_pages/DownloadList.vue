@@ -1,16 +1,13 @@
 <template>
   <div class="kuroco-container--middle">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div
-      class="kuroco-modal__body__pagetitle kuroco-modal__body__section kuroco-u-text-gray kuroco-u-hidden-sp"
-      v-if="list.length"
-      v-html="htmlParts.ext_3"
-    />
-    <div
-      class="kuroco-modal__body__pagetitle kuroco-modal__body__section kuroco-u-text-gray kuroco-u-hidden-pc"
-      v-if="list.length"
-      v-html="htmlParts.ext_7"
-    />
+    <div v-if="list.length" class="kuroco-modal__body__pagetitle kuroco-modal__body__section kuroco-u-text-gray">
+      <h1>
+        <span class="kuroco-u-hidden-sp">資料をダウンロードします</span
+        ><span class="kuroco-u-hidden-pc">資料のダウンロードリンクを送信します</span>
+      </h1>
+      <div v-html="htmlParts.ext_3" />
+    </div>
     <div class="kuroco-modal__body__section kuroco-container--col-2" v-if="list.length">
       <div class="kuroco-container--col-2__side" v-if="current_step != 'inputCompleted'">
         <div class="kuroco-card kuroco-cart--download-list">
@@ -34,7 +31,14 @@
             </ul>
             <button
               type="button"
-              class="kuroco-button--text kuroco-button--wide kuroco-u-d-flex kuroco-u-d-flex-align-center kuroco-u-d-flex-justify-center kuroco-u-py-md kuroco-u-my-sm"
+              class="
+                kuroco-button--text kuroco-button--wide
+                kuroco-u-d-flex
+                kuroco-u-d-flex-align-center
+                kuroco-u-d-flex-justify-center
+                kuroco-u-py-md
+                kuroco-u-my-sm
+              "
               @click.prevent="redirect({ target: 'List' })"
             >
               <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -188,19 +192,19 @@ export default {
       switch (step) {
         case 'inputEmail':
           this.hideToast(true);
-          this.updatePageParam('headerShowReturnButton', true)
+          this.updatePageParam('headerShowReturnButton', true);
           break;
         case 'inputInfo':
           this.hideToast(true);
-          this.updatePageParam('headerShowReturnButton', true)
+          this.updatePageParam('headerShowReturnButton', true);
           break;
         case 'downloading':
           this.hideToast(true);
-          this.updatePageParam('headerShowReturnButton', false)
+          this.updatePageParam('headerShowReturnButton', false);
           break;
         case 'inputCompleted':
           this.hideToast(false);
-          this.updatePageParam('headerShowReturnButton', false)
+          this.updatePageParam('headerShowReturnButton', false);
           break;
       }
     },

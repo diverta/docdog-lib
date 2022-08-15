@@ -1,15 +1,19 @@
 <template>
-  <section
-    class="kuroco-modal__body__complete kuroco-modal__body__section kuroco-u-hidden-sp"
-    v-if="htmlParts.ext_2"
-    v-html="htmlParts.ext_2"
-    ref="customContents"
-  />
-  <section
-    class="kuroco-modal__body__complete kuroco-modal__body__section kuroco-u-hidden-pc"
-    v-if="htmlParts.ext_6"
-    v-html="htmlParts.ext_6"
-  />
+  <section class="kuroco-modal__body__complete kuroco-modal__body__section">
+    <h2>
+      <span class="kuroco-u-hidden-sp">ダウンロードしました</span
+      ><span class="kuroco-u-hidden-pc">ダウンロードリンクを送信しました</span>
+    </h2>
+    <div v-if="htmlParts.ext_2" v-html="htmlParts.ext_2" ref="customContents"></div>
+    <div class="kuroco-modal__body__complete__button">
+      <div v-for="(item, idx) in htmlParts.ext_6">
+        <!-- TODO: if ext_7.key == primary, set class "kuroco-button--primary" -->
+        <!-- TODO: if ext_7.key == white, set class "kuroco-button--white" -->
+        <!-- TODO: if ext_8.key == blank, set target="_blank" and rel="noopener" -->
+        <a :href="item.url" class="kuroco-button--primary" target="_blank" and rel="noopener">{{ item.title }}</a>
+      </div>
+    </div>
+  </section>
   <nav class="kuroco-modal__body__section" v-if="!htmlParts.ext_2">
     <button type="button" class="kuroco-button--white kuroco-u-mt-lg" @click="redirect({ target: 'List' })">
       <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23,51 +27,13 @@
 </template>
 
 <script>
-import CardDocs from '@/components/app2/cards/CardDocs.vue';
-import TopicsList from '@/mixins/TopicsList';
-
 export default {
-  emits: ['redirect', 'addToast', 'removeToastById', 'closeModal'],
-  mixins: [TopicsList],
-  components: {
-    CardDocs,
-  },
+  emits: ['redirect', 'closeModal'],
   props: {
-    list: {
-      type: Array,
-      default: () => [],
-    },
-    toastIds: {
-      type: Object,
-      default: () => {},
-    },
     htmlParts: {
       type: Object,
       default: () => ({}),
     },
-  },
-  data() {
-    return {
-      recommended_list: [],
-    };
-  },
-  mounted() {
-    this.fetchList({
-      pageID: 1,
-      cnt: 4,
-    }).then((resp) => {
-      this.recommended_list = resp.list;
-    });
-    this.$refs.customContents.querySelectorAll('a[href^="?kuroco_page="]').forEach((node) => {
-      // Mapping custom html to dynamic events
-      const matches = node.href.match(/.*kuroco_page=([^&#]*)/);
-      if (matches[1]) {
-        node.addEventListener('click', (event) => {
-          event.preventDefault();
-          this.redirect({ target: matches[1] });
-        });
-      }
-    });
   },
   methods: {
     closeModal() {
@@ -75,12 +41,6 @@ export default {
     },
     redirect(params) {
       this.$emit('redirect', params);
-    },
-    addToast(params) {
-      this.$emit('addToast', params);
-    },
-    removeToastById(id) {
-      this.$emit('removeToastById', id);
     },
   },
 };
