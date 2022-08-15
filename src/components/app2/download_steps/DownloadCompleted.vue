@@ -7,10 +7,14 @@
     <div v-if="htmlParts.ext_2" v-html="htmlParts.ext_2" ref="customContents"></div>
     <div class="kuroco-modal__body__complete__button">
       <div v-for="(item, idx) in htmlParts.ext_6">
-        <!-- TODO: if ext_7.key == primary, set class "kuroco-button--primary" -->
-        <!-- TODO: if ext_7.key == white, set class "kuroco-button--white" -->
-        <!-- TODO: if ext_8.key == blank, set target="_blank" and rel="noopener" -->
-        <a :href="item.url" class="kuroco-button--primary" target="_blank" and rel="noopener">{{ item.title }}</a>
+        <a
+          :href="item.ext_6.url"
+          :class="anchorTitleClass(item)"
+          :target="ext8options(item).includes('blank') ? '_blank' : null"
+          :rel="ext8options(item).includes('blank') ? 'noopener' : null"
+        >
+          {{ item.ext_6.title }}
+        </a>
       </div>
     </div>
   </section>
@@ -36,6 +40,15 @@ export default {
     },
   },
   methods: {
+    anchorTitleClass(item) {
+      return [
+        { 'kuroco-button--primary': item.ext_7.key == 'primary' },
+        { 'kuroco-button--white': item.ext_7.key == 'white' },
+      ];
+    },
+    ext8options(item) {
+      return item.ext_8.map((i) => i.key);
+    },
     closeModal() {
       this.$emit('closeModal');
     },

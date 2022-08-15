@@ -85,10 +85,8 @@
     <!-- Step3 if ok -->
     <DownloadCompleted
       v-if="current_step == 'inputCompleted' && toastStatus != 'download_error'"
-      :list="list"
       :htmlParts="htmlParts"
       @redirect="redirect"
-      :toastIds="toastIds"
       @addToast="addToast"
       @removeToastById="removeToastById"
       @closeModal="close"
