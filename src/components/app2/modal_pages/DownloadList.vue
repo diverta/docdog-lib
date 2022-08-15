@@ -34,7 +34,14 @@
             </ul>
             <button
               type="button"
-              class="kuroco-button--text kuroco-button--wide kuroco-u-d-flex kuroco-u-d-flex-align-center kuroco-u-d-flex-justify-center kuroco-u-py-md kuroco-u-my-sm"
+              class="
+                kuroco-button--text kuroco-button--wide
+                kuroco-u-d-flex
+                kuroco-u-d-flex-align-center
+                kuroco-u-d-flex-justify-center
+                kuroco-u-py-md
+                kuroco-u-my-sm
+              "
               @click.prevent="redirect({ target: 'List' })"
             >
               <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,15 +85,23 @@
       </div>
     </div>
 
-    <!-- Step3 -->
+    <!-- Step3 if ok -->
     <DownloadCompleted
-      v-if="current_step == 'inputCompleted'"
+      v-if="current_step == 'inputCompleted' && toastStatus != 'download_error'"
       :list="list"
       :htmlParts="htmlParts"
       @redirect="redirect"
       :toastIds="toastIds"
       @addToast="addToast"
       @removeToastById="removeToastById"
+      @closeModal="close"
+    />
+
+    <!-- Step3 if error -->
+    <DownloadError
+      v-if="current_step == 'inputCompleted' && toastStatus == 'download_error'"
+      :htmlParts="htmlParts"
+      @redirect="redirect"
       @closeModal="close"
     />
   </div>
@@ -103,6 +118,7 @@ import { noimage_vertical } from '@/components/app2/svg_images';
 import DownloadInputEmail from '@/components/app2/download_steps/DownloadInputEmail.vue';
 import DownloadInputInfo from '@/components/app2/download_steps/DownloadInputInfo.vue';
 import DownloadCompleted from '@/components/app2/download_steps/DownloadCompleted.vue';
+import DownloadError from '@/components/app2/download_steps/DownloadError.vue';
 
 import memberApi from '@/api/member';
 
@@ -115,6 +131,7 @@ export default {
     DownloadInputEmail,
     DownloadInputInfo,
     DownloadCompleted,
+    DownloadError,
   },
   props: {
     list: {
@@ -188,19 +205,19 @@ export default {
       switch (step) {
         case 'inputEmail':
           this.hideToast(true);
-          this.updatePageParam('headerShowReturnButton', true)
+          this.updatePageParam('headerShowReturnButton', true);
           break;
         case 'inputInfo':
           this.hideToast(true);
-          this.updatePageParam('headerShowReturnButton', true)
+          this.updatePageParam('headerShowReturnButton', true);
           break;
         case 'downloading':
           this.hideToast(true);
-          this.updatePageParam('headerShowReturnButton', false)
+          this.updatePageParam('headerShowReturnButton', false);
           break;
         case 'inputCompleted':
           this.hideToast(false);
-          this.updatePageParam('headerShowReturnButton', false)
+          this.updatePageParam('headerShowReturnButton', false);
           break;
       }
     },

@@ -35,6 +35,7 @@
       @resetView="resetView"
       @hideToast="doHideToast"
       @downloadToast="downloadToast"
+      @changeToastStatus="toastStatus = $event"
       ref="ctrl"
     />
   </Modal>

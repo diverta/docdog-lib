@@ -226,7 +226,11 @@ export default {
               .then(() => {
                 if (downloadUrl != null || ++currentRetry > this.max_replay_times) {
                   clearInterval(timer);
-                  this.updateStatus('');
+                  if (downloadUrl === null) {
+                    this.updateStatus('download_error');
+                  } else {
+                    this.updateStatus('');
+                  }
                 }
               });
           }, this.replay_delay * 1000);
