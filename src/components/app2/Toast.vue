@@ -136,8 +136,8 @@ export default {
       status: '',
       toast_expand: true,
       toast_shrink: false,
-      replay_delay: 3, // seconds between zip download retry
-      max_replay_times: 5, // max tries
+      replay_delay: 1, // seconds between zip download retry
+      max_replay_times: 15, // max tries
     };
   },
   mounted() {
