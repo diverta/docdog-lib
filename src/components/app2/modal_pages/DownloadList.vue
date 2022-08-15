@@ -1,16 +1,13 @@
 <template>
   <div class="kuroco-container--middle">
     <AlertSuccess v-if="msg" :msg="msg" :msg2="msg2" />
-    <div
-      class="kuroco-modal__body__pagetitle kuroco-modal__body__section kuroco-u-text-gray kuroco-u-hidden-sp"
-      v-if="list.length"
-      v-html="htmlParts.ext_3"
-    />
-    <div
-      class="kuroco-modal__body__pagetitle kuroco-modal__body__section kuroco-u-text-gray kuroco-u-hidden-pc"
-      v-if="list.length"
-      v-html="htmlParts.ext_7"
-    />
+    <div v-if="list.length" class="kuroco-modal__body__pagetitle kuroco-modal__body__section kuroco-u-text-gray">
+      <h1>
+        <span class="kuroco-u-hidden-sp">資料をダウンロードします</span
+        ><span class="kuroco-u-hidden-pc">資料のダウンロードリンクを送信します</span>
+      </h1>
+      <div v-html="htmlParts.ext_3" />
+    </div>
     <div class="kuroco-modal__body__section kuroco-container--col-2" v-if="list.length">
       <div class="kuroco-container--col-2__side" v-if="current_step != 'inputCompleted'">
         <div class="kuroco-card kuroco-cart--download-list">
