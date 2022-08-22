@@ -46,6 +46,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    deviceType: {
+      type: String,
+      default: 'pc',
+    },
   },
   emits: [
     'close',

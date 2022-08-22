@@ -130,6 +130,10 @@ export default {
       type: String,
       default: '',
     },
+    deviceType: {
+      type: String,
+      default: 'pc',
+    },
   },
   data() {
     return {
@@ -193,21 +197,26 @@ export default {
     downloadAll() {
       if (this.status == 'downloading') return; // Already downloading
       this.updateStatus('downloading');
+      const params = {
+        entries: this.list
+          .filter((i) => i.file && i.file.url)
+          .map((i) => {
+            const firstIdx = i.file.url.indexOf('/files');
+            const urlObj = url.parse(i.file.url);
+            const path = urlObj.pathname;
+            const extension = path.substr(path.lastIndexOf('.') + 1);
+            return {
+              url: i.file.url.substr(firstIdx + 1, i.file.url.indexOf('?') - firstIdx - 1),
+              name: i.file.desc + '.' + extension,
+            };
+          }),
+      };
+      if (this.deviceType == 'sp') {
+        params.sendmail_flg = 1;
+      }
+
       zipApi
-        .makeZip({
-          entries: this.list
-            .filter((i) => i.file && i.file.url)
-            .map((i) => {
-              const firstIdx = i.file.url.indexOf('/files');
-              const urlObj = url.parse(i.file.url);
-              const path = urlObj.pathname;
-              const extension = path.substr(path.lastIndexOf('.') + 1);
-              return {
-                url: i.file.url.substr(firstIdx + 1, i.file.url.indexOf('?') - firstIdx - 1),
-                name: i.file.desc + '.' + extension,
-              };
-            }),
-        })
+        .makeZip(params)
         .then((resp) => {
           this.removeByIdx(null); // Clear toast contents after download has begun
           const tempFileId = resp.data;

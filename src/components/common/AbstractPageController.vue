@@ -10,6 +10,7 @@
     :toastStatus="toastStatus"
     :custom_data="custom_data"
     :urlParams="urlParams"
+    :deviceType="deviceType"
     @err="err = $event"
     @redirect="onRedirect"
     @hideToast="onHideToast"
@@ -61,6 +62,10 @@ export default {
     pageParams: {
       type: Object,
       default: () => {},
+    },
+    deviceType: {
+      type: String,
+      default: 'pc',
     },
   },
   data() {
