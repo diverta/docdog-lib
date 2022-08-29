@@ -23,7 +23,7 @@ HubSpot側でアクセストークンを発行します。
 Google Tag Managerの管理画面より、以下のソースを追加してください。
 ```
 const kurocoConfig = {
-  "appId": 2,
+  "appId": 2, //固定です
   "hubId": 12345678, // 連携するHubSpotのIDを入力してください
 };
 ```
@@ -76,12 +76,12 @@ const kurocoConfig = {
 
 ```
 const kurocoConfig = {
-  "appId": 2,
-  "hubId": 12345678,
-  "use_float_button": true,
-  "popup_style": "bottom: 24px; right: 24px",
+  "appId": 2,　 //固定です
+  "hubId": 12345678, // 連携するHubSpotのIDを入力してください
+  "use_float_button": true, // 導線ボタンの設置 trueで有効、flaseで無効になります
+  "popup_style": "bottom: 24px; right: 24px", // ボタンの設置位置を指定できます
   "css_vars": {
-    "--color-primary": "#1371ff" 
+    "--color-primary": "#1371ff"  // メインカラーのカラーコード（6桁）を入力してください
   }
 };
 ```
